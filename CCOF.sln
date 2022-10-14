@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Documents", "01 Documents", "{2501761A-39A6-44F8-99A3-BE1940DBF373}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 Core", "02 Core", "{C839EACF-98C2-427E-A269-125F9A2D9E53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 Infrastructure", "03 Infrastructure", "{044E25FD-D499-4F3E-B754-D8213C70272B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 Application", "04 Application", "{92C16F22-0498-422B-B8E9-8663955AB66B}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CCOF.Application.WebResources", "CCOF.Application.WebResources\", "{A14F53B5-DC05-42EF-BED2-561C90FD3014}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_6061"
+		Debug.AspNetCompiler.PhysicalPath = "CCOF.Application.WebResources\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6061\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_6061"
+		Release.AspNetCompiler.PhysicalPath = "CCOF.Application.WebResources\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6061\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "6061"
+		SlnRelativePath = "CCOF.Application.WebResources\"
+	EndProjectSection
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CCOF.Core.DataContext", "CCOF.Core.DataContext\CCOF.Core.DataContext.shproj", "{7E11D821-093B-4E0C-B139-04348871A472}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCOF.Infrastructure.WebAPI", "CCOF.Infrastructure.WebAPI\CCOF.Infrastructure.WebAPI.csproj", "{95A4C435-55E7-402F-81C9-6E78BA6B14FC}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		CCOF.Core.DataContext\CCOF.Core.DataContext.projitems*{7e11d821-093b-4e0c-b139-04348871a472}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A14F53B5-DC05-42EF-BED2-561C90FD3014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14F53B5-DC05-42EF-BED2-561C90FD3014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14F53B5-DC05-42EF-BED2-561C90FD3014}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14F53B5-DC05-42EF-BED2-561C90FD3014}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{95A4C435-55E7-402F-81C9-6E78BA6B14FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A4C435-55E7-402F-81C9-6E78BA6B14FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A4C435-55E7-402F-81C9-6E78BA6B14FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A4C435-55E7-402F-81C9-6E78BA6B14FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A14F53B5-DC05-42EF-BED2-561C90FD3014} = {92C16F22-0498-422B-B8E9-8663955AB66B}
+		{7E11D821-093B-4E0C-B139-04348871A472} = {C839EACF-98C2-427E-A269-125F9A2D9E53}
+		{95A4C435-55E7-402F-81C9-6E78BA6B14FC} = {044E25FD-D499-4F3E-B754-D8213C70272B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03EBDCA4-3EEB-4430-9D1F-BB76ADE05BBF}
+	EndGlobalSection
+EndGlobal
