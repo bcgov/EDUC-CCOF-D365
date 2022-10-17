@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 Application", "04 Applic
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CCOF.Application.WebResources", "CCOF.Application.WebResources\", "{A14F53B5-DC05-42EF-BED2-561C90FD3014}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_6061"
 		Debug.AspNetCompiler.PhysicalPath = "CCOF.Application.WebResources\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6061\"
@@ -37,9 +37,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCOF.Infrastructure.WebAPI", "CCOF.Infrastructure.WebAPI\CCOF.Infrastructure.WebAPI.csproj", "{95A4C435-55E7-402F-81C9-6E78BA6B14FC}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		CCOF.Core.DataContext\CCOF.Core.DataContext.projitems*{7e11d821-093b-4e0c-b139-04348871a472}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -64,5 +61,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03EBDCA4-3EEB-4430-9D1F-BB76ADE05BBF}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		CCOF.Core.DataContext\CCOF.Core.DataContext.projitems*{7e11d821-093b-4e0c-b139-04348871a472}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
