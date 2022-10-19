@@ -5,3 +5,6 @@
 /CCOF.Infrastructure.WebAPI/appsettings.Development.json
 /CCOF.Infrastructure.WebAPI/bin/Debug/net6.0
 /CCOF.Infrastructure.WebAPI/obj
+
+# configuration files
+appsettings.json
