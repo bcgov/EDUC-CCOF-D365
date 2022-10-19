@@ -41,6 +41,9 @@ objects:
             readOnly: true
           - name: log-storage
             mountPath: /logs
+          - name: config-env
+            mountPath: /app/appsettings.json
+            subPath: appsettings.json           
           livenessProbe:
             initialDelaySeconds: 20
             failureThreshold: 5
@@ -57,9 +60,6 @@ objects:
             protocol: TCP
           - containerPort: 443
             protocol: TCP
-          envFrom:
-            - configMapRef:
-                name: ccof-d365api-config-map
           readinessProbe:
             initialDelaySeconds: 10
             failureThreshold: 5
@@ -80,6 +80,9 @@ objects:
         volumes:
         - name: log-storage
           emptyDir: {}
+        - name: config-env
+          configMap:
+            name: ccof-d365api-config-map          
         - name: tls-certs
           secret:
             secretName: ccof-backend-cert
