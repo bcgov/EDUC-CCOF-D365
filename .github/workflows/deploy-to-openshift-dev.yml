@@ -23,7 +23,7 @@ env:
   APP_NAME: 'ccof'
   REPO_NAME: "educ-ccof-d365"
   BRANCH: "main"
-  APP_NAME_BACKEND: "api-d365"
+  APP_NAME_BACKEND: "d365api"
 
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
   NAMESPACE_TOOLS: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-tools
@@ -119,7 +119,7 @@ jobs:
         context: ./
 
       # https://github.com/redhat-actions/push-to-registry#readme
-    - name: Push backend to registry
+    - name: Push Dynamics API to registry
       id: push-image-backend
       uses: redhat-actions/push-to-registry@v2
       with:
