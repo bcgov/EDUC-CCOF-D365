@@ -1,4 +1,4 @@
-name: 1 DEV - Deploy Backend
+name: 1 DEV - Deploy Dynamics API
 
 env:
   # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
@@ -21,10 +21,10 @@ env:
   ARTIFACTORY_REPO: artifacts.developer.gov.bc.ca
 
   APP_NAME: 'ccof'
-  REPO_NAME: "educ-ccof"
+  REPO_NAME: "educ-ccof-d365"
   BRANCH: "main"
-  APP_NAME_BACKEND: "backend"
-  APP_FOLDER: "backend"
+  APP_NAME_BACKEND: "api-d365"
+
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
   NAMESPACE_TOOLS: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-tools
   COMMON_NAMESPACE: ${{ secrets.COMMON_NAMESPACE_NO_ENV }}
@@ -115,8 +115,8 @@ jobs:
         # Or, perform a source-to-image build using https://github.com/redhat-actions/s2i-build
         # Otherwise, point this to your Dockerfile/Containerfile relative to the repository root.
         dockerfiles: |
-          ./${{ env.APP_FOLDER }}/Dockerfile
-        context: ./${{ env.APP_FOLDER }}
+          ./Dockerfile
+        context: ./
 
       # https://github.com/redhat-actions/push-to-registry#readme
     - name: Push backend to registry
