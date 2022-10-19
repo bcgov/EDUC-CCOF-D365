@@ -48,7 +48,7 @@ objects:
             initialDelaySeconds: 20
             failureThreshold: 5
             httpGet:
-              path: "/api/operations?statement=health"
+              path: "/api/Health"
               port: 5091
               scheme: HTTP
             periodSeconds: 10
@@ -64,7 +64,7 @@ objects:
             initialDelaySeconds: 10
             failureThreshold: 5
             httpGet:
-              path: "/api/operations?statement=health"
+              path: "/api/Health"
               port: 5091
               scheme: HTTP
             periodSeconds: 10
@@ -122,7 +122,6 @@ objects:
     name: "${APP_NAME}-d365api-${BRANCH}"
   spec:
     host: "${HOST_ROUTE}"
-    path: /api
     port:
       targetPort: 5091-tcp
     tls:
