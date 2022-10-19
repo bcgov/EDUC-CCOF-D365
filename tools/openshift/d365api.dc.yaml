@@ -48,7 +48,7 @@ objects:
             initialDelaySeconds: 20
             failureThreshold: 5
             httpGet:
-              path: "/api"
+              path: "/api/operations?statement=health"
               port: 5091
               scheme: HTTP
             periodSeconds: 10
@@ -64,7 +64,7 @@ objects:
             initialDelaySeconds: 10
             failureThreshold: 5
             httpGet:
-              path: "/api/"
+              path: "/api/operations?statement=health"
               port: 5091
               scheme: HTTP
             periodSeconds: 10

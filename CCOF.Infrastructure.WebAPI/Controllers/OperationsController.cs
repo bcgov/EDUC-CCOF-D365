@@ -39,7 +39,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         public ActionResult<string> Get(string statement)
         {
             if (string.IsNullOrEmpty(statement)) return string.Empty;
-
+            if (string.Equals(statement, "health")) {
+                return Ok("healthy");
+            }
             if (Request?.QueryString.Value?.IndexOf("&") > 0)
             {
                 var filters = Request?.QueryString.Value.Substring(Request.QueryString.Value.IndexOf("&") + 1);
