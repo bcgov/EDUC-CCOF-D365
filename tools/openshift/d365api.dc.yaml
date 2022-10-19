@@ -45,15 +45,15 @@ objects:
             initialDelaySeconds: 20
             failureThreshold: 5
             httpGet:
-              path: "/api/health"
-              port: 8080
+              path: "/api"
+              port: 5091
               scheme: HTTP
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 5
           name: "${APP_NAME}-d365api-${BRANCH}"
           ports:
-          - containerPort: 8080
+          - containerPort: 5091
             protocol: TCP
           - containerPort: 443
             protocol: TCP
@@ -64,8 +64,8 @@ objects:
             initialDelaySeconds: 10
             failureThreshold: 5
             httpGet:
-              path: "/api/health"
-              port: 8080
+              path: "/api/"
+              port: 5091
               scheme: HTTP
             periodSeconds: 10
             successThreshold: 1
@@ -98,10 +98,10 @@ objects:
     name: "${APP_NAME}-d365api-${BRANCH}"
   spec:
     ports:
-    - name: 8080-tcp
-      port: 8080
+    - name: 5091-tcp
+      port: 5091
       protocol: TCP
-      targetPort: 8080
+      targetPort: 5091
     - name: 443-https
       port: 443
       protocol: TCP 
@@ -121,7 +121,7 @@ objects:
     host: "${HOST_ROUTE}"
     path: /api
     port:
-      targetPort: 8080-tcp
+      targetPort: 5091-tcp
     tls:
       insecureEdgeTerminationPolicy: Redirect
       termination: edge
