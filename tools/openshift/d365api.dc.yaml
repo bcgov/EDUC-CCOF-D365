@@ -59,7 +59,7 @@ objects:
             protocol: TCP
           envFrom:
             - configMapRef:
-                name: educ-ccof-backend-config-map
+                name: ccof-d365api-config-map
           readinessProbe:
             initialDelaySeconds: 10
             failureThreshold: 5
