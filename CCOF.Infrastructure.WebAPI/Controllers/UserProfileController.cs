@@ -29,9 +29,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
 <fetch>
   <entity name=""ccof_bceid_organization"">
-    <attribute name=""ccof_bceid_organizationid"" />
     <attribute name=""ccof_businessbceid"" />
-    <attribute name=""ccof_name"" />
     <attribute name=""ccof_organization"" />
     <link-entity name=""contact"" from=""contactid"" to=""ccof_businessbceid"" link-type=""inner"" alias=""BCeID"">
       <attribute name=""ccof_userid"" />
@@ -44,32 +42,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
       <attribute name=""name"" />
       <attribute name=""accountnumber"" />
       <attribute name=""accountid"" />
-      <link-entity name=""account"" from=""parentaccountid"" to=""accountid"" alias=""Facility"">
+      <link-entity name=""account"" from=""parentaccountid"" to=""accountid"" link-type=""outer"" alias=""Facility"">
         <attribute name=""name"" />
         <attribute name=""accountnumber"" />
-        <attribute name=""ccof_facilitylicencenumber"" />
-        <attribute name=""ccof_contractstatus"" />
-        <attribute name=""statuscode"" />
-        <attribute name=""ccof_facilitystartdate"" />
-        <attribute name=""ccof_facilitystatus"" />
-        <attribute name=""ccof_sda3percentmedian"" />
-        <attribute name=""ccof_servicedeliveryarea"" />
-        <link-entity name=""ccof_median_fee_sda"" from=""ccof_median_fee_sdaid"" to=""ccof_organizationcontactname"" link-type=""outer"" alias=""SDAMedian"">
-          <attribute name=""ccof_3yearstokindergarten"" />
-          <attribute name=""ccof_outofschoolcarekindergarten"" />
-          <attribute name=""ccof_preschool"" />
-          <attribute name=""ccof_18to36months"" />
-          <attribute name=""ccof_0to18months"" />
-          <attribute name=""ccof_outofschoolcaregrade1"" />
-        </link-entity>
-      </link-entity>
-      <link-entity name=""ccof_application"" from=""ccof_organization"" to=""accountid"" link-type=""outer"" alias=""Application"">
-        <attribute name=""ccof_consent"" />
-        <attribute name=""ccof_applicationtype"" />
-        <attribute name=""ccof_applicationid"" />
-        <attribute name=""ccof_name"" />
-        <attribute name=""statuscode"" />
-        <attribute name=""ccof_programyear"" />
+        <attribute name=""accountid"" />
       </link-entity>
     </link-entity>
   </entity>
