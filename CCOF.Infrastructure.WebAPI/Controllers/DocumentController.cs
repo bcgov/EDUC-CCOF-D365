@@ -58,7 +58,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var rawJsonData = value.ToString();
 
             // stop, if the file size exceeds 3mb 
-            if (rawJsonData.Length > 39999990) { return StatusCode((int)HttpStatusCode.InternalServerError, "The file size exceeds the limit allowed (<3Mb)."); };
+            if (rawJsonData.Length > 3999999) { return StatusCode((int)HttpStatusCode.InternalServerError, "The file size exceeds the limit allowed (<3Mb)."); };
             JObject obj = JObject.Parse(rawJsonData);
             obj.Add("notetext", JToken.FromObject(new string("Uploaded Document")));
             rawJsonData = obj.ToString();

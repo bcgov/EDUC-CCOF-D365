@@ -14,6 +14,7 @@ namespace CCOF.Infrastructure.WebAPI.Services
     {
         HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 50);
         HttpResponseMessage SendCreateRequestAsync(string endPoint, string content);
+        HttpResponseMessage SendCreateRequestAsyncRtn(string endPoint, string content);
         HttpResponseMessage SendCreateRequestAsync(HttpMethod httpMethod, string entitySetName, string body);
         HttpResponseMessage SendDeleteRequestAsync(string endPoint);
         HttpResponseMessage SendUpdateRequestAsync(string endPoint, string content);
@@ -52,7 +53,10 @@ namespace CCOF.Infrastructure.WebAPI.Services
         {
             return SendAsync(HttpMethod.Post, endPoint, content);
         }
-
+        public HttpResponseMessage SendCreateRequestAsyncRtn(string endPoint, string content)
+        {
+            return SendAsyncRtn(HttpMethod.Post, endPoint, content);
+        }
         public HttpResponseMessage SendUpdateRequestAsync(string endPoint, string body)
         {
             var message = new HttpRequestMessage(HttpMethod.Patch, endPoint);
@@ -107,6 +111,14 @@ namespace CCOF.Infrastructure.WebAPI.Services
             message.Content = new StringContent(body, Encoding.UTF8, "application/json");
             message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
+            return _authenticationService.GetHttpClient().Result.SendAsync(message).Result;
+        }
+        private HttpResponseMessage SendAsyncRtn(HttpMethod operation, string endPoint, string body)
+        {
+            var message = new HttpRequestMessage(operation, endPoint);
+            message.Content = new StringContent(body, Encoding.UTF8, "application/json");
+            message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            message.Headers.Add("Prefer", "return=representation");
             return _authenticationService.GetHttpClient().Result.SendAsync(message).Result;
         }
     }
