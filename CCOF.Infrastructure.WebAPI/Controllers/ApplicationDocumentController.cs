@@ -26,19 +26,45 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         public ActionResult<string> Get(string applicationId)
         {
             if (string.IsNullOrEmpty(applicationId)) return string.Empty;
-            string fetchXML = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='annotation' >
-                                    <attribute name='filename' />
-                                    <attribute name='filesize' />
-                                    <attribute name='notetext' />
-                                    <filter>
-                                      <condition attribute='objecttypecodename' operator='eq' value='assignment' />
-                                      <condition attribute='notetext' operator='eq' value='Uploaded Documents' />
-                                      <condition attribute='objectid' operator='eq' value= '{" + applicationId + @"}' />
-                                    </filter>                                
-                                  </entity>
-                                </fetch>";
-
+            //string fetchXML = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            //                      <entity name='annotation' >
+            //                        <attribute name='filename' />
+            //                        <attribute name='filesize' />
+            //                        <attribute name='notetext' />
+            //                        <filter>
+            //                          <condition attribute='objecttypecodename' operator='eq' value='assignment' />
+            //                          <condition attribute='notetext' operator='eq' value='Uploaded Documents' />
+            //                          <condition attribute='objectid' operator='eq' value= '{" + applicationId + @"}' />
+            //                        </filter>                                
+            //                      </entity>
+            //                    </fetch>";
+            var fetchData = new
+            {
+                ccof_application = applicationId
+            };
+            var fetchXML = $@"<?xml version=""1.0"" encoding=""utf-16""?>
+                        <fetch>
+                          <entity name=""annotation"">
+                            <attribute name=""filename"" />
+                            <attribute name=""filesize"" />
+                            <attribute name=""objectid"" />
+                            <attribute name=""stepid"" />
+                            <attribute name=""notetext"" />
+                            <attribute name=""subject"" />
+                            <attribute name=""documentbody"" />
+                            <attribute name=""isdocument"" />
+                            <attribute name=""objecttypecode"" />
+                            <attribute name=""annotationid"" />
+                            <link-entity name=""ccof_application_facility_document"" from=""ccof_application_facility_documentid"" to=""objectid"" alias=""ApplicationFacilityDocument"">
+                              <attribute name=""ccof_application_facility_documentid"" />
+                              <attribute name=""ccof_name"" />
+                              <attribute name=""ccof_facility"" />
+                              <filter>
+                                <condition attribute=""ccof_application"" operator=""eq"" value=""{fetchData.ccof_application/*cf5fe675-334b-ed11-bba2-000d3af4f80b*/}"" uiname=""APP-22000060"" uitype=""ccof_application"" />
+                              </filter>
+                            </link-entity>
+                          </entity>
+                        </fetch>";
             var statement = $"annotations?fetchXml=" + WebUtility.UrlEncode(fetchXML);
             var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
             if (response.IsSuccessStatusCode)
