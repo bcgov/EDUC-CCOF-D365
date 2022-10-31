@@ -97,7 +97,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ccof_facility = obj["ccof_facility"].ToString()
             };
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
-                    <fetch top=""50"">
+                    <fetch>
                       <entity name=""ccof_application_facility_document"">
                         <attribute name=""ccof_application"" />
                         <attribute name=""ccof_application_facility_documentid"" />
@@ -132,7 +132,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 uploadFile["documentbody"] = obj["documentbody"];
                 uploadFile["notetext"] = obj["notetext"];
                 uploadFile["objectid_ccof_application_facility_document@odata.bind"] = "/ccof_application_facility_documents(" + appFacilityDoc[0]["ccof_application_facility_documentid"].ToString()+")";
-                response = _d365webapiservice.SendCreateRequestAsyncRtn("annotations", uploadFile.ToString());
+                response = _d365webapiservice.SendCreateRequestAsyncRtn("annotations?$select=subject,filename", uploadFile.ToString());
                 if (response.IsSuccessStatusCode)
                 {
                     return Ok(response.Content.ReadAsStringAsync().Result);
@@ -166,7 +166,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["subject"] = obj["subject"];
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["documentbody"] = obj["documentbody"];
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["notetext"] = obj["notetext"];
-                response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_application_facility_documents?$expand=ccof_application_facility_document_Annotations($select=subject)", appUploadFile.ToString());
+                response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_application_facility_documents?$expand=ccof_application_facility_document_Annotations($select=subject,filename)", appUploadFile.ToString());
                 JObject returnFile=new JObject();
                 returnFile =JObject.Parse(response.Content.ReadAsStringAsync().Result);
 
