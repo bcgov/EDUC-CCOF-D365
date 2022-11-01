@@ -7,6 +7,7 @@ using CCOF.Infrastructure.WebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace CCOF.Infrastructure.WebAPI.Controllers
 {
@@ -27,14 +28,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             if (string.IsNullOrEmpty(userId)) return BadRequest("Invalid Request");
 
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
-<fetch>
+<fetch distinct=""true"" no-lock=""true"">
   <entity name=""ccof_bceid_organization"">
     <attribute name=""ccof_businessbceid"" />
     <attribute name=""ccof_organization"" />
     <link-entity name=""contact"" from=""contactid"" to=""ccof_businessbceid"" link-type=""inner"" alias=""BCeID"">
       <attribute name=""ccof_userid"" />
       <attribute name=""ccof_username"" />
-      <filter>
+      <filter type=""and"">
         <condition attribute=""ccof_userid"" operator=""eq"" value=""{userId}"" />
       </filter>
     </link-entity>
@@ -42,10 +43,41 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
       <attribute name=""name"" />
       <attribute name=""accountnumber"" />
       <attribute name=""accountid"" />
-      <link-entity name=""account"" from=""parentaccountid"" to=""accountid"" link-type=""outer"" alias=""Facility"">
-        <attribute name=""name"" />
-        <attribute name=""accountnumber"" />
-        <attribute name=""accountid"" />
+      <attribute name=""ccof_accounttype"" />
+      <link-entity name=""ccof_application"" from=""ccof_organization"" to=""accountid"" link-type=""outer"" alias=""Application"">
+        <attribute name=""ccof_providertype"" />
+        <attribute name=""ccof_name"" />
+        <attribute name=""statuscode"" />
+        <attribute name=""ccof_applicationid"" />
+        <attribute name=""ccof_applicationtype"" />
+        <attribute name=""ccof_organization"" />
+        <attribute name=""ccof_programyear"" />
+        <link-entity name=""ccof_program_year"" from=""ccof_program_yearid"" to=""ccof_programyear"" link-type=""outer"" alias=""ProgramYear"">
+          <attribute name=""ccof_name"" />
+          <attribute name=""statuscode"" />
+          <attribute name=""ccof_program_yearid"" />
+          <order attribute=""ccof_name"" descending=""true"" />
+        </link-entity>
+        <link-entity name=""ccof_application_basefunding"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCOF"">
+          <attribute name=""ccof_application_basefundingid"" />
+          <attribute name=""ccof_name"" />
+          <attribute name=""statuscode"" />
+          <attribute name=""ccof_facility"" />
+        </link-entity>
+        <link-entity name=""ccof_applicationccfri"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCFRI"">
+          <attribute name=""ccof_applicationccfriid"" />
+          <attribute name=""ccof_name"" />
+          <attribute name=""ccof_ccfrioptin"" />
+          <attribute name=""ccof_facility"" />
+          <attribute name=""statuscode"" />
+        </link-entity>
+        <link-entity name=""ccof_applicationecewe"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""ECEWE"">
+          <attribute name=""ccof_applicationeceweid"" />
+          <attribute name=""ccof_name"" />
+          <attribute name=""statuscode"" />
+          <attribute name=""ccof_optintoecewe"" />
+          <attribute name=""ccof_facility"" />
+        </link-entity>
       </link-entity>
     </link-entity>
   </entity>
@@ -56,7 +88,19 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var response = _d365webapiservice.SendMessageAsync(HttpMethod.Get, message);
             if (response.IsSuccessStatusCode)
             {
-                return Ok(response.Content.ReadAsStringAsync().Result);
+                var root = JToken.Parse(response.Content.ReadAsStringAsync().Result);
+                if (root.Last().First().HasValues)
+                {
+                    var statusCode = 1; // Current Program Year
+                    var records = root.Last().ToList();
+                    var applicationId = records[0][0]["Application.ccof_applicationid"]; // Latest Application
+                                                                                         // var values = records[0].Where(t => (int?)t["ProgramYear.statuscode"] == statusCode);
+                    var values = records[0].Where(t => (string)t["Application.ccof_applicationid"] == applicationId.ToString());
+                    return Ok(values);
+                }
+                else {
+                    return Ok(response.Content.ReadAsStringAsync().Result);
+                }            
             }
             else
                 return StatusCode((int)response.StatusCode,
