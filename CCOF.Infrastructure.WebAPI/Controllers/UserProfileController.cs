@@ -63,6 +63,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
           <attribute name=""ccof_name"" />
           <attribute name=""statuscode"" />
           <attribute name=""ccof_facility"" />
+          <link-entity name=""account"" from=""accountid"" to=""ccof_facility"" link-type=""outer"" alias=""CCOF.Facility"">
+            <attribute name=""name"" />
+            <attribute name=""accountnumber"" />
+          </link-entity>
         </link-entity>
         <link-entity name=""ccof_applicationccfri"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCFRI"">
           <attribute name=""ccof_applicationccfriid"" />
@@ -70,6 +74,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
           <attribute name=""ccof_ccfrioptin"" />
           <attribute name=""ccof_facility"" />
           <attribute name=""statuscode"" />
+          <link-entity name=""account"" from=""accountid"" to=""ccof_facility"" link-type=""outer"" alias=""CCFRI.Facility"">
+            <attribute name=""name"" />
+            <attribute name=""accountnumber"" />
+          </link-entity>
         </link-entity>
         <link-entity name=""ccof_applicationecewe"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""ECEWE"">
           <attribute name=""ccof_applicationeceweid"" />
@@ -77,6 +85,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
           <attribute name=""statuscode"" />
           <attribute name=""ccof_optintoecewe"" />
           <attribute name=""ccof_facility"" />
+          <link-entity name=""account"" from=""accountid"" to=""ccof_facility"" link-type=""outer"" alias=""ECEWE.Facility"">
+            <attribute name=""name"" />
+            <attribute name=""accountnumber"" />
+          </link-entity>
         </link-entity>
       </link-entity>
     </link-entity>
