@@ -29,7 +29,7 @@ CCOF.AdjudicationCCFRIFacility.Form = {
 		//
 		//var tabMonthAdjudication = formContext.ui.tabs.get("MonthAdjudication");
 		//tabMonthAdjudication.addTabStateChange(refreshMedianGrid(executionContext));
-		setTimeout(refreshMedianGrid(executionContext), 4000);
+		// setTimeout(refreshMedianGrid(executionContext), 4000);
 	},
 }
 function refreshMedianGrid(executionContext) {
