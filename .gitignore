@@ -2,9 +2,10 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/CCOF.Infrastructure.WebAPI/appsettings.Development.json
-/CCOF.Infrastructure.WebAPI/bin/Debug/net6.0
+/CCOF.Infrastructure.WebAPI/bin/Debug/
 /CCOF.Infrastructure.WebAPI/obj
+/.vs
 
 # configuration files
 appsettings.json
+/CCOF.Infrastructure.WebAPI/appsettings.Development.json
