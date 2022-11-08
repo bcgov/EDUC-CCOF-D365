@@ -29,7 +29,7 @@ SystemSetting.SS.Form = {
 
 
     //A function called on save
-    onLoad: function (executionContext){
+    onLoad: function (executionContext) {
 
     },
 
