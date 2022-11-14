@@ -142,9 +142,6 @@ parameters:
 - name: APP_NAME
   description: Application name
   required: true
-- name: HOST_ROUTE
-  description: The host the route will use to expose service outside cluster 
-  required: true
 - name: TAG
   description: The identifying tag for this specific deployment
   required: true
