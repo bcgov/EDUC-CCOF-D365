@@ -1,4 +1,4 @@
-name: 1 DEV - Deploy Dynamics API
+name: 3 TEST - Deploy Dynamics-API
 
 env:
   # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
@@ -7,7 +7,7 @@ env:
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
   # 🖊️ EDIT to set the kube context's namespace after login. Leave blank to use your user's default namespace.
-  OPENSHIFT_NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-dev
+  OPENSHIFT_NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-test
 
   # SPLUNK_TOKEN: ${{ secrets.SPLUNK_TOKEN }}
 
@@ -26,26 +26,23 @@ env:
   APP_NAME_BACKEND: "d365api"
 
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
-  NAMESPACE_TOOLS: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-tools
-  COMMON_NAMESPACE: ${{ secrets.COMMON_NAMESPACE_NO_ENV }}
-  TAG: "latest"
 
-  MIN_REPLICAS: "1"
-  MAX_REPLICAS: "1"
+  MIN_REPLICAS: "3"
+  MAX_REPLICAS: "5"
   MIN_CPU: "50m"
   MAX_CPU: "100m"
   MIN_MEM: "200Mi"
   MAX_MEM: "250Mi"
-
+  
 on:
   workflow_dispatch:
 
 jobs:
   openshift-ci-cd:
-    name: Build and deploy Backend to DEV
+    name: Deploy D365 API to TEST
     # ubuntu-20.04 can also be used.
     runs-on: ubuntu-18.04
-    environment: dev
+    environment: test
 
     outputs:
       ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
@@ -95,45 +92,15 @@ jobs:
       with:
         ref: ${{ env.BRANCH }}
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ env.DOCKER_ARTIFACTORY_REPO }}
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-    - name: Build Dynamics from Dockerfile
-      id: build-image-backend
-      uses: redhat-actions/buildah-build@v2
-      with:
-        image: ${{ env.APP_NAME_BACKEND }}
-        tags: "latest"
-
-        # If you don't have a Dockerfile/Containerfile, refer to https://github.com/redhat-actions/buildah-build#scratch-build-inputs
-        # Or, perform a source-to-image build using https://github.com/redhat-actions/s2i-build
-        # Otherwise, point this to your Dockerfile/Containerfile relative to the repository root.
-        dockerfiles: |
-          ./Dockerfile
-        context: ./
-
-      # https://github.com/redhat-actions/push-to-registry#readme
-    - name: Push Dynamics API to registry
-      id: push-image-backend
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        image: ${{ steps.build-image-backend.outputs.image }}
-        tags: ${{ steps.build-image-backend.outputs.tags }}
-        registry: ${{ env.IMAGE_REGISTRY }}
-        username: ${{ env.IMAGE_REGISTRY_USER }}
-        password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+    - name: Get latest tag
+      uses: actions-ecosystem/action-get-latest-tag@v1
+      id: get-latest-tag
 
     - name: Install oc
       uses: redhat-actions/openshift-tools-installer@v1
       with:
         oc: 4
 
-      # https://github.com/redhat-actions/oc-login#readme
-#    - uses: actions/checkout@v2
     - name: Deploy
       run: |
         set -eux
@@ -143,19 +110,18 @@ jobs:
         # Cancel any rollouts in progress
         oc rollout cancel dc/${{ env.APP_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }} 2> /dev/null \
         || true && echo "No rollout in progress"
-        
-        # Create the image stream if it doesn't exist
-        oc create imagestream ${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }} 2> /dev/null || true && echo "Backend image stream in place"
-        
-        oc tag ${{ steps.push-image-backend.outputs.registry-path }} ${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}:${{ env.TAG }}
-        
+
+        # Create tag for TEST env from DEV env image
+        oc tag ${{ env.NAMESPACE }}-dev/${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }} ${{ env.NAMESPACE }}-test/${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }}
+
         # Process and apply deployment template
-        oc process -f tools/openshift/d365api.dc.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p TAG=${{ env.TAG }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }}\
+        oc process -f tools/openshift/d365api.dc.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p TAG=${{ steps.get-latest-tag.outputs.tag }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }}\
         | oc apply -f -
-        
+
         # Start rollout (if necessary) and follow it
         oc rollout latest dc/${{ env.APP_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }} 2> /dev/null \
         || true && echo "Rollout in progress"
 
         # Get status, returns 0 if rollout is successful
         oc rollout status dc/${{ env.APP_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}
+
