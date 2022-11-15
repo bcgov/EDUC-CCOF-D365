@@ -171,6 +171,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var root = JToken.Parse(response.Content.ReadAsStringAsync().Result);
+
                 if (root.Last().First().HasValues)
                 {
                     var statusCode = 1; // Current Program Year
@@ -179,11 +180,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     if (applicationId != null)
                     {
                       var  values =  records[0].Where(t => (string)t["Application.ccof_applicationid"] == applicationId.ToString());
-                        //return Ok(values);
-                        return Ok(response.Content.ReadAsStringAsync().Result);
-
-
-                    }                                                                     
+                      return Ok(root["value"].ToString());
+                    }
                     else
                     {
                         // var values = records[0].Where(t => (string)t["Application.ccof_applicationid"] == "");
