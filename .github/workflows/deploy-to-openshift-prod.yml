@@ -27,8 +27,6 @@ env:
 
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
 
-
-
   MIN_REPLICAS: "3"
   MAX_REPLICAS: "5"
   MIN_CPU: "50m"
@@ -117,7 +115,7 @@ jobs:
         oc tag ${{ env.NAMESPACE }}-dev/${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }} ${{ env.NAMESPACE }}-prod/${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }}
 
         # Process and apply deployment template
-        oc process -f tools/openshift/frontend.dc.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p TAG=${{ steps.get-latest-tag.outputs.tag }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }}\
+        oc process -f tools/openshift/d365api.dc.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p TAG=${{ steps.get-latest-tag.outputs.tag }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }}\
         | oc apply -f -
 
         # Start rollout (if necessary) and follow it
@@ -127,7 +125,3 @@ jobs:
         # Get status, returns 0 if rollout is successful
         oc rollout status dc/${{ env.APP_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}
 
-    - name: ZAP Scan
-      uses: zaproxy/action-full-scan@v0.3.0
-      with:
-        target: 'https://${{ env.HOST_ROUTE }}'
