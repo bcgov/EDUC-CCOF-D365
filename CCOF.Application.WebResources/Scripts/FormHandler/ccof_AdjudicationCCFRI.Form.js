@@ -31,7 +31,7 @@ AdjCCFRI.Form = {
         debugger;
         var formContext = executionContext.getFormContext();
         var saveVCHA = formContext.getAttribute("ccof_vcha").getValue();  //Two options feild - Yes - 1(True) and No - 0(False)
-        var confirmStrings = { text: "You have updated VCHA.Are you sure you want to proceed?", title: "Confirmation Dialog" };
+        var confirmStrings = { text: "You have updated VCHA at organization level. This change will be cascaded to all child facilities. Are you sure you want to proceed?", title: "Confirmation Dialog" };
         var confirmOptions = { height: 200, width: 450 };
         var isDirtyVCHA = formContext.getAttribute("ccof_vcha").getIsDirty();
         if (isDirtyVCHA) {
