@@ -180,7 +180,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     if (applicationId != null)
                     {
                       var  values =  records[0].Where(t => (string)t["Application.ccof_applicationid"] == applicationId.ToString());
-                      return Ok(root["value"].ToString());
+                      return Ok(root["value"].ToString()); 
                     }
                     else
                     {
