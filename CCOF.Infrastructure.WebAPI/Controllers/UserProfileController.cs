@@ -129,6 +129,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
           <attribute name=""ccof_program_yearid"" />
           <attribute name=""statuscode"" />
           <order attribute=""ccof_name"" descending=""true"" />
+          <link-entity name=""ccof_median_fee"" from=""ccof_programyear"" to=""ccof_program_yearid"" link-type=""outer"" alias=""ThreePctMedian"">
+            <attribute name=""ccof_name"" />
+            <attribute name=""ccof_median_feeid"" />
+          </link-entity>
         </link-entity>
         <link-entity name=""ccof_application_basefunding"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCOF"">
           <attribute name=""ccof_facility"" />
@@ -180,7 +184,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     if (applicationId != null)
                     {
                       var  values =  records[0].Where(t => (string)t["Application.ccof_applicationid"] == applicationId.ToString());
-                      return Ok(root["value"].ToString()); 
+                      return Ok(root["value"].ToString());
                     }
                     else
                     {
