@@ -5,7 +5,10 @@
 /CCOF.Infrastructure.WebAPI/bin/Debug/
 /CCOF.Infrastructure.WebAPI/obj
 /.vs
-
+/CCOF.Infrastructure.WebAPI/Controllers/ContractFilesController.cs
+/CCOF.Infrastructure.WebAPI/Controllers/CustomActionController.cs
+/CCOF.Infrastructure.WebAPI/Controllers/AuthenticationController.cs
+/CCOF.Infrastructure.WebAPI/Controllers/MetadataController.cs
 # configuration files
 appsettings.json
 /CCOF.Infrastructure.WebAPI/appsettings.Development.json
