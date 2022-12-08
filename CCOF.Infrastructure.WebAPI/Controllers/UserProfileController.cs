@@ -36,13 +36,12 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
       <condition attribute=""ccof_userid"" operator=""eq"" value=""{userId}"" />
     </filter>
     <link-entity name=""ccof_bceid_organization"" from=""ccof_businessbceid"" to=""contactid"" link-type=""outer"">
-      <attribute name=""ccof_name"" />
-      <attribute name=""statuscode"" />
       <link-entity name=""account"" from=""accountid"" to=""ccof_organization"" link-type=""outer"" alias=""Organization"">
         <attribute name=""accountid"" />
-        <attribute name=""ccof_contractstatus"" />
         <attribute name=""name"" />
         <attribute name=""accountnumber"" />
+        <attribute name=""ccof_contractstatus"" />
+        <attribute name=""ccof_formcomplete"" />
         <link-entity name=""ccof_application"" from=""ccof_organization"" to=""accountid"" link-type=""outer"" alias=""Application"">
           <attribute name=""ccof_organization"" />
           <attribute name=""ccof_applicationtype"" />
@@ -58,26 +57,30 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             <order attribute=""ccof_name"" descending=""true"" />
           </link-entity>
           <link-entity name=""ccof_application_basefunding"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCOF"">
+            <attribute name=""ccof_application_basefundingid"" />
             <attribute name=""ccof_facility"" />
             <attribute name=""statuscode"" />
-            <attribute name=""ccof_application_basefundingid"" />
             <attribute name=""ccof_formcomplete"" />
             <link-entity name=""account"" from=""accountid"" to=""ccof_facility"" link-type=""outer"" alias=""CCOF.Facility"">
+              <attribute name=""accountid"" />
               <attribute name=""name"" />
               <attribute name=""accountnumber"" />
+              <attribute name=""ccof_facilitylicencenumber"" />
               <attribute name=""ccof_formcomplete"" />
             </link-entity>
           </link-entity>
           <link-entity name=""ccof_applicationccfri"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCFRI"">
+            <attribute name=""ccof_applicationccfriid"" />          
             <attribute name=""ccof_ccfrioptin"" />
             <attribute name=""ccof_name"" />
             <attribute name=""ccof_facility"" />
             <attribute name=""statuscode"" />
-            <attribute name=""ccof_applicationccfriid"" />
             <attribute name=""ccof_formcomplete"" />
             <link-entity name=""account"" from=""accountid"" to=""ccof_facility"" link-type=""outer"" alias=""CCFRI.Facility"">
-              <attribute name=""accountnumber"" />
               <attribute name=""accountid"" />
+              <attribute name=""name"" />
+              <attribute name=""accountnumber"" />
+              <attribute name=""ccof_facilitylicencenumber"" />
               <attribute name=""ccof_formcomplete"" />
             </link-entity>
           </link-entity>
@@ -85,12 +88,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             <attribute name=""ccof_applicationeceweid"" />
             <attribute name=""ccof_optintoecewe"" />
             <attribute name=""ccof_name"" />
+            <attribute name=""ccof_facility"" />
             <attribute name=""statuscode"" />
             <attribute name=""ccof_formcomplete"" />
-            <attribute name=""ccof_facility"" />
             <link-entity name=""account"" from=""accountid"" to=""ccof_applicationeceweid"" link-type=""outer"" alias=""ECEWE.Facility"">
+              <attribute name=""accountid"" />
               <attribute name=""name"" />
               <attribute name=""accountnumber"" />
+              <attribute name=""ccof_facilitylicencenumber"" />
               <attribute name=""ccof_formcomplete"" />
             </link-entity>
           </link-entity>
