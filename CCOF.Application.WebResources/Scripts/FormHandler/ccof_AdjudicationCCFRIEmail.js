@@ -24,6 +24,7 @@ AdjCCFRI.SubGrid = {
                 });
         }
         else {
+            Xrm.Utility.showProgressIndicator("Creating draft email...")
             var clientURL = Xrm.Utility.getGlobalContext().getClientUrl();
             var entity = {};
             var entityArray = [];
@@ -59,11 +60,14 @@ AdjCCFRI.SubGrid = {
                     if (this.status === 200) {
                         debugger;
                         var result = this.response;
+                        Xrm.Utility.closeProgressIndicator()
                         Xrm.Navigation.openAlertDialog(result)
-                        // formContext.ui.clearFormNotification("dddd");
+                        //formContext.getControl('gridCCFRIEmail').refresh();
+                        //var quickViewControl = Xrm.Page.ui.quickForms.get("quickViewCCFRIEmail");
+                        //quickViewControl.refresh(); 
                     }
                     else if (this.status === 400) {
-                        // formContext.ui.clearFormNotification("dddd");
+                        Xrm.Utility.closeProgressIndicator()
                         var result = this.response;
                         alert("Error: " + result);
                     }
