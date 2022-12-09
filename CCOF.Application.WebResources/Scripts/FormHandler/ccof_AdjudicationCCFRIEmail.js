@@ -45,7 +45,7 @@ AdjCCFRI.SubGrid = {
                 entity = {};
             });
             console.log(entityArray);
-            Xrm.Utility.alertDialog("entityArray:" + JSON.stringify(entityArray));
+            //Xrm.Utility.alertDialog("entityArray:" + JSON.stringify(entityArray));
             var response = getSyncMultipleRecord("environmentvariabledefinitions?$select=defaultvalue&$filter=schemaname eq 'ccof_EmailDecisionUrl'");
             var flowUrl = response[0]["defaultvalue"];
            // var flowUrl = "https://prod-11.canadacentral.logic.azure.com:443/workflows/c53af8c9c1c44fa1b8faaad89076b35f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=NH7j0MWwxj2KjK9wY4qwKPoOC73ekzIOPltv_odXlBA";
