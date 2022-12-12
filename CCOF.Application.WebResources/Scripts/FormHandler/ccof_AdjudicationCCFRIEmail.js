@@ -42,6 +42,7 @@ AdjCCFRI.SubGrid = {
                 entity.ccfriEmailId = subgridRecordGuid
                 entity.emailType = emailType;
                 entity.currentuserid = currentuserid.replace('{', '').replace('}', '');
+                entity.ccof_ccfriId = entityId.replace('{', '').replace('}', '');
                 entityArray.push(entity);
                 entity = {};
             });
