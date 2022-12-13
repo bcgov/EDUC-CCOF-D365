@@ -23,7 +23,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
         // GET: api/UserProfile
         [HttpGet]
-        public ActionResult<string> Get(string userId)
+        public ActionResult<string> Get(string userId,string userName)
         {
             if (string.IsNullOrEmpty(userId)) return BadRequest("Invalid Request");
 
@@ -32,8 +32,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
   <entity name=""contact"">
     <attribute name=""ccof_userid"" />
     <attribute name=""ccof_username"" />
-    <filter>
+    <filter type=""or"">
       <condition attribute=""ccof_userid"" operator=""eq"" value=""{userId}"" />
+      <condition attribute=""ccof_username"" operator=""eq"" value=""{userName}"" />
     </filter>
     <link-entity name=""ccof_bceid_organization"" from=""ccof_businessbceid"" to=""contactid"" link-type=""outer"">
       <link-entity name=""account"" from=""accountid"" to=""ccof_organization"" link-type=""outer"" alias=""Organization"">
@@ -50,10 +51,18 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
           <attribute name=""ccof_programyear"" />
           <attribute name=""statuscode"" />
           <attribute name=""ccof_providertype"" />
+          <attribute name=""ccof_unlock_declaration"" />
+          <attribute name=""ccof_unlock_licenseupload"" />
+          <attribute name=""ccof_unlock_supportingdocument"" />
+          <attribute name=""ccof_unlock_ccof"" />
+          <attribute name=""ccof_unlock_ecewe"" />
           <link-entity name=""ccof_program_year"" from=""ccof_program_yearid"" to=""ccof_programyear"" link-type=""outer"" alias=""ProgramYear"">
             <attribute name=""ccof_name"" />
             <attribute name=""ccof_program_yearid"" />
             <attribute name=""statuscode"" />
+            <attribute name=""ccof_declarationbstart"" />
+            <attribute name=""ccof_intakeperiodstart"" />
+            <attribute name=""ccof_intakeperiodend"" />
             <order attribute=""ccof_name"" descending=""true"" />
           </link-entity>
           <link-entity name=""ccof_application_basefunding"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCOF"">
@@ -70,12 +79,15 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             </link-entity>
           </link-entity>
           <link-entity name=""ccof_applicationccfri"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""CCFRI"">
-            <attribute name=""ccof_applicationccfriid"" />          
+            <attribute name=""ccof_applicationccfriid"" />
             <attribute name=""ccof_ccfrioptin"" />
             <attribute name=""ccof_name"" />
             <attribute name=""ccof_facility"" />
             <attribute name=""statuscode"" />
             <attribute name=""ccof_formcomplete"" />
+            <attribute name=""ccof_unlock_rfi"" />
+            <attribute name=""ccof_unlock_ccfri"" />
+            <attribute name=""ccof_unlock_nmf_rfi"" />
             <link-entity name=""account"" from=""accountid"" to=""ccof_facility"" link-type=""outer"" alias=""CCFRI.Facility"">
               <attribute name=""accountid"" />
               <attribute name=""name"" />
@@ -112,7 +124,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 var root = JToken.Parse(response.Content.ReadAsStringAsync().Result);
 
                 if (!root.Last().First().HasValues) { 
-                    //Add Search by userName here
+                    //An Alternate Approach: Add Search by userName here and then store the user Guid
 
                     return NotFound($"User not found: {userId}"); 
                 }
