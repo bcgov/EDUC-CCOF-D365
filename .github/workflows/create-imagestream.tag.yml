@@ -1,4 +1,4 @@
-name: Create Tag
+name: Create Image
 
 env:
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
