@@ -9,132 +9,22 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
 		var entityId = formContext.data.entity.getId(); // get parent record id
 		var appCCFRI = formContext.getAttribute("ccof_applicationccfri").getValue()[0].id;
 		// Facility Info; Region,Median, NMF, SDA , expense, MEFI Cap’, Limit Fees to NMF Benchmark’ ,orgType
-
-		var regionInfo = {};
-		var feeIncreaseDetails = {};
-		var expenseInfo = {};
+		var ExpenseInfo = {};
 		// Get expense Info
-		expenseInfo['Exceptional Circumstances'] = formContext.getAttribute("ccof_totalexpenses_exceptionalcircumstances").getValue();
-		expenseInfo['Direct Care Staff Wages'] = formContext.getAttribute("ccof_totalexpenses_wageincrease").getValue();
-		expenseInfo['Priority Service Expansion'] = formContext.getAttribute("ccof_totalexpenses_priorityserviceexpansion").getValue();
-		expenseInfo['Total Monthly Expenses'] = expenseInfo['Exceptional Circumstances'] + expenseInfo['Direct Care Staff Wages'] + expenseInfo['Priority Service Expansion'];
-		expenseInfo['MEFI Cap'] = formContext.getAttribute("ccof_meficap").getValue();
-		expenseInfo['Limit Fees to NMF Benchmark'] = formContext.getAttribute("ccof_limitfeestonmfbenchmark").getValue();
+        ExpenseInfo['Exceptional Circumstances'] = formContext.getAttribute("ccof_totalexpenses_exceptionalcircumstances").getValue();
+        ExpenseInfo['Direct Care Staff Wages'] = formContext.getAttribute("ccof_totalexpenses_wageincrease").getValue();
+        ExpenseInfo['Priority Service Expansion'] = formContext.getAttribute("ccof_totalexpenses_priorityserviceexpansion").getValue();
+        ExpenseInfo['Total Monthly Expenses'] = ExpenseInfo['Exceptional Circumstances'] + ExpenseInfo['Direct Care Staff Wages'] + ExpenseInfo['Priority Service Expansion'];
+        ExpenseInfo['MEFI Cap'] = formContext.getAttribute("ccof_meficap").getValue();
+        ExpenseInfo['Limit Fees to NMF Benchmark'] = formContext.getAttribute("ccof_limitfeestonmfbenchmark").getValue();
 
 		// Get Region, Median, NMF
-		var req = new XMLHttpRequest();
-		req.open("GET", Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.2/ccof_applicationccfris(" + getCleanedGuid(appCCFRI) +")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)", false);
-		req.setRequestHeader("OData-MaxVersion", "4.0");
-		req.setRequestHeader("OData-Version", "4.0");
-		req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-		req.setRequestHeader("Accept", "application/json");
-		req.setRequestHeader("Prefer", "odata.include-annotations=*");
-		req.onreadystatechange = function () {
-			if (this.readyState === 4) {
-				req.onreadystatechange = null;
-				if (this.status === 200) {
-					var result = JSON.parse(this.response);
-					regionInfo = result;
-					console.log(result);
-					// Columns
-					var ccof_applicationccfriid = result["ccof_applicationccfriid"]; // Guid
-					var ccof_region = result["_ccof_region_value"]; // Lookup
-					var ccof_region_formatted = result["_ccof_region_value@OData.Community.Display.V1.FormattedValue"];
-					var ccof_region_lookuplogicalname = result["_ccof_region_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-
-					// Many To One Relationships
-					if (result.hasOwnProperty("ccof_Application") && result["ccof_Application"] !== null) {
-						var ccof_Application_ccof_applicationid = result["ccof_Application"]["ccof_applicationid"]; // Guid
-						var ccof_Application_ccof_name = result["ccof_Application"]["ccof_name"]; // Text
-						var ccof_Application_ccof_programyear = result["ccof_Application"]["_ccof_programyear_value"]; // Lookup
-						var ccof_Application_ccof_programyear_formatted = result["ccof_Application"]["_ccof_programyear_value@OData.Community.Display.V1.FormattedValue"];
-						var ccof_Application_ccof_programyear_lookuplogicalname = result["ccof_Application"]["_ccof_programyear_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-						var ccof_Application_ccof_providertype = result["ccof_Application"]["ccof_providertype"]; // Choice
-						var ccof_Application_ccof_providertype_formatted = result["ccof_Application"]["ccof_providertype@OData.Community.Display.V1.FormattedValue"];
-					}
-					if (result.hasOwnProperty("ccof_Region3PctMedian") && result["ccof_Region3PctMedian"] !== null) {
-						var ccof_Region3PctMedian_ccof_0to18months = result["ccof_Region3PctMedian"]["ccof_0to18months"]; // Currency
-						var ccof_Region3PctMedian_ccof_10percentageof0to18 = result["ccof_Region3PctMedian"]["ccof_10percentageof0to18"]; // Currency
-						var ccof_Region3PctMedian_ccof_10percentageof18to36 = result["ccof_Region3PctMedian"]["ccof_10percentageof18to36"]; // Currency
-						var ccof_Region3PctMedian_ccof_10percentageof3ytok = result["ccof_Region3PctMedian"]["ccof_10percentageof3ytok"]; // Currency
-						var ccof_Region3PctMedian_ccof_10percentageofoosctog = result["ccof_Region3PctMedian"]["ccof_10percentageofoosctog"]; // Currency
-						var ccof_Region3PctMedian_ccof_10percentageofoosctok = result["ccof_Region3PctMedian"]["ccof_10percentageofoosctok"]; // Currency
-						var ccof_Region3PctMedian_ccof_10percenatgeofpre = result["ccof_Region3PctMedian"]["ccof_10percenatgeofpre"]; // Currency
-						var ccof_Region3PctMedian_ccof_18to36months = result["ccof_Region3PctMedian"]["ccof_18to36months"]; // Currency
-						var ccof_Region3PctMedian_ccof_3percentageof0to18 = result["ccof_Region3PctMedian"]["ccof_3percentageof0to18"]; // Currency
-						var ccof_Region3PctMedian_ccof_3percentageof18to36 = result["ccof_Region3PctMedian"]["ccof_3percentageof18to36"]; // Currency
-						var ccof_Region3PctMedian_ccof_3percentageof3ytok = result["ccof_Region3PctMedian"]["ccof_3percentageof3ytok"]; // Currency
-						var ccof_Region3PctMedian_ccof_3percentmedian = result["ccof_Region3PctMedian"]["_ccof_3percentmedian_value"]; // Lookup
-						var ccof_Region3PctMedian_ccof_3percentmedian_formatted = result["ccof_Region3PctMedian"]["_ccof_3percentmedian_value@OData.Community.Display.V1.FormattedValue"];
-						var ccof_Region3PctMedian_ccof_3percentmedian_lookuplogicalname = result["ccof_Region3PctMedian"]["_ccof_3percentmedian_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-						var ccof_Region3PctMedian_ccof_3percentageofoosctog = result["ccof_Region3PctMedian"]["ccof_3percentageofoosctog"]; // Currency
-						var ccof_Region3PctMedian_ccof_3percentageofoosctok = result["ccof_Region3PctMedian"]["ccof_3percentageofoosctok"]; // Currency
-						var ccof_Region3PctMedian_ccof_3percentageofpre = result["ccof_Region3PctMedian"]["ccof_3percentageofpre"]; // Currency
-						var ccof_Region3PctMedian_ccof_3yearstokindergarten = result["ccof_Region3PctMedian"]["ccof_3yearstokindergarten"]; // Currency
-						var ccof_Region3PctMedian_ccof_name = result["ccof_Region3PctMedian"]["ccof_name"]; // Text
-						var ccof_Region3PctMedian_ccof_outofschoolcaregrade1 = result["ccof_Region3PctMedian"]["ccof_outofschoolcaregrade1"]; // Currency
-						var ccof_Region3PctMedian_ccof_outofschoolcarekindergarten = result["ccof_Region3PctMedian"]["ccof_outofschoolcarekindergarten"]; // Currency
-						var ccof_Region3PctMedian_ccof_preschool = result["ccof_Region3PctMedian"]["ccof_preschool"]; // Currency
-					}
-					if (result.hasOwnProperty("ccof_RegionNMFBenchmark") && result["ccof_RegionNMFBenchmark"] !== null) {
-						var ccof_RegionNMFBenchmark_ccof_fee_benchmark_sdaid = result["ccof_RegionNMFBenchmark"]["ccof_fee_benchmark_sdaid"]; // Guid
-						var ccof_RegionNMFBenchmark_ccof_0to18m = result["ccof_RegionNMFBenchmark"]["ccof_0to18m"]; // Currency
-						var ccof_RegionNMFBenchmark_ccof_18to36m = result["ccof_RegionNMFBenchmark"]["ccof_18to36m"]; // Currency
-						var ccof_RegionNMFBenchmark_ccof_3ytok = result["ccof_RegionNMFBenchmark"]["ccof_3ytok"]; // Currency
-						var ccof_RegionNMFBenchmark_ccof_name = result["ccof_RegionNMFBenchmark"]["ccof_name"]; // Text
-						var ccof_RegionNMFBenchmark_ccof_oosctograde = result["ccof_RegionNMFBenchmark"]["ccof_oosctograde"]; // Currency
-						var ccof_RegionNMFBenchmark_ccof_oosctok = result["ccof_RegionNMFBenchmark"]["ccof_oosctok"]; // Currency
-						var ccof_RegionNMFBenchmark_ccof_preschool = result["ccof_RegionNMFBenchmark"]["ccof_preschool"]; // Currency
-					}
-				} else {
-					console.log(this.responseText);
-				}
-			}
-		};
-		req.send();
-		// get Fee Increase details
-		req = new XMLHttpRequest();
-		req.open("GET", Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.2/ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId)+" and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc", false);
-		req.setRequestHeader("OData-MaxVersion", "4.0");
-		req.setRequestHeader("OData-Version", "4.0");
-		req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-		req.setRequestHeader("Accept", "application/json");
-		req.setRequestHeader("Prefer", "odata.include-annotations=*");
-		req.onreadystatechange = function () {
-			if (this.readyState === 4) {
-				req.onreadystatechange = null;
-				if (this.status === 200) {
-					var results = JSON.parse(this.response);
-					feeIncreaseDetails = results;
-					console.log(results);
-					for (var i = 0; i < results.value.length; i++) {
-						var result = results.value[i];
-						// Columns
-						var ccof_ccfri_facility_parent_feeid = result["ccof_ccfri_facility_parent_feeid"]; // Guid
-						var ccof_adjudicationccfrifacility = result["_ccof_adjudicationccfrifacility_value"]; // Lookup
-						var ccof_adjudicationccfrifacility_formatted = result["_ccof_adjudicationccfrifacility_value@OData.Community.Display.V1.FormattedValue"];
-						var ccof_adjudicationccfrifacility_lookuplogicalname = result["_ccof_adjudicationccfrifacility_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-						var ccof_averageenrolment = result["ccof_averageenrolment"]; // Currency
-						var ccof_childcarecategory = result["_ccof_childcarecategory_value"]; // Lookup
-						var ccof_childcarecategory_formatted = result["_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue"];
-						var ccof_childcarecategory_lookuplogicalname = result["_ccof_childcarecategory_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-						var ccof_cumulativefeeincrease = result["ccof_cumulativefeeincrease"]; // Currency
-						var ccof_feebeforeincrease = result["ccof_feebeforeincrease"]; // Text
-						var ccof_feeincreasetype = result["ccof_feeincreasetype"]; // Choice
-						var ccof_feeincreasetype_formatted = result["ccof_feeincreasetype@OData.Community.Display.V1.FormattedValue"];
-						var ccof_name = result["ccof_name"]; // Text
-						var ccof_programyear = result["_ccof_programyear_value"]; // Lookup
-						var ccof_programyear_formatted = result["_ccof_programyear_value@OData.Community.Display.V1.FormattedValue"];
-						var ccof_programyear_lookuplogicalname = result["_ccof_programyear_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-					}
-				} else {
-					console.log(this.responseText);
-				}
-			}
-		};
-		req.send();
-        var returnValue = Calculator(regionInfo, feeIncreaseDetails, expenseInfo);
-        alert(JSON.stringify(returnValue));
+        var RegionInfos = getSyncSingleRecord("ccof_applicationccfris(" + getCleanedGuid(appCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)")
+ 		// get Fee Increase details
+        var  FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+        var returnValue = Calculator(RegionInfos, FeeIncreaseDetails, ExpenseInfo);
+        formContext.getAttribute("ccof_adjudicatornotes").setValue(returnValue['AdjudicatorNote']);
+        Xrm.Navigation.openAlertDialog(JSON.stringify(returnValue));
 	},
 }
 
@@ -191,11 +81,11 @@ function getSyncMultipleRecord(request) {
 }
 
 function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
+    debugger;
     var OrgType = regionInfo['ccof_Application']['ccof_providertype@OData.Community.Display.V1.FormattedValue'];   //"Group" or Family
     var SDA = regionInfo['_ccof_region_value@OData.Community.Display.V1.FormattedValue']; //"North Fraser";
     var Programyear = regionInfo['ccof_Application']['_ccof_programyear_value@OData.Community.Display.V1.FormattedValue']; //"2022/23";
     var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];  // C33 of Stage 3 Calculator is from CRM Limit Fees to NMF Benchmark  (toggle) 
-    console.log("dafdafj:" + Limitfeesto70Percentile);
     var DilutionCap = expenseInfo['MEFI Cap']; // CRM MEFI Cap (toggle) //B7  ?? need confirm 
     var InitalCalculation_DilutionCap = true;  // B7 of Calculations
     var TotalAllowedExpenses = 0; //B13 Total Allowed Expenses
@@ -226,12 +116,12 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         "Total Monthly Expenses": 0  // no use now.
     }
     var FacilityInfo = [];
-    for (let i in feeIncreaseDetails['value']) {
+    for (let i in feeIncreaseDetails) {
         let entity = {};
-        entity['CareCategory'] = feeIncreaseDetails['value'][i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue'];
-        entity['AverageEnrollment'] = parseFloat(feeIncreaseDetails['value'][i]['ccof_averageenrolment']);
-        entity['RequestedFeeIncrease'] = feeIncreaseDetails['value'][i]['ccof_cumulativefeeincrease'];
-        entity['FeeBeforeIncrease'] = feeIncreaseDetails['value'][i]['ccof_feebeforeincrease'];
+        entity['CareCategory'] = feeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue'];
+        entity['AverageEnrollment'] = parseFloat(feeIncreaseDetails[i]['ccof_averageenrolment']);
+        entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_cumulativefeeincrease'];
+        entity['FeeBeforeIncrease'] = feeIncreaseDetails[i]['ccof_feebeforeincrease'];
         FacilityInfo.push(entity);
     }
     console.log("FacilityInfo" + JSON.stringify(FacilityInfo));
@@ -324,9 +214,9 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         let tempAllowances = {};
         let tempInital = {};
         // Cap = SDA70thPercentileF(NMFBenchmark)-FeeBeforeIncrease and get min compare with 10% of Median
-        let result = Limitfeesto70Percentile ? (tempCap['Cap'] = Math.round(SDA70thPercentileF[FacilityInfo[i]['CareCategory']] - FacilityInfo[i]['FeeBeforeIncrease'])) : tempCap['Cap'] = null;
+        tempCap['Cap'] = Limitfeesto70Percentile ? (Math.round(SDA70thPercentileF[FacilityInfo[i]['CareCategory']] - FacilityInfo[i]['FeeBeforeIncrease'])) : null;
         // FacilityInfo[i]['CareCategory'] childcare category name + Per10 to get per10 median field's name
-        tempCap['Lesser'] = Math.min(result, MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per10')]);
+        tempCap['Lesser'] = (tempCap['Cap'] === null) ? MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per10')] : Math.min(tempCap['Cap'], MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per10')]);
         NMFIncreaseCap[FacilityInfo[i]['CareCategory']] = tempCap;
         // FacilityInfo[i]['CareCategory'] childcare category name + Per10 to get per3 median field's name
         tempAllowances['3% Allowable Fee Increase'] = MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')];
@@ -334,7 +224,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // Populate Inital Calculation B3 Average Enrollment
         tempInital['Average Enrollment'] = FacilityInfo[i]['AverageEnrollment'];
         // Calculation!B4
-        tempInital['Allowances'] = (tempCap['Cap'] < tempAllowances['3% Allowable Fee Increase']) ? tempCap['Cap'] : tempAllowances['3% Allowable Fee Increase'];
+        tempInital['Allowances'] = (tempCap['Cap'] === null) ? tempAllowances['3% Allowable Fee Increase'] :((tempCap['Cap'] < tempAllowances['3% Allowable Fee Increase']) ? tempCap['Cap'] : tempAllowances['3% Allowable Fee Increase']);
         // Calculation!B5
         tempInital['Request'] = FacilityInfo[i]['RequestedFeeIncrease'];
         // Calculation!B6. K3=Limit fees to 70 Percentile
@@ -746,8 +636,9 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         + resultString + stringPOLICIESUSED + " SDA: " + SDA + "; PERCENTILE CAP: " + (Limitfeesto70Percentile ? "Yes" : "No") + "; UNUSED EXPENSES: $" + (TotalMonthlyExpenses - TotalAllowedExpenses) + "\n"
         + "MEFI CAPPED: " + ((MEFIcappedcategories.trim() == "") ? "None" : MEFIcappedcategories) + "\n" + "70th % CAPPED: " + ((string70cappedcategories.trim() == "") ? "None" : string70cappedcategories);
     console.log("AdjudicatorNote:" + AdjudicatorNote);
-    returnValue = {};
-    returnValue['AdjudicatorNote'] = AdjudicatorNote;
+
+    var returnValue = {};
+    returnValue['AdjudicatorNote'] = AdjudicatorNote;  // as AdjudicatorNote include special chars. it will fail when function return.
     returnValue['AmountApprovedPerCategory'] = AmountApprovedPerCategory;
     //var readline = require('readline');
     //var r1 = readline.createInterface(process.stdin, process.stdout);
@@ -755,3 +646,117 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     return returnValue;
 
 }
+
+
+ //      var req = new XMLHttpRequest("ccof_applicationccfris(" + getCleanedGuid(appCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)");
+		//req.open("GET", Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.2/ccof_applicationccfris(" + getCleanedGuid(appCCFRI) +")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)", false);
+		//req.setRequestHeader("OData-MaxVersion", "4.0");
+		//req.setRequestHeader("OData-Version", "4.0");
+		//req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+		//req.setRequestHeader("Accept", "application/json");
+		//req.setRequestHeader("Prefer", "odata.include-annotations=*");
+		//req.onreadystatechange = function () {
+		//	if (this.readyState === 4) {
+		//		req.onreadystatechange = null;
+		//		if (this.status === 200) {
+		//			var result = JSON.parse(this.response);
+  //                  RegionInfos = result;
+		//			console.log(result);
+		//			// Columns
+		//			var ccof_applicationccfriid = result["ccof_applicationccfriid"]; // Guid
+		//			var ccof_region = result["_ccof_region_value"]; // Lookup
+		//			var ccof_region_formatted = result["_ccof_region_value@OData.Community.Display.V1.FormattedValue"];
+		//			var ccof_region_lookuplogicalname = result["_ccof_region_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
+
+		//			// Many To One Relationships
+		//			if (result.hasOwnProperty("ccof_Application") && result["ccof_Application"] !== null) {
+		//				var ccof_Application_ccof_applicationid = result["ccof_Application"]["ccof_applicationid"]; // Guid
+		//				var ccof_Application_ccof_name = result["ccof_Application"]["ccof_name"]; // Text
+		//				var ccof_Application_ccof_programyear = result["ccof_Application"]["_ccof_programyear_value"]; // Lookup
+		//				var ccof_Application_ccof_programyear_formatted = result["ccof_Application"]["_ccof_programyear_value@OData.Community.Display.V1.FormattedValue"];
+		//				var ccof_Application_ccof_programyear_lookuplogicalname = result["ccof_Application"]["_ccof_programyear_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
+		//				var ccof_Application_ccof_providertype = result["ccof_Application"]["ccof_providertype"]; // Choice
+		//				var ccof_Application_ccof_providertype_formatted = result["ccof_Application"]["ccof_providertype@OData.Community.Display.V1.FormattedValue"];
+		//			}
+		//			if (result.hasOwnProperty("ccof_Region3PctMedian") && result["ccof_Region3PctMedian"] !== null) {
+		//				var ccof_Region3PctMedian_ccof_0to18months = result["ccof_Region3PctMedian"]["ccof_0to18months"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_10percentageof0to18 = result["ccof_Region3PctMedian"]["ccof_10percentageof0to18"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_10percentageof18to36 = result["ccof_Region3PctMedian"]["ccof_10percentageof18to36"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_10percentageof3ytok = result["ccof_Region3PctMedian"]["ccof_10percentageof3ytok"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_10percentageofoosctog = result["ccof_Region3PctMedian"]["ccof_10percentageofoosctog"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_10percentageofoosctok = result["ccof_Region3PctMedian"]["ccof_10percentageofoosctok"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_10percenatgeofpre = result["ccof_Region3PctMedian"]["ccof_10percenatgeofpre"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_18to36months = result["ccof_Region3PctMedian"]["ccof_18to36months"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_3percentageof0to18 = result["ccof_Region3PctMedian"]["ccof_3percentageof0to18"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_3percentageof18to36 = result["ccof_Region3PctMedian"]["ccof_3percentageof18to36"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_3percentageof3ytok = result["ccof_Region3PctMedian"]["ccof_3percentageof3ytok"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_3percentmedian = result["ccof_Region3PctMedian"]["_ccof_3percentmedian_value"]; // Lookup
+		//				var ccof_Region3PctMedian_ccof_3percentmedian_formatted = result["ccof_Region3PctMedian"]["_ccof_3percentmedian_value@OData.Community.Display.V1.FormattedValue"];
+		//				var ccof_Region3PctMedian_ccof_3percentmedian_lookuplogicalname = result["ccof_Region3PctMedian"]["_ccof_3percentmedian_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
+		//				var ccof_Region3PctMedian_ccof_3percentageofoosctog = result["ccof_Region3PctMedian"]["ccof_3percentageofoosctog"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_3percentageofoosctok = result["ccof_Region3PctMedian"]["ccof_3percentageofoosctok"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_3percentageofpre = result["ccof_Region3PctMedian"]["ccof_3percentageofpre"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_3yearstokindergarten = result["ccof_Region3PctMedian"]["ccof_3yearstokindergarten"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_name = result["ccof_Region3PctMedian"]["ccof_name"]; // Text
+		//				var ccof_Region3PctMedian_ccof_outofschoolcaregrade1 = result["ccof_Region3PctMedian"]["ccof_outofschoolcaregrade1"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_outofschoolcarekindergarten = result["ccof_Region3PctMedian"]["ccof_outofschoolcarekindergarten"]; // Currency
+		//				var ccof_Region3PctMedian_ccof_preschool = result["ccof_Region3PctMedian"]["ccof_preschool"]; // Currency
+		//			}
+		//			if (result.hasOwnProperty("ccof_RegionNMFBenchmark") && result["ccof_RegionNMFBenchmark"] !== null) {
+		//				var ccof_RegionNMFBenchmark_ccof_fee_benchmark_sdaid = result["ccof_RegionNMFBenchmark"]["ccof_fee_benchmark_sdaid"]; // Guid
+		//				var ccof_RegionNMFBenchmark_ccof_0to18m = result["ccof_RegionNMFBenchmark"]["ccof_0to18m"]; // Currency
+		//				var ccof_RegionNMFBenchmark_ccof_18to36m = result["ccof_RegionNMFBenchmark"]["ccof_18to36m"]; // Currency
+		//				var ccof_RegionNMFBenchmark_ccof_3ytok = result["ccof_RegionNMFBenchmark"]["ccof_3ytok"]; // Currency
+		//				var ccof_RegionNMFBenchmark_ccof_name = result["ccof_RegionNMFBenchmark"]["ccof_name"]; // Text
+		//				var ccof_RegionNMFBenchmark_ccof_oosctograde = result["ccof_RegionNMFBenchmark"]["ccof_oosctograde"]; // Currency
+		//				var ccof_RegionNMFBenchmark_ccof_oosctok = result["ccof_RegionNMFBenchmark"]["ccof_oosctok"]; // Currency
+		//				var ccof_RegionNMFBenchmark_ccof_preschool = result["ccof_RegionNMFBenchmark"]["ccof_preschool"]; // Currency
+		//			}
+		//		} else {
+		//			console.log(this.responseText);
+		//		}
+		//	}
+		//};
+		//req.send();
+
+
+		//req = new XMLHttpRequest();
+		//req.open("GET", Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.2/ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId)+" and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc", false);
+		//req.setRequestHeader("OData-MaxVersion", "4.0");
+		//req.setRequestHeader("OData-Version", "4.0");
+		//req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+		//req.setRequestHeader("Accept", "application/json");
+		//req.setRequestHeader("Prefer", "odata.include-annotations=*");
+		//req.onreadystatechange = function () {
+		//	if (this.readyState === 4) {
+		//		req.onreadystatechange = null;
+		//		if (this.status === 200) {
+		//			var results = JSON.parse(this.response);
+  //                  FeeIncreaseDetails = results;
+		//			console.log(results);
+		//			for (var i = 0; i < results.value.length; i++) {
+		//				var result = results.value[i];
+		//				// Columns
+		//				var ccof_ccfri_facility_parent_feeid = result["ccof_ccfri_facility_parent_feeid"]; // Guid
+		//				var ccof_adjudicationccfrifacility = result["_ccof_adjudicationccfrifacility_value"]; // Lookup
+		//				var ccof_adjudicationccfrifacility_formatted = result["_ccof_adjudicationccfrifacility_value@OData.Community.Display.V1.FormattedValue"];
+		//				var ccof_adjudicationccfrifacility_lookuplogicalname = result["_ccof_adjudicationccfrifacility_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
+		//				var ccof_averageenrolment = result["ccof_averageenrolment"]; // Currency
+		//				var ccof_childcarecategory = result["_ccof_childcarecategory_value"]; // Lookup
+		//				var ccof_childcarecategory_formatted = result["_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue"];
+		//				var ccof_childcarecategory_lookuplogicalname = result["_ccof_childcarecategory_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
+		//				var ccof_cumulativefeeincrease = result["ccof_cumulativefeeincrease"]; // Currency
+		//				var ccof_feebeforeincrease = result["ccof_feebeforeincrease"]; // Text
+		//				var ccof_feeincreasetype = result["ccof_feeincreasetype"]; // Choice
+		//				var ccof_feeincreasetype_formatted = result["ccof_feeincreasetype@OData.Community.Display.V1.FormattedValue"];
+		//				var ccof_name = result["ccof_name"]; // Text
+		//				var ccof_programyear = result["_ccof_programyear_value"]; // Lookup
+		//				var ccof_programyear_formatted = result["_ccof_programyear_value@OData.Community.Display.V1.FormattedValue"];
+		//				var ccof_programyear_lookuplogicalname = result["_ccof_programyear_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
+		//			}
+		//		} else {
+		//			console.log(this.responseText);
+		//		}
+		//	}
+		//};
+		//req.send();
