@@ -19,6 +19,7 @@
     <Compile Remove="Controllers\ContractFilesController.cs" />
     <Compile Remove="Controllers\CustomActionController.cs" />
     <Compile Remove="Controllers\MetadataController.cs" />
+    <Compile Remove="Controllers\NewUserProfileController.cs" />
     <Compile Remove="Services\AuthenticationService.cs" />
   </ItemGroup>
 

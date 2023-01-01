@@ -38,12 +38,6 @@ namespace CCOF.Infrastructure.WebAPI.Services
             if (formatted)
                 request.Headers.Add("Prefer", "odata.include-annotations=OData.Community.Display.V1.FormattedValue");
 
-            //var message = new HttpRequestMessage();
-            //message.Headers.Add("OData-MaxVersion", "4.0");
-            //message.Headers.Add("OData-Version", "4.0");
-            //message.Headers.Add("Prefer", "odata.include-annotations=*");
-            //message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
             var client = _authenticationService.GetHttpClient().Result;
 
             return client.SendAsync(request).Result;
@@ -53,10 +47,12 @@ namespace CCOF.Infrastructure.WebAPI.Services
         {
             return SendAsync(HttpMethod.Post, endPoint, content);
         }
+
         public HttpResponseMessage SendCreateRequestAsyncRtn(string endPoint, string content)
         {
             return SendAsyncRtn(HttpMethod.Post, endPoint, content);
         }
+
         public HttpResponseMessage SendUpdateRequestAsync(string endPoint, string body)
         {
             var message = new HttpRequestMessage(HttpMethod.Patch, endPoint);
@@ -64,8 +60,6 @@ namespace CCOF.Infrastructure.WebAPI.Services
 
             var client = _authenticationService.GetHttpClient().Result;
             return client.SendAsync(message).Result;
-
-            //return SendAsync(HttpMethod.Patch, endPoint, content);
         }
 
         public HttpResponseMessage SendDeleteRequestAsync(string endPoint)
@@ -113,12 +107,14 @@ namespace CCOF.Infrastructure.WebAPI.Services
 
             return _authenticationService.GetHttpClient().Result.SendAsync(message).Result;
         }
+
         private HttpResponseMessage SendAsyncRtn(HttpMethod operation, string endPoint, string body)
         {
             var message = new HttpRequestMessage(operation, endPoint);
             message.Content = new StringContent(body, Encoding.UTF8, "application/json");
             message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             message.Headers.Add("Prefer", "return=representation");
+
             return _authenticationService.GetHttpClient().Result.SendAsync(message).Result;
         }
     }

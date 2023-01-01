@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CCOF.Infrastructure.WebAPI.Controllers
 {
@@ -20,117 +23,115 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }
 
-        // GET: api/Application
+        // GET: api/UserProfile
         [HttpGet]
-        public ActionResult<string> Get(string applicationId)
+        public ActionResult<string> Get(string userId, string userName)
         {
-            if (string.IsNullOrEmpty(applicationId)) return BadRequest("Invalid Request");
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName)) return BadRequest("Invalid Request");
 
-//            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
-//<fetch>
-//  <entity name=""ccof_application"">
-//    <attribute name=""createdby"" />
-//    <attribute name=""ccof_ecewe_confirmation"" />
-//    <attribute name=""ccof_providertype"" />
-//    <attribute name=""createdon"" />
-//    <attribute name=""ccof_submittedby"" />
-//    <attribute name=""ccof_ecewe_selecttheapplicablefundingmodel"" />
-//    <attribute name=""ccof_name"" />
-//    <attribute name=""statuscode"" />
-//    <attribute name=""modifiedby"" />
-//    <attribute name=""ccof_consent"" />
-//    <attribute name=""ccof_ecewe_optintoecewe"" />
-//    <attribute name=""ccof_organization"" />
-//    <attribute name=""ccof_applicationid"" />
-//    <attribute name=""ccof_applicationtype"" />
-//    <attribute name=""modifiedon"" />
-//    <attribute name=""statecode"" />
-//    <attribute name=""ccof_ecewe_selecttheapplicablesector"" />
-//    <attribute name=""ccof_programyear"" />
-//    <filter>
-//      <condition attribute=""ccof_applicationid"" operator=""eq"" value=""{applicationId}"" uitype=""ccof_application"" />
-//    </filter>
-//    <link-entity name=""ccof_applicationccfri"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""AppCCFRI"">
-//      <attribute name=""ccof_name"" />
-//      <attribute name=""ccof_informationccfri"" />
-//      <attribute name=""ccof_facility"" />
-//      <attribute name=""ccof_feecorrectccfri"" />
-//      <attribute name=""ccof_chargefeeccfri"" />
-//      <attribute name=""ccof_applicationccfriid"" />
-//      <link-entity name=""ccof_application_ccfri_childcarecategory"" from=""ccof_applicationccfri"" to=""ccof_applicationccfriid"" link-type=""outer"" alias=""CCFRI_CCC"">
-//        <attribute name=""ccof_programyear"" />
-//        <attribute name=""ccof_name"" />
-//        <attribute name=""ccof_application_ccfri_childcarecategoryid"" />
-//        <attribute name=""ccof_childcarecategory"" />
-//        <attribute name=""ccof_apr"" />
-//        <attribute name=""ccof_aug"" />
-//      </link-entity>
-//    </link-entity>
-//    <link-entity name=""ccof_application_basefunding"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""ccof"">
-//      <attribute name=""ccof_application_basefundingid"" />
-//      <attribute name=""ccof_licensetype"" />
-//      <attribute name=""ccof_preschoolmaxnumber"" />
-//      <attribute name=""ccof_name"" />
-//      <attribute name=""ccof_facility"" />
-//    </link-entity>
-//  </entity>
-//</fetch>";
-
-            var fetchData = new
-            {
-                ccof_applicationid = applicationId
-            };
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
-<fetch>
-  <entity name=""ccof_application"">
-    <attribute name=""ccof_applicationtype"" />
-    <attribute name=""ccof_name"" />
-    <attribute name=""ccof_ccofstatus"" />
-    <attribute name=""createdon"" />
-    <attribute name=""ccof_ecewe_selecttheapplicablesector"" />
-    <attribute name=""ccof_consent"" />
-    <attribute name=""statecode"" />
-    <attribute name=""ccof_ecewe_confirmation"" />
-    <attribute name=""createdby"" />
-    <attribute name=""modifiedby"" />
-    <attribute name=""statuscode"" />
-    <attribute name=""ccof_providertype"" />
-    <filter>
-      <condition attribute=""ccof_applicationid"" operator=""eq"" value=""{fetchData.ccof_applicationid/*0a5943bf-324b-ed11-bba1-002248d53d53*/}"" uiname=""APP-22000128"" uitype=""ccof_application"" />
+<fetch top=""1"" distinct=""true"" no-lock=""true"">
+  <entity name=""contact"">
+    <attribute name=""contactid"" />
+    <attribute name=""ccof_userid"" />
+    <attribute name=""ccof_username"" />
+    <filter type=""or"">
+      <condition attribute=""ccof_userid"" operator=""eq"" value=""{userId}"" />
+      <condition attribute=""ccof_username"" operator=""eq"" value=""{userName}"" />
     </filter>
-    <link-entity name=""ccof_applicationccfri"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""appCCFRI"">
-      <attribute name=""ccof_ccfrioptin"" />
-      <attribute name=""ccof_name"" />
-      <attribute name=""createdon"" />
-      <attribute name=""ccof_application"" />
-      <attribute name=""ccof_applicationccfriid"" />
-      <link-entity name=""ccof_application_ccfri_childcarecategory"" from=""ccof_applicationccfri"" to=""ccof_applicationccfriid"" link-type=""outer"" alias=""appCCFRI.childcare"">
-        <attribute name=""ccof_application_ccfri_childcarecategoryid"" />
-        <attribute name=""statecode"" />
-        <attribute name=""ccof_name"" />
-        <attribute name=""ccof_applicationccfri"" />
-        <attribute name=""ccof_apr"" />
+    <link-entity name=""ccof_bceid_organization"" from=""ccof_businessbceid"" to=""contactid"" link-type=""outer"">
+      <link-entity name=""account"" from=""accountid"" to=""ccof_organization"" link-type=""outer"" alias=""Organization"">
+        <attribute name=""accountid"" />
+        <attribute name=""name"" />
+        <attribute name=""accountnumber"" />
+        <attribute name=""ccof_contractstatus"" />
+        <attribute name=""ccof_formcomplete"" />
+        <link-entity name=""ccof_application"" from=""ccof_organization"" to=""accountid"" link-type=""outer"" alias=""Application"">
+          <attribute name=""ccof_organization"" />
+          <attribute name=""ccof_applicationtype"" />
+          <attribute name=""ccof_applicationid"" />
+          <attribute name=""ccof_name"" />
+          <attribute name=""ccof_programyear"" />
+          <attribute name=""statuscode"" />
+          <attribute name=""ccof_providertype"" />
+          <attribute name=""ccof_unlock_declaration"" />
+          <attribute name=""ccof_unlock_licenseupload"" />
+          <attribute name=""ccof_unlock_supportingdocument"" />
+          <attribute name=""ccof_unlock_ccof"" />
+          <attribute name=""ccof_unlock_ecewe"" />
+          <link-entity name=""ccof_program_year"" from=""ccof_program_yearid"" to=""ccof_programyear"" link-type=""outer"" alias=""ProgramYear"">
+            <attribute name=""ccof_name"" />
+            <attribute name=""ccof_program_yearid"" />
+            <attribute name=""statuscode"" />
+            <attribute name=""ccof_declarationbstart"" />
+            <attribute name=""ccof_intakeperiodstart"" />
+            <attribute name=""ccof_intakeperiodend"" />
+            <order attribute=""ccof_programyearnumber"" descending=""true"" />
+          </link-entity>
+        </link-entity>
       </link-entity>
-    </link-entity>
-    <link-entity name=""ccof_application_basefunding"" from=""ccof_application"" to=""ccof_applicationid"" link-type=""outer"" alias=""ccof"">
-      <attribute name=""ccof_30monthtoschoolage4hoursoflessextendedcc"" />
-      <attribute name=""ccof_30monthtoschoolagemorethan4hourextended"" />
-      <attribute name=""ccof_closedfacilityinapr"" />
-      <attribute name=""ccof_name"" />
     </link-entity>
   </entity>
 </fetch>";
-
-            var message = $"ccof_applications?fetchXml=" + WebUtility.UrlEncode(fetchXml);
+            var message = $"contacts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
 
             var response = _d365webapiservice.SendMessageAsync(HttpMethod.Get, message);
             if (response.IsSuccessStatusCode)
             {
-                return Ok(response.Content.ReadAsStringAsync().Result);
+                var root = JToken.Parse(response.Content.ReadAsStringAsync().Result);
+
+                if (!root.Last().First().HasValues) { return NotFound($"User not found: {userId}"); }
+
+                var records = root.Last().ToList();
+                if (records != null & records[0][0]["ccof_userid"] == null)
+                {
+                    // Update Dataverse with the userid
+                    var statement = @$"contacts({records[0][0]["contactid"]})";
+                    var body = System.Text.Json.JsonSerializer.Serialize(new { ccof_userid = userId });
+                    HttpResponseMessage updateRespopnse = _d365webapiservice.SendUpdateRequestAsync(statement, body);
+
+                    if (!updateRespopnse.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine(StatusCode((int)response.StatusCode));
+                    }
+                }
+
+                if (records != null & records[0][0]["Organization.accountid"] == null) { return NotFound("No profiles."); }
+                if (records != null & records[0][0]["Application.ccof_applicationid"] == null) { return NotFound("No applications."); }
+
+                var aggregatedResult = AggregateApplicationData(records[0][0]);
+
+                return Ok(aggregatedResult);
             }
             else
                 return StatusCode((int)response.StatusCode,
                     $"Failed to Retrieve records: {response.ReasonPhrase}");
+        }
+
+        private dynamic AggregateApplicationData(JToken token)
+        {
+            dynamic dynUserProfile = JObject.Parse(token.ToString());
+            var getFacilitiesStatement = @$"accounts?$select=accountnumber,name,ccof_formcomplete,accountid,_parentaccountid_value,ccof_facilitystatus&$filter=(ccof_accounttype eq 100000001 and _parentaccountid_value eq {token["Organization.accountid"]})";
+            var facilitiesResponse = _d365webapiservice.SendRetrieveRequestAsync(getFacilitiesStatement, true, 250);
+            if (facilitiesResponse.IsSuccessStatusCode)
+            {
+                dynamic jResult = JObject.Parse(facilitiesResponse.Content.ReadAsStringAsync().Result);
+                dynUserProfile.facilities = jResult.value;
+            }
+
+            var getApplicationStatement = @$"ccof_applications?$select=_ccof_organization_value,ccof_applicationtype,ccof_applicationid,ccof_name,_ccof_programyear_value,statuscode,ccof_providertype,ccof_unlock_declaration,ccof_unlock_licenseupload,ccof_unlock_supportingdocument,ccof_unlock_ccof,ccof_unlock_ecewe&$expand=ccof_ProgramYear($select=ccof_name,ccof_program_yearid,statuscode,ccof_declarationbstart,ccof_intakeperiodstart,ccof_intakeperiodend),ccof_application_basefunding_Application($select=ccof_application_basefundingid,_ccof_facility_value,statuscode,ccof_formcomplete),ccof_applicationccfri_Application_ccof_ap($select=ccof_applicationccfriid,ccof_ccfrioptin,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete,ccof_unlock_rfi,ccof_unlock_ccfri,ccof_unlock_nmf_rfi),ccof_ccof_application_ccof_applicationecewe_application($select=ccof_applicationeceweid,ccof_optintoecewe,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete)&$filter=(ccof_applicationid eq {token["Application.ccof_applicationid"]})";
+            var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationStatement, true, 250);
+            if (applicationResponse.IsSuccessStatusCode)
+            {
+                dynamic jResult = JObject.Parse(applicationResponse.Content.ReadAsStringAsync().Result);
+                dynUserProfile.application = jResult.value[0];
+            }
+
+            // A simple way to remove unwanted attributes
+            var userProfileString = JsonConvert.SerializeObject(dynUserProfile);
+            UserProfile userProfile = System.Text.Json.JsonSerializer.Deserialize<UserProfile>(userProfileString);
+
+            return userProfile;
         }
     }
 }
