@@ -40,7 +40,6 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             <attribute name=""stepid"" />
                             <attribute name=""notetext"" />
                             <attribute name=""subject"" />
-                            <attribute name=""documentbody"" />
                             <attribute name=""isdocument"" />
                             <attribute name=""objecttypecode"" />
                             <attribute name=""annotationid"" />
@@ -64,6 +63,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 return StatusCode((int)response.StatusCode,
                     $"Failed to Retrieve records: {response.ReasonPhrase}");
         }
+
         // UploadFile: api/Document
         [HttpPost]
         [ActionName("UploadFile")]

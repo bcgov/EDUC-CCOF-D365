@@ -15,10 +15,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationController : ControllerBase
+    public class ProviderProfileController : ControllerBase
     {
         private readonly ID365WebAPIService _d365webapiservice;
-        public ApplicationController(ID365WebAPIService d365webapiservice)
+        public ProviderProfileController(ID365WebAPIService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }
