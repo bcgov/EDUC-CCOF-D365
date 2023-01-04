@@ -57,6 +57,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_unlock_supportingdocument { get; set; }
         public int? ccof_unlock_ccof { get; set; }
         public int? ccof_unlock_ecewe { get; set; }
+        public bool? ccof_licensecomplete { get; set; }
         public Ccof_Programyear ccof_ProgramYear { get; set; }
         public Ccof_Application_Basefunding_Application[] ccof_application_basefunding_Application { get; set; }
         public Ccof_Applicationccfri_Application_Ccof_Ap[] ccof_applicationccfri_Application_ccof_ap { get; set; }
