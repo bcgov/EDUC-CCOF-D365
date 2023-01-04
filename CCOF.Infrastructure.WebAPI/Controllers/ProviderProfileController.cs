@@ -83,7 +83,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 if (!root.Last().First().HasValues) { return NotFound($"User not found: {userId}"); }
 
                 var records = root.Last().ToList();
-                if (records != null & records[0][0]["ccof_userid"] == null)
+                if (records != null && records[0][0]["ccof_userid"] == null)
                 {
                     // Update Dataverse with the userid
                     var statement = @$"contacts({records[0][0]["contactid"]})";
@@ -96,8 +96,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     }
                 }
 
-                if (records != null & records[0][0]["Organization.accountid"] == null) { return NotFound("No profiles."); }
-                if (records != null & records[0][0]["Application.ccof_applicationid"] == null) { return NotFound("No applications."); }
+                if (records != null && records[0][0]["Organization.accountid"] == null) { return NotFound("No profiles."); }
+                if (records != null && records[0][0]["Application.ccof_applicationid"] == null) { return NotFound("No applications."); }
 
                 var aggregatedResult = AggregateApplicationData(records[0][0]);
 
