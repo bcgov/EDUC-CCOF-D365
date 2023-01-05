@@ -83,7 +83,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? _ccof_facility_value { get; set; }
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscodeODataCommunityDisplayV1FormattedValue { get; set; }
-        public int statuscode { get; set; }
+        public int? statuscode { get; set; }
         public bool? ccof_formcomplete { get; set; }
     }
 
@@ -95,7 +95,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscodeODataCommunityDisplayV1FormattedValue { get; set; }
         public int? statuscode { get; set; }
-        public int ccof_ccfrioptin { get; set; }
+        public int? ccof_ccfrioptin { get; set; }
         public bool? ccof_formcomplete { get; set; }
         public int? ccof_unlock_rfi { get; set; }
         public int? ccof_unlock_ccfri { get; set; }
@@ -110,7 +110,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscodeODataCommunityDisplayV1FormattedValue { get; set; }
         public int? statuscode { get; set; }
-        public int ccof_optintoecewe { get; set; }
+        public int? ccof_optintoecewe { get; set; }
         public bool? ccof_formcomplete { get; set; }
     }
 }
