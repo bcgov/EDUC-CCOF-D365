@@ -25,6 +25,7 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
         var returnValue = Calculator(RegionInfos, FeeIncreaseDetails, ExpenseInfo);
         formContext.getAttribute("ccof_adjudicatornotes").setValue(returnValue['AdjudicatorNote']);
         Xrm.Navigation.openAlertDialog(JSON.stringify(returnValue));
+        // update Summary of Approved Amounts Records
 	},
 }
 
