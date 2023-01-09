@@ -16,7 +16,7 @@ CCOF.AdjudicationCCFRIFacility.Form = {
 				formContext.ui.tabs.get("MonthAdjudication").setVisible(false);
 			}
 			else {
-				formContext.ui.tabs.get("Adjudication").setVisible(false);
+				formContext.ui.tabs.get("Adjudication").setVisible(true);
 				formContext.ui.tabs.get("MonthAdjudication").setVisible(true);
 			}
 		}
