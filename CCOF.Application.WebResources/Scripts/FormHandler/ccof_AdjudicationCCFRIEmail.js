@@ -69,8 +69,11 @@ AdjCCFRI.SubGrid = {
                     }
                     else if (this.status === 400) {
                         Xrm.Utility.closeProgressIndicator()
-                        var result = this.response;
-                        alert("Error: " + result);
+                        var result = "There are something error! Please contact administrator!\n"+this.response;
+                        var alertStrings = { confirmButtonLabel: "Ok", text: result, title: "Error!" };
+                        var alertOptions = { height: 240, width: 520 };
+                        Xrm.Navigation.openAlertDialog(alertStrings, alertOptions);
+                        // alert("Error: " + result);
                     }
                 }
             };
