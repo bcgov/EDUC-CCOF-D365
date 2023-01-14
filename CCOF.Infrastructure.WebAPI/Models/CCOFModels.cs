@@ -62,6 +62,10 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_unlock_licenseupload { get; set; }
         public int? ccof_unlock_supportingdocument { get; set; }
         public int? ccof_unlock_declaration { get; set; }
+        public int? ccof_has_nmf { get; set; }
+        public int? ccof_has_rfi { get; set; }
+        public int? ccof_nmf_formcomplete { get; set; }
+        public int? ccof_rfi_formcomplete { get; set; }
         public bool? ccof_licensecomplete { get; set; }
         public bool? ccof_ecewe_eligibility_complete { get; set; }
         [JsonPropertyName("ccof_ccofstatus@OData.Community.Display.V1.FormattedValue")]
