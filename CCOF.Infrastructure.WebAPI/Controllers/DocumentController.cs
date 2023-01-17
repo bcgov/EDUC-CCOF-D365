@@ -69,11 +69,11 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             string fileextension = partialfilename[partialfilename.Count() - 1].ToLower();
 
             // stop, if the file format whether is not JPG, PDF or PNG
-            string[] acceptedFileFormats = { "jpg", "jpeg", "pdf", "png" };
+            string[] acceptedFileFormats = { "jpg", "jpeg", "pdf", "png", "doc", "docx", "heic" , "xls", "xlsx" };
 
             if (Array.IndexOf(acceptedFileFormats, fileextension) == -1)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Sorry, only PDF, JPG and PNG file formats are supported.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Uploaded file format is supported.");
             }
             var response = _d365webapiservice.SendCreateRequestAsync("annotations", rawJsonData);
             //TODO: Improve Exception handling
