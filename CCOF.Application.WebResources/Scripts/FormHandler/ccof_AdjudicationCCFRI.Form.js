@@ -33,13 +33,25 @@ AdjCCFRI.Form = {
         var hasRole = false;
         roles.forEach(function (item) {
             if (item.name == "CCOF - QC" || item.name == "CCOF - Leadership") {
-                formContext.ui.tabs.get("decisionemail").setVisible(true);
-                break;
-            }
-            else {
-                formContext.ui.tabs.get("decisionemail").setVisible(false);
+                hasRole = true;
             }
         });
+
+        if (hasRole === true) {
+            formContext.ui.tabs.get("decisionemail").setVisible(true);
+        } else {
+            formContext.ui.tabs.get("decisionemail").setVisible(false);
+        }
+
+        //roles.forEach(function (item) {
+        //    if (item.name == "CCOF - QC" || item.name == "CCOF - Leadership") {
+        //        formContext.ui.tabs.get("decisionemail").setVisible(true);
+                
+        //    }
+        //    else {
+        //        formContext.ui.tabs.get("decisionemail").setVisible(false);
+        //    }
+        //});
     },
 
     saveConfirm: function (executionContext) {
