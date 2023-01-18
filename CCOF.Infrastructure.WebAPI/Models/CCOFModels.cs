@@ -107,6 +107,10 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_unlock_rfi { get; set; }
         public int? ccof_unlock_ccfri { get; set; }
         public int? ccof_unlock_nmf_rfi { get; set; }
+        public bool? ccof_has_nmf { get; set; }
+        public bool? ccof_has_rfi { get; set; }
+        public bool? ccof_nmf_formcomplete { get; set; }
+        public bool? ccof_rfi_formcomplete { get; set; }
     }
 
     public class Ccof_Ccof_Application_Ccof_Applicationecewe_Application
