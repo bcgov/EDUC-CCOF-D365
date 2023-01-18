@@ -5,7 +5,6 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
     Calculation: function (primaryControl) {
         try {
             debugger;
-            // Xrm.Utility.showProgressIndicator("please wait..system is calculating the cost");
             console.log("Initial Adjudication Calculattion....");
             var formContext = primaryControl;
             var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount";
@@ -50,7 +49,6 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
             var TotalAllowableStagePolicy = PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amountEntityName);
             IndicateCap(FeeIncreaseDetails, TotalAllowableStagePolicy, RegionInfos, entityId);
             formContext.getAttribute("ccof_adjudicatornotes").setValue(returnValue['AdjudicatorNote']);
-            // Xrm.Utility.closeProgressIndicator();
             //refresh the summary grid
             formContext.getControl("AllowableAmount").refresh();
             console.log("End Initial Adjudication Calculation");
@@ -95,7 +93,6 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                 var returnValue24Months = Calculator(RegionInfos, FeeIncreaseDetails24Months, ExpenseInfo24Months);
                 // Xrm.Navigation.openAlertDialog("24 Months"+JSON.stringify(returnValue24Months));
                 formContext.getAttribute("ccof_monthadjudicatornotes").setValue(returnValue24Months['AdjudicatorNote']);
-
                 //need to pass values of 24 month adjudication as well 
                 var TotalAllowableStagePolicy24Months = Populate24MonthSummaryApprovedAmount(returnValue24Months, FacilityAmountAllowedRecords24Months, ccfri_facility_allowable_amount_24MonthEntityName);
                 IndicateCap24Month(FeeIncreaseDetails24Months, TotalAllowableStagePolicy24Months, RegionInfos, entityId);
@@ -189,7 +186,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         ['PRE', ['PRE', 'ccof_tota']],
     ]);
     // console.log(ChildcareCategories.get('0-18')[0]);
-    // console.log("test"+Math.min(null, 3));
     var TotalMonthlyExpenses = expenseInfo['Total Monthly Expenses'];  // B11 ? comes from CRM 
     var FacilityExpense =   // comes from CRM 
     {
@@ -243,7 +239,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     }
     console.log("SDA70thPercentileF" + JSON.stringify(SDA70thPercentileF));
 
-    // console.log(JSON.stringify(FacilityInfo) + "\n" + JSON.stringify(MediansFee) + "\n" + JSON.stringify(SDA70thPercentileF));
     // Populate Allowances from Median 3% fields
     //  Get NMF Increase Cap based on FacilityInfo get from CRM
     var NMFIncreaseCap = {};
@@ -276,10 +271,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // Calculation!B10 Request/Dilution Cap Result
         tempInital['Request/Dilution Cap Result'] = (InitalCalculation_DilutionCap && (tempInital['Request'] > tempInital['Dilution Cap'])) ? tempInital['Dilution Cap'] : tempInital['Request'];
         InitalCalculation[FacilityInfo[i]['CareCategory']] = tempInital;
-        //console.log("1");
-        //console.log(JSON.stringify(entity));
-        // console.log(JSON.stringify(NMFIncreaseCap));
-        // console.log("InitalCalculation" + JSON.stringify(InitalCalculation));
     }
     console.log("NMFIncreaseCap:" + JSON.stringify(NMFIncreaseCap));
     console.log("InitalCalculation" + JSON.stringify(InitalCalculation));
@@ -290,7 +281,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     for (const item in InitalCalculation) {
         let entity = {};
         // Round 1 Calculation B20
-        // Round1[item]['Enrollment'] =
         entity['Enrollment'] = (TotalMonthlyExpenses === 0) ? 0 : InitalCalculation[item]['Average Enrollment'];
         //Round 1 Calculation B21
         entity['Allowance'] = (InitalCalculation[item]['Allowances'] < InitalCalculation[item]['Request/Dilution Cap Result']) ? InitalCalculation[item]['Allowances'] : InitalCalculation[item]['Request/Dilution Cap Result'];
@@ -298,7 +288,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // console.log("Round1 first: " + JSON.stringify(Round1));
     }
     // Populate Get Round 1 B22 Final Amount
-    // var Round1 = structuredClone(Round1Temp);
     var sumEnrollment = 0;
     var weightSumAllowance = 0;
     for (const item in Round1) {
@@ -343,7 +332,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     Round1['Revenue allowed'] = Round1RevenueAllowed.toFixed(2);
     // get B32 Expenses Left 
     Round1['Expenses Left'] = (TotalMonthlyExpenses - Round1['Revenue allowed']).toFixed(2);
-    //console.log("Round1 end:" + JSON.stringify(Round1));
+    console.log("Round1 end:" + JSON.stringify(Round1));
     // Round1 End
 
     // Populate Left Round 
@@ -451,15 +440,10 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // console.log("RoundArray:" + JSON.stringify(RoundArray));
         //console.log("Check Finnal Approval " + JSON.stringify(InitalCalculation));
     }
-    // console.log("RoundArray" + JSON.stringify(RoundArray));
-
-    //console.log("2");
-    // console.log("3% Median:"+JSON.stringify(AllowancesOnCalculator));
-    //console.log(JSON.stringify(NMFIncreaseCap));
+     console.log("RoundArray" + JSON.stringify(RoundArray));
 
     // Populate SUMMARY CALCULATIONS
     var ChangeEmptyCellstoZero = {};
-
     for (let i in FacilityInfo) {
         let temp = {};
         temp['No Fee Increase in Years'] = AllowancesOnCalculator[FacilityInfo[i]['CareCategory']]['3% Allowable Fee Increase'];
@@ -489,22 +473,12 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // F16
         TotalFullAllowanceGiven = TotalFullAllowanceGiven && InitalCalculation[item]['Full Allowance Given'];
     }
-    console.log("Check B15,B16: " + JSON.stringify(InitalCalculation));
     // Populate B14 Allowed Expenses less than or equal to expenses. TotalAllowedExpenses(B13), TotalMonthlyExpenses(B11)
     AllowedExpensesLessExpenses = (TotalAllowedExpenses <= TotalMonthlyExpenses) ? true : false;
     // Populate Stage 3 Calculator  Calculator Validation I12
     CalculatorValidation = AllowedExpensesLessExpenses && TotalIfLessThanCapped && TotalFullAllowanceGiven;
 
     // Populate row88 Total and Total Approved Exceptional Circumstances Direct Care Staff Wages etc.
-    //var FacilityExpense =   // comes from CRM 
-    //{
-    //    "Exceptional Circumstances": 500,
-    //    "Direct Care Staff Wages": 200,
-    //    "MTFI: Unused Expenses": 100,
-    //    "Priority Service Expansion": 0,
-    //    "Priority SE (Indigenous)": 100,
-    //    "Total Monthly Expenses": 1100  // no use now.
-    //}
     var SummaryCalculationsTotalApproved = {};
     SummaryCalculationsTotalApproved['Exceptional Circumstances'] = {};
     SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'] = FacilityExpense['Exceptional Circumstances'];
@@ -549,13 +523,11 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     PoliciesApplied['Policy Used']['Historic'] = 0;
     PoliciesApplied['Policy Used']['No Fee Increase in Years'] = 0;
     PoliciesApplied['Policy Used']['Median'] = 0;
-
     for (const item in InitalCalculation) {
         let entity = {};
         // B109
         // entity['Nominal'] = (InitalCalculation[item]['Request/Dilution Cap Result'] > 1) ? true : false;
         entity['Nominal'] = false;  // based meeting on Jan 09, 2023 with Brain
-
         if (entity['Nominal'] === true) PoliciesApplied['Policy Used']['Nominal'] = PoliciesApplied['Policy Used']['Nominal'] + 1;
         // B77 = RoundArray[FacilityInfo.length - 2][item]['Final approvable']
         // B108
@@ -664,12 +636,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     }
     console.log(" Populate Amount Approved Per Category:" + JSON.stringify(AmountApprovedPerCategory));
 
-
-
-
-
-
-
     // Final Calculations of Stage 3 Calculator
     var FinalCalculations = {};
     var CheckFullRequestApprovable = true;
@@ -684,7 +650,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         entity['Full Request Approvable?'] = (entity['Requested Fee Increase'] <= entity['Max Approvable']) ? true : false;
         CheckFullRequestApprovable = CheckFullRequestApprovable && entity['Full Request Approvable?'];
         FinalCalculations[FacilityInfo[i]['CareCategory']] = entity;
-
     }
     console.log("resultString:" + resultString);
     console.log("Final Calculations:" + JSON.stringify(FinalCalculations));
@@ -723,7 +688,6 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     //var r1 = readline.createInterface(process.stdin, process.stdout);
     //return AdjudicatorNote;
     return returnValue;
-
 }
 
 function UpdateEntityRecord(entityname, entityId, data) {

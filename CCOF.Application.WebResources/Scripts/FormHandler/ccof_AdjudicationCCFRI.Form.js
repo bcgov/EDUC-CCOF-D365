@@ -34,6 +34,7 @@ AdjCCFRI.Form = {
         roles.forEach(function (item) {
             if (item.name == "CCOF - QC" || item.name == "CCOF - Leadership") {
                 formContext.ui.tabs.get("decisionemail").setVisible(true);
+                break;
             }
             else {
                 formContext.ui.tabs.get("decisionemail").setVisible(false);
