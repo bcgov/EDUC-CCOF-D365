@@ -31,12 +31,12 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
             var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
             //  Validate FeeIncrease info
             if (FeeIncreaseDetails.length === 0) {
-                Xrm.Navigation.openAlertDialog("There is no Fee Increase Fee in Initial Adjudiction  meets the calculation requirements. Please check it!");
+                Xrm.Navigation.openAlertDialog("Initial Fee Increase is required!");
                 return;
             } else {
                 for (let i in FeeIncreaseDetails) {
                     if (FeeIncreaseDetails[i]['ccof_averageenrolment'] === null || FeeIncreaseDetails[i]['ccof_cumulativefeeincrease'] === null || FeeIncreaseDetails[i]['ccof_feebeforeincrease'] === null) {
-                        Xrm.Navigation.openAlertDialog("There are no Fee Increase Details Initial Adjudiction to meet the calculation requirements. Please check it!");
+                        Xrm.Navigation.openAlertDialog("One or more Initial Fee Increase Amount are missing!");
                         return;
                     }
                 }
@@ -78,12 +78,12 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                 var FeeIncreaseDetails24Months = getSyncMultipleRecord("ccof_ccfrifacilityfeeincrease24months?$select=_ccof_adjudicationccfrifacility_value, ccof_averageenrolment, _ccof_childcarecategory_value, ccof_cumulativefeeincrease, ccof_feebeforeincrease, ccof_feeincreasetype, ccof_name, _ccof_programyear_value, ccof_reasonfor24monthsadj, ccof_cumulativefeeincreasepercent, _ccof_applicationccfrichildcarecategory_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
                 // Validate FeeIncrease info
                 if (FeeIncreaseDetails24Months.length === 0) {
-                    Xrm.Navigation.openAlertDialog("There is no Fee Increase Fee in 24 Months meets the calculation requirements. Please check it!");
+                    Xrm.Navigation.openAlertDialog("24-Month Fee Increase is required!");
                     return;
                 } else {
                     for (let i in FeeIncreaseDetails24Months) {
                         if (FeeIncreaseDetails24Months[i]['ccof_averageenrolment'] === null || FeeIncreaseDetails24Months[i]['ccof_cumulativefeeincrease'] === null || FeeIncreaseDetails24Months[i]['ccof_feebeforeincrease'] === null) {
-                            Xrm.Navigation.openAlertDialog("There are no Average Enrollment in 24 Months to meet the calculation requirements. Please check it!");
+                            Xrm.Navigation.openAlertDialog("One or more 24-Month Fee Increase Amount are missing!");
                             return;
                         }
                     }
