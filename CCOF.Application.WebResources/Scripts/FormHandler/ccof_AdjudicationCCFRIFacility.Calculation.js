@@ -35,8 +35,8 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                 return;
             } else {
                 for (let i in FeeIncreaseDetails) {
-                    if (FeeIncreaseDetails[i]['ccof_averageenrolment'] === null) {
-                        Xrm.Navigation.openAlertDialog("There are no Average Enrollment Initial Adjudiction to meet the calculation requirements. Please check it!");
+                    if (FeeIncreaseDetails[i]['ccof_averageenrolment'] === null || FeeIncreaseDetails[i]['ccof_cumulativefeeincrease'] === null || FeeIncreaseDetails[i]['ccof_feebeforeincrease'] === null) {
+                        Xrm.Navigation.openAlertDialog("There are no Fee Increase Details Initial Adjudiction to meet the calculation requirements. Please check it!");
                         return;
                     }
                 }
@@ -82,7 +82,7 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                     return;
                 } else {
                     for (let i in FeeIncreaseDetails24Months) {
-                        if (FeeIncreaseDetails24Months[i]['ccof_averageenrolment'] === null) {
+                        if (FeeIncreaseDetails24Months[i]['ccof_averageenrolment'] === null || FeeIncreaseDetails24Months[i]['ccof_cumulativefeeincrease'] === null || FeeIncreaseDetails24Months[i]['ccof_feebeforeincrease'] === null) {
                             Xrm.Navigation.openAlertDialog("There are no Average Enrollment in 24 Months to meet the calculation requirements. Please check it!");
                             return;
                         }
@@ -440,7 +440,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // console.log("RoundArray:" + JSON.stringify(RoundArray));
         //console.log("Check Finnal Approval " + JSON.stringify(InitalCalculation));
     }
-     console.log("RoundArray" + JSON.stringify(RoundArray));
+    console.log("RoundArray" + JSON.stringify(RoundArray));
 
     // Populate SUMMARY CALCULATIONS
     var ChangeEmptyCellstoZero = {};
