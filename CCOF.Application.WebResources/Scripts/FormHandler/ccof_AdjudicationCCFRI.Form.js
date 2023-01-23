@@ -26,32 +26,25 @@ AdjCCFRI.Form = {
     },
 
     onLoad: function (executionContext) {
-        debugger;
-        let formContext = executionContext.getFormContext();
-        var roles = Xrm.Utility.getGlobalContext().userSettings.roles;
-        if (roles === null) return false;
-        var hasRole = false;
-        roles.forEach(function (item) {
-            if (item.name == "CCOF - QC" || item.name == "CCOF - Leadership") {
-                hasRole = true;
-            }
-        });
-
-        if (hasRole === true) {
-            formContext.ui.tabs.get("decisionemail").setVisible(true);
-        } else {
-            formContext.ui.tabs.get("decisionemail").setVisible(false);
-        }
-
+        // removed it based on Ticket 1132
+        //debugger;
+        //let formContext = executionContext.getFormContext();
+        //var roles = Xrm.Utility.getGlobalContext().userSettings.roles;
+        //if (roles === null) return false;
+        //var hasRole = false;
         //roles.forEach(function (item) {
         //    if (item.name == "CCOF - QC" || item.name == "CCOF - Leadership") {
-        //        formContext.ui.tabs.get("decisionemail").setVisible(true);
-                
-        //    }
-        //    else {
-        //        formContext.ui.tabs.get("decisionemail").setVisible(false);
+        //        hasRole = true;
         //    }
         //});
+
+        //if (hasRole === true) {
+        //    formContext.ui.tabs.get("decisionemail").setVisible(true);
+        //} else {
+        //    formContext.ui.tabs.get("decisionemail").setVisible(false);
+        //}
+
+
     },
 
     saveConfirm: function (executionContext) {
