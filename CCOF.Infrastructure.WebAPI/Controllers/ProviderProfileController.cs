@@ -25,9 +25,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
         // GET: api/UserProfile
         [HttpGet]
-        public ActionResult<string> Get(string userId, string userName)
+        public ActionResult<string> Get(string userName, string? userId = null)
         {
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userName)) return BadRequest("Invalid Request");
+            if (string.IsNullOrEmpty(userName)) return BadRequest("Invalid Request");
 
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
 <fetch top=""1"" distinct=""true"" no-lock=""true"">
@@ -83,7 +83,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 if (!root.Last().First().HasValues) { return NotFound($"User not found: {userId}"); }
 
                 var records = root.Last().ToList();
-                if (records != null && records[0][0]["ccof_userid"] == null)
+                if (records != null && records[0][0]["ccof_userid"] == null && !string.IsNullOrEmpty(userId))
                 {
                     // Update Dataverse with the userid
                     var statement = @$"contacts({records[0][0]["contactid"]})";
