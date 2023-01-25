@@ -22,7 +22,7 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
             ExpenseInfo['Limit Fees to NMF Benchmark'] = formContext.getAttribute("ccof_limitfeestonmfbenchmark").getValue();
             // Validate expense info
             if (ExpenseInfo['Total Monthly Expenses'] === 0) {
-                Xrm.Navigation.openAlertDialog("There is no Expense fees in Initial Adjudiction meet the calculation requirements. Please check it!");
+                Xrm.Navigation.openAlertDialog("Initial Adjudiction Expense fees are required!");
                 return;
             }
             // Get Region, Median, NMF
@@ -70,7 +70,7 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                 ExpenseInfo24Months['Limit Fees to NMF Benchmark'] = formContext.getAttribute("ccof_limitfeestonmfbenchmark_24month").getValue();
                 // Validate expense info
                 if (ExpenseInfo24Months['Total Monthly Expenses'] === 0) {
-                    Xrm.Navigation.openAlertDialog("There is no Expense fees in 24 Months meet the calculation requirements. Please check it!");
+                    Xrm.Navigation.openAlertDialog("24 Month Expense fees  are required!");
                     return;
                 }
                 // Get Region, Median, NMF for  24 Months. it same as Initial Adjudication
