@@ -484,7 +484,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'] = FacilityExpense['Exceptional Circumstances'];
     SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total Approved'] = (TotalAllowedExpenses <= SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total']) ?
         TotalAllowedExpenses : SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'];
-    SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder'] = TotalAllowedExpenses - SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'];
+    SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder'] = TotalAllowedExpenses - SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total Approved'];
     SummaryCalculationsTotalApproved['Direct Care Staff Wages'] = {};
     SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total'] = FacilityExpense['Direct Care Staff Wages'];
     SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total Approved'] = (SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total'] <= SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder']) ?
