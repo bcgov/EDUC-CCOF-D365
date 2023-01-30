@@ -46,7 +46,8 @@ AdjCCFRI.SubGrid = {
             return;
         }
         // Xrm.Utility.showProgressIndicator("Creating draft email...")
-        formContext.ui.setFormNotification("Creating draft email...", "INFO", "CreatingEmails");
+        // formContext.ui.setFormNotification("Creating draft email...", "INFO", "CreatingEmails");
+        formContext.ui.setFormNotification("Creating draft email...", "WARNING", "CreatingEmails");
         var clientURL = Xrm.Utility.getGlobalContext().getClientUrl();
         var entity = {};
         var entityArray = [];
