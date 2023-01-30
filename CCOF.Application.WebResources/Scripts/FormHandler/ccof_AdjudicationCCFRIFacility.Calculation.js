@@ -617,15 +617,15 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
             entity['Increase Allowed for Expenses'] = (Round1[item]['Final approvable'] - Round1[item]['Allowance']).toFixed(2);
         }
         // H106 Exceptional Circumstances
-        entity['Exceptional Circumstances'] = (SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2);
+        entity['Exceptional Circumstances'] = (TotalAllowedExpenses!=0)?(SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2):0;
         // H107 Direct Care Staff Wages
-        entity['Direct Care Staff Wages'] = (SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2);
+        entity['Direct Care Staff Wages'] = (TotalAllowedExpenses != 0) ?(SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2):0;
         // H108 MTFI Unused
-        entity['MTFI Unused'] = (SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2);
+        entity['MTFI Unused'] = (TotalAllowedExpenses != 0) ?(SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2):0;
         // H109 Priority SE (Extended Hours)
-        entity['Priority SE(Extended Hours)'] = (SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2);
+        entity['Priority SE(Extended Hours)'] = (TotalAllowedExpenses != 0) ?(SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2):0;
         // H100 Priority SE (Indigenous)
-        entity['Priority SE (Indigenous)'] = (SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2);
+        entity['Priority SE (Indigenous)'] = (TotalAllowedExpenses != 0) ?(SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total Approved'] / TotalAllowedExpenses * entity['Increase Allowed for Expenses']).toFixed(2):0;
         // H113 Nominal
         if (FacilityInfo.length > 1) {
             entity['Nominal'] = PoliciesApplied[item]['Nominal'] ? RoundArray[FacilityInfo.length - 2][item]['Final approvable'] : 0;
