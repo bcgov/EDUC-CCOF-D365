@@ -712,6 +712,12 @@ function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords
         var accup_outofschoolkindergarden;
         var accup_3yearstokindergarden;
         var accup_outofschoolcaregrade1;
+        var stage2_0to18months;
+        var stage2_18to36months;
+        var stage2_preschol;
+        var stage2_outofschoolkindergarden;
+        var stage2_3yearstokindergarden;
+        var stage2_outofschoolcaregrade1;
 
         let arrayLength = FacilityAmountAllowedRecords.length;
         for (let i = 0; i < arrayLength; i++) {
@@ -771,7 +777,7 @@ function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords
             }
             //ACCUP
             else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "ACCUP") {
-                accup_0to18months = FacilityAmountAllowedRecords[i]['ccof_0to18months'];
+                accup_0to18months = FacilityAmountAllowedRecords[i]['ccof_0to18months']; 
                 accup_18to36months = FacilityAmountAllowedRecords[i]['ccof_18to36months'];
                 accup_preschol = FacilityAmountAllowedRecords[i]['ccof_preschool'];
                 accup_outofschoolkindergarden = FacilityAmountAllowedRecords[i]['ccof_outofschoolcarekindergarten'];
@@ -779,23 +785,29 @@ function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords
                 accup_outofschoolcaregrade1 = FacilityAmountAllowedRecords[i]['ccof_outofschoolcaregrade1'];
 
             }
+            //Stage 2 - Fee Increase Limit (FIL)
+            else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Stage 2 - Fee Increase Limit (FIL)") {
+                stage2_0to18months = FacilityAmountAllowedRecords[i]['ccof_0to18months'];
+                stage2_18to36months = FacilityAmountAllowedRecords[i]['ccof_18to36months'];
+                stage2_preschol = FacilityAmountAllowedRecords[i]['ccof_preschool'];
+                stage2_outofschoolkindergarden = FacilityAmountAllowedRecords[i]['ccof_outofschoolcarekindergarten'];
+                stage2_3yearstokindergarden = FacilityAmountAllowedRecords[i]['ccof_3yearstokindergarten'];
+                stage2_outofschoolcaregrade1 = FacilityAmountAllowedRecords[i]['ccof_outofschoolcaregrade1'];
+            }
             //Total Allowable Fee Increase - need to total
             else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Total Allowable Fee Increase") {
 
                 TotalAllowableStagePolicy = {
-                    "ccof_0to18months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('0-18') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Direct Care Staff Wages']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Exceptional Circumstances']) + accup_0to18months) : accup_0to18months,
-                    "ccof_18to36months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('18-36') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Direct Care Staff Wages']) + accup_18to36months) : accup_18to36months,
-                    "ccof_preschool": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('PRE') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Direct Care Staff Wages']) + accup_preschol) : accup_preschol,
-                    "ccof_outofschoolcarekindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Direct Care Staff Wages']) + accup_outofschoolkindergarden) : accup_outofschoolkindergarden,
-                    "ccof_3yearstokindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Direct Care Staff Wages']) + accup_3yearstokindergarden) : accup_3yearstokindergarden,
-                    "ccof_outofschoolcaregrade1": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Direct Care Staff Wages']) + accup_outofschoolcaregrade1) : accup_outofschoolcaregrade1
+                    "ccof_0to18months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('0-18') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Direct Care Staff Wages']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Exceptional Circumstances']) + accup_0to18months + stage2_0to18months) : accup_0to18months + stage2_0to18months,
+                    "ccof_18to36months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('18-36') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Direct Care Staff Wages']) + stage2_18to36months) : accup_18to36months + stage2_18to36months,
+                    "ccof_preschool": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('PRE') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Direct Care Staff Wages']) + accup_preschol + stage2_preschol) : accup_preschol + stage2_preschol,
+                    "ccof_outofschoolcarekindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Direct Care Staff Wages']) + accup_outofschoolkindergarden + stage2_outofschoolkindergarden) : accup_outofschoolkindergarden + stage2_outofschoolkindergarden,
+                    "ccof_3yearstokindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Direct Care Staff Wages']) + accup_3yearstokindergarden + stage2_3yearstokindergarden) : accup_3yearstokindergarden + stage2_3yearstokindergarden,
+                    "ccof_outofschoolcaregrade1": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Direct Care Staff Wages']) + accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1) : accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1
                 }
                 var Id = FacilityAmountAllowedRecords[i]['ccof_ccfri_facility_allowable_amountid'];
                 UpdateEntityRecord(entityname, Id, TotalAllowableStagePolicy);
-
-
             }
-
         }
     }
     return TotalAllowableStagePolicy;
@@ -811,6 +823,12 @@ function Populate24MonthSummaryApprovedAmount(returnValue, FacilityAmountAllowed
         var accup_outofschoolkindergarden;
         var accup_3yearstokindergarden;
         var accup_outofschoolcaregrade1;
+        var stage2_0to18months;
+        var stage2_18to36months;
+        var stage2_preschol;
+        var stage2_outofschoolkindergarden;
+        var stage2_3yearstokindergarden;
+        var stage2_outofschoolcaregrade1;
 
         let arrayLength = FacilityAmountAllowedRecords.length;
         for (let i = 0; i < arrayLength; i++) {
@@ -870,7 +888,7 @@ function Populate24MonthSummaryApprovedAmount(returnValue, FacilityAmountAllowed
             }
             //ACCUP
             else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "ACCUP") {
-                accup_0to18months = FacilityAmountAllowedRecords[i]['ccof_to18months'];
+                accup_0to18months = FacilityAmountAllowedRecords[i]['ccof_to18months']; 
                 accup_18to36months = FacilityAmountAllowedRecords[i]['ccof_to36months'];
                 accup_preschol = FacilityAmountAllowedRecords[i]['ccof_preschool'];
                 accup_outofschoolkindergarden = FacilityAmountAllowedRecords[i]['ccof_outofschoolcarekindergarten'];
@@ -878,23 +896,29 @@ function Populate24MonthSummaryApprovedAmount(returnValue, FacilityAmountAllowed
                 accup_outofschoolcaregrade1 = FacilityAmountAllowedRecords[i]['ccof_outofschoolcaregrade1'];
 
             }
+            //Stage 2 - Fee Increase Limit (FIL)
+            else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Stage 2 - Fee Increase Limit (FIL)") {
+                stage2_0to18months = FacilityAmountAllowedRecords[i]['ccof_to18months'];  
+                stage2_18to36months = FacilityAmountAllowedRecords[i]['ccof_to36months'];
+                stage2_preschol = FacilityAmountAllowedRecords[i]['ccof_preschool']; 
+                stage2_outofschoolkindergarden = FacilityAmountAllowedRecords[i]['ccof_outofschoolcarekindergarten']; 
+                stage2_3yearstokindergarden = FacilityAmountAllowedRecords[i]['ccof__3yearstokindergarten']; 
+                stage2_outofschoolcaregrade1 = FacilityAmountAllowedRecords[i]['ccof_outofschoolcaregrade1'];
+            }
             //Total Allowable Fee Increase - need to total
             else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Total Allowable Fee Increase") {
 
                 TotalAllowableStagePolicy = {
-                    "ccof_to18months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('0-18') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Direct Care Staff Wages']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Exceptional Circumstances']) + accup_0to18months) : accup_0to18months,
-                    "ccof_to36months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('18-36') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Direct Care Staff Wages']) + accup_18to36months) : accup_18to36months,
-                    "ccof_preschool": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('PRE') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Direct Care Staff Wages']) + accup_preschol) : accup_preschol,
-                    "ccof_outofschoolcarekindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Direct Care Staff Wages']) + accup_outofschoolkindergarden) : accup_outofschoolkindergarden,
-                    "ccof__3yearstokindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Direct Care Staff Wages']) + accup_3yearstokindergarden) : accup_3yearstokindergarden,
-                    "ccof_outofschoolcaregrade1": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Direct Care Staff Wages']) + accup_outofschoolcaregrade1) : accup_outofschoolcaregrade1
+                    "ccof_to18months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('0-18') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Direct Care Staff Wages']) + parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['Exceptional Circumstances']) + accup_0to18months + stage2_0to18months) : accup_0to18months + stage2_0to18months,
+                    "ccof_to36months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('18-36') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['Direct Care Staff Wages']) + stage2_18to36months) : accup_18to36months + stage2_18to36months,
+                    "ccof_preschool": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('PRE') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['Direct Care Staff Wages']) + accup_preschol + stage2_preschol) : accup_preschol + stage2_preschol,
+                    "ccof_outofschoolcarekindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['Direct Care Staff Wages']) + accup_outofschoolkindergarden + stage2_outofschoolkindergarden) : accup_outofschoolkindergarden + stage2_outofschoolkindergarden,
+                    "ccof__3yearstokindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Direct Care Staff Wages']) + accup_3yearstokindergarden + stage2_3yearstokindergarden) : accup_3yearstokindergarden + stage2_3yearstokindergarden,
+                    "ccof_outofschoolcaregrade1": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Direct Care Staff Wages']) + accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1) : accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1
                 }
                 var Id = FacilityAmountAllowedRecords[i]['ccof_ccfrifacilityallowableamount_24monthid'];
                 UpdateEntityRecord(entityname, Id, TotalAllowableStagePolicy);
-
-
             }
-
         }
     }
     return TotalAllowableStagePolicy;
