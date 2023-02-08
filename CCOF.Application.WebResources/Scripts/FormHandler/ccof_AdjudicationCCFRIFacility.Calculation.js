@@ -53,11 +53,13 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
             formContext.getControl("AllowableAmount").refresh();
             console.log("End Initial Adjudication Calculation");
             // Xrm.Navigation.openAlertDialog(JSON.stringify(returnValue));
-            // Check if it has 24 Months
-            let appCCFRIReq = "ccof_applicationccfris(" + getCleanedGuid(appCCFRI) + ")?$select=ccof_feecorrectccfri";
-            let appCCFRIResponse = getSyncSingleRecord(appCCFRIReq);
+            // Check if it has 24 Months // Update logic based on ticket 1135. will check if Fee Increase in 24 Months have records
+            //let appCCFRIReq = "ccof_applicationccfris(" + getCleanedGuid(appCCFRI) + ")?$select=ccof_feecorrectccfri";
+            //let appCCFRIResponse = getSyncSingleRecord(appCCFRIReq);
             // 100000000  Yes 100000001 No
-            if (appCCFRIResponse["ccof_feecorrectccfri"] === 100000001) {  // 24 Months tab and Initial Adjudication tab
+            var FeeIncreaseDetails24Months = getSyncMultipleRecord("ccof_ccfrifacilityfeeincrease24months?$select=_ccof_adjudicationccfrifacility_value, ccof_averageenrolment, _ccof_childcarecategory_value, ccof_cumulativefeeincrease, ccof_feebeforeincrease, ccof_feeincreasetype, ccof_name, _ccof_programyear_value, ccof_reasonfor24monthsadj, ccof_cumulativefeeincreasepercent, _ccof_applicationccfrichildcarecategory_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+            if (FeeIncreaseDetails24Months.length > 0) {
+            //if (appCCFRIResponse["ccof_feecorrectccfri"] === 100000001) {  // 24 Months tab and Initial Adjudication tab
                 // Facility Info; Region,Median, NMF, SDA , expense, MEFI Cap’, Limit Fees to NMF Benchmark’ ,orgType
                 // Get expense Info
                 console.log("Begin 24 Months Calculation");
@@ -75,7 +77,7 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                 }
                 // Get Region, Median, NMF for  24 Months. it same as Initial Adjudication
                 // get Fee Increase details
-                var FeeIncreaseDetails24Months = getSyncMultipleRecord("ccof_ccfrifacilityfeeincrease24months?$select=_ccof_adjudicationccfrifacility_value, ccof_averageenrolment, _ccof_childcarecategory_value, ccof_cumulativefeeincrease, ccof_feebeforeincrease, ccof_feeincreasetype, ccof_name, _ccof_programyear_value, ccof_reasonfor24monthsadj, ccof_cumulativefeeincreasepercent, _ccof_applicationccfrichildcarecategory_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+                // var FeeIncreaseDetails24Months = getSyncMultipleRecord("ccof_ccfrifacilityfeeincrease24months?$select=_ccof_adjudicationccfrifacility_value, ccof_averageenrolment, _ccof_childcarecategory_value, ccof_cumulativefeeincrease, ccof_feebeforeincrease, ccof_feeincreasetype, ccof_name, _ccof_programyear_value, ccof_reasonfor24monthsadj, ccof_cumulativefeeincreasepercent, _ccof_applicationccfrichildcarecategory_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
                 // Validate FeeIncrease info
                 if (FeeIncreaseDetails24Months.length === 0) {
                     Xrm.Navigation.openAlertDialog("24-Month Fee Increase is required!");
