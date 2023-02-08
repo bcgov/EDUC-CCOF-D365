@@ -15,7 +15,8 @@ function parentFeesIncrease() {
 }
 
 function expenseCircumastances() {
-    var excepVal = Xrm.Page.getAttribute("ccof_doestheexceptionalcircumstanceoccurwithin").getValue();
+    debugger;
+    var excepVal = Xrm.Page.getAttribute("ccof_exceptionalcircumstanceoccurwithin6m").getValue();
     if (excepVal == 0) {
         Xrm.Page.ui.tabs.get("general_tab").sections.get("expenseInfo").setVisible(false);
     }
