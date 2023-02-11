@@ -304,10 +304,13 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         if (Round1[item]['Enrollment'] === 0) {
             Round1[item]['Final Amount'] = Round1[item]['Allowance'];
         } else {
-            Round1[item]['Final Amount'] = ((TotalMonthlyExpenses + weightSumAllowance) / sumEnrollment).toFixed(2);
+            Round1[item]['Final Amount'] = ((TotalMonthlyExpenses + weightSumAllowance) / sumEnrollment);
+            //Round1[item]['Final Amount'] = ((TotalMonthlyExpenses + weightSumAllowance) / sumEnrollment).toFixed(2);
         }
         // B23=B22-B21 Amount added=Final Amount-Allowance
-        Round1[item]['Amount added'] = (Round1[item]['Final Amount'] - Round1[item]['Allowance']).toFixed(2);
+        Round1[item]['Amount added'] = (Round1[item]['Final Amount'] - Round1[item]['Allowance']);
+       //  Round1[item]['Amount added'] = (Round1[item]['Final Amount'] - Round1[item]['Allowance']).toFixed(2);
+
         // B24  Check for negative
         Round1[item]['Check for negative'] = (Round1[item]['Amount added'] < 0) ? true : false;
         // B25 Approvable 1 
@@ -331,9 +334,13 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // console.log(Round1RevenueAllowed);
     }
     // Get B31 Revenue allowed
-    Round1['Revenue allowed'] = Round1RevenueAllowed.toFixed(2);
+    Round1['Revenue allowed'] = Round1RevenueAllowed;
+   // Round1['Revenue allowed'] = Round1RevenueAllowed.toFixed(2);
+
     // get B32 Expenses Left 
-    Round1['Expenses Left'] = (TotalMonthlyExpenses - Round1['Revenue allowed']).toFixed(2);
+    Round1['Expenses Left'] = (TotalMonthlyExpenses - Round1['Revenue allowed']);
+    // Round1['Expenses Left'] = (TotalMonthlyExpenses - Round1['Revenue allowed']).toFixed(2);
+
     console.log("Round1 end:" + JSON.stringify(Round1));
     // Round1 End
 
@@ -362,13 +369,14 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
                 delete tempRoundClone[item];
                 // console.log("tempRoundClone:" + JSON.stringify(tempRoundClone))
                 for (const j in tempRoundClone) {
-                    ifAmountAdded = ifAmountAdded && (tempAmountAdded <= tempRoundClone[j]['Amount added']);
+                    // 20230209 fix a bug add parseFloat otherwise the value is not true( -6.59<=-1.59) 
+                    ifAmountAdded = ifAmountAdded && (parseFloat(tempAmountAdded) <= parseFloat(tempRoundClone[j]['Amount added']));
                     Checkfornegative = Checkfornegative || tempRoundClone[j]['Check for negative']
                 }
                 tempRoundClone = {};
                 //console.log("ifAmountAdded:" + ifAmountAdded);
                 //console.log(" Checkfornegative:" + Checkfornegative);
-                if (roundClone[item]['Check for negative'] && (roundClone[item]['Final Amount'] < InitalCalculation[item]['Allowances']) && ifAmountAdded && (ExpensesLeft < 0)) {
+                if (roundClone[item]['Check for negative'] && (parseFloat(roundClone[item]['Final Amount']) < parseFloat(InitalCalculation[item]['Allowances'])) && ifAmountAdded && (ExpensesLeft < 0)) {
                     entity['Enrollment'] = 0;
                 } else {
                     if (Checkfornegative && (ExpensesLeft < 0)) {
@@ -398,29 +406,34 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
                     roundTemp[item]['Final Amount'] = roundTemp[item]['Allowance'];
                 } else {
                     // console.log(ExpensesLeft + weightSumAllowance);
-                    roundTemp[item]['Final Amount'] = ((ExpensesLeft + weightSumAllowance) / sumEnrollment).toFixed(2);
+                    roundTemp[item]['Final Amount'] = ((ExpensesLeft + weightSumAllowance) / sumEnrollment);
+                   //  roundTemp[item]['Final Amount'] = ((ExpensesLeft + weightSumAllowance) / sumEnrollment).toFixed(2);
+
                 }
 
                 // B23=B22-B21 Amount added=Final Amount-Allowance
-                roundTemp[item]['Amount added'] = (roundTemp[item]['Final Amount'] - roundTemp[item]['Allowance']).toFixed(2);
+                roundTemp[item]['Amount added'] = (roundTemp[item]['Final Amount'] - roundTemp[item]['Allowance']);
+                // roundTemp[item]['Amount added'] = (roundTemp[item]['Final Amount'] - roundTemp[item]['Allowance']).toFixed(2);
+
                 // B24  Check for negative
                 roundTemp[item]['Check for negative'] = (roundTemp[item]['Amount added'] < 0) ? true : false;
-                // B25 Approvable 1 
-                roundTemp[item]['Approvable 1'] = !roundTemp[item]['Check for negative'] ? roundTemp[item]['Final Amount'] : ((roundTemp[item]['Final Amount'] > roundTemp[item]['Allowance']) ? roundTemp[item]['Final Amount'] : roundTemp[item]['Allowance']);
+                // B25 Approvable 1 // 20230209
+                //roundTemp[item]['Approvable 1'] = !roundTemp[item]['Check for negative'] ? roundTemp[item]['Final Amount'] : ((parseFloat(roundTemp[item]['Final Amount']) > parseFloat(roundTemp[item]['Allowance'])) ? parseFloat(roundTemp[item]['Final Amount']) : roundTemp[item]['Allowance']);
+                roundTemp[item]['Approvable 1'] = !roundTemp[item]['Check for negative'] ? roundTemp[item]['Final Amount'] : ((parseFloat(roundTemp[item]['Final Amount']) > parseFloat(Round1[item]['Allowance'])) ? parseFloat(roundTemp[item]['Final Amount']) : Round1[item]['Allowance']);
                 // B26 Check for dilution cap
-                roundTemp[item]['Check for dilution cap'] = ((roundTemp[item]['Final Amount'] > InitalCalculation[item]['Dilution Cap']) && InitalCalculation_DilutionCap) ? true : false;
+                roundTemp[item]['Check for dilution cap'] = ((parseFloat(roundTemp[item]['Final Amount']) > parseFloat(InitalCalculation[item]['Dilution Cap'])) && InitalCalculation_DilutionCap) ? true : false;
                 // B27 Approvable 2
                 roundTemp[item]['Approvable 2'] = !roundTemp[item]['Check for dilution cap'] ? roundTemp[item]['Approvable 1'] : InitalCalculation[item]['Dilution Cap'];
                 // B28 Check for request cap  Request/Dilution Cap Result
-                roundTemp[item]['Check for request cap'] = (roundTemp[item]['Final Amount'] > InitalCalculation[item]['Request/Dilution Cap Result']) ? true : false;
+                roundTemp[item]['Check for request cap'] = (parseFloat(roundTemp[item]['Final Amount']) > parseFloat(InitalCalculation[item]['Request/Dilution Cap Result'])) ? true : false;
                 // B29 Final approvable 
                 roundTemp[item]['Final approvable'] = !roundTemp[item]['Check for request cap'] ? roundTemp[item]['Approvable 2'] : InitalCalculation[item]['Request/Dilution Cap Result'];
                 if (i === FacilityInfo.length - 1) {
                     // populate B9     // populate FINAL APPROVABLE to InitalCalculation from RoundArray
-                    InitalCalculation[item]['FINAL APPROVABLE'] = (InitalCalculation_DilutionCap && (InitalCalculation[item]['Allowances'] > InitalCalculation[item]['Dilution Cap'])) ?
-                        ((InitalCalculation[item]['Request'] < InitalCalculation[item]['Allowances']) ? InitalCalculation[item]['Request'] : InitalCalculation[item]['Allowances']) : roundTemp[item]['Final approvable'];
+                    InitalCalculation[item]['FINAL APPROVABLE'] = (InitalCalculation_DilutionCap && (parseFloat(InitalCalculation[item]['Allowances']) > parseFloat(InitalCalculation[item]['Dilution Cap']))) ?
+                        ((parseFloat(InitalCalculation[item]['Request']) < parseFloat(InitalCalculation[item]['Allowances'])) ? InitalCalculation[item]['Request'] : InitalCalculation[item]['Allowances']) : roundTemp[item]['Final approvable'];
                     //  Calculation!B12 Allowed Expense /category
-                    InitalCalculation[item]['Allowed Expense /category'] = (InitalCalculation[item]['Allowances'] > InitalCalculation[item]['Request']) ? 0 :
+                    InitalCalculation[item]['Allowed Expense /category'] = (parseFloat(InitalCalculation[item]['Allowances']) > parseFloat(InitalCalculation[item]['Request'])) ? 0 :
                         InitalCalculation[item]['Average Enrollment'] * (InitalCalculation[item]['FINAL APPROVABLE'] - InitalCalculation[item]['Allowances']);
                 }
                 // get  B31 Revenue allowed
@@ -428,9 +441,13 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
                 // console.log(roundTempRevenueAllowed);
             }
             // Get B31 Revenue allowed
-            roundTemp['Revenue allowed'] = tempRevenueAllowed.toFixed(2);
+            roundTemp['Revenue allowed'] = tempRevenueAllowed;
+            // roundTemp['Revenue allowed'] = tempRevenueAllowed.toFixed(2);
+
             // get B32 Expenses Left 
-            roundTemp['Expenses Left'] = (ExpensesLeft - roundTemp['Revenue allowed']).toFixed(2);
+            roundTemp['Expenses Left'] = (ExpensesLeft - roundTemp['Revenue allowed']);
+            //roundTemp['Expenses Left'] = (ExpensesLeft - roundTemp['Revenue allowed']).toFixed(2);
+
             //console.log("Round1 end:" + JSON.stringify(Round1));
             // Round1 End
             //console.log("roundTemp:" + JSON.stringify(roundTemp));
@@ -463,15 +480,17 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     for (const item in InitalCalculation) {
         TotalAllowedExpenses = TotalAllowedExpenses + InitalCalculation[item]['Allowed Expense /category'];
         //  console.log("TotalAllowedExpenses(B13): " + TotalAllowedExpenses);
+    }
+    for (const item in InitalCalculation) {
         // B15 If less than, capped?
         InitalCalculation[item]['If less than, capped'] = ((TotalAllowedExpenses < TotalMonthlyExpenses)
-            && (InitalCalculation[item]['FINAL APPROVABLE'] < InitalCalculation[item]['Request'])
-            && (InitalCalculation[item]['FINAL APPROVABLE'] < InitalCalculation[item]['Dilution Cap'])) ? false : true;
+            && (parseFloat(InitalCalculation[item]['FINAL APPROVABLE']) < parseFloat(InitalCalculation[item]['Request']))
+            && (parseFloat(InitalCalculation[item]['FINAL APPROVABLE']) < parseFloat(InitalCalculation[item]['Dilution Cap']))) ? false : true;
         // F15
         TotalIfLessThanCapped = TotalIfLessThanCapped && InitalCalculation[item]['If less than, capped'];
         // B16 Full Allowance Given? (if less than request)
-        InitalCalculation[item]['Full Allowance Given'] = ((InitalCalculation[item]['FINAL APPROVABLE'] < InitalCalculation[item]['Allowances'])
-            && (InitalCalculation[item]['FINAL APPROVABLE'] < InitalCalculation[item]['Request'])) ? false : true;
+        InitalCalculation[item]['Full Allowance Given'] = ((parseFloat(InitalCalculation[item]['FINAL APPROVABLE']) < parseFloat(InitalCalculation[item]['Allowances']))
+            && (parseFloat(InitalCalculation[item]['FINAL APPROVABLE']) < parseFloat(InitalCalculation[item]['Request']))) ? false : true;
         // F16
         TotalFullAllowanceGiven = TotalFullAllowanceGiven && InitalCalculation[item]['Full Allowance Given'];
     }
@@ -484,30 +503,30 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     var SummaryCalculationsTotalApproved = {};
     SummaryCalculationsTotalApproved['Exceptional Circumstances'] = {};
     SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'] = FacilityExpense['Exceptional Circumstances'];
-    SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total Approved'] = (TotalAllowedExpenses <= SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total']) ?
+    SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total Approved'] = (parseFloat(TotalAllowedExpenses) <= parseFloat(SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'])) ?
         TotalAllowedExpenses : SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'];
     SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder'] = TotalAllowedExpenses - SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total Approved'];
     SummaryCalculationsTotalApproved['Direct Care Staff Wages'] = {};
     SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total'] = FacilityExpense['Direct Care Staff Wages'];
-    SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total Approved'] = (SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total'] <= SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder']) ?
+    SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total Approved'] = (parseFloat(SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total']) <= parseFloat(SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder'])) ?
         SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total'] : SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder'];
     SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Remainder'] = SummaryCalculationsTotalApproved['Exceptional Circumstances']['Remainder'] - SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total Approved'];
 
     SummaryCalculationsTotalApproved['Priority SE (Inclusive)'] = {};
     SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total'] = FacilityExpense['MTFI: Unused Expenses'];
-    SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total Approved'] = (SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total'] <= SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Remainder']) ?
+    SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total Approved'] = (parseFloat(SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total']) <= parseFloat(SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Remainder'])) ?
         SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total'] : SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Remainder'];
     SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Remainder'] = SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Remainder'] - SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total Approved'];
 
     SummaryCalculationsTotalApproved['Priority SE (Extended Hours)'] = {};
     SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total'] = FacilityExpense['Priority Service Expansion'];
-    SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total Approved'] = (SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total'] <= SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Remainder'])
+    SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total Approved'] = (parseFloat(SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total']) <= parseFloat(SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Remainder']))
         ? SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total'] : SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Remainder'];
     SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Remainder'] = SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Remainder'] - SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total Approved'];
 
     SummaryCalculationsTotalApproved['Priority SE (Indigenous)'] = {};
     SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total'] = FacilityExpense['Priority SE (Indigenous)'];
-    SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total Approved'] = (SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total'] <= SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Remainder'])
+    SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total Approved'] = (parseFloat(SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total']) <= parseFloat(SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Remainder']))
         ? SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total'] : SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Remainder'];
     SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Remainder']
     console.log("SummaryCalculationsTotalApproved" + JSON.stringify(SummaryCalculationsTotalApproved));
@@ -534,54 +553,54 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         // B77 = RoundArray[FacilityInfo.length - 2][item]['Final approvable']
         // B108
         if (FacilityInfo.length > 1) {
-            entity['Priority SE (Indigenous)'] = ((RoundArray[FacilityInfo.length - 2][item]['Final approvable'] > InitalCalculation[item]['Allowances'])
-                && (SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
+            entity['Priority SE (Indigenous)'] = ((parseFloat(RoundArray[FacilityInfo.length - 2][item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
+                && (parseFloat(SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total']) > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Priority SE (Indigenous)'] === true) PoliciesApplied['Policy Used']['Priority SE (Indigenous)'] = PoliciesApplied['Policy Used']['Priority SE(Indigenous)'] + 1;
             // B107
-            entity['Priority SE (Extended Hours)'] = ((RoundArray[FacilityInfo.length - 2][item]['Final approvable'] > InitalCalculation[item]['Allowances'])
-                && (SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
+            entity['Priority SE (Extended Hours)'] = ((parseFloat(RoundArray[FacilityInfo.length - 2][item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
+                && (parseFloat(SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total']) > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Priority SE (Extended Hours)'] === true) PoliciesApplied['Policy Used']['Priority SE (Extended Hours)'] = PoliciesApplied['Policy Used']['Priority SE (Extended Hours)'] + 1;
             // B106
-            entity['MTFI Unused'] = ((RoundArray[FacilityInfo.length - 2][item]['Final approvable'] > InitalCalculation[item]['Allowances'])
-                && (SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
+            entity['MTFI Unused'] = ((parseFloat(RoundArray[FacilityInfo.length - 2][item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
+                && (parseFloat(SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total']) > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['MTFI Unused'] === true) PoliciesApplied['Policy Used']['MTFI Unused'] = PoliciesApplied['Policy Used']['MTFI Unused'] + 1;
             // B105
-            entity['Direct Care Staff Wages'] = ((RoundArray[FacilityInfo.length - 2][item]['Final approvable'] > InitalCalculation[item]['Allowances'])
-                && (SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
+            entity['Direct Care Staff Wages'] = ((parseFloat(RoundArray[FacilityInfo.length - 2][item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
+                && (parseFloat(SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total']) > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Direct Care Staff Wages'] === true) PoliciesApplied['Policy Used']['Direct Care Staff Wages'] = PoliciesApplied['Policy Used']['Direct Care Staff Wages'] + 1;
             // B104
-            entity['Exceptional Circumstances'] = ((RoundArray[FacilityInfo.length - 2][item]['Final approvable'] > InitalCalculation[item]['Allowances'])
+            entity['Exceptional Circumstances'] = ((parseFloat(RoundArray[FacilityInfo.length - 2][item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
                 && (SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Exceptional Circumstances'] === true) PoliciesApplied['Policy Used']['Exceptional Circumstances'] = PoliciesApplied['Policy Used']['Exceptional Circumstances'] + 1;
 
         } else { // ===1 
-            entity['Priority SE (Indigenous)'] = ((Round1[item]['Final approvable'] > InitalCalculation[item]['Allowances'])
+            entity['Priority SE (Indigenous)'] = ((parseFloat(Round1[item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
                 && (SummaryCalculationsTotalApproved['Priority SE (Indigenous)']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Priority SE (Indigenous)'] === true) PoliciesApplied['Policy Used']['Priority SE (Indigenous)'] = PoliciesApplied['Policy Used']['Priority SE(Indigenous)'] + 1;
             // B107
-            entity['Priority SE (Extended Hours)'] = ((Round1[item]['Final approvable'] > InitalCalculation[item]['Allowances'])
+            entity['Priority SE (Extended Hours)'] = ((parseFloat(Round1[item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
                 && (SummaryCalculationsTotalApproved['Priority SE (Extended Hours)']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Priority SE (Extended Hours)'] === true) PoliciesApplied['Policy Used']['Priority SE (Extended Hours)'] = PoliciesApplied['Policy Used']['Priority SE (Extended Hours)'] + 1;
             // B106
-            entity['MTFI Unused'] = ((Round1[item]['Final approvable'] > InitalCalculation[item]['Allowances'])
+            entity['MTFI Unused'] = ((parseFloat(Round1[item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
                 && (SummaryCalculationsTotalApproved['Priority SE (Inclusive)']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['MTFI Unused'] === true) PoliciesApplied['Policy Used']['MTFI Unused'] = PoliciesApplied['Policy Used']['MTFI Unused'] + 1;
             // B105
-            entity['Direct Care Staff Wages'] = ((Round1[item]['Final approvable'] > InitalCalculation[item]['Allowances'])
+            entity['Direct Care Staff Wages'] = ((parseFloat(Round1[item]['Final approvable']) > parseFloat(InitalCalculation[item]['Allowances']))
                 && (SummaryCalculationsTotalApproved['Direct Care Staff Wages']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Direct Care Staff Wages'] === true) PoliciesApplied['Policy Used']['Direct Care Staff Wages'] = PoliciesApplied['Policy Used']['Direct Care Staff Wages'] + 1;
             // B104
             entity['Exceptional Circumstances'] = ((Round1[item]['Final approvable'] > InitalCalculation[item]['Allowances'])
-                && (SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total'] > 0) && (entity['Nominal'] === false)) ? true : false;
+                && (parseFloat(SummaryCalculationsTotalApproved['Exceptional Circumstances']['Total']) > 0) && (entity['Nominal'] === false)) ? true : false;
             if (entity['Exceptional Circumstances'] === true) PoliciesApplied['Policy Used']['Exceptional Circumstances'] = PoliciesApplied['Policy Used']['Exceptional Circumstances'] + 1;
         }
         // B103 Historic
-        entity['Historic'] = ((ChangeEmptyCellstoZero[item]['Historic'] >= (ChangeEmptyCellstoZero[item]['No Fee Increase in Years'] + ChangeEmptyCellstoZero[item]['Median']))
+        entity['Historic'] = ((parseFloat(ChangeEmptyCellstoZero[item]['Historic']) >= (parseFloat(ChangeEmptyCellstoZero[item]['No Fee Increase in Years']) + parseFloat(ChangeEmptyCellstoZero[item]['Median'])))
             && (ChangeEmptyCellstoZero[item]['Historic'] > 0) && (entity['Nominal'] === false)) ? true : false;
         if (entity['Historic'] === true) PoliciesApplied['Policy Used']['Historic'] = PoliciesApplied['Policy Used']['Historic'] + 1;
         // B102 No Fee Increase in Years
         entity['No Fee Increase in Years'] = ((entity['Historic'] === false) && (ChangeEmptyCellstoZero[item]['No Fee Increase in Years'] > 0)
-            && (InitalCalculation[item]['FINAL APPROVABLE'] > ChangeEmptyCellstoZero[item]['Median']) && (entity['Nominal'] === false)) ? true : false;
+            && (parseFloat(InitalCalculation[item]['FINAL APPROVABLE']) > parseFloat(ChangeEmptyCellstoZero[item]['Median'])) && (entity['Nominal'] === false)) ? true : false;
         if (entity['No Fee Increase in Years'] === true) PoliciesApplied['Policy Used']['No Fee Increase in Years'] = PoliciesApplied['Policy Used']['No Fee Increase in Years'] + 1;
         // B101 Median
         entity['Median'] = ((entity['Historic'] === false)
@@ -649,7 +668,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
         entity['Requested Fee Increase'] = FacilityInfo[i]['RequestedFeeIncrease'];
         //I9
         entity['Max Approvable'] = (FacilityInfo[i]['AverageEnrollment'] === 0) ? 0 : InitalCalculation[FacilityInfo[i]['CareCategory']]['FINAL APPROVABLE'];
-        resultString = resultString + " " + FacilityInfo[i]['CareCategory'] + ": $" + entity['Max Approvable'];
+        resultString = resultString + " " + FacilityInfo[i]['CareCategory'] + ": $" + entity['Max Approvable'].toFixed(2);
         entity['Full Request Approvable?'] = (entity['Requested Fee Increase'] <= entity['Max Approvable']) ? true : false;
         CheckFullRequestApprovable = CheckFullRequestApprovable && entity['Full Request Approvable?'];
         FinalCalculations[FacilityInfo[i]['CareCategory']] = entity;
@@ -679,7 +698,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo) {
     console.log("DilutionCapor70thpercentile:" + JSON.stringify(DilutionCapor70thpercentile));
 
     // A118 Adjudicator Note: last result //70th % CAPPED => NMF Benchmark CAPPED based on ticket 1135
-    var AdjudicatorNote = "S3CV: " + (CalculatorValidation ? "Pass" : "Fail") + " RESULT: " + ((!CheckFullRequestApprovable) ? "Not Approvable" : "Approvable") + "; MAX APPROVABLE: "
+    var AdjudicatorNote = "S3CV: " + (CalculatorValidation ? "Pass;" : "Fail;") + " RESULT: " + ((!CheckFullRequestApprovable) ? "Not Approvable" : "Approvable") + "; MAX APPROVABLE: "
         + resultString + stringPOLICIESUSED + " SDA: " + SDA + "; PERCENTILE CAP: " + (Limitfeesto70Percentile ? "Yes" : "No") + "; UNUSED EXPENSES: $" + (TotalMonthlyExpenses - TotalAllowedExpenses).toFixed(2) + "\n"
         + "MEFI CAPPED: " + ((MEFIcappedcategories.trim() == "") ? "None" : MEFIcappedcategories) + "\n" + "NMF Benchmark CAPPED: " + ((string70cappedcategories.trim() == "") ? "None" : string70cappedcategories);
     console.log("AdjudicatorNote:" + AdjudicatorNote);
