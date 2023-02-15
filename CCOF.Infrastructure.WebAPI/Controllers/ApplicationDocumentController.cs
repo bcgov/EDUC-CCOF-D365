@@ -74,7 +74,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             // stop, if the file size exceeds 3mb 
             if (rawJsonData.Length > 3999999) { return StatusCode((int)HttpStatusCode.InternalServerError, "The file size exceeds the limit allowed (<3Mb)."); };
             JObject obj = JObject.Parse(rawJsonData);
-            obj.Add("notetext", JToken.FromObject(new string("Uploaded Document")));
+            // obj.Add("notetext", JToken.FromObject(new string("Uploaded Document")));
             rawJsonData = obj.ToString();
             if (obj["ccof_applicationid"].ToString().Trim() == null || obj["ccof_facility"].ToString().Trim() == null)
                 return "Application ID or Facility ID cannot be empty";
