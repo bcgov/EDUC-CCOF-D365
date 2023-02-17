@@ -18,6 +18,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("Organization.name")]
         public string? organization_name { get; set; }
 
+        [JsonPropertyName("Organization.ccof_fundingagreementnumber")]
+        public string? organization_ccof_fundingagreementnumber { get; set; }
+
         [JsonPropertyName("Organization.ccof_contractstatus")]
         public int? organization_ccof_contractstatus { get; set; }
 
