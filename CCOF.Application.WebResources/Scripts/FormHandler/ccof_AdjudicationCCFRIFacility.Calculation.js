@@ -59,7 +59,11 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                     //need to pass values of Initial adjudication
                     var TotalAllowableStagePolicy = PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amountEntityName, FeeIncreaseDetails, RegionInfos, entityId, mefiCAP, limitfeestonmfbenchmark);
                     //IndicateCap(FeeIncreaseDetails, TotalAllowableStagePolicy, RegionInfos, entityId, mefiCAP, limitfeestonmfbenchmark);
-                    formContext.getAttribute("ccof_adjudicatornotes").setValue(returnValue['AdjudicatorNote']);
+                    //let currentDate = new Date();
+                    //let historyValue = formContext.getAttribute("ccof_adjudicatornotes").getValue();
+                    //let plainValue = convertToPlain(historyValue);
+                    //formContext.getAttribute("ccof_adjudicatornotes").setValue(plainValue+'\n'+returnValue['AdjudicatorNote']+'\n');
+                    formContext.getAttribute("ccof_stage3calculatornotesinitial").setValue(returnValue['AdjudicatorNote']);
                     //refresh the summary grid
                     formContext.getControl("AllowableAmount").refresh();
                     console.log("End Initial Adjudication Calculation");
@@ -115,11 +119,16 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                     console.log("FeeIncreaseDetails24Months" + JSON.stringify(FacilityAmountAllowedRecords24Months));
                     var returnValue24Months = Calculator(RegionInfos, FeeIncreaseDetails24Months, ExpenseInfo24Months);
                     // Xrm.Navigation.openAlertDialog("24 Months"+JSON.stringify(returnValue24Months));
-                    formContext.getAttribute("ccof_monthadjudicatornotes").setValue(returnValue24Months['AdjudicatorNote']);
+                    // formContext.getAttribute("ccof_monthadjudicatornotes").setValue(returnValue24Months['AdjudicatorNote']);
                     //need to pass values of 24 month adjudication as well 
                     var TotalAllowableStagePolicy24Months = Populate24MonthSummaryApprovedAmount(returnValue24Months, FacilityAmountAllowedRecords24Months, ccfri_facility_allowable_amount_24MonthEntityName, FeeIncreaseDetails24Months, RegionInfos, entityId, mefiCAP24month, limitfeestonmfbenchmark24month);
                     //  IndicateCap24Month(FeeIncreaseDetails24Months, TotalAllowableStagePolicy24Months, RegionInfos, entityId, mefiCAP24month, limitfeestonmfbenchmark24month);
                     //IndicateCap(FeeIncreaseDetails, TotalAllowableStagePolicy, RegionInfos, entityId, mefiCAP, limitfeestonmfbenchmark, TotalAllowableStagePolicyId);
+                    //var currentDate = new Date();
+                    //let historyValue = formContext.getAttribute("ccof_monthadjudicatornotes").getValue();
+                    //let plainValue = convertToPlain(historyValue);
+                    //formContext.getAttribute("ccof_monthadjudicatornotes").setValue(plainValue + '\n' + returnValue24Months['AdjudicatorNote']);
+                    formContext.getAttribute("ccof_stage3calculatornotes24month").setValue(returnValue24Months['AdjudicatorNote']);
                     formContext.getControl("AllowableAmount24Months").refresh();
                     // Xrm.Utility.closeProgressIndicator();
                     console.log("End 24 Months Calculation");
@@ -129,12 +138,15 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
             var alertOptions = { height: 240, width: 320 };
             if (ifCalculateInitial) {
                 if (ifCalculate24Months) {
+                    formContext.data.save();
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication Calculation is complete! \n 24 Months Adjudication is complete!", alertOptions);
                 } else {
+                    formContext.data.save();
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication Calculation is complete!\n 24 Months Adjudication will not be calculated as Fee Increase Amount is missing or No Fee Increase Amount data need to be calculated!", alertOptions);
                 }
             } else {
                 if (ifCalculate24Months) {
+                    formContext.data.save();
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication will not be calculated as Fee Increase Amount is missing! or No Fee Increase Amount data need to be calculated! \n 24 Months Adjudication Calculation is complete", alertOptions);
                 } else {
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication will not be calculated as Fee Increase Amount is missing! or No Fee Increase Amount data need to be calculated!\n 24 Months Adjudication will not be calculated as Fee Increase Amount is missing or No Fee Increase Amount data need to be calculated!", alertOptions);
@@ -1295,4 +1307,15 @@ function IndicateCap24Month(feeIncreaseDetails, TotalAllowableStagePolicy, regio
         }
 
     }
+}
+function convertToPlain(html) {
+
+    // Create a new div element
+    var tempDivElement = document.createElement("div");
+
+    // Set the HTML content with the given value
+    tempDivElement.innerHTML = html;
+
+    // Retrieve the text property of the element 
+    return tempDivElement.textContent || tempDivElement.innerText || "";
 }
