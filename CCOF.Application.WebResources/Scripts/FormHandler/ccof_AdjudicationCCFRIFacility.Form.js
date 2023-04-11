@@ -111,8 +111,10 @@ function HideAdjudicatorRecommendationOptions(executionContext) {
 	var formContext = executionContext.getFormContext();
 	//Remove Stage 2(NOM) and Stage 2 (MED) automatically for the FY 2023/24
 	if (today > limitDate) {
-		formContext.getControl("ccof_adjudicatorrecommendation").removeOption(100000010); //Stage 2 (NOM)
-		formContext.getControl("ccof_adjudicatorrecommendation").removeOption(100000011); //Stage 2 (MED)
+		formContext.getControl("ccof_ccfriadjudicatorrecommendation").removeOption(100000003); //Stage 2 (NOM)
+		formContext.getControl("ccof_ccfriadjudicatorrecommendation").removeOption(100000004); //Stage 2 (MED)
+		//formContext.getControl("ccof_adjudicatorrecommendation").removeOption(100000010); //Stage 2 (NOM)
+		//formContext.getControl("ccof_adjudicatorrecommendation").removeOption(100000011); //Stage 2 (MED)
 	}
 }
 
