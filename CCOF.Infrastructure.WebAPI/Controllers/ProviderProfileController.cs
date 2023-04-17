@@ -27,6 +27,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         [HttpGet]
         public ActionResult<string> Get(string userName, string? userId = null)
         {
+            
             if (string.IsNullOrEmpty(userName)) return BadRequest("Invalid Request");
 
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
@@ -99,10 +100,20 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
                 if (records != null && records[0][0]["Organization.accountid"] == null) { return NotFound("No profiles."); }
                 if (records != null && records[0][0]["Application.ccof_applicationid"] == null) { return NotFound("No applications."); }
+                var applicationtype = records[0][0]["Application.ccof_applicationtype"].ToString();
+                
+                if (applicationtype != "100000001")
+                {
+                    var aggregatedResult = AggregateApplicationData(records[0][0]);
+                    return Ok(aggregatedResult);
+                }
+                else
+                {
+                    var aggregatedResult = AggregateApplicationDataExcludingNewFacilities(records[0][0]);
+                    return Ok(aggregatedResult);
+                }
 
-                var aggregatedResult = AggregateApplicationData(records[0][0]);
-
-                return Ok(aggregatedResult);
+               
             }
             else
                 return StatusCode((int)response.StatusCode,
@@ -134,5 +145,69 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
             return userProfile;
         }
+
+        private dynamic AggregateApplicationDataExcludingNewFacilities(JToken token)
+        {
+            dynamic dynUserProfile = JObject.Parse(token.ToString());
+            var getFacilitiesStatement = "";
+
+            getFacilitiesStatement = @$"accounts?$select=accountnumber,name,ccof_formcomplete,accountid,_parentaccountid_value,ccof_facilitystatus,ccof_facilitylicencenumber&$filter=(ccof_accounttype eq 100000001 and ccof_facilitystatus ne 100000000 and _parentaccountid_value eq {token["Organization.accountid"]})";
+
+            var facilitiesResponse = _d365webapiservice.SendRetrieveRequestAsync(getFacilitiesStatement, true, 250);
+            if (facilitiesResponse.IsSuccessStatusCode)
+            {
+                dynamic jResult = JObject.Parse(facilitiesResponse.Content.ReadAsStringAsync().Result);
+                dynUserProfile.facilities = jResult.value;
+            }
+
+            //get application with program year and exclude facility status is new.
+            var getApplicationStatement = @$"ccof_applications?$select=_ccof_organization_value,ccof_applicationtype,ccof_applicationid,ccof_name,_ccof_programyear_value,statuscode,ccof_providertype,ccof_unlock_declaration,ccof_unlock_licenseupload,ccof_unlock_supportingdocument,ccof_unlock_ccof,ccof_unlock_ecewe,ccof_licensecomplete,ccof_ecewe_eligibility_complete,ccof_ccofstatus&$expand=ccof_ProgramYear($select=ccof_name,ccof_program_yearid,statuscode,ccof_declarationbstart,ccof_intakeperiodstart,ccof_intakeperiodend)&$filter=(ccof_applicationid eq {token["Application.ccof_applicationid"]})";
+
+
+            var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationStatement, true, 250);
+            if (applicationResponse.IsSuccessStatusCode)
+            {
+                dynamic jResult_Application = JObject.Parse(applicationResponse.Content.ReadAsStringAsync().Result);
+              //  jResult_Application.application = jResult_Application.value;
+                //// Get Application CCFRI 
+                var getApplicationCCFRIStatement = @$"ccof_applicationccfris?$select=_ccof_application_value,_ccof_facility_value,ccof_unlock_rfi,ccof_name,ccof_has_rfi,ccof_ccfrioptin,ccof_unlock_ccfri,ccof_unlock_nmf_rfi,ccof_faclilityid,ccof_rfi_formcomplete,ccof_nmf_formcomplete,ccof_has_nmf,ccof_applicationccfriid,statuscode&$expand=ccof_Facility($select=ccof_accounttype)&$filter=(_ccof_application_value eq {token["Application.ccof_applicationid"]}) and (ccof_Facility/ccof_facilitystatus ne 100000000)";
+
+
+                var applicationCCFRIResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationCCFRIStatement, true, 250);
+                if (applicationCCFRIResponse.IsSuccessStatusCode)
+                {
+                    dynamic jResult_applicationCCFRI = JObject.Parse(applicationCCFRIResponse.Content.ReadAsStringAsync().Result);
+                    jResult_Application.value[0].ccof_applicationccfri_Application_ccof_ap = jResult_applicationCCFRI.value;
+                }
+                ////Get Base funding Application
+                var getBaseFundingApplicationStatement = @$"ccof_application_basefundings?$select=_ccof_application_value,_ccof_facility_value,ccof_application_basefundingid,ccof_name,_ccof_licensetypes_value,statuscode,ccof_formcomplete&$expand=ccof_Facility($select=ccof_accounttype;$filter=(ccof_facilitystatus ne 100000000))&$filter=(_ccof_application_value eq {token["Application.ccof_applicationid"]})";
+
+
+                var baseFundingApplicationResponse = _d365webapiservice.SendRetrieveRequestAsync(getBaseFundingApplicationStatement, true, 250);
+                if (baseFundingApplicationResponse.IsSuccessStatusCode)
+                {
+                    dynamic jResult_BaseFunding = JObject.Parse(baseFundingApplicationResponse.Content.ReadAsStringAsync().Result);
+                    jResult_Application.value[0].ccof_application_basefunding_Application = jResult_BaseFunding.value;
+                }
+                ////Get application ECE-WE 
+                var getApplicationECEWEStatement = @$"ccof_applicationecewes?$select=statuscode,ccof_formcomplete,_ccof_facility_value,ccof_applicationeceweid,ccof_optintoecewe,_ccof_application_value&$expand=ccof_Facility($select=ccof_facilitystatus;$filter=(ccof_facilitystatus ne 100000000))&$filter=(_ccof_application_value eq {token["Application.ccof_applicationid"]})";
+
+
+                var applicationECEWEResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationECEWEStatement, true, 250);
+                if (applicationECEWEResponse.IsSuccessStatusCode)
+                {
+                    dynamic jResult_ApplicationECEWE = JObject.Parse(applicationECEWEResponse.Content.ReadAsStringAsync().Result);
+                    jResult_Application.value[0].ccof_ccof_application_ccof_applicationecewe_application = jResult_ApplicationECEWE.value;
+                }
+                dynUserProfile.application = jResult_Application.value[0];
+               
+            }
+            // A simple way to remove unwanted attributes
+            var userProfileString = JsonConvert.SerializeObject(dynUserProfile);
+            UserProfile userProfile = System.Text.Json.JsonSerializer.Deserialize<UserProfile>(userProfileString);
+
+            return userProfile;
+        }
     }
 }
+
