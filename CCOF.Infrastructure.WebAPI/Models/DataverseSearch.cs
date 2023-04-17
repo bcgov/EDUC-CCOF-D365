@@ -2,6 +2,7 @@
 {
     public class DataverseSearch
     {
+
         public string? search { get; set; }
         public bool usefuzzy { get; } = true;
         public string? filter { get; } = "account:ccof_accounttype eq 100000001"; // Restrict Search to Facility account type and excluding closed status

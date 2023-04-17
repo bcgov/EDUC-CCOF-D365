@@ -148,6 +148,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
         private dynamic AggregateApplicationDataExcludingNewFacilities(JToken token)
         {
+
             dynamic dynUserProfile = JObject.Parse(token.ToString());
             var getFacilitiesStatement = "";
 
