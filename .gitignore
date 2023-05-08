@@ -13,3 +13,5 @@
 appsettings.json
 /CCOF.Infrastructure.WebAPI/appsettings.Development.json
 .vs/CCOF/v17/.suo
+/.vs/CCOF/v17/.suo
+/.vs/CCOF/config/applicationhost.config
