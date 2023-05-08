@@ -157,8 +157,13 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
         catch (err) {
             alert("There are some exceptional errors happened, please contact Administrator!" + err);
         }
+    },     
+    OnMEFICap: function (executionContext) {
+        debugger;
+        let formContext = executionContext.getFormContext();
+        CCOF.AdjudicationCCFRIFacility.Calculation.Calculation(formContext);
     },
-}
+};
 
 function getCleanedGuid(id) {
     return id.replace("{", "").replace("}", "");
@@ -889,7 +894,11 @@ function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords
                 //    "ccof_outofschoolcaregrade1": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Direct Care Staff Wages']) + accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1) : accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1
                 //}
                 TotalAllowableStagePolicyId = FacilityAmountAllowedRecords[i]['ccof_ccfri_facility_allowable_amountid'];
-                UpdateEntityRecord(entityname, TotalAllowableStagePolicyId, TotalAllowableStagePolicy);
+                debugger;
+
+                UpdateEntityRecord(entityname, TotalAllowableStagePolicyId, TotalAllowableStagePolicy);           
+                Xrm.Page.ui.controls.get("AllowableAmount").refresh();                
+                //Xrm.Page.ui.tabs.get("Adjudication_section_7").refresh();
             }
         }
         IndicateCap(FeeIncreaseDetails, TotalAllowableStagePolicy, RegionInfos, entityId, mefiCAP, limitfeestonmfbenchmark, TotalAllowableStagePolicyId);
@@ -1014,9 +1023,8 @@ function Populate24MonthSummaryApprovedAmount(returnValue, FacilityAmountAllowed
                 //    "ccof__3yearstokindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['Direct Care Staff Wages']) + accup_3yearstokindergarden + stage2_3yearstokindergarden) : accup_3yearstokindergarden + stage2_3yearstokindergarden,
                 //    "ccof_outofschoolcaregrade1": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Priority SE(Extended Hours)']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Exceptional Circumstances']) + parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['Direct Care Staff Wages']) + accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1) : accup_outofschoolcaregrade1 + stage2_outofschoolcaregrade1
                 //}
-                TotalAllowableStagePolicyId = FacilityAmountAllowedRecords[i]['ccof_ccfrifacilityallowableamount_24monthid'];
-
-                UpdateEntityRecord(entityname, TotalAllowableStagePolicyId, TotalAllowableStagePolicy);
+                TotalAllowableStagePolicyId = FacilityAmountAllowedRecords[i]['ccof_ccfrifacilityallowableamount_24monthid'];             
+                UpdateEntityRecord(entityname, TotalAllowableStagePolicyId, TotalAllowableStagePolicy);                
             }
         }
         IndicateCap24Month(FeeIncreaseDetails24Months, TotalAllowableStagePolicy, RegionInfos, entityId, mefiCAP24month, limitfeestonmfbenchmark24month, TotalAllowableStagePolicyId);
