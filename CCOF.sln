@@ -36,6 +36,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CCOF.Core.DataContext", "CC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCOF.Infrastructure.WebAPI", "CCOF.Infrastructure.WebAPI\CCOF.Infrastructure.WebAPI.csproj", "{95A4C435-55E7-402F-81C9-6E78BA6B14FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PCF Controls", "PCF Controls", "{E2DD64AE-B86B-4D67-8B3A-55430382BE4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
