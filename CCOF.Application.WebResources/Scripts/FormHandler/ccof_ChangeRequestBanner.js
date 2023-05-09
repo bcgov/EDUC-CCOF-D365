@@ -28,20 +28,22 @@ function showNotification(executionContext, formContext, fetchXML, flag) {
                         var ccof_records = formContext.getAttribute("ccof_adjudication").getValue();
                         console.log(ccof_records);
                         var ccof_id = ccof_records[0]["id"].replace("{", "").replace("}", "");
-                        var appId = null;
+ //                       var powerappId = null;
 
                         var globalContext = Xrm.Utility.getGlobalContext();
+                        var appurl = globalContext.getCurrentAppUrl();
                         globalContext.getCurrentAppProperties().then(
                             function success(app) {
-                                appId = app["appId"];
-                                console.log(appId);
+ //                               powerappId = app.appId;
+                                console.log(app);
                             },
                             function errorCallback() {
                                 console.log("Error");
                             });
 
 
-                        var url = executionContext.getContext().getClientUrl() + '/main.aspx?' + appId + '&forceUCI=1&pagetype=entityrecord&etn=ccof_adjudication&id=' + ccof_id;
+                        var url = appurl + '&forceUCI=1&pagetype=entityrecord&etn=ccof_adjudication&id=' + ccof_id;
+                        //var url = executionContext.getContext().getClientUrl() + '/main.aspx?appid=' + powerappId + '&forceUCI=1&pagetype=entityrecord&etn=ccof_adjudication&id=' + ccof_id;
 
                         // var url = "https://mychildcareservicesdev.crm3.dynamics.com/main.aspx?appid=733af835-f8da-4763-b4ab-972ebdc95f65&forceUCI=1&pagetype=entityrecord&etn=ccof_adjudication&id=" + ccof_id;
 
@@ -68,6 +70,7 @@ function showNotification(executionContext, formContext, fetchXML, flag) {
 }
 
 function showNotificationCCFRI(executionContext) {
+    debugger;
     var formContext = executionContext.getFormContext();
 
     var ccfri = formContext.data.entity.getId().replace("{", "").replace("}", "");
@@ -89,6 +92,7 @@ function showNotificationCCFRI(executionContext) {
 }
 
 function showNotificationCCOF(executionContext) {
+    debugger;
     var formContext = executionContext.getFormContext();
 
     var ccof = formContext.data.entity.getId().replace("{", "").replace("}", "");
@@ -110,6 +114,7 @@ function showNotificationCCOF(executionContext) {
 }
 
 function showNotificationECE(executionContext) {
+    debugger;
     var formContext = executionContext.getFormContext();
     var ecewe = formContext.data.entity.getId().replace("{", "").replace("}", "");
 
