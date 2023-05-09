@@ -21,6 +21,7 @@ function showNotification(executionContext, formContext, fetchXML, CCOFXML) {
                             var appId = null;
 
                             var globalContext = Xrm.Utility.getGlobalContext();
+                            var appurl = globalContext.getCurrentAppUrl();
                             globalContext.getCurrentAppProperties().then(
                                 function success(app) {
                                     appId = app["appId"];
@@ -29,8 +30,8 @@ function showNotification(executionContext, formContext, fetchXML, CCOFXML) {
                                 function errorCallback() {
                                     console.log("Error");
                                 });
-
-                            var url = executionContext.getContext().getClientUrl() + '/main.aspx?' + appId + '&forceUCI=1&pagetype=entityrecord&etn=ccof_adjudication&id=' + ccof_id;
+                            var url = appurl + '&forceUCI=1&pagetype=entityrecord&etn=ccof_adjudication&id=' + ccof_id;
+                            // var url = executionContext.getContext().getClientUrl() + '/main.aspx?' + appId + '&forceUCI=1&pagetype=entityrecord&etn=ccof_adjudication&id=' + ccof_id;
                             var notification_link = formContext.getAttribute("ccof_notification_link").getValue();
                             if (notification_link == null) {
                                 formContext.getAttribute("ccof_notification_link").setValue(url);
@@ -56,6 +57,7 @@ function showNotification(executionContext, formContext, fetchXML, CCOFXML) {
 }
 
 function showNotificationCCFRIFacility(executionContext) {
+    debugger;
     var formContext = executionContext.getFormContext();
     var ccfriFacility = formContext.data.entity.getId().replace("{", "").replace("}", "");
 
@@ -88,6 +90,7 @@ function showNotificationCCFRIFacility(executionContext) {
 
 
 function showNotificationECEWEFacility(executionContext) {
+    debugger;
     var formContext = executionContext.getFormContext();
     var eceweFacility = formContext.data.entity.getId().replace("{", "").replace("}", "");
 
