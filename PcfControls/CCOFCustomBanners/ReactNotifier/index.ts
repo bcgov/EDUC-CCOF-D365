@@ -5,7 +5,7 @@ import * as ReactDOM from 'react-dom';
 import { MessageBarType } from "office-ui-fabric-react/lib/components/MessageBar/MessageBar.types";
 
 
-export class SimpleNotification implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+export class CCOFCustomBanners implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
 	private _container:HTMLDivElement;
 	private _ctrl:NotificationControl;

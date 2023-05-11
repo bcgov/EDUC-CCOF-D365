@@ -58,95 +58,95 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SimpleNotification" xml:space="preserve">
-    <value>Simple Notification</value>
+  <data name="CCOFCustomBanners" xml:space="preserve">
+    <value>CCOFCustomBanners</value>
   </data>
-  <data name="SimpleNotification_Desc" xml:space="preserve">
-    <value>Un controle pour afficher une notification</value>
+  <data name="CCOFCustomBanners_Desc" xml:space="preserve">
+    <value>A control to display a notification</value>
   </data>
   <data name="fakeAttribute_Display_Key" xml:space="preserve">
-    <value>Champ</value>
+    <value>Attribute</value>
   </data>
   <data name="fakeAttribute_Desc" xml:space="preserve">
-    <value>Le champ à remplacer par la notification</value>
+    <value>The attribute to replace with the notification</value>
   </data>
   <data name="messageType_Display_Key" xml:space="preserve">
-    <value>Type de notification</value>
+    <value>Notification type</value>
   </data>
    <data name="messageType_Desc" xml:space="preserve">
-    <value>Définit le type de notification</value>
+    <value>Defines the type of notification</value>
   </data>
   <data name="Info_Key" xml:space="preserve">
     <value>Information</value>
   </data>
   <data name="Warning_Key" xml:space="preserve">
-    <value>Avertissement</value>
+    <value>Warning</value>
   </data>
   <data name="Error_Key" xml:space="preserve">
-    <value>Erreur</value>
+    <value>Error</value>
   </data>
    <data name="Blocked_Key" xml:space="preserve">
-    <value>Blocké</value>
+    <value>Blocked</value>
   </data>
   <data name="SevereWarning_Key" xml:space="preserve">
-    <value>Avertissement sévère</value>
+    <value>Severe warning</value>
   </data>
   <data name="Success_Key" xml:space="preserve">
-    <value>Succès</value>
+    <value>Success</value>
   </data>
-  <data name="Info_Desc" xml:space="preserve">
+   <data name="Info_Desc" xml:space="preserve">
     <value>Information</value>
   </data>
   <data name="Warning_Desc" xml:space="preserve">
-    <value>Avertissement</value>
+    <value>Warning</value>
   </data>
   <data name="Error_Desc" xml:space="preserve">
-    <value>Erreur</value>
+    <value>Error</value>
   </data>
    <data name="Blocked_Desc" xml:space="preserve">
-    <value>Blocké</value>
+    <value>Blocked</value>
   </data>
   <data name="SevereWarning_Desc" xml:space="preserve">
-    <value>Avertissement sévère</value>
+    <value>Severe warning</value>
   </data>
   <data name="Success_Desc" xml:space="preserve">
-    <value>Succès</value>
+    <value>Success</value>
   </data>
   <data name="message_Display_Key" xml:space="preserve">
     <value>Message</value>
   </data>
   <data name="message_Desc_Key" xml:space="preserve">
-    <value>Le message à afficher</value>
+    <value>The message to display</value>
   </data>
   <data name="showLink_Display_Key" xml:space="preserve">
-    <value>Afficher un lien?</value>
+    <value>Display a link?</value>
   </data>
   <data name="showLink_Desc_Key" xml:space="preserve">
-    <value>Indique si un lien doit être ajouté à la fin du message de notification</value>
+    <value>Indicates if an hypertext link must be added at the end of the message</value>
   </data>
   <data name="Yes_Key" xml:space="preserve">
-    <value>Oui</value>
+    <value>Yes</value>
   </data>
   <data name="No_Key" xml:space="preserve">
-    <value>Non</value>
+    <value>No</value>
   </data>
   <data name="Yes_Desc" xml:space="preserve">
-    <value>Oui</value>
+    <value>Yes</value>
   </data>
   <data name="No_Desc" xml:space="preserve">
-    <value>Non</value>
+    <value>No</value>
   </data>
   <data name="linkText_Display_Key" xml:space="preserve">
-    <value>Texte du lien</value>
+    <value>Link text</value>
   </data>
   <data name="linkText_Desc_Key" xml:space="preserve">
-    <value>Texte à utiliser pour le lien</value>
+    <value>Text to be used for the link</value>
   </data>
   <data name="link_Display_Key" xml:space="preserve">
-    <value>Lien</value>
+    <value>Link</value>
   </data>
   <data name="link_Desc_Key" xml:space="preserve">
-    <value>Url vers laquelle naviguer lorsque l'utilisateur clique sur le lien</value>
+    <value>Url to navigate to when clicking on the link</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
 </root>
