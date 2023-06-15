@@ -25,6 +25,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }
+        //Retrieve PDFs based on application id.s
         [HttpGet]
         public ActionResult<string> Get(string applicationId)
         {
