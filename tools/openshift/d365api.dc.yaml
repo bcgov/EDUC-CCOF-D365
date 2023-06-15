@@ -112,10 +112,10 @@ objects:
     selector:
       app: "${APP_NAME}-${BRANCH}"
       deploymentconfig: "${APP_NAME}-d365api-${BRANCH}"
-- apiVersion: autoscaling/v2beta1
+- apiVersion: autoscaling/v2
   kind: HorizontalPodAutoscaler
   metadata:
-    name: "${APP_NAME}-d365api-${BRANCH}-cpu-autoscaler"
+    name: "${APP_NAME}-d365api-cpu-autoscaler"
   spec:
     scaleTargetRef:
       apiVersion: apps.openshift.io/v1
