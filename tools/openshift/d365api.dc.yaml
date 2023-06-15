@@ -14,12 +14,13 @@ objects:
     creationTimestamp:
     labels:
       app: "${APP_NAME}-${BRANCH}"
-    name: "${APP_NAME}-d365api-${BRANCH}"
+      branch: "${BRANCH}"
+    name: "${APP_NAME}-d365api"
   spec:
     replicas: ${{MIN_REPLICAS}}
     selector:
       app: "${APP_NAME}-${BRANCH}"
-      deploymentconfig: "${APP_NAME}-d365api-${BRANCH}"
+      deploymentconfig: "${APP_NAME}-d365api"
     strategy:
       resources: {}
       type: Rolling
@@ -30,7 +31,7 @@ objects:
         creationTimestamp:
         labels:
           app: "${APP_NAME}-${BRANCH}"
-          deploymentconfig: "${APP_NAME}-d365api-${BRANCH}"
+          deploymentconfig: "${APP_NAME}-d365api"
       spec:
         containers:
         - image: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${REPO_NAME}-d365api-${BRANCH}:${TAG}
@@ -98,7 +99,7 @@ objects:
     creationTimestamp:
     labels:
       app: "${APP_NAME}-${BRANCH}"
-    name: "${APP_NAME}-d365api-${BRANCH}"
+    name: "${APP_NAME}-d365api"
   spec:
     ports:
     - name: 5091-tcp
@@ -111,7 +112,7 @@ objects:
       targetPort: 443
     selector:
       app: "${APP_NAME}-${BRANCH}"
-      deploymentconfig: "${APP_NAME}-d365api-${BRANCH}"
+      deploymentconfig: "${APP_NAME}-d365api"
 - apiVersion: autoscaling/v2
   kind: HorizontalPodAutoscaler
   metadata:
