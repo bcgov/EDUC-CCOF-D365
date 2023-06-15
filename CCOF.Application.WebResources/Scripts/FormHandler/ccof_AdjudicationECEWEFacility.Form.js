@@ -67,11 +67,14 @@ function enableDisableEceweDecision() {
             function success(result) {
                 var ccfriQcDecisionVal = result.ccof_ccfriqcdecision;
                 console.log("Retrieved values: CcfriQC Decision: " + ccfriQcDecisionVal);
+                // fix bug based on ticket 1987
                 if (ccfriQcDecisionVal != null || ccfriQcDecisionVal != undefined) {
-                    Xrm.Page.getControl('ccof_ecewedecision').setDisabled(true);
+                    Xrm.Page.getControl('ccof_ecewedecision').setDisabled(false);
+                   // Xrm.Page.getControl('ccof_ecewedecision').setDisabled(true);
                 }
                 else {
-                    Xrm.Page.getControl('ccof_ecewedecision').setDisabled(false);
+                    Xrm.Page.getControl('ccof_ecewedecision').setDisabled(true);
+                    //Xrm.Page.getControl('ccof_ecewedecision').setDisabled(false);
                 }
             },
             function (error) {
