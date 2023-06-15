@@ -24,7 +24,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
         // GET: api/Document
         [HttpGet]
-        public ActionResult<string> Get(string annotationId)
+        public ActionResult<string> Get(string annotationId, int maxPageSize = 1000)
         {
             if (string.IsNullOrEmpty(annotationId)) return string.Empty;
             string fetchXML = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -40,7 +40,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                                 </fetch>";
 
             var statement = $"annotations?fetchXml=" + WebUtility.UrlEncode(fetchXML);
-            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
+            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize);
             if (response.IsSuccessStatusCode)
             {
                 return Ok(response.Content.ReadAsStringAsync().Result);
@@ -69,7 +69,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             string fileextension = partialfilename[partialfilename.Count() - 1].ToLower();
 
             // stop, if the file format whether is not JPG, PDF or PNG
-            string[] acceptedFileFormats = { "jpg", "jpeg", "pdf", "png", "doc", "docx", "heic" , "xls", "xlsx" };
+            string[] acceptedFileFormats = { "jpg", "jpeg", "pdf", "png", "doc", "docx", "heic", "xls", "xlsx" };
 
             if (Array.IndexOf(acceptedFileFormats, fileextension) == -1)
             {
