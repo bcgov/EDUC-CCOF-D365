@@ -6,7 +6,7 @@ env:
   OPENSHIFT_NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-dev
 
   REPO_NAME: "educ-ccof-d365"
-  BRANCH: "main"
+  BRANCH: ${{ github.ref_name }}
   APP_NAME_BACKEND: "d365api"
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
 
