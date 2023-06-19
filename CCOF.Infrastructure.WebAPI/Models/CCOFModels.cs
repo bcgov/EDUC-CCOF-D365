@@ -140,6 +140,8 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscode_formatted { get; set; }
         public int? statuscode { get; set; }
+        [JsonPropertyName("statecode@OData.Community.Display.V1.FormattedValue")]
+        public string? statecode_formatted { get; set; }
         public int? statecode { get; set; }
         public string? _ccof_ccfri_value { get; set; }
         public string? ccof_name { get; set; }
@@ -153,7 +155,11 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscode_formatted { get; set; }
         public int? statuscode { get; set; }
+        [JsonPropertyName("statecode@OData.Community.Display.V1.FormattedValue")]
+        public string? statecode_formatted { get; set; }
         public int? statecode { get; set; }
+        [JsonPropertyName("ccof_changetype@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_changetype_formatted { get; set; }
         public int? ccof_changetype { get; set; }
         public string? _ccof_ccfri_value { get; set; }
         public string? ccof_name { get; set; }
@@ -168,13 +174,22 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscode_formatted { get; set; }
         public int? statuscode { get; set; }
+        [JsonPropertyName("statecode@OData.Community.Display.V1.FormattedValue")]
+        public string? statecode_formatted { get; set; }
         public int? statecode { get; set; }
       
         public string? ccof_name { get; set; }
-        public int? ccof_unlock_change_request { get; set; }
-        public int? ccof_unlock_declaration { get; set; }
 
-        public int? ccof_unlock_document { get; set; }
+        [JsonPropertyName("ccof_unlock_change_request@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_change_request_formatted { get; set; }
+        public bool? ccof_unlock_change_request { get; set; }
+        [JsonPropertyName("ccof_unlock_declaration@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_declaration_formatted { get; set; }
+        public bool? ccof_unlock_declaration { get; set; }
+        [JsonPropertyName("ccof_unlock_document@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_document_formatted { get; set; }
+        public bool? ccof_unlock_document { get; set; }
+        
         public ccof_change_action_change_request[]? ccof_change_action_change_request { get; set; }
         
     }
