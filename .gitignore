@@ -412,3 +412,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /.vs/CCOF/DesignTimeBuild/.dtbcache.v2
+/CCOF.Application.WebResources/Scripts/FormHandler/JavaScript.js

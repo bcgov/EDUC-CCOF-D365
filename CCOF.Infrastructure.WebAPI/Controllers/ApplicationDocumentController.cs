@@ -21,10 +21,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         public ApplicationDocumentController(ID365WebAPIService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
-        }  
+        }
 
         [HttpGet]
-        public ActionResult<string> Get(string applicationId)
+        public ActionResult<string> Get(string applicationId, int maxPageSize = 1000)
         {
             if (string.IsNullOrEmpty(applicationId)) return string.Empty;
             var fetchData = new
@@ -48,13 +48,13 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                               <attribute name=""ccof_name"" />
                               <attribute name=""ccof_facility"" />
                               <filter>
-                                <condition attribute=""ccof_application"" operator=""eq"" value=""{fetchData.ccof_application/*cf5fe675-334b-ed11-bba2-000d3af4f80b*/}"" uiname=""APP-22000060"" uitype=""ccof_application"" />
+                                <condition attribute=""ccof_application"" operator=""eq"" value=""{fetchData.ccof_application}"" uitype=""ccof_application"" />
                               </filter>
                             </link-entity>
                           </entity>
                         </fetch>";
             var statement = $"annotations?fetchXml=" + WebUtility.UrlEncode(fetchXML);
-            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
+            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize);
             if (response.IsSuccessStatusCode)
             {
                 return Ok(response.Content.ReadAsStringAsync().Result);
@@ -110,7 +110,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                       </entity>
                     </fetch>";
             var statement = $"ccof_application_facility_documents?fetchXml=" + WebUtility.UrlEncode(fetchXml);
-             response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
+            response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
             JObject appFacilityDocsResult = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
             JArray appFacilityDoc = new JArray();
             appFacilityDoc = appFacilityDocsResult["value"].ToObject<JArray>();
@@ -131,7 +131,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 uploadFile["subject"] = obj["subject"];
                 uploadFile["documentbody"] = obj["documentbody"];
                 uploadFile["notetext"] = obj["notetext"];
-                uploadFile["objectid_ccof_application_facility_document@odata.bind"] = "/ccof_application_facility_documents(" + appFacilityDoc[0]["ccof_application_facility_documentid"].ToString()+")";
+                uploadFile["objectid_ccof_application_facility_document@odata.bind"] = "/ccof_application_facility_documents(" + appFacilityDoc[0]["ccof_application_facility_documentid"].ToString() + ")";
                 response = _d365webapiservice.SendCreateRequestAsyncRtn("annotations?$select=subject,filename", uploadFile.ToString());
                 if (response.IsSuccessStatusCode)
                 {
@@ -159,16 +159,16 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         }";
                 JObject appUploadFile = new JObject();
                 appUploadFile = JObject.Parse(appUploadFiles);
-                appUploadFile["ccof_facility@odata.bind"] = "/accounts(" + obj["ccof_facility"].ToString() +")";
-                appUploadFile["ccof_application@odata.bind"] = "/ccof_applications("+ obj["ccof_applicationid"].ToString() + ")";
+                appUploadFile["ccof_facility@odata.bind"] = "/accounts(" + obj["ccof_facility"].ToString() + ")";
+                appUploadFile["ccof_application@odata.bind"] = "/ccof_applications(" + obj["ccof_applicationid"].ToString() + ")";
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["filename"] = obj["filename"];
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["filesize"] = obj["filesize"];
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["subject"] = obj["subject"];
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["documentbody"] = obj["documentbody"];
                 appUploadFile["ccof_application_facility_document_Annotations"][0]["notetext"] = obj["notetext"];
                 response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_application_facility_documents?$expand=ccof_application_facility_document_Annotations($select=subject,filename)", appUploadFile.ToString());
-                JObject returnFile=new JObject();
-                returnFile =JObject.Parse(response.Content.ReadAsStringAsync().Result);
+                JObject returnFile = new JObject();
+                returnFile = JObject.Parse(response.Content.ReadAsStringAsync().Result);
 
                 if (response.IsSuccessStatusCode)
                 {
