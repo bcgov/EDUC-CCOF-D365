@@ -36,17 +36,19 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         /// <returns></returns>
         // GET: api/Operations
         [HttpGet]
-        public ActionResult<string> Get(string statement)
+        public ActionResult<string> Get(string statement, int maxPageSize = 200)
         {
             if (string.IsNullOrEmpty(statement)) return string.Empty;
 
             if (Request?.QueryString.Value?.IndexOf("&") > 0)
             {
                 var filters = Request?.QueryString.Value.Substring(Request.QueryString.Value.IndexOf("&") + 1);
+                if (filters?.IndexOf("&maxPageSize") > 0)
+                    filters = filters?.Substring(0, filters.IndexOf("&maxPageSize")); //Remove MaxPagesize parameter
                 statement = $"{statement}&{filters}";
             }
 
-            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
+            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize);
 
             if (response.IsSuccessStatusCode)
                 return Ok(response.Content.ReadAsStringAsync().Result);
@@ -63,7 +65,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         /// <returns></returns>
         // POST: api/Operations
         [HttpPost]
-        public ActionResult<string> Post(string statement, [FromBody]dynamic value)
+        public ActionResult<string> Post(string statement, [FromBody] dynamic value)
         {
             if (Request?.QueryString.Value?.IndexOf("&") > 0)
             {
@@ -79,7 +81,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 Match m = Regex.Match(entityUri, pattern, RegexOptions.IgnoreCase);
                 var newRecordId = string.Empty;
                 if (m.Success) { newRecordId = m.Value; return Ok($"{newRecordId}"); }
-                else return StatusCode((int)HttpStatusCode.InternalServerError, 
+                else return StatusCode((int)HttpStatusCode.InternalServerError,
                     "Unable to create record at this time");
             }
             else

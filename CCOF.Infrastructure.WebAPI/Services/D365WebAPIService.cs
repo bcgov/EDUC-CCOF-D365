@@ -12,7 +12,7 @@ namespace CCOF.Infrastructure.WebAPI.Services
 {
     public interface ID365WebAPIService
     {
-        HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 50);
+        HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 200);
         HttpResponseMessage SendCreateRequestAsync(string endPoint, string content);
         HttpResponseMessage SendCreateRequestAsyncRtn(string endPoint, string content);
         HttpResponseMessage SendCreateRequestAsync(HttpMethod httpMethod, string entitySetName, string body);
@@ -31,7 +31,7 @@ namespace CCOF.Infrastructure.WebAPI.Services
             _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
 
-        public HttpResponseMessage SendRetrieveRequestAsync(string query, Boolean formatted = false, int maxPageSize = 50)
+        public HttpResponseMessage SendRetrieveRequestAsync(string query, Boolean formatted = false, int maxPageSize = 200)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, query);
             request.Headers.Add("Prefer", "odata.maxpagesize=" + maxPageSize.ToString());
