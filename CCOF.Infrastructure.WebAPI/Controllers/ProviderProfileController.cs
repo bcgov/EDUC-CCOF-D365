@@ -109,7 +109,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 return StatusCode((int)response.StatusCode,
                     $"Failed to Retrieve records: {response.ReasonPhrase}");
         }
-
+        //Aggregate application, facilities & change request details.
         private dynamic AggregateApplicationData(JToken token)
         {
             dynamic dynUserProfile = JObject.Parse(token.ToString());
