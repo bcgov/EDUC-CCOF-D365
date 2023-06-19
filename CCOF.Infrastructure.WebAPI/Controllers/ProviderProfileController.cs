@@ -27,6 +27,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         [HttpGet]
         public ActionResult<string> Get(string userName, string? userId = null)
         {
+            
             if (string.IsNullOrEmpty(userName)) return BadRequest("Invalid Request");
 
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
@@ -99,10 +100,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
                 if (records != null && records[0][0]["Organization.accountid"] == null) { return NotFound("No profiles."); }
                 if (records != null && records[0][0]["Application.ccof_applicationid"] == null) { return NotFound("No applications."); }
-
-                var aggregatedResult = AggregateApplicationData(records[0][0]);
-
-                return Ok(aggregatedResult);
+               
+                    var aggregatedResult = AggregateApplicationData(records[0][0]);
+                    return Ok(aggregatedResult);
+               
             }
             else
                 return StatusCode((int)response.StatusCode,
@@ -119,8 +120,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 dynamic jResult = JObject.Parse(facilitiesResponse.Content.ReadAsStringAsync().Result);
                 dynUserProfile.facilities = jResult.value;
             }
-
-            var getApplicationStatement = @$"ccof_applications?$select=_ccof_organization_value,ccof_applicationtype,ccof_applicationid,ccof_name,_ccof_programyear_value,statuscode,ccof_providertype,ccof_unlock_declaration,ccof_unlock_licenseupload,ccof_unlock_supportingdocument,ccof_unlock_ccof,ccof_unlock_ecewe,ccof_licensecomplete,ccof_ecewe_eligibility_complete,ccof_ccofstatus&$expand=ccof_ProgramYear($select=ccof_name,ccof_program_yearid,statuscode,ccof_declarationbstart,ccof_intakeperiodstart,ccof_intakeperiodend),ccof_application_basefunding_Application($select=ccof_application_basefundingid,_ccof_facility_value,statuscode,ccof_formcomplete),ccof_applicationccfri_Application_ccof_ap($select=ccof_applicationccfriid,ccof_ccfrioptin,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete,ccof_unlock_rfi,ccof_unlock_ccfri,ccof_unlock_nmf_rfi,ccof_has_nmf,ccof_has_rfi,ccof_nmf_formcomplete,ccof_rfi_formcomplete),ccof_ccof_application_ccof_applicationecewe_application($select=ccof_applicationeceweid,ccof_optintoecewe,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete)&$filter=(ccof_applicationid eq {token["Application.ccof_applicationid"]})";
+            
+            var getApplicationStatement = @$"ccof_applications?$select=_ccof_organization_value,ccof_applicationtype,ccof_applicationid,ccof_name,_ccof_programyear_value,statuscode,ccof_providertype,ccof_unlock_declaration,ccof_unlock_licenseupload,ccof_unlock_supportingdocument,ccof_unlock_ccof,ccof_unlock_ecewe,ccof_licensecomplete,ccof_ecewe_eligibility_complete,ccof_ccofstatus&$expand=ccof_ProgramYear($select=ccof_name,ccof_program_yearid,statuscode,ccof_declarationbstart,ccof_intakeperiodstart,ccof_intakeperiodend),ccof_application_basefunding_Application($select=ccof_application_basefundingid,_ccof_facility_value,statuscode,ccof_formcomplete),ccof_applicationccfri_Application_ccof_ap($select=ccof_applicationccfriid,ccof_ccfrioptin,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete,ccof_unlock_rfi,ccof_unlock_ccfri,ccof_unlock_nmf_rfi,ccof_has_nmf,ccof_has_rfi,ccof_nmf_formcomplete,ccof_rfi_formcomplete),ccof_ccof_application_ccof_applicationecewe_application($select=ccof_applicationeceweid,ccof_optintoecewe,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete),ccof_ccof_change_request_Application_ccof_appl($select = ccof_change_requestid, ccof_name, ccof_unlock_change_request, ccof_unlock_declaration, ccof_unlock_document, statecode, statuscode;$expand=ccof_change_action_change_request($select=ccof_change_actionid,_ccof_change_request_value,ccof_changetype,ccof_name,statecode,statuscode;$expand=ccof_change_request_new_facility_change_act($select=_ccof_ccof_value,_ccof_change_action_value,ccof_change_request_new_facilityid,_ccof_ecewe_value,_ccof_facility_value,statecode,statuscode,_ccof_ccfri_value,ccof_name)))&$filter=(ccof_applicationid eq {token["Application.ccof_applicationid"]})";
+           
             var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationStatement, true, 250);
             if (applicationResponse.IsSuccessStatusCode)
             {
@@ -133,6 +135,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             UserProfile userProfile = System.Text.Json.JsonSerializer.Deserialize<UserProfile>(userProfileString);
 
             return userProfile;
-        }
+        }       
     }
 }
+

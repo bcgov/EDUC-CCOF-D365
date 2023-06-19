@@ -1,0 +1,49 @@
+
+
+Use VS Code to build a project. 
+1. Install Node.js (Node v16.13.0 (LTS))
+2. Install React Native Tools extention for VS Code 
+3. Go to a project directory C:\Projects\ReactNotifier and run: npm install (in Command prompt)
+4. Go to a project directory C:\Projects\ReactNotifier and run: npm install build ((in Command prompt)
+5. Create 'Solution' folder if it doesn't exist.
+6. Go to 'Solution' folder ->  C:\Projects\ReactNotifier\solution
+****Go to VS Code and run commangs below from VS Code Terminal**** 
+7. pac solution init --publisher-name ChildCareOperatingFunding --publisher-prefix ccof
+8. pac solution add-reference --path  C:\Projects\ReactNotifier
+9. Go to 'Solution' folder ->  C:\Projects\ReactNotifier\solution
+10. msbuild /t:build /restore  //this will build unmanaged solution
+11.solution.zip file will be located : C:\Projects\ReactNotifier\Solution\bin\Debug\solution.zip
+12. msbuild /t:build /restore /p:Configuration=Release (release means a solution will be Managed)
+
+Note: Name of a solution can be changed in solution.xml file
+
+****Example of Solution.xml with correct namings*****
+
+<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.1.0.643" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <!-- Unique Name of Cds Solution-->
+    <UniqueName>CCOFCustomBanners</UniqueName>
+    <LocalizedNames>
+      <!-- Localized Solution Name in language code -->
+      <LocalizedName description="CCOF Custom Banners" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions />
+    <Version>1.0</Version>
+    <!-- Solution Package Type: Unmanaged(0)/Managed(1)/Both(2)-->
+    <Managed>0</Managed>
+    <Publisher>
+      <!-- Unique Publisher Name of Cds Solution -->
+      <UniqueName>ChildCareOperatingFunding</UniqueName>
+      <LocalizedNames>
+        <!-- Localized Cds Publisher Name in language code-->
+        <LocalizedName description="ChildCare Operating Funding" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions>
+        <!-- Description of Cds Publisher in language code -->
+        <Description description="ChildCare Operating Funding" languagecode="1033" />
+      </Descriptions>
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <!-- Customization Prefix for the Cds Publisher-->
+      <CustomizationPrefix>ccof</CustomizationPrefix>

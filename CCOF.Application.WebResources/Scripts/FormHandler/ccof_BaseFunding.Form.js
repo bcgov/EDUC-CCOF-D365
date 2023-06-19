@@ -53,7 +53,7 @@ CCOF.BaseFunding.Form = {
             Xrm.Page.ui.tabs.get("tab_general").sections.get("License_Info").setVisible(false);
             Xrm.Page.ui.tabs.get("tab_general").sections.get("Preschool").setVisible(false);
             Xrm.Page.ui.tabs.get("tab_general").sections.get("GCC_Information").setVisible(false);
-            Xrm.Page.ui.tabs.get("tab_general").sections.get("MaxSpace_forExtendedHours").setVisible(false);
+            Xrm.Page.ui.tabs.get("tab_general").sections.get("MaxSpace_forExtendedHours").setVisible(true);
             Xrm.Page.ui.tabs.get("tab_general").sections.get("gccp").setVisible(false);
         }
         else if (typeOfAppValue == 100000000)  //Group Child Care Provider - 100000000
