@@ -74,9 +74,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Ccof_Application_Basefunding_Application[]? ccof_application_basefunding_Application { get; set; }
         public Ccof_Applicationccfri_Application_Ccof_Ap[]? ccof_applicationccfri_Application_ccof_ap { get; set; }
         public Ccof_Ccof_Application_Ccof_Applicationecewe_Application[]? ccof_ccof_application_ccof_applicationecewe_application { get; set; }
-
-        public ccof_ccof_change_request_Application_ccof_appl[]? ccof_ccof_change_request_Application_ccof_appl { get; set; }
-        
+        public ccof_ccof_change_request_Application_ccof_appl[]? ccof_ccof_change_request_Application_ccof_appl { get; set; }       
     }
 
     public class Ccof_Programyear
@@ -170,16 +168,13 @@ namespace CCOF.Infrastructure.WebAPI.Models
     public class ccof_ccof_change_request_Application_ccof_appl
     {
         public string? ccof_change_requestid { get; set; }
-     
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscode_formatted { get; set; }
         public int? statuscode { get; set; }
         [JsonPropertyName("statecode@OData.Community.Display.V1.FormattedValue")]
         public string? statecode_formatted { get; set; }
-        public int? statecode { get; set; }
-      
+        public int? statecode { get; set; }    
         public string? ccof_name { get; set; }
-
         [JsonPropertyName("ccof_unlock_change_request@OData.Community.Display.V1.FormattedValue")]
         public string? ccof_unlock_change_request_formatted { get; set; }
         public bool? ccof_unlock_change_request { get; set; }
@@ -188,9 +183,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public bool? ccof_unlock_declaration { get; set; }
         [JsonPropertyName("ccof_unlock_document@OData.Community.Display.V1.FormattedValue")]
         public string? ccof_unlock_document_formatted { get; set; }
-        public bool? ccof_unlock_document { get; set; }
-        
+        public bool? ccof_unlock_document { get; set; }     
         public ccof_change_action_change_request[]? ccof_change_action_change_request { get; set; }
-        
     }
 }

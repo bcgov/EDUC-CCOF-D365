@@ -32,8 +32,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CCOF.Application.WebResourc
 		SlnRelativePath = "CCOF.Application.WebResources\"
 	EndProjectSection
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CCOF.Core.DataContext", "CCOF.Core.DataContext\CCOF.Core.DataContext.shproj", "{7E11D821-093B-4E0C-B139-04348871A472}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCOF.Infrastructure.WebAPI", "CCOF.Infrastructure.WebAPI\CCOF.Infrastructure.WebAPI.csproj", "{95A4C435-55E7-402F-81C9-6E78BA6B14FC}"
 EndProject
 Global
@@ -46,8 +44,6 @@ Global
 		{A14F53B5-DC05-42EF-BED2-561C90FD3014}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A14F53B5-DC05-42EF-BED2-561C90FD3014}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{A14F53B5-DC05-42EF-BED2-561C90FD3014}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{7E11D821-093B-4E0C-B139-04348871A472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E11D821-093B-4E0C-B139-04348871A472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95A4C435-55E7-402F-81C9-6E78BA6B14FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95A4C435-55E7-402F-81C9-6E78BA6B14FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95A4C435-55E7-402F-81C9-6E78BA6B14FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,13 +54,9 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A14F53B5-DC05-42EF-BED2-561C90FD3014} = {92C16F22-0498-422B-B8E9-8663955AB66B}
-		{7E11D821-093B-4E0C-B139-04348871A472} = {C839EACF-98C2-427E-A269-125F9A2D9E53}
 		{95A4C435-55E7-402F-81C9-6E78BA6B14FC} = {044E25FD-D499-4F3E-B754-D8213C70272B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03EBDCA4-3EEB-4430-9D1F-BB76ADE05BBF}
-	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		CCOF.Core.DataContext\CCOF.Core.DataContext.projitems*{7e11d821-093b-4e0c-b139-04348871a472}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
