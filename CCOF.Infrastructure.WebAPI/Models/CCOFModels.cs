@@ -186,4 +186,11 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public bool? ccof_unlock_document { get; set; }     
         public ccof_change_action_change_request[]? ccof_change_action_change_request { get; set; }
     }
+    public class ApplicationDocumentResponse
+    {
+        public string subject { get; set; }
+        public string filename { get; set; }
+        public string annotationid { get; set; }
+        public string applicationFacilityDocumentId { get; set; }
+    }
 }
