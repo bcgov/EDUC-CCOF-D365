@@ -11,7 +11,7 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
             var ccfri_facility_allowable_amount_24MonthEntityName = "ccof_ccfrifacilityallowableamount_24month";
             var entityId = formContext.data.entity.getId(); // get parent record id
             var appCCFRI = formContext.getAttribute("ccof_applicationccfri").getValue()[0].id;
-            // Facility Info; Region,Median, NMF, SDA , expense, MEFI Cap’, Limit Fees to NMF Benchmark’ ,orgType
+            // Facility Info; Region,Median, NMF, SDA , expense, MEFI Capâ€™, Limit Fees to NMF Benchmarkâ€™ ,orgType
             // Get expense Info
             var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
 
@@ -79,7 +79,7 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
             var FeeIncreaseDetails24Months = getSyncMultipleRecord("ccof_ccfrifacilityfeeincrease24months?$select=_ccof_adjudicationccfrifacility_value, ccof_averageenrolment, _ccof_childcarecategory_value, ccof_cumulativefeeincrease, ccof_feebeforeincrease, ccof_feeincreasetype, ccof_name, _ccof_programyear_value, ccof_reasonfor24monthsadj, ccof_cumulativefeeincreasepercent, _ccof_applicationccfrichildcarecategory_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
             if (FeeIncreaseDetails24Months.length > 0) {
                 //if (appCCFRIResponse["ccof_feecorrectccfri"] === 100000001) {  // 24 Months tab and Initial Adjudication tab
-                // Facility Info; Region,Median, NMF, SDA , expense, MEFI Cap’, Limit Fees to NMF Benchmark’ ,orgType
+                // Facility Info; Region,Median, NMF, SDA , expense, MEFI Capâ€™, Limit Fees to NMF Benchmarkâ€™ ,orgType
                 // Get expense Info
                 console.log("Begin 24 Months Calculation");
                 var ExpenseInfo24Months = {};
