@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -135,7 +137,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 response = _d365webapiservice.SendCreateRequestAsyncRtn("annotations?$select=subject,filename", uploadFile.ToString());
                 if (response.IsSuccessStatusCode)
                 {
-                    return Ok(response.Content.ReadAsStringAsync().Result);
+                    ApplicationDocumentResponse appDocResponse = System.Text.Json.JsonSerializer.Deserialize<ApplicationDocumentResponse>(response.Content.ReadAsStringAsync().Result);
+                    appDocResponse.applicationFacilityDocumentId = appFacilityDoc[0]["ccof_application_facility_documentid"].ToString();
+                                       
+                    return Ok(appDocResponse);
                 }
                 else
                     return StatusCode((int)response.StatusCode,
@@ -172,7 +177,11 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return Ok(returnFile["ccof_application_facility_document_Annotations"][0].ToString());
+                    ApplicationDocumentResponse appDocResponse = System.Text.Json.JsonSerializer.Deserialize<ApplicationDocumentResponse>(returnFile["ccof_application_facility_document_Annotations"][0].ToString());
+                    appDocResponse.applicationFacilityDocumentId = returnFile["ccof_application_facility_documentid"].ToString();
+
+                    return Ok(appDocResponse);
+
                 }
                 else
                     return StatusCode((int)response.StatusCode,
