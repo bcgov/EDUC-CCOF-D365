@@ -64,9 +64,9 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                     //let plainValue = convertToPlain(historyValue);
                     //formContext.getAttribute("ccof_adjudicatornotes").setValue(plainValue+'\n'+returnValue['AdjudicatorNote']+'\n');
                     formContext.getAttribute("ccof_stage3calculatornotesinitial").setValue(returnValue['AdjudicatorNote']);
+                    console.log("End Initial Adjudication Calculation");
                     //refresh the summary grid
                     formContext.getControl("AllowableAmount").refresh();
-                    console.log("End Initial Adjudication Calculation");
                     // Xrm.Navigation.openAlertDialog(" Initial Adjudication Completed Calculation!");
                 }
 
@@ -130,30 +130,46 @@ CCOF.AdjudicationCCFRIFacility.Calculation = {
                     //let plainValue = convertToPlain(historyValue);
                     //formContext.getAttribute("ccof_monthadjudicatornotes").setValue(plainValue + '\n' + returnValue24Months['AdjudicatorNote']);
                     formContext.getAttribute("ccof_stage3calculatornotes24month").setValue(returnValue24Months['AdjudicatorNote']);
+                    console.log("End 24 Months Calculation");
                     formContext.getControl("AllowableAmount24Months").refresh();
                     // Xrm.Utility.closeProgressIndicator();
-                    console.log("End 24 Months Calculation");
                     //Xrm.Navigation.openAlertDialog(" 24 Months Completed Calculation!");
                 }
             }
             var alertOptions = { height: 240, width: 320 };
             if (ifCalculateInitial) {
                 if (ifCalculate24Months) {
-                    formContext.data.save();
+                    formContext.data.save().then(function () {
+                        // Save completed
+                        formContext.data.refresh(true); // Refresh the form
+                    }).catch(function (error) {
+                        // Handle save error
+                    });
+
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication Calculation is complete! \n 24 Months Adjudication is complete!", alertOptions);
                 } else {
-                    formContext.data.save();
+                    formContext.data.save().then(function () {
+                        // Save completed
+                        formContext.data.refresh(true); // Refresh the form
+                    }).catch(function (error) {
+                        // Handle save error
+                    });
+
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication Calculation is complete!\n 24 Months Adjudication will not be calculated as Fee Increase Amount is missing or No Fee Increase Amount data need to be calculated!", alertOptions);
                 }
             } else {
                 if (ifCalculate24Months) {
-                    formContext.data.save();
+                    formContext.data.save().then(function () {
+                        // Save completed
+                        formContext.data.refresh(true); // Refresh the form
+                    }).catch(function (error) {
+                        // Handle save error
+                    });
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication will not be calculated as Fee Increase Amount is missing! or No Fee Increase Amount data need to be calculated! \n 24 Months Adjudication Calculation is complete", alertOptions);
                 } else {
                     Xrm.Navigation.openAlertDialog(" Initial Adjudication will not be calculated as Fee Increase Amount is missing! or No Fee Increase Amount data need to be calculated!\n 24 Months Adjudication will not be calculated as Fee Increase Amount is missing or No Fee Increase Amount data need to be calculated!", alertOptions);
                 }
             }
-
         }
         catch (err) {
             alert("There are some exceptional errors happened, please contact Administrator!" + err);
@@ -1089,9 +1105,6 @@ function IndicateCap(feeIncreaseDetails, TotalAllowableStagePolicy, regionInfo, 
             if (MEFICAPReached == false) { MEFICAPReached = TotalAllowableStagePolicy['ccof_outofschoolcaregrade1'] > MediansFee['OOSC-G_Per10'] ? true : false; }
 
         }
-
-
-
         //compareNMF( NMF - Fee Before increase) with total approved amount
         if (limitfeestonmfbenchmark == true) {
             for (const i in feeIncreaseDetails) {
@@ -1114,18 +1127,15 @@ function IndicateCap(feeIncreaseDetails, TotalAllowableStagePolicy, regionInfo, 
                     }
                 }
 
-
             }
 
         }
-
 
         console.log("MEFI CAP true or false?" + MEFICAPReached);
         console.log("NMFCAPReached  true or false?" + NMFCAPReached);
         if (MEFICAPReached == true && NMFCAPReached == true) {
             ReachedCap = {
                 "ccof_capsindicator": 100000002
-
             }
             TotalAllowableStagePolicywithMEFICAP = {
                 "ccof_0to18months": MediansFee['0-18_Per10'],
@@ -1149,7 +1159,6 @@ function IndicateCap(feeIncreaseDetails, TotalAllowableStagePolicy, regionInfo, 
         else if (MEFICAPReached == true && NMFCAPReached == false) {
             ReachedCap = {
                 "ccof_capsindicator": 100000000
-
             }
             TotalAllowableStagePolicywithMEFICAP = {
                 "ccof_0to18months": MediansFee['0-18_Per10'],
@@ -1174,11 +1183,16 @@ function IndicateCap(feeIncreaseDetails, TotalAllowableStagePolicy, regionInfo, 
         else if (MEFICAPReached == false && NMFCAPReached == true) {
             ReachedCap = {
                 "ccof_capsindicator": 100000001
-
             }
             UpdateEntityRecord(entityname, entityId, ReachedCap)
         }
-
+            // ticket CCFRI-2126 fix. Jun 30, 2023
+        else if (MEFICAPReached === false && NMFCAPReached === false) {
+            ReachedCap = {
+                "ccof_capsindicator": null
+            }
+            UpdateEntityRecord(entityname, entityId, ReachedCap)
+        }
     }
 
 }
@@ -1238,7 +1252,6 @@ function IndicateCap24Month(feeIncreaseDetails, TotalAllowableStagePolicy, regio
             if (MEFICAPReached == false) { MEFICAPReached = TotalAllowableStagePolicy['ccof_outofschoolcaregrade1'] > MediansFee['OOSC-G_Per10'] ? true : false; }
         }
 
-
         //compareNMF( NMF - Fee Before increase) with total approved amount
         if (limitfeestonmfbenchmark24month == true) {
             for (const i in feeIncreaseDetails) {
@@ -1261,23 +1274,14 @@ function IndicateCap24Month(feeIncreaseDetails, TotalAllowableStagePolicy, regio
                         NMFCAPReached = TotalAllowableStagePolicy['ccof_preschool'] > (SDA70thPercentileF['PRE'] - feeIncreaseDetails[i]['ccof_feebeforeincrease']) ? true : false;
                     }
                 }
-
-
             }
         }
-
-
-
-
 
         console.log("MEFI CAP true or false?" + MEFICAPReached);
         console.log("NMFCAPReached  true or false?" + NMFCAPReached);
         if (MEFICAPReached == true && NMFCAPReached == true) {
             ReachedCap = {
-
-
                 "ccof_reachedcaps_24month": 100000002
-
             }
             TotalAllowableStagePolicywithMEFICAP = {
                 "ccof_to18months": MediansFee['0-18_Per10'],
@@ -1311,6 +1315,13 @@ function IndicateCap24Month(feeIncreaseDetails, TotalAllowableStagePolicy, regio
             ReachedCap = {
                 "ccof_reachedcaps_24month": 100000001
 
+            }
+            UpdateEntityRecord(entityname, entityId, ReachedCap)
+        }
+            // ticket CCFRI-2126 fix. Jun 30, 2023
+        else if (MEFICAPReached == false && NMFCAPReached == true) {
+            ReachedCap = {
+                "ccof_reachedcaps_24month": null
             }
             UpdateEntityRecord(entityname, entityId, ReachedCap)
         }
