@@ -208,16 +208,19 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? statuscode { get; set; }
         [JsonPropertyName("statecode@OData.Community.Display.V1.FormattedValue")]
         public string? statecode_formatted { get; set; }
-        public int? statecode { get; set; }    
+        public int? statecode { get; set; }
+        [JsonPropertyName("ccof_externalstatus@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_externalstatus_formatted { get; set; }
+        public int? ccof_externalstatus { get; set; }    
         public string? ccof_name { get; set; }
-         [JsonPropertyName("ccof_unlock_declaration@OData.Community.Display.V1.FormattedValue")]
+         [JsonPropertyName("ccof_declaration@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_declaration_formatted { get; set; }
+        public bool? ccof_declaration { get; set; }
         public string? ccof_unlock_declaration_formatted { get; set; }
         public bool? ccof_unlock_declaration { get; set; }
-
         [JsonPropertyName("ccof_licensecomplete@OData.Community.Display.V1.FormattedValue")]
         public string? ccof_licensecomplete_formatted { get; set; }
         public bool? ccof_licensecomplete { get; set; }
-
         [JsonPropertyName("ccof_ecewe_eligibility_complete@OData.Community.Display.V1.FormattedValue")]
         public string? ccof_ecewe_eligibility_complete_formatted { get; set; }
         public bool? ccof_ecewe_eligibility_complete { get; set; }
