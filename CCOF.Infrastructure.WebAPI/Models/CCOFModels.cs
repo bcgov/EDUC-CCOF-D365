@@ -128,6 +128,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_optintoecewe { get; set; }
         public bool? ccof_formcomplete { get; set; }
     }
+
     public class ccof_change_request_new_facility_change_act
     {
         public string? ccof_change_request_new_facilityid { get; set; }
@@ -135,14 +136,28 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? _ccof_ccof_value { get; set; }
         public string? _ccof_ecewe_value { get; set; }
         public string? _ccof_facility_value { get; set; }
+
+        public string? _ccof_ccfri_value { get; set; }
+        public string? ccof_name { get; set; }
+
+        [JsonPropertyName("ccof_unlock_ccfri@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_ccfri_formatted { get; set; }
+        public bool? ccof_unlock_ccfri { get; set; }
+
+        [JsonPropertyName("ccof_unlock_rfi@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_rfi_formatted { get; set; }
+        public bool? ccof_unlock_rfi { get; set; }
+
+        [JsonPropertyName("ccof_unlock_nmf_rfi@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_nmf_rfi_formatted { get; set; }
+        public bool? ccof_unlock_nmf_rfi { get; set; }
+
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
         public string? statuscode_formatted { get; set; }
         public int? statuscode { get; set; }
         [JsonPropertyName("statecode@OData.Community.Display.V1.FormattedValue")]
         public string? statecode_formatted { get; set; }
         public int? statecode { get; set; }
-        public string? _ccof_ccfri_value { get; set; }
-        public string? ccof_name { get; set; }
 
     }
 
@@ -161,8 +176,28 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_changetype { get; set; }
         public string? _ccof_ccfri_value { get; set; }
         public string? ccof_name { get; set; }
-        public ccof_change_request_new_facility_change_act[]? ccof_change_request_new_facility_change_act { get; set; }
 
+        [JsonPropertyName("ccof_unlock_ecewe@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_ecewe_formatted { get; set; }
+        public bool? ccof_unlock_ecewe { get; set; }
+
+        [JsonPropertyName("ccof_unlock_licence_upload@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_licence_upload_formatted { get; set; }
+        public bool? ccof_unlock_licence_upload { get; set; }
+
+        [JsonPropertyName("ccof_unlock_supporting_document@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_supporting_document_formatted { get; set; }
+        public bool? ccof_unlock_supporting_document { get; set; }
+
+        [JsonPropertyName("ccof_unlock_change_request@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_change_request_formatted { get; set; }
+        public bool? ccof_unlock_change_request { get; set; }
+
+        [JsonPropertyName("ccof_unlock_other_changes_document@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_unlock_other_changes_document_formatted { get; set; }
+        public bool? ccof_unlock_other_changes_document { get; set; }
+
+        public ccof_change_request_new_facility_change_act[]? ccof_change_request_new_facility_change_act { get; set; }
     }
 
     public class ccof_ccof_change_request_Application_ccof_appl
@@ -175,17 +210,21 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? statecode_formatted { get; set; }
         public int? statecode { get; set; }    
         public string? ccof_name { get; set; }
-        [JsonPropertyName("ccof_unlock_change_request@OData.Community.Display.V1.FormattedValue")]
-        public string? ccof_unlock_change_request_formatted { get; set; }
-        public bool? ccof_unlock_change_request { get; set; }
-        [JsonPropertyName("ccof_unlock_declaration@OData.Community.Display.V1.FormattedValue")]
+         [JsonPropertyName("ccof_unlock_declaration@OData.Community.Display.V1.FormattedValue")]
         public string? ccof_unlock_declaration_formatted { get; set; }
         public bool? ccof_unlock_declaration { get; set; }
-        [JsonPropertyName("ccof_unlock_document@OData.Community.Display.V1.FormattedValue")]
-        public string? ccof_unlock_document_formatted { get; set; }
-        public bool? ccof_unlock_document { get; set; }     
+
+        [JsonPropertyName("ccof_licensecomplete@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_licensecomplete_formatted { get; set; }
+        public bool? ccof_licensecomplete { get; set; }
+
+        [JsonPropertyName("ccof_ecewe_eligibility_complete@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_ecewe_eligibility_complete_formatted { get; set; }
+        public bool? ccof_ecewe_eligibility_complete { get; set; }
+
         public ccof_change_action_change_request[]? ccof_change_action_change_request { get; set; }
     }
+
     public class ApplicationDocumentResponse
     {
         public string subject { get; set; }
