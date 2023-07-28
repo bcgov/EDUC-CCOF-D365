@@ -163,6 +163,8 @@ namespace CCOF.Infrastructure.WebAPI.Models
 
     public class ccof_change_action_change_request
     {
+    
+         public bool? ccof_unlock_ccof { get; set; }
         public string? ccof_change_actionid { get; set; }
         public string? _ccof_change_request_value { get; set; }
         [JsonPropertyName("statuscode@OData.Community.Display.V1.FormattedValue")]
