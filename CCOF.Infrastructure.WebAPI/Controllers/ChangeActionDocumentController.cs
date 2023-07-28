@@ -78,8 +78,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
            
             rawJsonData = obj.ToString();
             //Check change request is not null
-            if (obj["ccof_change_requestid"].ToString().Trim() == null)
-                return "CHANGE REQUEST ID cannot be empty";
+            if (obj["ccof_change_action_id"].ToString().Trim() == null)
+                return "CHANGE ACTION ID cannot be empty";
 
             string filename = (string)obj["filename"];
             string[] partialfilename = filename.Split('.');
@@ -95,36 +95,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             // check if change action exists based on change request id passed.
             var fetchData = new
             {
-                ccof_change_request = obj["ccof_change_requestid"].ToString(),
+                ccof_change_action = obj["ccof_change_action_id"].ToString(),
               
             };
-            var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
-      <fetch>
-  <entity name=""ccof_change_action"">
-    <attribute name=""ccof_change_actionid"" />
-    <attribute name=""ccof_name"" />
-    <attribute name=""createdon"" />
-    <attribute name=""statuscode"" />
-    <attribute name=""statecode"" />
-    <attribute name=""ccof_regarding"" />
-    <attribute name=""ccof_changetype"" />
-    <attribute name=""ccof_change_request"" />
-    <order attribute=""ccof_name"" descending=""false"" />
-    <filter type=""and"">
-      <condition attribute=""ccof_change_request"" operator=""eq"" value=""{fetchData.ccof_change_request}"" />
-    </filter>
-  </entity>
-</fetch>";
-
-
-            var statement = $"ccof_change_actions?fetchXml=" + WebUtility.UrlEncode(fetchXml);
-            response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
-            JObject changeActionDocsResult = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
-            JArray changeActionDoc = new JArray();
-            changeActionDoc = changeActionDocsResult["value"].ToObject<JArray>();
-            // if change action exist, then create a Note with uploaded file and associate it to change action table.
-            if (changeActionDoc.Count > 0)  
-            {
+           
                 string uploadFilestr = @"{
                                     ""filename"":"""",
                                     ""filesize"":0,
@@ -140,7 +114,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 uploadFile["subject"] = obj["subject"];
                 uploadFile["documentbody"] = obj["documentbody"];
                 uploadFile["notetext"] = obj["notetext"];
-                uploadFile["objectid_ccof_change_action@odata.bind"] = "/ccof_change_actions(" + changeActionDoc[0]["ccof_change_actionid"].ToString() + ")";
+                uploadFile["objectid_ccof_change_action@odata.bind"] = "/ccof_change_actions(" + fetchData.ccof_change_action + ")";
                 response = _d365webapiservice.SendCreateRequestAsyncRtn("annotations?$select=subject,filename", uploadFile.ToString());
                 if (response.IsSuccessStatusCode)
                 {
@@ -148,44 +122,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 }
                 else
                     return StatusCode((int)response.StatusCode,
-                        $"Failed to Retrieve records: {response.ReasonPhrase}");
-            }
-            else  // Create change action and a Note with uploaded file
-            {
-                string changeactionUploadFiles = @"
-                       {
-                          ""ccof_change_request@odata.bind"": ""/ccof_change_requests(cf5fe675-334b-ed11-bba2-000d3af4f80b)"",
-                          ""ccof_change_action_Annotations"": [
-                            {
-                              ""filename"": ""TESTChangeActionFile.pdf"",
-                              ""filesize"": 281000,
-                              ""subject"": ""test 1"",
-                              ""documentbody"": """",
-                              ""notetext"": ""test"",
-                            }
-                          ]
-                        }";
-                JObject changeactionUploadFile = new JObject();
-                changeactionUploadFile = JObject.Parse(changeactionUploadFiles);
-                changeactionUploadFile["ccof_change_request@odata.bind"] = "/ccof_change_requests(" + obj["ccof_change_requestid"].ToString() + ")";
-                changeactionUploadFile["ccof_changetype"] = 100000013;
-                changeactionUploadFile["ccof_change_action_Annotations"][0]["filename"] = obj["filename"];
-                changeactionUploadFile["ccof_change_action_Annotations"][0]["filesize"] = obj["filesize"];
-                changeactionUploadFile["ccof_change_action_Annotations"][0]["subject"] = obj["subject"];
-                changeactionUploadFile["ccof_change_action_Annotations"][0]["documentbody"] = obj["documentbody"];
-                changeactionUploadFile["ccof_change_action_Annotations"][0]["notetext"] = obj["notetext"];
-                response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_change_actions?$expand=ccof_change_action_Annotations($select=subject,filename)", changeactionUploadFile.ToString());
-                JObject returnFile = new JObject();
-                returnFile = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return Ok(returnFile["ccof_change_action_Annotations"][0].ToString());
-                }
-                else
-                    return StatusCode((int)response.StatusCode,
-                        $"Failed to Retrieve records: {response.ReasonPhrase}");
-            }
+                        $"Failed to upload file: {response.ReasonPhrase}");
+            
+           
 
         }
     }
