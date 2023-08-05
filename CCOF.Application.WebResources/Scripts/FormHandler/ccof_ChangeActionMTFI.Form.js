@@ -6,46 +6,25 @@ CCOF.ChangeActionMTFI.Form = {
 	onLoad: function (executionContext) {
 		debugger;
 		let formContext = executionContext.getFormContext();
-		//let appCCFRI = formContext.getAttribute("ccof_applicationccfri").getValue();
-		//if (appCCFRI !== null) {
-		//	let appCCFRIid = appCCFRI[0].id;
-		//	let appCCFRIReq = "ccof_applicationccfris(" + getCleanedGuid(appCCFRIid) + ")?$select=ccof_feecorrectccfri";
-		//	let appCCFRIResponse = getSyncSingleRecord(appCCFRIReq);
-		//	// 100000000  Yes 100000001 No
-		//	if (appCCFRIResponse["ccof_feecorrectccfri"] === 100000000) {
-		//		formContext.ui.tabs.get("Adjudication").setVisible(true);
-		//		formContext.ui.tabs.get("MonthAdjudication").setVisible(false);
-		//	}
-		//	else {
-		//		formContext.ui.tabs.get("Adjudication").setVisible(true);
-		//		formContext.ui.tabs.get("MonthAdjudication").setVisible(true);
-		//	}
-		//}
+
 		HideAdjudicatorRecommendationOptions(executionContext);
 
 		formContext.getAttribute("ccof_afcconfirmedbyqc").addOnChange(onChange_confirmedbyqc);
 		formContext.getAttribute("ccof_afcconfirmedbycommittee").addOnChange(onChange_confirmedbyconfirmedbycommittee);
 		formContext.getAttribute("ccof_afcsenttoexecutive").addOnChange(onChange_senttoexecutive);
 		formContext.getAttribute("ccof_afcreviewedbyexecutive").addOnChange(onChange_reviewedbyexecutive);
-
 		formContext.getAttribute("ccof_newmodifiedfacilityrecommendation").addOnChange(onChange_newmodifiedfacilityrecommendation);
 		formContext.getAttribute("ccof_newmodifiedfacilityqcdecision").addOnChange(onChange_newmodifiedfacilityqcdecision);
 		formContext.getAttribute("ccof_closureadjudicatorrecommendationnotes").addOnChange(onChange_closureadjudicatorrecommendationnotes);
 		formContext.getAttribute("ccof_closureadjudicatorrecommendation").addOnChange(onChange_closureadjudicatorrecommendation);
 		formContext.getAttribute("ccof_ccfripaymenteligibilitystartdate").addOnChange(onChange_ccfripaymenteligibilitystartdate);
 		formContext.getAttribute("ccof_ccfriadjudicatorrecommendation").addOnChange(onChange_ccfriadjudicatorrecommendation);
-		formContext.getAttribute("ccof_temporaryapprovalstartdate").addOnChange(onChange_temporaryapprovalstartdate);
-		formContext.getAttribute("ccof_temporaryapprovaluntil").addOnChange(onChange_temporaryapprovaluntil);
 		formContext.getAttribute("ccof_afcoccurred").addOnChange(onChange_afcoccurred);
-		formContext.getAttribute("ccof_ccfriqcdecision").addOnChange(onChange_ccfriqcdecision);
-		formContext.getAttribute("ccof_ccfripreapproval").addOnChange(onChange_ccfripreapproval);
+		formContext.getAttribute("ccof_mtfi_qcdecision").addOnChange(onChange_mtfi_qcdecision);
+		formContext.getAttribute("ccof_mtfipreapproval").addOnChange(onChange_mtfipreapproval);
 		formContext.getAttribute("ccof_unapproved_mtfi_followup_required").addOnChange(onChange_unapproved_mtfi_followup_required);
 		formContext.getAttribute("ccof_afcqcrecommendedtocommittee").addOnChange(onChange_afcqcrecommendedtocommittee);
 
-		//
-		//var tabMonthAdjudication = formContext.ui.tabs.get("MonthAdjudication");
-		//tabMonthAdjudication.addTabStateChange(refreshMedianGrid(executionContext));
-		// setTimeout(refreshMedianGrid(executionContext), 4000);
 	},
 }
 function refreshMedianGrid(executionContext) {
@@ -113,8 +92,6 @@ function HideAdjudicatorRecommendationOptions(executionContext) {
 	if (today > limitDate) {
 		formContext.getControl("ccof_ccfriadjudicatorrecommendation").removeOption(100000003); //Stage 2 (NOM)
 		formContext.getControl("ccof_ccfriadjudicatorrecommendation").removeOption(100000004); //Stage 2 (MED)
-		//formContext.getControl("ccof_adjudicatorrecommendation").removeOption(100000010); //Stage 2 (NOM)
-		//formContext.getControl("ccof_adjudicatorrecommendation").removeOption(100000011); //Stage 2 (MED)
 	}
 }
 
@@ -135,8 +112,6 @@ function onChange_reviewedbyexecutive(executionContext) {
 	setUserAndDate(executionContext, "ccof_afc_updatedbyreviewedbyexecutive", "ccof_afc_updatedonreviewedbyexecutive");
 }
 
-
-
 function onChange_newmodifiedfacilityrecommendation(executionContext) {
 	setUserAndDate(executionContext, "ccof_decision_updatedby_facilityrecommendation", "ccof_decision_updatedon_facilityrecommendation");
 }
@@ -155,20 +130,14 @@ function onChange_ccfripaymenteligibilitystartdate(executionContext) {
 function onChange_ccfriadjudicatorrecommendation(executionContext) {
 	setUserAndDate(executionContext, "ccof_decision_updatedby_ccfriadjudicatorrec", "ccof_decision_updatedonccfriadjudicatorrec");
 }
-function onChange_temporaryapprovalstartdate(executionContext) {
-	setUserAndDate(executionContext, "ccof_decision_updatedbytempapprovalstart", "ccof_decision_updatedon_tempapprovalstart");
-}
-function onChange_temporaryapprovaluntil(executionContext) {
-	setUserAndDate(executionContext, "ccof_updatedbytemporaryapprovaluntil", "ccof_updatedontemporaryapprovaluntil");
-}
 function onChange_afcoccurred(executionContext) {
 	setUserAndDate(executionContext, "ccof_decision_updatedby_afcoccurred", "ccof_decision_updatedonafcoccurred");
 }
-function onChange_ccfriqcdecision(executionContext) {
-	setUserAndDate(executionContext, "ccof_decision_updatedbyccfriqcdecision", "ccof_decision_updatedonccfriqcdecision");
+function onChange_mtfi_qcdecision(executionContext) {
+	setUserAndDate(executionContext, "ccof_mtfi_updatedbyqcdecision", "ccof_mtfi_updatedonqcdecision");
 }
-function onChange_ccfripreapproval(executionContext) {
-	setUserAndDate(executionContext, "ccof_decision_updatedbyccfripreapproval", "ccof_decision_updatedonccfripreapproval");
+function onChange_mtfipreapproval(executionContext) {
+	setUserAndDate(executionContext, "ccof_updatedbymtfipreapproval", "ccof_updatedonmtfipreapproval");
 }
 function onChange_unapproved_mtfi_followup_required(executionContext) {
 	setUserAndDate(executionContext, "ccof_decision_updatedbyunapprovedmtfifollowup", "ccof_decision_updatedonunapprovemtfifollowup");
