@@ -113,7 +113,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         private dynamic AggregateApplicationData(JToken token)
         {
             dynamic dynUserProfile = JObject.Parse(token.ToString());
-            var getFacilitiesStatement = @$"accounts?$select=accountnumber,name,ccof_formcomplete,accountid,_parentaccountid_value,ccof_facilitystatus,ccof_facilitylicencenumber&$filter=(ccof_accounttype eq 100000001 and _parentaccountid_value eq {token["Organization.accountid"]})";
+            // exclude Cancelled Facility
+            var getFacilitiesStatement = @$"accounts?$select=accountnumber,name,ccof_formcomplete,accountid,_parentaccountid_value,ccof_facilitystatus,ccof_facilitylicencenumber&$filter=(ccof_accounttype eq 100000001 
+and Microsoft.Dynamics.CRM.In(PropertyName='ccof_facilitystatus',PropertyValues=['100000000','100000001','100000002','100000003','100000004','100000005','100000006','100000007','100000008','100000009']) 
+and _parentaccountid_value eq {token["Organization.accountid"]})";
             var facilitiesResponse = _d365webapiservice.SendRetrieveRequestAsync(getFacilitiesStatement, true, 250);
             if (facilitiesResponse.IsSuccessStatusCode)
             {
