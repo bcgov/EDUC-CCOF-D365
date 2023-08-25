@@ -26,6 +26,7 @@ CCOF.ChangeActionMTFI.Calculation = {
                 var ExpenseInfo = {};
                 ExpenseInfo['Exceptional Circumstances'] = ccfriFacilityInfo['ccof_totalexpenses_exceptionalcircumstances'];
                 ExpenseInfo['Direct Care Staff Wages'] = ccfriFacilityInfo['ccof_totalexpenses_wageincrease'];
+                ExpenseInfo['MTFI:Unused Expenses'] = 0;  // 0 for initial adjuciation CCFRIFacility 
                 ExpenseInfo['Priority Service Expansion'] = ccfriFacilityInfo['ccof_totalexpenses_priorityserviceexpansion'];
                 ExpenseInfo['Total Monthly Expenses'] = ExpenseInfo['Exceptional Circumstances'] + ExpenseInfo['Direct Care Staff Wages'] + ExpenseInfo['Priority Service Expansion'];
                 ExpenseInfo['MEFI Cap'] = ccfriFacilityInfo['ccof_meficap'];
@@ -102,6 +103,7 @@ CCOF.ChangeActionMTFI.Calculation = {
                     "3Y-K": (returnValue['FinalCalculations'].hasOwnProperty('3Y-K') == true) ? parseFloat(returnValue['FinalCalculations']['3Y-K']['Max Approvable']) : 0,
                     "OOSC-G": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-G') == true) ? parseFloat(returnValue['FinalCalculations']['OOSC-G']['Max Approvable']) : 0
                 }
+                var MTFIUnusedExpenses = returnValue['MTFI:Unused Expenses'];
                 console.log("End Initial Adjudication Calculation");
             }
 
@@ -113,8 +115,6 @@ CCOF.ChangeActionMTFI.Calculation = {
                 for (let i in MTFIInfo) {
                     console.log("MTFI Adjudication Calculation started....");
                     var ccfri_facility_allowable_amount_mtfiEntityName = "ccof_ccfri_facility_allowable_amount_mtfi";
-
-
                     var mtfiEntityId = MTFIInfo[i]['ccof_change_request_mtfiid']; // get MTFI record id
                     var mtfiAppCCFRI = MTFIInfo[i]['_ccof_ccfri_value'];
 
@@ -125,17 +125,22 @@ CCOF.ChangeActionMTFI.Calculation = {
                         var MTFIExpenseInfo = {};
                         MTFIExpenseInfo['Exceptional Circumstances'] = MTFIInfo[i]['ccof_totalexpenses_exceptionalcircumstances'];
                         MTFIExpenseInfo['Direct Care Staff Wages'] = MTFIInfo[i]['ccof_totalexpenses_wageincrease'];
+                        MTFIExpenseInfo['MTFI:Unused Expenses'] = MTFIUnusedExpenses;
                         MTFIExpenseInfo['Priority Service Expansion'] = MTFIInfo[i]['ccof_totalexpenses_priorityserviceexpansion'];
-                        MTFIExpenseInfo['Total Monthly Expenses'] = MTFIExpenseInfo['Exceptional Circumstances'] + MTFIExpenseInfo['Direct Care Staff Wages'] + MTFIExpenseInfo['Priority Service Expansion'];
-                        MTFIExpenseInfo['MEFI Cap'] = MTFIInfo['ccof_meficap'];
-                        MTFIExpenseInfo['Limit Fees to NMF Benchmark'] = MTFIInfo['ccof_limitfeestonmfbenchmark'];
+                        //MTFIExpenseInfo['MEFI Cap'] = MTFIInfo['ccof_meficap'];
+                        //MTFIExpenseInfo['Limit Fees to NMF Benchmark'] = MTFIInfo['ccof_limitfeestonmfbenchmark'];
+                        MTFIExpenseInfo['Total Monthly Expenses'] = MTFIExpenseInfo['Exceptional Circumstances'] + MTFIExpenseInfo['Direct Care Staff Wages'] + MTFIExpenseInfo['Priority Service Expansion'] + MTFIExpenseInfo['MTFI:Unused Expenses'];
+                        MTFIExpenseInfo['MEFI Cap'] = MTFIInfo[i]['ccof_meficap'];
+                        MTFIExpenseInfo['Limit Fees to NMF Benchmark'] = MTFIInfo[i]['ccof_limitfeestonmfbenchmark'];
 
                         var mefiCAP = MTFIInfo[i]['ccof_meficap'];
                         var limitfeestonmfbenchmark = MTFIInfo[i]['ccof_limitfeestonmfbenchmark'];
 
 
                         // Get Region, Median, NMF
-                        var MTFIRegionInfos = getSyncSingleRecord("ccof_applicationccfris(" + getCleanedGuid(mtfiAppCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)");
+                        // there is no Application for ApplicationCCFRI of MTFI
+                        // var MTFIRegionInfos = getSyncSingleRecord("ccof_applicationccfris(" + getCleanedGuid(mtfiAppCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)");
+                        var MTFIRegionInfos = getSyncSingleRecord("ccof_applicationccfris(" + getCleanedGuid(mtfiAppCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)");
                         //  Validate FeeIncrease info
                         var ifCalculateMTFI = true;
                         if (mtfiFeeIncreaseDetails.length === 0) {
@@ -156,8 +161,6 @@ CCOF.ChangeActionMTFI.Calculation = {
                             var FacilityAmountAllowedRecords = getSyncMultipleRecord("ccof_ccfri_facility_allowable_amount_mtfis?$select=ccof_3yearstokindergarten,ccof_outofschoolcarekindergarten,ccof_preschool,ccof_18to36months,ccof_0to18months,ccof_outofschoolcaregrade1,ccof_stage3policy,ccof_displayorder&$filter=(_ccof_ccfrifacilitymtfi_value eq " + mtfiEntityId + ")&$top=50&$orderby=ccof_displayorder asc");
                             isMTFI = true;
                             var returnValue = Calculator(MTFIRegionInfos, mtfiFeeIncreaseDetails, MTFIExpenseInfo, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision, isMTFI);
-
-
                             //need to pass values of Initial adjudication
                             var TotalAllowableStagePolicy = PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amount_mtfiEntityName, mtfiFeeIncreaseDetails, MTFIRegionInfos, mtfiEntityId, mefiCAP, limitfeestonmfbenchmark, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision, isMTFI);
                             // calculate combined approvable value.
@@ -172,6 +175,7 @@ CCOF.ChangeActionMTFI.Calculation = {
                             var mtfistage3calculatornotes = {
                                 "ccof_stage3calculatornotesinitial": returnValue['AdjudicatorNote']
                             }
+                             MTFIUnusedExpenses = returnValue['MTFI:Unused Expenses'];  // for next MTFI
                             UpdateEntityRecord("ccof_change_request_mtfi", mtfiEntityId, mtfistage3calculatornotes);
 
                             console.log("End MTFI Adjudication Calculation");
@@ -257,10 +261,9 @@ function getSyncMultipleRecord(request) {
 
 function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision, isMTFI) {
     debugger;
-
-    var OrgType = regionInfo['ccof_Application']['ccof_providertype@OData.Community.Display.V1.FormattedValue'];   //"Group" or Family
+    // var OrgType = regionInfo['ccof_Application']['ccof_providertype@OData.Community.Display.V1.FormattedValue'];   //"Group" or Family
     var SDA = regionInfo['_ccof_region_value@OData.Community.Display.V1.FormattedValue']; //"North Fraser";
-    var Programyear = regionInfo['ccof_Application']['_ccof_programyear_value@OData.Community.Display.V1.FormattedValue']; //"2022/23";
+    // var Programyear = regionInfo['ccof_Application']['_ccof_programyear_value@OData.Community.Display.V1.FormattedValue']; //"2022/23";
     var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];  // C33 of Stage 3 Calculator is from CRM Limit Fees to NMF Benchmark  (toggle) 
     var DilutionCap = expenseInfo['MEFI Cap']; // CRM MEFI Cap (toggle) //B7  ?? need confirm 
     var InitalCalculation_DilutionCap = true;  // B7 of Calculations
@@ -285,7 +288,8 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
     {
         "Exceptional Circumstances": expenseInfo['Exceptional Circumstances'],
         "Direct Care Staff Wages": expenseInfo['Direct Care Staff Wages'],
-        "MTFI: Unused Expenses": 0,
+        // "MTFI: Unused Expenses": 0,
+        "MTFI: Unused Expenses": expenseInfo['MTFI:Unused Expenses'],
         "Priority Service Expansion": expenseInfo['Priority Service Expansion'],
         "Priority SE (Indigenous)": 0,
         "Total Monthly Expenses": 0  // no use now.
@@ -821,6 +825,8 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
 
     returnValue['AdjudicatorNote'] = AdjudicatorNote;  // as AdjudicatorNote include special chars. it will fail when function return.
     returnValue['AmountApprovedPerCategory'] = AmountApprovedPerCategory;
+    // add return value UNUSED EXPENSES 20230823
+    returnValue['MTFI:Unused Expenses'] = (TotalMonthlyExpenses - TotalAllowedExpenses);
 
     return returnValue;
 }
@@ -839,11 +845,11 @@ function UpdateEntityRecord(entityname, entityId, data) {
 
 
 function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, entityname, FeeIncreaseDetails, RegionInfos, entityId, mefiCAP, limitfeestonmfbenchmark, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision) {
+    // this is for MTFI
     debugger;
     var TotalAllowableStagePolicy = {};
     // To prepopulate the records in summary record.
     if (FacilityAmountAllowedRecords != null) {
-        debugger;
         var TotalAllowableStagePolicyId;
         let arrayLength = FacilityAmountAllowedRecords.length;
         for (let i = 0; i < arrayLength; i++) {
@@ -920,12 +926,22 @@ function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords
                 stage2_3yearstokindergarden = FacilityAmountAllowedRecords[i]['ccof_3yearstokindergarten'];
                 stage2_outofschoolcaregrade1 = FacilityAmountAllowedRecords[i]['ccof_outofschoolcaregrade1'];
             }
+            //Used Carried Forward Amounts / or MTFI:Unused Expenses or MTFI Unused in Approved
+            else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Used Carried Forward Amounts") {
+                var UsedCarriedForwardAmounts = {
+                    "ccof_0to18months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('0-18') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['MTFI Unused']) : 0,
+                    "ccof_18to36months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('18-36') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['MTFI Unused']) : 0,
+                    "ccof_preschool": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('PRE') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['PRE']['MTFI Unused']) : 0,
+                    "ccof_outofschoolcarekindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-K') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-K']['MTFI Unused']) : 0,
+                    "ccof_3yearstokindergarten": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('3Y-K') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['3Y-K']['MTFI Unused']) : 0,
+                    "ccof_outofschoolcaregrade1": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('OOSC-G') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['OOSC-G']['MTFI Unused']) : 0
+                }
+
+                Id = FacilityAmountAllowedRecords[i]['ccof_ccfri_facility_allowable_amount_mtfiid'];
+                UpdateEntityRecord(entityname, Id, UsedCarriedForwardAmounts);
+            }
             //Total MTFI Allowable Amount
-
             else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Total MTFI Allowable Amount") {
-
-
-
                 TotalAllowableStagePolicy = {
                     "ccof_0to18months": (returnValue['FinalCalculations'].hasOwnProperty('0-18') == true) ? parseFloat(returnValue['FinalCalculations']['0-18']['Max Approvable']) : 0,
                     "ccof_18to36months": (returnValue['FinalCalculations'].hasOwnProperty('18-36') == true) ? parseFloat(returnValue['FinalCalculations']['18-36']['Max Approvable']) : 0,
@@ -939,7 +955,6 @@ function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords
                 UpdateEntityRecord(entityname, TotalAllowableStagePolicyId, TotalAllowableStagePolicy);
             }
 
-
         }
         IndicateCap(FeeIncreaseDetails, TotalAllowableStagePolicy, RegionInfos, entityId, mefiCAP, limitfeestonmfbenchmark, TotalAllowableStagePolicyId, InitialTotalAllowableStagePolicy, Initialstage2capammount, returnValue);
     }
@@ -952,7 +967,6 @@ function PopulateCCFRIFacilitySummaryApprovedAmount(returnValue, FacilityAmountA
     var TotalAllowableStagePolicy = {};
     // To prepopulate the records in summary record.
     if (FacilityAmountAllowedRecords != null) {
-        debugger;
         var TotalAllowableStagePolicyId;
         let arrayLength = FacilityAmountAllowedRecords.length;
         for (let i = 0; i < arrayLength; i++) {
