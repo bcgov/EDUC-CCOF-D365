@@ -20,7 +20,8 @@ CCOF.ChangeActionMTFI.Calculation = {
             // Facility Info; Region,Median, NMF, SDA , expense, MEFI Capâ€™, Limit Fees to NMF Benchmarkâ€™ ,orgType
             // Get expense Info
             //ccof_mtfifeeincrease
-            var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+            //var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+            var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
 
             if (FeeIncreaseDetails.length > 0) {
                 var ExpenseInfo = {};
@@ -79,8 +80,6 @@ CCOF.ChangeActionMTFI.Calculation = {
                 var returnValue = Calculator(regionInfo, FeeIncreaseDetails, ExpenseInfo, null, null, isMTFI);
                 var TotalAllowableStagePolicy = PopulateCCFRIFacilitySummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amountEntityName, FeeIncreaseDetails, regionInfo, entityId, ExpenseInfo['MEFI Cap'], ExpenseInfo['Limit Fees to NMF Benchmark']);
 
-
-
                 var initialstage3calculatornotes = {
                     "ccof_stage3calculatornotesinitial": returnValue['AdjudicatorNote']
                 }
@@ -119,8 +118,8 @@ CCOF.ChangeActionMTFI.Calculation = {
                     var mtfiAppCCFRI = MTFIInfo[i]['_ccof_ccfri_value'];
 
                     // Get MTFI expense Info, Region, Mefi cap, NMF info.
-
-                    var mtfiFeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_fee_increase_mtfis?$select=ccof_averageenrolment,_ccof_ccfrifacilitymtfi_value,_ccof_childcarecategory_value,ccof_mtfifeeincrease,ccof_mtfifeeincreasepercent,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_ccfrifacilitymtfi_value eq " + getCleanedGuid(mtfiEntityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+                    // var mtfiFeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_fee_increase_mtfis?$select=ccof_averageenrolment,_ccof_ccfrifacilitymtfi_value,_ccof_childcarecategory_value,ccof_mtfifeeincrease,ccof_mtfifeeincreasepercent,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_ccfrifacilitymtfi_value eq " + getCleanedGuid(mtfiEntityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+                    var mtfiFeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_fee_increase_mtfis?$select=ccof_averageenrolment,_ccof_ccfrifacilitymtfi_value,_ccof_childcarecategory_value,ccof_mtfifeeincrease,ccof_mtfifeeincreasepercent,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_ccfrifacilitymtfi_value eq " + getCleanedGuid(mtfiEntityId) + " and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
                     if (mtfiFeeIncreaseDetails.length > 0) {
                         var MTFIExpenseInfo = {};
                         MTFIExpenseInfo['Exceptional Circumstances'] = MTFIInfo[i]['ccof_totalexpenses_exceptionalcircumstances'];
