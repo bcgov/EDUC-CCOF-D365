@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace CCOF.Infrastructure.WebAPI.Models
 {
@@ -236,5 +237,26 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string filename { get; set; }
         public string annotationid { get; set; }
         public string applicationFacilityDocumentId { get; set; }
+    }
+    public class ApplicationSummaryDocumentResponse
+    {
+      
+        public string filename { get; set; }
+        public string annotationid { get; set; }
+        public string id { get; set; }
+        public string uploadedon { get; set; }
+        public string applicationtype { get; set; }
+        public string programyear { get; set; }
+
+    }
+    public class ChangeRequestDocumentResponse
+    {
+        public string filename { get; set; }
+        public string annotationid { get; set; }
+        public string id { get; set; }
+        public string uploadedon { get; set; }
+        public string applicationtype { get; set; }
+        public string programyear { get; set; }
+
     }
 }
