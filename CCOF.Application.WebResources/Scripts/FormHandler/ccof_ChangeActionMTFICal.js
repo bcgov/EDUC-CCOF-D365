@@ -17,7 +17,7 @@ CCOF.ChangeActionMTFI.Calculation = {
             var ccfriFacilityAppCCFRI = ccfriFacilityInfo['_ccof_applicationccfri_value'];
             var newModifiedQCDecision = ccfriFacilityInfo['ccof_newmodifiedfacilityqcdecision'];
             var programYearNumber = ccfriFacilityInfo['ccof_ProgramYear']['ccof_programyearnumber'];
-            // Facility Info; Region,Median, NMF, SDA , expense, MEFI Capâ€™, Limit Fees to NMF Benchmarkâ€™ ,orgType
+            // Facility Info; Region,Median, NMF, SDA , expense, MEFI CapÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢, Limit Fees to NMF BenchmarkÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ ,orgType
             // Get expense Info
             //ccof_mtfifeeincrease
             //var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
@@ -78,7 +78,9 @@ CCOF.ChangeActionMTFI.Calculation = {
                 var FacilityAmountAllowedRecords = getSyncMultipleRecord("ccof_ccfri_facility_allowable_amounts?$select=ccof_3yearstokindergarten,ccof_outofschoolcarekindergarten,ccof_preschool,ccof_18to36months,ccof_0to18months,ccof_outofschoolcaregrade1,ccof_stage3policy,ccof_displayorder&$filter=(_ccof_ccfrifacility_value eq " + entityId + ")&$top=50&$orderby=ccof_displayorder asc");
                 console.log("FeeIncreaseDetails" + JSON.stringify(FacilityAmountAllowedRecords));
                 var returnValue = Calculator(regionInfo, FeeIncreaseDetails, ExpenseInfo, null, null, isMTFI);
-                var TotalAllowableStagePolicy = PopulateCCFRIFacilitySummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amountEntityName, FeeIncreaseDetails, regionInfo, entityId, ExpenseInfo['MEFI Cap'], ExpenseInfo['Limit Fees to NMF Benchmark']);
+                // var TotalAllowableStagePolicy = PopulateCCFRIFacilitySummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amountEntityName, FeeIncreaseDetails, regionInfo, entityId, ExpenseInfo['MEFI Cap'], ExpenseInfo['Limit Fees to NMF Benchmark']);
+
+
 
                 var initialstage3calculatornotes = {
                     "ccof_stage3calculatornotesinitial": returnValue['AdjudicatorNote']
@@ -105,9 +107,9 @@ CCOF.ChangeActionMTFI.Calculation = {
                 var MTFIUnusedExpenses = returnValue['MTFI:Unused Expenses'];
                 console.log("End Initial Adjudication Calculation");
             }
-
+            var currentMTFIentityId = formContext.data.entity.getId();
             //Check if MTFIs exist
-            var MTFIInfo = getSyncMultipleRecord("ccof_change_request_mtfis?$select=_ccof_ccfri_value,_ccof_ccfri_facility_value,ccof_change_request_mtfiid,ccof_limitfeestonmfbenchmark,ccof_meficap,ccof_stage3calculatornotesinitial,ccof_totalexpenses_exceptionalcircumstances,ccof_totalexpenses_priorityserviceexpansion,ccof_totalexpenses_wageincrease&$expand=ccof_ProgramYear($select=ccof_programyearnumber)&$filter=(_ccof_ccfri_facility_value eq " + getCleanedGuid(entityId) + ") and (statuscode eq 6 or statuscode eq 3)  and (ccof_ProgramYear/ccof_programyearnumber eq " + programYearNumber + ")&$orderby=createdon asc");
+            var MTFIInfo = getSyncMultipleRecord("ccof_change_request_mtfis?$select=_ccof_ccfri_value,_ccof_ccfri_facility_value,ccof_change_request_mtfiid,ccof_limitfeestonmfbenchmark,ccof_meficap,ccof_stage3calculatornotesinitial,ccof_totalexpenses_exceptionalcircumstances,ccof_totalexpenses_priorityserviceexpansion,ccof_totalexpenses_wageincrease&$expand=ccof_ProgramYear($select=ccof_programyearnumber)&$filter=(_ccof_ccfri_facility_value eq " + getCleanedGuid(entityId) + ") and (statuscode eq 6 or statuscode eq 3)  and (ccof_ProgramYear/ccof_programyearnumber eq " + programYearNumber + ")&$orderby=ccof_mtfi_sequence_number asc");
             // if MTFIs exist,calculate costs.
             if (MTFIInfo.length > 0) {
                 //  MTFI CALCULATION STARTED
@@ -119,7 +121,7 @@ CCOF.ChangeActionMTFI.Calculation = {
 
                     // Get MTFI expense Info, Region, Mefi cap, NMF info.
                     // var mtfiFeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_fee_increase_mtfis?$select=ccof_averageenrolment,_ccof_ccfrifacilitymtfi_value,_ccof_childcarecategory_value,ccof_mtfifeeincrease,ccof_mtfifeeincreasepercent,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_ccfrifacilitymtfi_value eq " + getCleanedGuid(mtfiEntityId) + " and statecode eq 0 and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
-                    var mtfiFeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_fee_increase_mtfis?$select=ccof_averageenrolment,_ccof_ccfrifacilitymtfi_value,_ccof_childcarecategory_value,ccof_mtfifeeincrease,ccof_mtfifeeincreasepercent,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_ccfrifacilitymtfi_value eq " + getCleanedGuid(mtfiEntityId) + " and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
+                    var mtfiFeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_fee_increase_mtfis?$select=ccof_averageenrolment,_ccof_ccfrifacilitymtfi_value,_ccof_childcarecategory_value,ccof_mtfi_amount,ccof_mtfifeeincreasepercent,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_ccfrifacilitymtfi_value eq " + getCleanedGuid(mtfiEntityId) + " and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
                     if (mtfiFeeIncreaseDetails.length > 0) {
                         var MTFIExpenseInfo = {};
                         MTFIExpenseInfo['Exceptional Circumstances'] = MTFIInfo[i]['ccof_totalexpenses_exceptionalcircumstances'];
@@ -148,7 +150,7 @@ CCOF.ChangeActionMTFI.Calculation = {
 
                         } else {
                             for (let i in mtfiFeeIncreaseDetails) {
-                                if (mtfiFeeIncreaseDetails[i]['ccof_averageenrolment'] === null || mtfiFeeIncreaseDetails[i]['ccof_mtfifeeincrease'] === null || mtfiFeeIncreaseDetails[i]['ccof_feebeforeincrease'] === null) {
+                                if (mtfiFeeIncreaseDetails[i]['ccof_averageenrolment'] === null || mtfiFeeIncreaseDetails[i]['ccof_mtfi_amount'] === null || mtfiFeeIncreaseDetails[i]['ccof_feebeforeincrease'] === null) {
 
                                     ifCalculateMTFI = false;
 
@@ -161,7 +163,11 @@ CCOF.ChangeActionMTFI.Calculation = {
                             isMTFI = true;
                             var returnValue = Calculator(MTFIRegionInfos, mtfiFeeIncreaseDetails, MTFIExpenseInfo, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision, isMTFI);
                             //need to pass values of Initial adjudication
-                            var TotalAllowableStagePolicy = PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amount_mtfiEntityName, mtfiFeeIncreaseDetails, MTFIRegionInfos, mtfiEntityId, mefiCAP, limitfeestonmfbenchmark, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision, isMTFI);
+                            if (getCleanedGuid(currentMTFIentityId).toLowerCase() === mtfiEntityId) {
+
+                                var TotalAllowableStagePolicy = PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, ccfri_facility_allowable_amount_mtfiEntityName, mtfiFeeIncreaseDetails, MTFIRegionInfos, mtfiEntityId, mefiCAP, limitfeestonmfbenchmark, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision, isMTFI);
+
+                            }
                             // calculate combined approvable value.
                             InitialTotalAllowableStagePolicy = {
                                 "0-18": (returnValue['FinalCalculations'].hasOwnProperty('0-18') == true) ? parseFloat(returnValue['FinalCalculations']['0-18']['Cummulative Approvable Amount']) : 0,
@@ -171,14 +177,16 @@ CCOF.ChangeActionMTFI.Calculation = {
                                 "3Y-K": (returnValue['FinalCalculations'].hasOwnProperty('3Y-K') == true) ? parseFloat(returnValue['FinalCalculations']['3Y-K']['Cummulative Approvable Amount']) : 0,
                                 "OOSC-G": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-G') == true) ? parseFloat(returnValue['FinalCalculations']['OOSC-G']['Cummulative Approvable Amount']) : 0
                             }
-                            var mtfistage3calculatornotes = {
-                                "ccof_stage3calculatornotesinitial": returnValue['AdjudicatorNote']
+
+                            if (getCleanedGuid(currentMTFIentityId).toLowerCase() === mtfiEntityId) {
+                                var mtfistage3calculatornotes = {
+                                    "ccof_stage3calculatornotesinitial": returnValue['AdjudicatorNote']
+                                }
+                                MTFIUnusedExpenses = returnValue['MTFI:Unused Expenses'];  // for next MTFI
+                                UpdateEntityRecord("ccof_change_request_mtfi", mtfiEntityId, mtfistage3calculatornotes);
+
+                                console.log("End MTFI Adjudication Calculation");
                             }
-                             MTFIUnusedExpenses = returnValue['MTFI:Unused Expenses'];  // for next MTFI
-                            UpdateEntityRecord("ccof_change_request_mtfi", mtfiEntityId, mtfistage3calculatornotes);
-
-                            console.log("End MTFI Adjudication Calculation");
-
                         }
 
                     }
@@ -263,7 +271,8 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
     // var OrgType = regionInfo['ccof_Application']['ccof_providertype@OData.Community.Display.V1.FormattedValue'];   //"Group" or Family
     var SDA = regionInfo['_ccof_region_value@OData.Community.Display.V1.FormattedValue']; //"North Fraser";
     // var Programyear = regionInfo['ccof_Application']['_ccof_programyear_value@OData.Community.Display.V1.FormattedValue']; //"2022/23";
-    var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];  // C33 of Stage 3 Calculator is from CRM Limit Fees to NMF Benchmark  (toggle) 
+    var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];
+    // C33 of Stage 3 Calculator is from CRM Limit Fees to NMF Benchmark  (toggle) 
     var DilutionCap = expenseInfo['MEFI Cap']; // CRM MEFI Cap (toggle) //B7  ?? need confirm 
     var InitalCalculation_DilutionCap = true;  // B7 of Calculations
     var TotalAllowedExpenses = 0; //B13 Total Allowed Expenses
@@ -299,7 +308,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         entity['CareCategory'] = feeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue'];
         entity['AverageEnrollment'] = parseFloat(feeIncreaseDetails[i]['ccof_averageenrolment']);
         if (isMTFI) {
-            entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_mtfifeeincrease'];
+            entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_mtfi_amount'];
         }
         else {
             entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_cumulativefeeincrease'];
@@ -768,6 +777,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         let entity = {};
         // I8
         entity['Requested Fee Increase'] = FacilityInfo[i]['RequestedFeeIncrease'];
+        entity['FeeBeforeIncrease'] = FacilityInfo[i]['FeeBeforeIncrease'];
         //I9
         entity['Max Approvable'] = (FacilityInfo[i]['AverageEnrollment'] === 0) ? 0 : InitalCalculation[FacilityInfo[i]['CareCategory']]['FINAL APPROVABLE'];
         if (InitialTotalAllowableStagePolicy == null && Initialstage2capammount == null) {
@@ -778,12 +788,21 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         }
         else {
             let TotalApprovable;
+            if (Limitfeesto70Percentile == false) {
+                TotalApprovable = (parseFloat(entity['Max Approvable'].toFixed(2)) + parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2))) <= parseFloat(Initialstage2capammount[Category].toFixed(2)) ? parseFloat(entity['Max Approvable'].toFixed(2)) : (parseFloat(Initialstage2capammount[Category].toFixed(2)) - parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2)));
 
-            TotalApprovable = (parseFloat(entity['Max Approvable'].toFixed(2)) + parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2))) <= parseFloat(Initialstage2capammount[Category].toFixed(2)) ? parseFloat(entity['Max Approvable'].toFixed(2)) : (parseFloat(Initialstage2capammount[Category].toFixed(2)) - parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2)));
+                entity['Cummulative Approvable Amount'] = (parseFloat(entity['Max Approvable'].toFixed(2)) + parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2)));
+                entity['Full Request Approvable?'] = (entity['Cummulative Approvable Amount'] <= parseFloat(Initialstage2capammount[Category].toFixed(2))) ? true : false;
+                resultString = resultString + " " + FacilityInfo[i]['CareCategory'] + ": $" + TotalApprovable;
+            }
+            else {
+                TotalApprovable = (parseFloat(entity['Max Approvable'].toFixed(2)) + parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2))) <= (SDA70thPercentileF[Category] - FacilityInfo[i]['FeeBeforeIncrease']) ? parseFloat(entity['Max Approvable'].toFixed(2)) : ((SDA70thPercentileF[Category] - FacilityInfo[i]['FeeBeforeIncrease']) - parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2)));
 
-            entity['Cummulative Approvable Amount'] = (parseFloat(entity['Max Approvable'].toFixed(2)) + parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2)));
-            entity['Full Request Approvable?'] = (entity['Cummulative Approvable Amount'] <= parseFloat(Initialstage2capammount[Category].toFixed(2))) ? true : false;
-            resultString = resultString + " " + FacilityInfo[i]['CareCategory'] + ": $" + TotalApprovable;
+                entity['Cummulative Approvable Amount'] = (parseFloat(entity['Max Approvable'].toFixed(2)) + parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2)));
+                entity['Full Request Approvable?'] = (entity['Cummulative Approvable Amount'] <= (SDA70thPercentileF[Category] - FacilityInfo[i]['FeeBeforeIncrease'])) ? true : false;
+                resultString = resultString + " " + FacilityInfo[i]['CareCategory'] + ": $" + TotalApprovable;
+            }
+
         }
 
         CheckFullRequestApprovable = CheckFullRequestApprovable && entity['Full Request Approvable?'];
@@ -1162,18 +1181,18 @@ function IndicateCap(feeIncreaseDetails, TotalAllowableStagePolicy, regionInfo, 
             }
 
 
-            TotalAllowableStagePolicywithMEFICAP = {
+            TotalAllowableStagePolicywithNMFCAP = {
 
-                "ccof_0to18months": (returnValue['FinalCalculations'].hasOwnProperty('0-18') == true) ? (parseFloat(returnValue['FinalCalculations']['0-18']['Cummulative Approvable Amount']) <= parseFloat(Initialstage2capammount['0-18'])) ? parseFloat(returnValue['FinalCalculations']['0-18']['Max Approvable']) : (parseFloat(Initialstage2capammount['0-18']) - parseFloat(InitialTotalAllowableStagePolicy['0-18'].toFixed(2))) : 0,
-                "ccof_18to36months": (returnValue['FinalCalculations'].hasOwnProperty('18-36') == true) ? (parseFloat(returnValue['FinalCalculations']['18-36']['Cummulative Approvable Amount']) <= parseFloat(Initialstage2capammount['18-36'])) ? parseFloat(returnValue['FinalCalculations']['18-36']['Max Approvable']) : (parseFloat(Initialstage2capammount['18-36']) - parseFloat(InitialTotalAllowableStagePolicy['18-36'].toFixed(2))) : 0,
-                "ccof_preschool": (returnValue['FinalCalculations'].hasOwnProperty('PRE') == true) ? (parseFloat(returnValue['FinalCalculations']['PRE']['Cummulative Approvable Amount']) <= parseFloat(Initialstage2capammount['PRE'])) ? parseFloat(returnValue['FinalCalculations']['PRE']['Max Approvable']) : (parseFloat(Initialstage2capammount['PRE']) - parseFloat(InitialTotalAllowableStagePolicy['PRE'].toFixed(2))) : 0,
-                "ccof_outofschoolcarekindergarten": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-K') == true) ? (parseFloat(returnValue['FinalCalculations']['OOSC-K']['Cummulative Approvable Amount']) <= parseFloat(Initialstage2capammount['OOSC-K'])) ? parseFloat(returnValue['FinalCalculations']['OOSC-K']['Max Approvable']) : (parseFloat(Initialstage2capammount['OOSC-K']) - parseFloat(InitialTotalAllowableStagePolicy['OOSC-K'].toFixed(2))) : 0,
-                "ccof_3yearstokindergarten": (returnValue['FinalCalculations'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['FinalCalculations']['3Y-K']['Cummulative Approvable Amount']) <= parseFloat(Initialstage2capammount['3Y-K'])) ? parseFloat(returnValue['FinalCalculations']['3Y-K']['Max Approvable']) : (parseFloat(Initialstage2capammount['3Y-K']) - parseFloat(InitialTotalAllowableStagePolicy['3Y-K'].toFixed(2))) : 0,
-                "ccof_outofschoolcaregrade1": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['FinalCalculations']['OOSC-G']['Cummulative Approvable Amount']) <= parseFloat(Initialstage2capammount['OOSC-G'])) ? parseFloat(returnValue['FinalCalculations']['OOSC-G']['Max Approvable']) : (parseFloat(Initialstage2capammount['OOSC-G']) - parseFloat(InitialTotalAllowableStagePolicy['OOSC-G'].toFixed(2))) : 0
+                "ccof_0to18months": (returnValue['FinalCalculations'].hasOwnProperty('0-18') == true) ? (parseFloat(returnValue['FinalCalculations']['0-18']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['0-18'] - parseFloat(returnValue['FinalCalculations']['0-18']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['0-18']['Max Approvable']) : ((SDA70thPercentileF['0-18'] - parseFloat(returnValue['FinalCalculations']['0-18']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['0-18'].toFixed(2))) : 0,
+                "ccof_18to36months": (returnValue['FinalCalculations'].hasOwnProperty('18-36') == true) ? (parseFloat(returnValue['FinalCalculations']['18-36']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['18-36'] - parseFloat(returnValue['FinalCalculations']['18-36']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['18-36']['Max Approvable']) : ((SDA70thPercentileF['18-36'] - parseFloat(returnValue['FinalCalculations']['18-36']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['18-36'].toFixed(2))) : 0,
+                "ccof_preschool": (returnValue['FinalCalculations'].hasOwnProperty('PRE') == true) ? (parseFloat(returnValue['FinalCalculations']['PRE']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['PRE'] - parseFloat(returnValue['FinalCalculations']['PRE']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['PRE']['Max Approvable']) : ((SDA70thPercentileF['PRE'] - parseFloat(returnValue['FinalCalculations']['PRE']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['PRE'].toFixed(2))) : 0,
+                "ccof_outofschoolcarekindergarten": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-K') == true) ? (parseFloat(returnValue['FinalCalculations']['OOSC-K']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['OOSC-K'] - parseFloat(returnValue['FinalCalculations']['OOSC-K']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['OOSC-K']['Max Approvable']) : ((SDA70thPercentileF['OOSC-K'] - parseFloat(returnValue['FinalCalculations']['OOSC-K']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['OOSC-K'].toFixed(2))) : 0,
+                "ccof_3yearstokindergarten": (returnValue['FinalCalculations'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['FinalCalculations']['3Y-K']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['3Y-K'] - parseFloat(returnValue['FinalCalculations']['3Y-K']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['3Y-K']['Max Approvable']) : ((SDA70thPercentileF['3Y-K'] - parseFloat(returnValue['FinalCalculations']['3Y-K']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['3Y-K'].toFixed(2))) : 0,
+                "ccof_outofschoolcaregrade1": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['FinalCalculations']['OOSC-G']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['OOSC-G'] - parseFloat(returnValue['FinalCalculations']['OOSC-G']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['OOSC-G']['Max Approvable']) : ((SDA70thPercentileF['OOSC-G'] - parseFloat(returnValue['FinalCalculations']['OOSC-G']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['OOSC-G'].toFixed(2))) : 0
             }
 
             UpdateEntityRecord(entityname, entityId, ReachedCap);
-            UpdateEntityRecord(ccfri_facility_allowable_amountEntityName, TotalAllowableStagePolicyID, TotalAllowableStagePolicywithMEFICAP);
+            UpdateEntityRecord(ccfri_facility_allowable_amountEntityName, TotalAllowableStagePolicyID, TotalAllowableStagePolicywithNMFCAP);
         }
         else if (MEFICAPReached == true && NMFCAPReached == false) {
             ReachedCap = {
@@ -1199,7 +1218,18 @@ function IndicateCap(feeIncreaseDetails, TotalAllowableStagePolicy, regionInfo, 
                 "ccof_capsindicator": 100000001
 
             }
-            UpdateEntityRecord(entityname, entityId, ReachedCap)
+
+            TotalAllowableStagePolicywithNMFCAP = {
+
+                "ccof_0to18months": (returnValue['FinalCalculations'].hasOwnProperty('0-18') == true) ? (parseFloat(returnValue['FinalCalculations']['0-18']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['0-18'] - parseFloat(returnValue['FinalCalculations']['0-18']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['0-18']['Max Approvable']) : ((SDA70thPercentileF['0-18'] - parseFloat(returnValue['FinalCalculations']['0-18']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['0-18'].toFixed(2))) : 0,
+                "ccof_18to36months": (returnValue['FinalCalculations'].hasOwnProperty('18-36') == true) ? (parseFloat(returnValue['FinalCalculations']['18-36']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['18-36'] - parseFloat(returnValue['FinalCalculations']['18-36']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['18-36']['Max Approvable']) : ((SDA70thPercentileF['18-36'] - parseFloat(returnValue['FinalCalculations']['18-36']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['18-36'].toFixed(2))) : 0,
+                "ccof_preschool": (returnValue['FinalCalculations'].hasOwnProperty('PRE') == true) ? (parseFloat(returnValue['FinalCalculations']['PRE']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['PRE'] - parseFloat(returnValue['FinalCalculations']['PRE']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['PRE']['Max Approvable']) : ((SDA70thPercentileF['PRE'] - parseFloat(returnValue['FinalCalculations']['PRE']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['PRE'].toFixed(2))) : 0,
+                "ccof_outofschoolcarekindergarten": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-K') == true) ? (parseFloat(returnValue['FinalCalculations']['OOSC-K']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['OOSC-K'] - parseFloat(returnValue['FinalCalculations']['OOSC-K']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['OOSC-K']['Max Approvable']) : ((SDA70thPercentileF['OOSC-K'] - parseFloat(returnValue['FinalCalculations']['OOSC-K']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['OOSC-K'].toFixed(2))) : 0,
+                "ccof_3yearstokindergarten": (returnValue['FinalCalculations'].hasOwnProperty('3Y-K') == true) ? (parseFloat(returnValue['FinalCalculations']['3Y-K']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['3Y-K'] - parseFloat(returnValue['FinalCalculations']['3Y-K']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['3Y-K']['Max Approvable']) : ((SDA70thPercentileF['3Y-K'] - parseFloat(returnValue['FinalCalculations']['3Y-K']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['3Y-K'].toFixed(2))) : 0,
+                "ccof_outofschoolcaregrade1": (returnValue['FinalCalculations'].hasOwnProperty('OOSC-G') == true) ? (parseFloat(returnValue['FinalCalculations']['OOSC-G']['Cummulative Approvable Amount']) <= (SDA70thPercentileF['OOSC-G'] - parseFloat(returnValue['FinalCalculations']['OOSC-G']['FeeBeforeIncrease']))) ? parseFloat(returnValue['FinalCalculations']['OOSC-G']['Max Approvable']) : ((SDA70thPercentileF['OOSC-G'] - parseFloat(returnValue['FinalCalculations']['OOSC-G']['FeeBeforeIncrease'])) - parseFloat(InitialTotalAllowableStagePolicy['OOSC-G'].toFixed(2))) : 0
+            }
+            UpdateEntityRecord(entityname, entityId, ReachedCap);
+            UpdateEntityRecord(ccfri_facility_allowable_amountEntityName, TotalAllowableStagePolicyID, TotalAllowableStagePolicywithNMFCAP);
         }
         // ticket CCFRI-2126 fix. Jun 30, 2023
         else if (MEFICAPReached === false && NMFCAPReached === false) {
