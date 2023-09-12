@@ -97,7 +97,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(applicationStatement, true);
             JArray finalResult = new JArray();
             
-            if (applicationResponse.IsSuccessStatusCode && changeRequestresponse.IsSuccessStatusCode) {
+            if (applicationResponse.IsSuccessStatusCode || changeRequestresponse.IsSuccessStatusCode) {
                 ApplicationSummaryDocumentResponse appDocResponse = System.Text.Json.JsonSerializer.Deserialize<ApplicationSummaryDocumentResponse>(applicationResponse.Content.ReadAsStringAsync().Result);
                 ChangeRequestDocumentResponse changeRequestDocResponse = System.Text.Json.JsonSerializer.Deserialize<ChangeRequestDocumentResponse>(changeRequestresponse.Content.ReadAsStringAsync().Result);
                 JObject appSummaryDocumentResult = JObject.Parse(applicationResponse.Content.ReadAsStringAsync().Result.ToString());
