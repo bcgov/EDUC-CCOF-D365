@@ -35,7 +35,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             };
 
             //change Types MTFI - 100000007 , Add New Facility - 
-            var changeRequestfetchXML = $@"<fetch top=""50"">
+            var changeRequestfetchXML = $@"<fetch>
   <entity name=""annotation"">
     <attribute name=""annotationid"" />
     <attribute name=""filename"" />
@@ -67,7 +67,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var changeRequestresponse = _d365webapiservice.SendRetrieveRequestAsync(changeRequeststatement, true);
             
 
-            var applicationfetchXML = $@"<fetch top=""50"">
+            var applicationfetchXML = $@"<fetch>
   <entity name=""annotation"">
     <attribute name=""annotationid"" />
     <attribute name=""filename"" />
