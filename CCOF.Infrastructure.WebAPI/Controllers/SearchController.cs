@@ -31,7 +31,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 
             var validSearch = new DataverseSearch() { search = Regex.Replace(validJson.Search, @"[^\w $\-]", "").Trim() };// Remove special characters
 
-            var response = _d365webapiservice.SendSearchRequestAsync(JsonSerializer.Serialize(validSearch));
+            var response = _d365webapiservice.SendSearchRequestAsync(JsonSerializer.Serialize(validSearch)).Result;
 
             if (response.IsSuccessStatusCode)
             {

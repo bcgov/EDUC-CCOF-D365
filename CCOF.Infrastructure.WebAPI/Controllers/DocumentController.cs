@@ -40,7 +40,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                                 </fetch>";
 
             var statement = $"annotations?fetchXml=" + WebUtility.UrlEncode(fetchXML);
-            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize);
+            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize).Result;
             if (response.IsSuccessStatusCode)
             {
                 return Ok(response.Content.ReadAsStringAsync().Result);
@@ -99,7 +99,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         public ActionResult<string> RemoveFile(string annotationid)
         {
             annotationid = "annotations(" + annotationid + ")";
-            var response = _d365webapiservice.SendDeleteRequestAsync(annotationid);
+            var response = _d365webapiservice.SendDeleteRequestAsync(annotationid).Result;
             if (response.IsSuccessStatusCode)
             {
                 return Ok("The document has been removed");

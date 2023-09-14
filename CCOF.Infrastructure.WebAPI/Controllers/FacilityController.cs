@@ -68,7 +68,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 </fetch>";
             var message = $"ccof_facility_licenseses?fetchXml=" + WebUtility.UrlEncode(fetchXml);
 
-            var response = _d365webapiservice.SendMessageAsync(HttpMethod.Get, message);
+            var response = _d365webapiservice.SendMessageAsync(HttpMethod.Get, message).Result;
             if (response.IsSuccessStatusCode)
             {
                 var root = JToken.Parse(response.Content.ReadAsStringAsync().Result);

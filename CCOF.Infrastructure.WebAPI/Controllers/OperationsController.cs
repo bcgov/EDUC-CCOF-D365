@@ -48,7 +48,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 statement = $"{statement}&{filters}";
             }
 
-            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize);
+            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize).Result;
 
             if (response.IsSuccessStatusCode)
                 return Ok(response.Content.ReadAsStringAsync().Result);
@@ -117,7 +117,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         [HttpDelete]
         public ActionResult<string> Delete(string statement)
         {
-            var response = _d365webapiservice.SendDeleteRequestAsync(statement);
+            var response = _d365webapiservice.SendDeleteRequestAsync(statement).Result;
 
             if (response.IsSuccessStatusCode)
                 return Ok($"{statement} removed");

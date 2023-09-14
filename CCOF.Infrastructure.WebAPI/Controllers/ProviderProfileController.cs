@@ -77,7 +77,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
 </fetch>";
             var message = $"contacts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
 
-            var response = _d365webapiservice.SendMessageAsync(HttpMethod.Get, message);
+            var response = _d365webapiservice.SendMessageAsync(HttpMethod.Get, message).Result;
             if (response.IsSuccessStatusCode)
             {
                 var root = JToken.Parse(response.Content.ReadAsStringAsync().Result);
@@ -90,7 +90,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     // Update Dataverse with the userid
                     var statement = @$"contacts({records[0][0]["contactid"]})";
                     var body = System.Text.Json.JsonSerializer.Serialize(new { ccof_userid = userId });
-                    HttpResponseMessage updateRespopnse = _d365webapiservice.SendUpdateRequestAsync(statement, body);
+                    HttpResponseMessage updateRespopnse = _d365webapiservice.SendUpdateRequestAsync(statement, body).Result;
 
                     if (!updateRespopnse.IsSuccessStatusCode)
                     {
@@ -117,7 +117,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var getFacilitiesStatement = @$"accounts?$select=accountnumber,name,ccof_formcomplete,accountid,_parentaccountid_value,ccof_facilitystatus,ccof_facilitylicencenumber&$filter=(ccof_accounttype eq 100000001 
 and Microsoft.Dynamics.CRM.In(PropertyName='ccof_facilitystatus',PropertyValues=['100000000','100000001','100000002','100000003','100000004','100000005','100000006','100000007','100000008','100000009']) 
 and _parentaccountid_value eq {token["Organization.accountid"]})";
-            var facilitiesResponse = _d365webapiservice.SendRetrieveRequestAsync(getFacilitiesStatement, true, 250);
+            var facilitiesResponse = _d365webapiservice.SendRetrieveRequestAsync(getFacilitiesStatement, true, 250).Result;
             if (facilitiesResponse.IsSuccessStatusCode)
             {
                 dynamic jResult = JObject.Parse(facilitiesResponse.Content.ReadAsStringAsync().Result);
@@ -125,7 +125,7 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
             }
 
             var getApplicationStatement = @$"ccof_applications?$select=_ccof_organization_value,ccof_applicationtype,ccof_applicationid,ccof_name,_ccof_programyear_value,statuscode,ccof_providertype,ccof_unlock_declaration,ccof_unlock_licenseupload,ccof_unlock_supportingdocument,ccof_unlock_ccof,ccof_unlock_ecewe,ccof_licensecomplete,ccof_ecewe_eligibility_complete,ccof_ccofstatus&$expand=ccof_ProgramYear($select=ccof_name,ccof_program_yearid,statuscode,ccof_declarationbstart,ccof_intakeperiodstart,ccof_intakeperiodend),ccof_application_basefunding_Application($select=ccof_application_basefundingid,_ccof_facility_value,statuscode,ccof_formcomplete),ccof_applicationccfri_Application_ccof_ap($select=ccof_applicationccfriid,ccof_ccfrioptin,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete,ccof_unlock_rfi,ccof_unlock_ccfri,ccof_unlock_nmf_rfi,ccof_has_nmf,ccof_has_rfi,ccof_nmf_formcomplete,ccof_rfi_formcomplete),ccof_ccof_application_ccof_applicationecewe_application($select=ccof_applicationeceweid,ccof_optintoecewe,ccof_name,_ccof_facility_value,statuscode,ccof_formcomplete),ccof_ccof_change_request_Application_ccof_appl($select = ccof_change_requestid, ccof_name)&$filter=(ccof_applicationid eq {token["Application.ccof_applicationid"]})";
-            var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationStatement, true, 250);
+            var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationStatement, true, 250).Result;
             if (applicationResponse.IsSuccessStatusCode)
             {
                 dynamic jResult1 = JObject.Parse(applicationResponse.Content.ReadAsStringAsync().Result);
@@ -146,7 +146,7 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
             {
                 var getChangeRequestsStatement = @$"ccof_change_requests?$select=ccof_change_requestid,ccof_name,ccof_externalstatus,ccof_declaration,ccof_unlock_declaration,ccof_licensecomplete,ccof_ecewe_eligibility_complete,statecode,statuscode&$expand=ccof_change_action_change_request($select=ccof_unlock_ccof,ccof_change_actionid,_ccof_change_request_value,ccof_changetype,ccof_name,ccof_unlock_ecewe,ccof_unlock_licence_upload,ccof_unlock_supporting_document,ccof_unlock_change_request,ccof_unlock_other_changes_document, statecode,statuscode;$expand=ccof_change_request_new_facility_change_act($select=_ccof_ccof_value,_ccof_change_action_value,ccof_change_request_new_facilityid,_ccof_ecewe_value,_ccof_facility_value,_ccof_ccfri_value,ccof_name,ccof_unlock_ccfri,ccof_unlock_rfi,ccof_unlock_nmf_rfi,statecode,statuscode))&$filter=(_ccof_application_value eq {applicationId})";
 
-                var changeRequestResponse = _d365webapiservice.SendRetrieveRequestAsync(getChangeRequestsStatement, true, 5000);
+                var changeRequestResponse = _d365webapiservice.SendRetrieveRequestAsync(getChangeRequestsStatement, true, 5000).Result;
                 if (changeRequestResponse.IsSuccessStatusCode)
                 {
                     dynamic jResult = JObject.Parse(changeRequestResponse.Content.ReadAsStringAsync().Result);

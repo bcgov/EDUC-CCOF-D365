@@ -58,7 +58,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                               </entity>
                        </fetch>";
             var statement = $"annotations?fetchXml=" + WebUtility.UrlEncode(fetchXML);
-            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true);
+            var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true).Result;
             if (response.IsSuccessStatusCode)
             {
                 return Ok(response.Content.ReadAsStringAsync().Result);
@@ -124,7 +124,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 appUploadFile["ccof_change_request_summary_Annotations"][0]["subject"] = obj["subject"];
                 appUploadFile["ccof_change_request_summary_Annotations"][0]["documentbody"] = obj["documentbody"];
                 appUploadFile["ccof_change_request_summary_Annotations"][0]["notetext"] = obj["notetext"];
-                response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_change_request_summaries?$expand=ccof_change_request_summary_Annotations($select=subject,filename)", appUploadFile.ToString());
+                response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_change_request_summaries?$expand=ccof_change_request_summary_Annotations($select=subject,filename)", appUploadFile.ToString()).Result;
                 var content = await response.Content.ReadAsStringAsync();
                 JObject returnFile = new JObject();
                 returnFile = JObject.Parse(content);

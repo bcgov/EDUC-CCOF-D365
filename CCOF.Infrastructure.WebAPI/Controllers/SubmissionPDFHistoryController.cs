@@ -34,8 +34,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 orgId = OrgId
             };
 
-            //change Types MTFI - 100000007 , Add New Facility - 
-            var changeRequestfetchXML = $@"<fetch top=""50"">
+            //change Types MTFI - 100000007 , Add New Facility
+            var changeRequestfetchXML = $@"<fetch>
   <entity name=""annotation"">
     <attribute name=""annotationid"" />
     <attribute name=""filename"" />
@@ -64,10 +64,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
   </entity>
 </fetch>";
             var changeRequeststatement = $"annotations?fetchXml=" + WebUtility.UrlEncode(changeRequestfetchXML);
-            var changeRequestresponse = _d365webapiservice.SendRetrieveRequestAsync(changeRequeststatement, true);
-            
+            var changeRequestresponse = _d365webapiservice.SendRetrieveRequestAsync(changeRequeststatement, true).Result;
 
-            var applicationfetchXML = $@"<fetch top=""50"">
+
+            var applicationfetchXML = $@"<fetch>
   <entity name=""annotation"">
     <attribute name=""annotationid"" />
     <attribute name=""filename"" />
@@ -94,77 +94,66 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
   </entity>
 </fetch>";
             var applicationStatement = $"annotations?fetchXml=" + WebUtility.UrlEncode(applicationfetchXML);
-            var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(applicationStatement, true);
+            var applicationResponse = _d365webapiservice.SendRetrieveRequestAsync(applicationStatement, true).Result;
             JArray finalResult = new JArray();
             
-            if (applicationResponse.IsSuccessStatusCode && changeRequestresponse.IsSuccessStatusCode) {
+            if (applicationResponse.IsSuccessStatusCode || changeRequestresponse.IsSuccessStatusCode) {
                 ApplicationSummaryDocumentResponse appDocResponse = System.Text.Json.JsonSerializer.Deserialize<ApplicationSummaryDocumentResponse>(applicationResponse.Content.ReadAsStringAsync().Result);
                 ChangeRequestDocumentResponse changeRequestDocResponse = System.Text.Json.JsonSerializer.Deserialize<ChangeRequestDocumentResponse>(changeRequestresponse.Content.ReadAsStringAsync().Result);
                 JObject appSummaryDocumentResult = JObject.Parse(applicationResponse.Content.ReadAsStringAsync().Result.ToString());
-               
+
                 JArray appSummaryDoc = new JArray();
                 appSummaryDoc = appSummaryDocumentResult["value"].ToObject<JArray>();
                 if (appSummaryDoc.Count > 0)
                 {
                     for (int i = 0; i < appSummaryDoc.Count; i++)
                     {
-                        
-
                         appDocResponse.filename = appSummaryDoc[i]["filename"].ToString();
                         appDocResponse.annotationid = appSummaryDoc[i]["annotationid"].ToString();
                         appDocResponse.id = appSummaryDoc[i]["app.ccof_name"].ToString();
                         appDocResponse.uploadedon = appSummaryDoc[i]["as.createdon"].ToString();
                         appDocResponse.applicationtype = appSummaryDoc[i]["app.ccof_applicationtype@OData.Community.Display.V1.FormattedValue"].ToString();
                         appDocResponse.programyear = appSummaryDoc[i]["app.ccof_programyear@OData.Community.Display.V1.FormattedValue"].ToString();
-                     
-                        finalResult.Add(new JObject { { "filename", appDocResponse.filename }, { "annotationid", appDocResponse.annotationid }, { "id", appDocResponse.id } , { "uploadedon", appDocResponse.uploadedon } , { "applicationtype", appDocResponse.applicationtype } , { "programyear", appDocResponse.programyear } });
+
+                        finalResult.Add(new JObject { { "filename", appDocResponse.filename }, { "annotationid", appDocResponse.annotationid }, { "id", appDocResponse.id }, { "uploadedon", appDocResponse.uploadedon }, { "applicationtype", appDocResponse.applicationtype }, { "programyear", appDocResponse.programyear } });
                     }
-
                 }
-               
-                JObject changeRequestSummaryDocumentResult = JObject.Parse(changeRequestresponse.Content.ReadAsStringAsync().Result.ToString());
-                    JArray changeRequestSummaryDoc = new JArray();
-                    changeRequestSummaryDoc = changeRequestSummaryDocumentResult["value"].ToObject<JArray>();
-                    if (changeRequestSummaryDoc.Count > 0)
-                    {
-                        for (int i = 0; i < changeRequestSummaryDoc.Count; i++)
-                        {
-                            
 
-                            changeRequestDocResponse.filename = changeRequestSummaryDoc[i]["filename"].ToString();
-                            changeRequestDocResponse.annotationid = changeRequestSummaryDoc[i]["annotationid"].ToString();
-                            changeRequestDocResponse.id = changeRequestSummaryDoc[i]["cr.ccof_name"].ToString();
-                            changeRequestDocResponse.uploadedon = changeRequestSummaryDoc[i]["cs.createdon"].ToString();
+                JObject changeRequestSummaryDocumentResult = JObject.Parse(changeRequestresponse.Content.ReadAsStringAsync().Result.ToString());
+                JArray changeRequestSummaryDoc = new JArray();
+                changeRequestSummaryDoc = changeRequestSummaryDocumentResult["value"].ToObject<JArray>();
+                if (changeRequestSummaryDoc.Count > 0)
+                {
+                    for (int i = 0; i < changeRequestSummaryDoc.Count; i++)
+                    {
+
+
+                        changeRequestDocResponse.filename = changeRequestSummaryDoc[i]["filename"].ToString();
+                        changeRequestDocResponse.annotationid = changeRequestSummaryDoc[i]["annotationid"].ToString();
+                        changeRequestDocResponse.id = changeRequestSummaryDoc[i]["cr.ccof_name"].ToString();
+                        changeRequestDocResponse.uploadedon = changeRequestSummaryDoc[i]["cs.createdon"].ToString();
                         if (changeRequestSummaryDoc[i]["cr.ccof_changetypes"].ToString() == "100000007")
                         {
                             changeRequestDocResponse.applicationtype = "MTFI";
-                        
                         }
                         else
                         {
                             changeRequestDocResponse.applicationtype = "Change Request";
-
                         }
-                           
-                            changeRequestDocResponse.programyear = changeRequestSummaryDoc[i]["cr.ccof_program_year@OData.Community.Display.V1.FormattedValue"].ToString();
+
+                        changeRequestDocResponse.programyear = changeRequestSummaryDoc[i]["cr.ccof_program_year@OData.Community.Display.V1.FormattedValue"].ToString();
                         finalResult.Add(new JObject { { "filename", changeRequestDocResponse.filename }, { "annotationid", changeRequestDocResponse.annotationid }, { "id", changeRequestDocResponse.id }, { "uploadedon", changeRequestDocResponse.uploadedon }, { "applicationtype", changeRequestDocResponse.applicationtype }, { "programyear", changeRequestDocResponse.programyear } });
                     }
-                   
                 }
-
 
                 return Ok(finalResult);
 
             }
-            
+
             else
                 return StatusCode((int)applicationResponse.StatusCode,
                     $"Failed to Retrieve records: {applicationResponse.ReasonPhrase}");
-
-
         }
-    
-       
     }
 }
 

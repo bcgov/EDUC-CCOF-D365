@@ -1,25 +1,18 @@
-﻿using CCOF.Infrastructure.WebAPI.Services;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CCOF.Infrastructure.WebAPI.Services
 {
     public interface ID365WebAPIService
     {
-        HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 200);
-        HttpResponseMessage SendCreateRequestAsync(string endPoint, string content);
-        HttpResponseMessage SendCreateRequestAsyncRtn(string endPoint, string content);
-        HttpResponseMessage SendCreateRequestAsync(HttpMethod httpMethod, string entitySetName, string body);
-        HttpResponseMessage SendDeleteRequestAsync(string endPoint);
-        HttpResponseMessage SendUpdateRequestAsync(string endPoint, string content);
-        HttpResponseMessage SendMessageAsync(HttpMethod httpMethod, string messageUri);
-        HttpResponseMessage SendSearchRequestAsync(string body);
+        Task<HttpResponseMessage> SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 200);
+        Task<HttpResponseMessage> SendCreateRequestAsync(string endPoint, string content);
+        Task<HttpResponseMessage> SendCreateRequestAsyncRtn(string endPoint, string content);
+        Task<HttpResponseMessage> SendCreateRequestAsync(HttpMethod httpMethod, string entitySetName, string body);
+        Task<HttpResponseMessage> SendDeleteRequestAsync(string endPoint);
+        Task<HttpResponseMessage> SendUpdateRequestAsync(string endPoint, string content);
+        Task<HttpResponseMessage> SendMessageAsync(HttpMethod httpMethod, string messageUri);
+        Task<HttpResponseMessage> SendSearchRequestAsync(string body);
     }
 
     public class D365WebAPIService : ID365WebAPIService
@@ -31,62 +24,65 @@ namespace CCOF.Infrastructure.WebAPI.Services
             _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
 
-        public HttpResponseMessage SendRetrieveRequestAsync(string query, Boolean formatted = false, int maxPageSize = 200)
+        public async Task<HttpResponseMessage> SendRetrieveRequestAsync(string query, Boolean formatted = false, int maxPageSize = 200)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, query);
             request.Headers.Add("Prefer", "odata.maxpagesize=" + maxPageSize.ToString());
             if (formatted)
                 request.Headers.Add("Prefer", "odata.include-annotations=OData.Community.Display.V1.FormattedValue");
 
-            var client = _authenticationService.GetHttpClient().Result;
+            var client = await _authenticationService.GetHttpClient();
 
-            return client.SendAsync(request).Result;
+            return await client.SendAsync(request);
         }
 
-        public HttpResponseMessage SendCreateRequestAsync(string endPoint, string content)
+        public async Task<HttpResponseMessage> SendCreateRequestAsync(string endPoint, string content)
         {
-            return SendAsync(HttpMethod.Post, endPoint, content);
+            return await SendAsync(HttpMethod.Post, endPoint, content);
         }
 
-        public HttpResponseMessage SendCreateRequestAsyncRtn(string endPoint, string content)
+        public async Task<HttpResponseMessage> SendCreateRequestAsyncRtn(string endPoint, string content)
         {
-            return SendAsyncRtn(HttpMethod.Post, endPoint, content);
+            return await SendAsyncRtn(HttpMethod.Post, endPoint, content);
         }
 
-        public HttpResponseMessage SendUpdateRequestAsync(string endPoint, string body)
+        public async Task<HttpResponseMessage> SendUpdateRequestAsync(string endPoint, string body)
         {
             var message = new HttpRequestMessage(HttpMethod.Patch, endPoint);
             message.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var client = _authenticationService.GetHttpClient().Result;
-            return client.SendAsync(message).Result;
+            var client = await _authenticationService.GetHttpClient();
+
+            return await client.SendAsync(message);
         }
 
-        public HttpResponseMessage SendDeleteRequestAsync(string endPoint)
+        public async Task<HttpResponseMessage> SendDeleteRequestAsync(string endPoint)
         {
-            return _authenticationService.GetHttpClient().Result.DeleteAsync(endPoint).Result;
+            var client = await _authenticationService.GetHttpClient();
+
+            return await client.DeleteAsync(endPoint);
         }
 
-        public HttpResponseMessage SendCreateRequestAsync(HttpMethod httpMethod, string entitySetName, string body)
+        public async Task<HttpResponseMessage> SendCreateRequestAsync(HttpMethod httpMethod, string entitySetName, string body)
         {
             var message = new HttpRequestMessage(httpMethod, entitySetName);
             message.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var client = _authenticationService.GetHttpClient().Result;
+            var client = await _authenticationService.GetHttpClient();
 
-            return client.SendAsync(message).Result;
+            return await client.SendAsync(message);
         }
 
-        public HttpResponseMessage SendMessageAsync(HttpMethod httpMethod, string messageUri)
+        public async Task<HttpResponseMessage> SendMessageAsync(HttpMethod httpMethod, string messageUri)
         {
-            var client = _authenticationService.GetHttpClient().Result;
             HttpRequestMessage message = new(httpMethod, messageUri);
 
-            // Send the message to the WebAPI. 
-            return client.SendAsync(message).Result;
+            var client = await _authenticationService.GetHttpClient();
+
+            return await client.SendAsync(message);
         }
 
-        public HttpResponseMessage SendSearchRequestAsync(string body)
+        public async Task<HttpResponseMessage> SendSearchRequestAsync(string body)
         {
             var message = new HttpRequestMessage()
             {
@@ -94,28 +90,30 @@ namespace CCOF.Infrastructure.WebAPI.Services
             };
             message.Method = HttpMethod.Post;
 
-            var client = _authenticationService.GetHttpClient(isSearch: true).Result;
+            var client = await _authenticationService.GetHttpClient(isSearch: true);
 
-            return client.SendAsync(message).Result;
+            return await client.SendAsync(message);
         }
 
-        private HttpResponseMessage SendAsync(HttpMethod operation, string endPoint, string body)
+        private async Task<HttpResponseMessage> SendAsync(HttpMethod operation, string endPoint, string body)
         {
-            var message = new HttpRequestMessage(operation, endPoint)  ;
+            var message = new HttpRequestMessage(operation, endPoint);
             message.Content = new StringContent(body, Encoding.UTF8, "application/json");
             message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-            return _authenticationService.GetHttpClient().Result.SendAsync(message).Result;
+            var client = await _authenticationService.GetHttpClient();
+            return await client.SendAsync(message);
         }
 
-        private HttpResponseMessage SendAsyncRtn(HttpMethod operation, string endPoint, string body)
+        private async Task<HttpResponseMessage> SendAsyncRtn(HttpMethod operation, string endPoint, string body)
         {
             var message = new HttpRequestMessage(operation, endPoint);
             message.Content = new StringContent(body, Encoding.UTF8, "application/json");
             message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             message.Headers.Add("Prefer", "return=representation");
 
-            return _authenticationService.GetHttpClient().Result.SendAsync(message).Result;
+            var client = await _authenticationService.GetHttpClient();
+            return await client.SendAsync(message);
         }
     }
 }
