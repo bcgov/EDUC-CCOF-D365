@@ -92,10 +92,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     var body = System.Text.Json.JsonSerializer.Serialize(new { ccof_userid = userId });
                     HttpResponseMessage updateRespopnse = _d365webapiservice.SendUpdateRequestAsync(statement, body);
 
-                    if (!updateRespopnse.IsSuccessStatusCode)
-                    {
-                        Console.WriteLine(StatusCode((int)response.StatusCode));
-                    }
+                    
                 }
 
                 if (records != null && records[0][0]["Organization.accountid"] == null) { return NotFound("No profiles."); }
@@ -155,5 +152,6 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
             }
             return applicationJson;
         }
+       
     }
 }
