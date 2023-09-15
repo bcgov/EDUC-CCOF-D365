@@ -117,7 +117,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         appDocResponse.applicationtype = appSummaryDoc[i]["app.ccof_applicationtype@OData.Community.Display.V1.FormattedValue"].ToString();
                         appDocResponse.programyear = appSummaryDoc[i]["app.ccof_programyear@OData.Community.Display.V1.FormattedValue"].ToString();
                      
-                        finalResult.Add(new JObject { { "filename", appDocResponse.filename }, { "annotationid", appDocResponse.annotationid }, { "id", appDocResponse.id } , { "uploadedon", appDocResponse.uploadedon } , { "applicationtype", appDocResponse.applicationtype } , { "programyear", appDocResponse.programyear } });
+                        finalResult.Add(new JObject { { "filename", appDocResponse.filename }, { "annotationid", appDocResponse.annotationid }, { "id", appDocResponse.id } , { "submissiondate", appDocResponse.uploadedon } , { "type", appDocResponse.applicationtype } , { "fiscalyear", appDocResponse.programyear } });
                     }
 
                 }
@@ -147,7 +147,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         }
                            
                             changeRequestDocResponse.programyear = changeRequestSummaryDoc[i]["cr.ccof_program_year@OData.Community.Display.V1.FormattedValue"].ToString();
-                        finalResult.Add(new JObject { { "filename", changeRequestDocResponse.filename }, { "annotationid", changeRequestDocResponse.annotationid }, { "id", changeRequestDocResponse.id }, { "uploadedon", changeRequestDocResponse.uploadedon }, { "applicationtype", changeRequestDocResponse.applicationtype }, { "programyear", changeRequestDocResponse.programyear } });
+                        finalResult.Add(new JObject { { "filename", changeRequestDocResponse.filename }, { "annotationid", changeRequestDocResponse.annotationid }, { "id", changeRequestDocResponse.id }, { "submissiondate", changeRequestDocResponse.uploadedon }, { "type", changeRequestDocResponse.applicationtype }, { "fiscalyear", changeRequestDocResponse.programyear } });
                     }
                    
                 }
