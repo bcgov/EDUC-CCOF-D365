@@ -143,7 +143,7 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
 
             // A simple way to remove unwanted attributes
             var userProfileString = JsonConvert.SerializeObject(dynUserProfile);
-            UserProfile userProfile = System.Text.Json.JsonSerializer.Deserialize<UserProfile>(userProfileString);
+            FiscalUserProfile userProfile = System.Text.Json.JsonSerializer.Deserialize<FiscalUserProfile>(userProfileString);
 
             return userProfile;
         }

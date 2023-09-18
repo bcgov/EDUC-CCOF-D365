@@ -126,25 +126,24 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
             if (applicationResponse.IsSuccessStatusCode)
             {
                 dynamic jResult1 = JObject.Parse(applicationResponse.Content.ReadAsStringAsync().Result);
-                JArray applicationArray = new JArray();
+              
                 dynamic appWithECEWE = null;
                 dynamic appwithCCOF = null;
                 dynamic appwithCCFRI = null;
                 dynamic appWithCR = null;
-                applicationArray = jResult1["value"].ToObject<JArray>();
-                dynUserProfile.application = jResult1.value;
-                for (int i = 0; i < applicationArray.Count; i++)
-                {
-                     appWithCR = AppendChangeRequests(applicationArray[i], applicationArray[i]["ccof_applicationid"].ToString());
-                     appWithECEWE = AppendApplicationECEWE(applicationArray[i], applicationArray[i]["ccof_applicationid"].ToString());
-                    appwithCCOF = AppendApplicationCCOF(applicationArray[i], applicationArray[i]["ccof_applicationid"].ToString());
-                     appwithCCFRI = AppendApplicationCCFRI(applicationArray[i], applicationArray[i]["ccof_applicationid"].ToString());
-                  
-                    dynUserProfile.application[i] = appWithCR;
-                    dynUserProfile.application[i] = appWithECEWE;
-                    dynUserProfile.application[i] = appwithCCOF;
-                    dynUserProfile.application[i] = appwithCCFRI;
-                }
+                
+
+                appWithECEWE = AppendApplicationECEWE(jResult1.value[0], token["Application.ccof_applicationid"].ToString());
+                dynUserProfile.application = appWithECEWE;
+                appwithCCOF = AppendApplicationCCOF(appWithECEWE, token["Application.ccof_applicationid"].ToString());
+                dynUserProfile.application = appwithCCOF;
+                appwithCCFRI = AppendApplicationCCFRI(appwithCCOF, token["Application.ccof_applicationid"].ToString());
+                dynUserProfile.application = appwithCCFRI;
+                appWithCR = AppendChangeRequests(appwithCCFRI, token["Application.ccof_applicationid"].ToString());
+                dynUserProfile.application = appWithCR;
+
+                
+               
                    
             }
 

@@ -30,6 +30,35 @@ namespace CCOF.Infrastructure.WebAPI.Models
 
         public Facility[]? facilities { get; set; }
 
+        public Application? application { get; set; }
+    }
+    public class FiscalUserProfile
+    {
+        public string? ccof_username { get; set; }
+
+        public string? ccof_userid { get; set; }
+
+        [JsonPropertyName("Organization.accountid")]
+
+        public string? organization_accountid { get; set; }
+        [JsonPropertyName("Organization.accountnumber")]
+
+        public string? organization_accountnumber { get; set; }
+
+        [JsonPropertyName("Organization.name")]
+        public string? organization_name { get; set; }
+
+        [JsonPropertyName("Organization.ccof_fundingagreementnumber")]
+        public string? organization_ccof_fundingagreementnumber { get; set; }
+
+        [JsonPropertyName("Organization.ccof_contractstatus")]
+        public int? organization_ccof_contractstatus { get; set; }
+
+        [JsonPropertyName("Organization.ccof_formcomplete")]
+        public bool? organization_ccof_formcomplete { get; set; }
+
+        public Facility[]? facilities { get; set; }
+
         public Application[]? application { get; set; }
     }
 
