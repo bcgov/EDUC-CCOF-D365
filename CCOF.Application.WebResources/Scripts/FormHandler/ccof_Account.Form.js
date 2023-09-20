@@ -1,4 +1,4 @@
-﻿// A webresource for BaseFunding only
+// A webresource for BaseFunding only
 
 //Create Namespace Object if its defined
 var Account = Account || {};
@@ -17,6 +17,7 @@ Account.OrgFacility.Form = {
 
             case 2: // update                           
                 this.getTypeOfForm();
+				this.setFilterXml_ParentFeeGrid(executionContext);				
                 break;
             case 3: //readonly
                 break;
@@ -65,5 +66,92 @@ Account.OrgFacility.Form = {
                 }//endif
             } //end for
         }
+    },
+	
+    setFilterXml_ParentFeeGrid: function (executionContext) {
+
+		var formContext = executionContext.getFormContext();
+        var subgrid_A = formContext.getControl("Subgrid_EstimatorParentFees");
+        var subgrid_B = formContext.getControl("Subgrid_InternalParentFeesHistory");		
+
+        var currentRecordId = formContext.data.entity.getId();		
+
+		//set up the query to retrieve record IDs of Program Year entity (for last 2 Fiscal)
+		var programYearFetchXml = [
+			"<fetch top='3' version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+			" <entity name='ccof_program_year'>",
+			"	<attribute name='ccof_program_yearid' />",
+			"	<attribute name='ccof_name' />",
+			"	<attribute name='statuscode' />",
+			"	<attribute name='ccof_previousyear' />",
+			"	<attribute name='ccof_intakeperiodstart' />",
+			"	<attribute name='ccof_programyearnumber' />",
+			"	<order attribute='ccof_programyearnumber' descending='true' />",
+			"	<filter type='and'>",
+			"	  <condition attribute='statecode' operator='eq' value='0' />",
+			"	  <condition attribute='statuscode' operator='in'>",
+			"		<value>1</value>",
+			"		<value>3</value>",
+			"		<value>4</value>",	
+			"	  </condition>",
+			"	</filter>",
+			"  </entity>",
+			"</fetch>"
+		].join("");	
+		
+		//query the records of Program Year
+		Xrm.WebApi.retrieveMultipleRecords("ccof_program_year", "?fetchXml=" + encodeURIComponent(programYearFetchXml)).then(
+			function(results) {
+				var FilteredList_ProgramYear = results.entities.map(
+					function(r) { 
+						return ("<value>" + r.ccof_program_yearid + "</value>");
+					}).join("");
+				
+				//compose query and refresh the grid - "Estimator Parent Fees"
+				var fetchXml_A = [
+					"<fetch version='1.0' mapping='logical' distinct='true' no-lock='false' >",
+					"  <entity name='ccof_parent_fees' >",
+					"	<filter type='and' >",
+					"	  <condition attribute='statecode' operator='eq' value='0' />",
+					"	  <condition attribute='ccof_availability' operator='in'>",
+					"		 <value>100000001</value>",
+					"		 <value>100000002</value>",
+					"	  </condition>",			
+					"	  <condition attribute='statuscode' operator='eq' value='1' />",
+					"     <condition attribute='ccof_programyear' operator='in' uitype='ccof_program_year' >",
+                             FilteredList_ProgramYear,
+					"     </condition>",
+					"	  <condition attribute='ccof_facility' operator='eq' value='",currentRecordId, "uitype='account' />",
+					"	</filter>",
+					"  </entity>",
+					"</fetch>"
+				].join("");
+				
+				subgrid_A.setFilterXml(fetchXml_A);
+				subgrid_A.refresh();
+				
+				//compose query and refresh the grid - "Internal Parent Fees History"
+				var fetchXml_B = [
+					"<fetch version='1.0' mapping='logical' distinct='true' no-lock='false' >",
+					"  <entity name='ccof_parent_fees' >",
+					"	<filter type='and' >",
+					"	  <condition attribute='statecode' operator='eq' value='0' />",
+					"	  <condition attribute='ccof_availability' operator='ne' value='100000001' />",
+					"	  <condition attribute='statuscode' operator='eq' value='1' />",
+					"     <condition attribute='ccof_programyear' operator='in' uitype='ccof_program_year' >",
+                             FilteredList_ProgramYear,
+					"     </condition>",
+					"	  <condition attribute='ccof_facility' operator='eq' value='",currentRecordId, "uitype='account' />",
+					"	</filter>",
+					"  </entity>",
+					"</fetch>"
+				].join("");				
+
+				subgrid_B.setFilterXml(fetchXml_B);
+				subgrid_B.refresh();
+				
+			}, 
+			Xrm.Navigation.openErrorDialog);
     }
+
 };
