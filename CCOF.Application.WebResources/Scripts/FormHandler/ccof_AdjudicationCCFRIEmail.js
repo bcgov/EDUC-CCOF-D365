@@ -40,9 +40,9 @@ AdjCCFRI.SubGrid = {
             Xrm.Navigation.openAlertDialog("There are no Primary Bceid info,Data error!");
             return;
         }
-        if (bceidInfo["primarycontactid"]["emailaddress1"] === null||!ValidateEmail(bceidInfo["primarycontactid"]["emailaddress1"])) {
+        if (bceidInfo["primarycontactid"]["emailaddress1"] === null || !ValidateEmail(bceidInfo["primarycontactid"]["emailaddress1"])) {
             formContext.ui.clearFormNotification("CreatingEmails");
-            Xrm.Navigation.openAlertDialog("Primary Email address is illegle!");
+            Xrm.Navigation.openAlertDialog("Primary Email address is illegal!");
             return;
         }
         // Xrm.Utility.showProgressIndicator("Creating draft email...")
