@@ -264,6 +264,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
     {
         public string subject { get; set; }
         public string filename { get; set; }
+        public string filesize { get; set; }
         public string annotationid { get; set; }
         public string applicationFacilityDocumentId { get; set; }
     }
@@ -271,6 +272,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
     {
       
         public string filename { get; set; }
+        public string filesize { get; set; }
         public string annotationid { get; set; }
         public string id { get; set; }
         public string uploadedon { get; set; }
@@ -281,6 +283,8 @@ namespace CCOF.Infrastructure.WebAPI.Models
     public class ChangeRequestDocumentResponse
     {
         public string filename { get; set; }
+
+        public string filesize { get; set; }
         public string annotationid { get; set; }
         public string id { get; set; }
         public string uploadedon { get; set; }

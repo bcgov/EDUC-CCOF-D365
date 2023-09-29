@@ -111,13 +111,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         
 
                         appDocResponse.filename = appSummaryDoc[i]["filename"].ToString();
+                        appDocResponse.filesize = appSummaryDoc[i]["filesize"].ToString();
                         appDocResponse.annotationid = appSummaryDoc[i]["annotationid"].ToString();
                         appDocResponse.id = appSummaryDoc[i]["app.ccof_name"].ToString();
                         appDocResponse.uploadedon = appSummaryDoc[i]["as.createdon"].ToString();
                         appDocResponse.applicationtype = appSummaryDoc[i]["app.ccof_applicationtype@OData.Community.Display.V1.FormattedValue"].ToString();
                         appDocResponse.programyear = appSummaryDoc[i]["app.ccof_programyear@OData.Community.Display.V1.FormattedValue"].ToString();
                      
-                        finalResult.Add(new JObject { { "filename", appDocResponse.filename }, { "annotationid", appDocResponse.annotationid }, { "id", appDocResponse.id } , { "submissiondate", appDocResponse.uploadedon } , { "type", appDocResponse.applicationtype } , { "fiscalyear", appDocResponse.programyear } });
+                        finalResult.Add(new JObject { { "filename", appDocResponse.filename }, { "filesize", appDocResponse.filesize }, { "annotationid", appDocResponse.annotationid }, { "id", appDocResponse.id } , { "submissiondate", appDocResponse.uploadedon } , { "type", appDocResponse.applicationtype } , { "fiscalyear", appDocResponse.programyear } });
                     }
 
                 }
@@ -132,7 +133,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             
 
                             changeRequestDocResponse.filename = changeRequestSummaryDoc[i]["filename"].ToString();
-                            changeRequestDocResponse.annotationid = changeRequestSummaryDoc[i]["annotationid"].ToString();
+                        changeRequestDocResponse.filesize = changeRequestSummaryDoc[i]["filesize"].ToString();
+                        changeRequestDocResponse.annotationid = changeRequestSummaryDoc[i]["annotationid"].ToString();
                             changeRequestDocResponse.id = changeRequestSummaryDoc[i]["cr.ccof_name"].ToString();
                             changeRequestDocResponse.uploadedon = changeRequestSummaryDoc[i]["cs.createdon"].ToString();
                         if (changeRequestSummaryDoc[i]["cr.ccof_changetypes"].ToString() == "100000007")
@@ -147,7 +149,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         }
                            
                             changeRequestDocResponse.programyear = changeRequestSummaryDoc[i]["cr.ccof_program_year@OData.Community.Display.V1.FormattedValue"].ToString();
-                        finalResult.Add(new JObject { { "filename", changeRequestDocResponse.filename }, { "annotationid", changeRequestDocResponse.annotationid }, { "id", changeRequestDocResponse.id }, { "submissiondate", changeRequestDocResponse.uploadedon }, { "type", changeRequestDocResponse.applicationtype }, { "fiscalyear", changeRequestDocResponse.programyear } });
+                        finalResult.Add(new JObject { { "filename", changeRequestDocResponse.filename }, { "filesize", changeRequestDocResponse.filesize }, { "annotationid", changeRequestDocResponse.annotationid }, { "id", changeRequestDocResponse.id }, { "submissiondate", changeRequestDocResponse.uploadedon }, { "type", changeRequestDocResponse.applicationtype }, { "fiscalyear", changeRequestDocResponse.programyear } });
                     }
                    
                 }
