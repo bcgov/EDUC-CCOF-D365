@@ -58,20 +58,31 @@ CCOF.ChangeActionMTFI.Calculation = {
                 "3Y-K": MediansFee['3Y-K_Per10'],
                 "OOSC-G": MediansFee['OOSC-G_Per10']
             }
+            InitialTotalAllowableStagePolicy = {
+                "0-18": FacilityAmountAllowedRecords[0]['ccof_0to18months'],
+                "18-36": FacilityAmountAllowedRecords[0]['ccof_18to36months'],
+                "PRE": FacilityAmountAllowedRecords[0]['ccof_preschool'] ,
+                "OOSC-K": FacilityAmountAllowedRecords[0]['ccof_outofschoolcarekindergarten'],
+                "3Y-K": FacilityAmountAllowedRecords[0]['ccof_3yearstokindergarten'],
+                "OOSC-G": FacilityAmountAllowedRecords[0]['ccof_outofschoolcaregrade1']
+            }
             var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
             var ifCalculateInitial = true;  // not equal Stage 1 (NRC)
-            if (FeeIncreaseDetails.length === 0 || ccfriFacilityQCDecision != 100000002) {
+            if (FeeIncreaseDetails.length === 0) {
                 ifCalculateInitial = false;
             } else {
-                for (let i in FeeIncreaseDetails)
-                    if (InitialTotalAllowableStagePolicy[FeeIncreaseDetails[i]['ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] === null) {
-
-                        ifCalculateInitial = false;
-
+                if (ccfriFacilityQCDecision != 100000002) {
+                    for (let i in FeeIncreaseDetails) {
+                        var ccofname = FeeIncreaseDetails[i]["ccof_name"]
+                        var category = FeeIncreaseDetails[i]["_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue"];
+                        if (InitialTotalAllowableStagePolicy[category] === null) {
+                            ifCalculateInitial = false;
+                        }
                     }
+                }
             }
             if (!ifCalculateInitial) {
-                Xrm.Navigation.openAlertDialog(" Please check CCFRI QC Decision or Total Allowable Fee Increase to make sure there are not blank", alertOptions);
+                Xrm.Navigation.openAlertDialog("The Initial Adjudication is not in Stage 1, the Allowable Fee Increase must not be blank", alertOptions);
                 return;
             }
             InitialTotalAllowableStagePolicy = {
@@ -148,6 +159,9 @@ CCOF.ChangeActionMTFI.Calculation = {
                 } else {
                     Xrm.Navigation.openAlertDialog(" MTFI will not be calculated as Fee Increase Amount is missing! or No Fee Increase Amount data need to be calculated! ", alertOptions);
                 }
+            }
+            else {
+                Xrm.Navigation.openAlertDialog(" MTFI will not be calculated as Fee Increase Amount is missing! or No Fee Increase Amount data need to be calculated! ", alertOptions);
             }
         }
         catch (err) {
@@ -938,7 +952,7 @@ function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords
                 stage2_outofschoolcaregrade1 = FacilityAmountAllowedRecords[i]['ccof_outofschoolcaregrade1'];
             }
             //Used Carried Forward Amounts / or MTFI:Unused Expenses or MTFI Unused in Approved
-            else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Used Carried Forward Amounts") {
+            else if (FacilityAmountAllowedRecords[i]['ccof_stage3policy@OData.Community.Display.V1.FormattedValue'] == "Unused Carried Forward Amounts") {
                 var UsedCarriedForwardAmounts = {
                     "ccof_0to18months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('0-18') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['0-18']['MTFI Unused']) : 0,
                     "ccof_18to36months": (returnValue['AmountApprovedPerCategory'].hasOwnProperty('18-36') == true) ? parseFloat(returnValue['AmountApprovedPerCategory']['18-36']['MTFI Unused']) : 0,
