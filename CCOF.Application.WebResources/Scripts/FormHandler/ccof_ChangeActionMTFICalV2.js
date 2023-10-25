@@ -227,9 +227,10 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
     // var OrgType = regionInfo['ccof_Application']['ccof_providertype@OData.Community.Display.V1.FormattedValue'];   //"Group" or Family
     var SDA = regionInfo['_ccof_region_value@OData.Community.Display.V1.FormattedValue']; //"North Fraser";
     // var Programyear = regionInfo['ccof_Application']['_ccof_programyear_value@OData.Community.Display.V1.FormattedValue']; //"2022/23";
-    var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];
+    var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];   
     // C33 of Stage 3 Calculator is from CRM Limit Fees to NMF Benchmark  (toggle) 
-    var DilutionCap = expenseInfo['MEFI Cap']; // CRM MEFI Cap (toggle) //B7  ?? need confirm 
+
+    //var DilutionCap = expenseInfo['MEFI Cap']; // CRM MEFI Cap (toggle) //B7  ?? need confirm  // comment it Oct 24, 2023
     var InitalCalculation_DilutionCap = true;  // B7 of Calculations
     var TotalAllowedExpenses = 0; //B13 Total Allowed Expenses
     var AllowedExpensesLessExpenses = true;// B14 Allowed Expenses less than or equal to expenses
@@ -793,7 +794,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         else {
             let TotalApprovable;
             // Updated Oct 19, 2023
-            entity['Max Approvable'] = (FacilityInfo[i]['AverageEnrollment'] === 0) ? 0 : (InitalCalculation[FacilityInfo[i]['CareCategory']]['FINAL APPROVABLE'] - InitialTotalAllowableStagePolicy[Category]);
+            entity['Max Approvable'] = (FacilityInfo[i]['AverageEnrollment'] === 0) ? 0 : parseFloat((InitalCalculation[FacilityInfo[i]['CareCategory']]['FINAL APPROVABLE'] - InitialTotalAllowableStagePolicy[Category])).toFixed(2);
             //if ((newModifiedQCDecision == 100000001 || newModifiedQCDecision == 100000002) && TotalMonthlyExpenses == 0) {
             //    entity['Max Approvable'] = (FacilityInfo[i]['AverageEnrollment'] === 0) ? 0 : 0;
             //}
