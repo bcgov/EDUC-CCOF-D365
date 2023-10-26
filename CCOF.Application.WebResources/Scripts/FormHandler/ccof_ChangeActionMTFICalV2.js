@@ -334,7 +334,9 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
                 tempAllowances['3% Allowable Fee Increase'] = 0;
             }
             else {
-                tempAllowances['3% Allowable Fee Increase'] = MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']];
+                // updated logic based on ticket 2978
+               // tempAllowances['3% Allowable Fee Increase'] = MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']] ?;
+                tempAllowances['3% Allowable Fee Increase'] = ((MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']]) < 0) ? 0 : (MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']]);
             }
 
         }
@@ -807,7 +809,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
             entity['CummulativeAmount'] = entity['Max Approvable'] + parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2));
             TotalApprovable = (TotalMonthlyExpenses == 0 && (newModifiedQCDecision == 100000001 || newModifiedQCDecision == 100000002)) ? 0 : entity['CummulativeAmount'] <= parseFloat(Initialstage2capammount[Category].toFixed(2)) ? InitalCalculation[FacilityInfo[i]['CareCategory']]['FINAL APPROVABLE'] - InitialTotalAllowableStagePolicy[Category] >= 0 ? InitalCalculation[FacilityInfo[i]['CareCategory']]['FINAL APPROVABLE'] - InitialTotalAllowableStagePolicy[Category] : 0 : (parseFloat(Initialstage2capammount[Category].toFixed(2)) - parseFloat(InitialTotalAllowableStagePolicy[Category].toFixed(2)));
             entity['Full Request Approvable?'] = (entity['Requested Fee Increase'] <= TotalApprovable) ? true : false;
-            resultString = resultString + " " + FacilityInfo[i]['CareCategory'] + ": $" + TotalApprovable;
+            resultString = resultString + " " + FacilityInfo[i]['CareCategory'] + ": $" + parseFloat(TotalApprovable).toFixed(2);
         }
 
         CheckFullRequestApprovable = CheckFullRequestApprovable && entity['Full Request Approvable?'];
