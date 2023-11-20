@@ -61,27 +61,12 @@ CCOF.ChangeActionMTFI.Calculation = {
             InitialTotalAllowableStagePolicy = {
                 "0-18": FacilityAmountAllowedRecords[0]['ccof_0to18months'],
                 "18-36": FacilityAmountAllowedRecords[0]['ccof_18to36months'],
-                "PRE": FacilityAmountAllowedRecords[0]['ccof_preschool'] ,
+                "PRE": FacilityAmountAllowedRecords[0]['ccof_preschool'],
                 "OOSC-K": FacilityAmountAllowedRecords[0]['ccof_outofschoolcarekindergarten'],
                 "3Y-K": FacilityAmountAllowedRecords[0]['ccof_3yearstokindergarten'],
                 "OOSC-G": FacilityAmountAllowedRecords[0]['ccof_outofschoolcaregrade1']
             }
-            var FeeIncreaseDetails = getSyncMultipleRecord("ccof_ccfri_facility_parent_fees?$select=_ccof_adjudicationccfrifacility_value,ccof_averageenrolment,_ccof_childcarecategory_value,ccof_cumulativefeeincrease,ccof_feebeforeincrease,ccof_feeincreasetype,ccof_name,_ccof_programyear_value&$filter=(_ccof_adjudicationccfrifacility_value eq " + getCleanedGuid(entityId) + " and ccof_feebeforeincrease ne 'N/A')&$orderby=_ccof_childcarecategory_value asc");
-            var ifCalculateInitial = true;  // not equal Stage 1 (NRC)
-            if (FeeIncreaseDetails.length === 0) {
-                ifCalculateInitial = false;
-            } else {
-                if (ccfriFacilityQCDecision != 100000002) {
-                    for (let i in FeeIncreaseDetails) {
-                        var ccofname = FeeIncreaseDetails[i]["ccof_name"]
-                        var category = FeeIncreaseDetails[i]["_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue"];
-                        if (InitialTotalAllowableStagePolicy[category] === null) {
-                            ifCalculateInitial = false;
-                        }
-                    }
-                }
-            }
-            if (!ifCalculateInitial) {
+            if (ccfriFacilityQCDecision != 100000002) { // not equal Stage 1 (NRC)
                 Xrm.Navigation.openAlertDialog("The Initial Adjudication is not in Stage 1, the Allowable Fee Increase must not be blank", alertOptions);
                 return;
             }
@@ -227,7 +212,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
     // var OrgType = regionInfo['ccof_Application']['ccof_providertype@OData.Community.Display.V1.FormattedValue'];   //"Group" or Family
     var SDA = regionInfo['_ccof_region_value@OData.Community.Display.V1.FormattedValue']; //"North Fraser";
     // var Programyear = regionInfo['ccof_Application']['_ccof_programyear_value@OData.Community.Display.V1.FormattedValue']; //"2022/23";
-    var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];   
+    var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];
     // C33 of Stage 3 Calculator is from CRM Limit Fees to NMF Benchmark  (toggle) 
 
     //var DilutionCap = expenseInfo['MEFI Cap']; // CRM MEFI Cap (toggle) //B7  ?? need confirm  // comment it Oct 24, 2023
@@ -335,7 +320,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
             }
             else {
                 // updated logic based on ticket 2978
-               // tempAllowances['3% Allowable Fee Increase'] = MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']] ?;
+                // tempAllowances['3% Allowable Fee Increase'] = MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']] ?;
                 tempAllowances['3% Allowable Fee Increase'] = ((MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']]) < 0) ? 0 : (MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per3')] - InitialTotalAllowableStagePolicy[FacilityInfo[i]['CareCategory']]);
             }
 
