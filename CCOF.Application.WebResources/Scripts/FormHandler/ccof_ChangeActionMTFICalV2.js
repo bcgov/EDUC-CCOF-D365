@@ -15,7 +15,8 @@ CCOF.ChangeActionMTFI.Calculation = {
             var ccfriFacilityInfo = getSyncSingleRecord("ccof_adjudication_ccfri_facilities(" + getCleanedGuid(entityId) + ")?$select=_ccof_applicationccfri_value,ccof_totalexpenses_exceptionalcircumstances,ccof_totalexpenses_priorityserviceexpansion,ccof_totalexpenses_wageincrease,ccof_limitfeestonmfbenchmark,ccof_meficap,ccof_ccfriqcdecision,ccof_newmodifiedfacilityqcdecision&$expand=ccof_ProgramYear($select=ccof_programyearnumber)");
             var ccfriFacilityQCDecision = ccfriFacilityInfo['ccof_ccfriqcdecision'];
             var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount";
-            var ccfriFacilityAppCCFRI = ccfriFacilityInfo['_ccof_applicationccfri_value'];
+            // var ccfriFacilityAppCCFRI = ccfriFacilityInfo['_ccof_applicationccfri_value'];
+            var ccfriFacilityAppCCFRI = formContext.getAttribute("ccof_ccfri").getValue()[0].id; 
             var newModifiedQCDecision = ccfriFacilityInfo['ccof_newmodifiedfacilityqcdecision'];
             var programYearNumber = ccfriFacilityInfo['ccof_ProgramYear']['ccof_programyearnumber'];
             var MTFISequenceNumber = formContext.getAttribute("ccof_mtfi_sequence_number").getValue();
@@ -26,7 +27,8 @@ CCOF.ChangeActionMTFI.Calculation = {
             var alertOptions = { height: 240, width: 320 };
 
             // Get Region, Median, NMF
-            var regionInfo = getSyncSingleRecord("ccof_applicationccfris(" + getCleanedGuid(ccfriFacilityAppCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)");
+            // var regionInfo = getSyncSingleRecord("ccof_applicationccfris(" + getCleanedGuid(ccfriFacilityAppCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Application($select=ccof_applicationid,ccof_name,_ccof_programyear_value,ccof_providertype),ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)");
+            var regionInfo = getSyncSingleRecord("ccof_applicationccfris(" + getCleanedGuid(ccfriFacilityAppCCFRI) + ")?$select=ccof_applicationccfriid,_ccof_region_value&$expand=ccof_Region3PctMedian($select=ccof_0to18months,ccof_10percentageof0to18,ccof_10percentageof18to36,ccof_10percentageof3ytok,ccof_10percentageofoosctog,ccof_10percentageofoosctok,ccof_10percenatgeofpre,ccof_18to36months,ccof_3percentageof0to18,ccof_3percentageof18to36,ccof_3percentageof3ytok,_ccof_3percentmedian_value,ccof_3percentageofoosctog,ccof_3percentageofoosctok,ccof_3percentageofpre,ccof_3yearstokindergarten,ccof_name,ccof_outofschoolcaregrade1,ccof_outofschoolcarekindergarten,ccof_preschool),ccof_RegionNMFBenchmark($select=ccof_fee_benchmark_sdaid,ccof_0to18m,ccof_18to36m,ccof_3ytok,ccof_name,ccof_oosctograde,ccof_oosctok,ccof_preschool)");
             var MediansFee = // 10 MEFI from Median table based on SDA,Org,OrgType and Program year.
             {
                 "0-18": regionInfo['ccof_Region3PctMedian']['ccof_0to18months'],
@@ -66,10 +68,10 @@ CCOF.ChangeActionMTFI.Calculation = {
                 "3Y-K": FacilityAmountAllowedRecords[0]['ccof_3yearstokindergarten'],
                 "OOSC-G": FacilityAmountAllowedRecords[0]['ccof_outofschoolcaregrade1']
             }
-            if (ccfriFacilityQCDecision != 100000002) { // not equal Stage 1 (NRC)
-                Xrm.Navigation.openAlertDialog("The Initial Adjudication is not in Stage 1, the Allowable Fee Increase must not be blank", alertOptions);
-                return;
-            }
+            //if (ccfriFacilityQCDecision != 100000002) { // not equal Stage 1 (NRC)
+            //    Xrm.Navigation.openAlertDialog("The Initial Adjudication is not in Stage 1, the Allowable Fee Increase must not be blank", alertOptions);
+            //    return;
+            //}
             InitialTotalAllowableStagePolicy = {
                 "0-18": (FacilityAmountAllowedRecords[0]['ccof_0to18months'] === null) ? 0 : parseFloat(FacilityAmountAllowedRecords[0]['ccof_0to18months']),
                 "18-36": (FacilityAmountAllowedRecords[0]['ccof_18to36months'] === null) ? 0 : parseFloat(FacilityAmountAllowedRecords[0]['ccof_18to36months']),
