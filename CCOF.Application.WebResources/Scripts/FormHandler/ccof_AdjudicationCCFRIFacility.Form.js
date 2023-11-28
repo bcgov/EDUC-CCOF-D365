@@ -157,9 +157,15 @@ function onChange_ccfriadjudicatorrecommendation(executionContext) {
 }
 function onChange_temporaryapprovalstartdate(executionContext) {
 	setUserAndDate(executionContext, "ccof_decision_updatedbytempapprovalstart", "ccof_decision_updatedon_tempapprovalstart");
+	// handle Tempoary Approval Automation flag  // Nov 27.2023
+	var formContext = executionContext.getFormContext();
+	formContext.getAttribute("ccof_isautotempapproved").setValue(false);
 }
 function onChange_temporaryapprovaluntil(executionContext) {
 	setUserAndDate(executionContext, "ccof_updatedbytemporaryapprovaluntil", "ccof_updatedontemporaryapprovaluntil");
+	// handle Tempoary Approval Automation flag  // Nov 27.2023
+	var formContext = executionContext.getFormContext();
+	formContext.getAttribute("ccof_isautotempapproved").setValue(false);
 }
 function onChange_afcoccurred(executionContext) {
 	setUserAndDate(executionContext, "ccof_decision_updatedby_afcoccurred", "ccof_decision_updatedonafcoccurred");

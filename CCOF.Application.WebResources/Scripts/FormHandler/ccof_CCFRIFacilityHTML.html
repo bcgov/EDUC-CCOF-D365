@@ -32,14 +32,15 @@
                 var month = $("#month").val();
 
                 window.parent.Xrm.Page.getAttribute("ccof_eligibilitystartdate").setValue(month);
-
-                window.parent.Xrm.Page.getAttribute("ccof_eligibilitystartdate").setSubmitMode("always");}
+                window.parent.Xrm.Page.getAttribute("ccof_eligibilitystartdate").setSubmitMode("always");
+                // handle Tempoary Approval Automation flag  // Nov 27.2023
+                window.parent.Xrm.Page.getAttribute("ccof_isautotempapproved").setValue(false);
+            }
 
         }
         function OnloadSetYearBasedonProgramYear() {
 
-            if (window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue() != null)
-            {
+            if (window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue() != null) {
                 var currentApplicationYear = window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue()[0].name;
             }
 
@@ -60,7 +61,7 @@
                         if ($("#month").val() > 3) {
                             $("#year").val(currentYear);
                         }
-                        else if ($("#month").val() <= 3 && $("#month").val() != 0 ) {
+                        else if ($("#month").val() <= 3 && $("#month").val() != 0) {
                             $("#year").val(nextYear.toString());
 
                         }
