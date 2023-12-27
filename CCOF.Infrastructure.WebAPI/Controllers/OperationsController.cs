@@ -46,6 +46,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 if (filters?.IndexOf("&maxPageSize") > 0)
                     filters = filters?.Substring(0, filters.IndexOf("&maxPageSize")); //Remove MaxPagesize parameter
                 statement = $"{statement}&{filters}";
+
             }
 
             var response = _d365webapiservice.SendRetrieveRequestAsync(statement, true, maxPageSize);
