@@ -1,0 +1,126 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="/WebResources/ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="/WebResources/ccof_JQuery.min.js" type="text/javascript"></script>
+</head>
+
+<body onload="OnloadSetFundingAgreementNumYearBasedonProgramYear()" style="margin-top: -1%;">
+    <script type="text/javascript">
+        function OnloadSetFundingAgreementNumYearBasedonProgramYear() {
+            debugger;
+
+            if (window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue() != null) {
+                var programYearid = window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue()[0].id;
+                //if (programYearid != null) {
+                //    var programYear = getSyncSingleRecord("ccof_program_years(" + getCleanedGuid(programYearid) + ")");
+                //    // if programyear less 23/24 will set program year to 23/24
+                //    if (programYear != null && programYear['ccof_programyearnumber']<4) {
+                //        var programYearNum = getSyncMultipleRecord("ccof_program_years?$select=ccof_name,ccof_program_yearid&$filter=(ccof_programyearnumber eq 4)");
+                //        if (programYearNum != null && programYearNum.length > 0) {
+                //            programYearid = programYearNum[0]['ccof_program_yearid'];
+                //        }
+                //    }
+                //}
+            }
+            if (window.parent.Xrm.Page.getAttribute("ccof_organization").getValue() != null) {
+                var orgid = window.parent.Xrm.Page.getAttribute("ccof_organization").getValue()[0].id;
+
+            }
+            if (programYearid != null && orgid != null) {
+                var FundingAgreementNumbers = getSyncMultipleRecord("ccof_funding_agreements?$select=ccof_funding_agreementid,ccof_name,_ccof_organization_value,_ccof_programyear_value,ccof_contractstatus,ccof_version&$filter=(_ccof_organization_value eq '" + getCleanedGuid(orgid) + "' and _ccof_programyear_value eq '" + getCleanedGuid(programYearid) +"')&$orderby=ccof_version desc");
+                if (FundingAgreementNumbers!=null&&FundingAgreementNumbers.length > 0) {
+                    var fundingAgreementNumber = FundingAgreementNumbers[0]['ccof_name'];
+                    $(document).ready(function () {
+                        if (fundingAgreementNumber != null) {
+                            $("#fundingagreementnum").val(FundingAgreementNumbers[0]['ccof_name']);
+                            $("#contractstatus").val(FundingAgreementNumbers[0]['ccof_contractstatus@OData.Community.Display.V1.FormattedValue']);
+                        }
+                    });
+                }
+            }
+        }
+        function getCleanedGuid(id) {
+            return id.replace("{", "").replace("}", "");
+        }
+        function getSyncMultipleRecord(request) {
+            var result = null;
+            var req = new XMLHttpRequest();
+            req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + request, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        var results = JSON.parse(this.response);
+                        result = results.value;
+                    } else {
+                        Xrm.Utility.alertDialog(this.statusText);
+                    }
+                }
+            };
+            req.send();
+            return result;
+        }
+
+        function getSyncSingleRecord(request) {
+            var results = null;
+            var req = new XMLHttpRequest();
+            req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + request, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        var result = JSON.parse(this.response);
+                        results = result;
+                    }
+                    else {
+                        Xrm.Utility.alertDialog(this.statusText);
+                    }
+                }
+            };
+            req.send();
+            return results;
+        }
+    </script>
+
+    <style>
+        #fundingagreementnum {
+            border: none;
+            font-family: SegoeUI, "Segoe UI";
+            font-size: 14px;
+        }
+        #contractstatus {
+            border: none;
+            font-family: SegoeUI, "Segoe UI";
+            font-size: 14px;
+        }
+        label {
+            border-left: 5px;
+            font-size: 14px;
+            font-family: SegoeUI, "Segoe UI";
+        }
+    </style>
+    <div style="margin-left: 12px;">
+        <label>Funding Agreement Number</label>
+        <span style="margin-left: 5%;">
+            <input type="text" id="fundingagreementnum" name="fundingagreementnum" size="15" value="-------------" readonly />
+        </span>
+        <br />
+        <label>Contract Status</label>
+        <span style="margin-left: 10%;">
+            <input type="text" id="contractstatus" name="contractstatus" size="30" value="------------" readonly />
+        </span>
+    </div>
+</body>
+</html>
