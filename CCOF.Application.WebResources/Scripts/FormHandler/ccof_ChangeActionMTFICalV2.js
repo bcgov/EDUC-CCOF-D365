@@ -11,10 +11,10 @@ CCOF.ChangeActionMTFI.Calculation = {
             // INITIAL CALCULATION RECALCULATION
             var InitialTotalAllowableStagePolicy;
             var entityId = formContext.getAttribute("ccof_ccfri_facility").getValue()[0].id; // get parent record id
+            entityId = getCleanedGuid(entityId);  // 20240501 Richard
             var isMTFI = true;
             var ccfriFacilityInfo = getSyncSingleRecord("ccof_adjudication_ccfri_facilities(" + getCleanedGuid(entityId) + ")?$select=_ccof_applicationccfri_value,ccof_totalexpenses_exceptionalcircumstances,ccof_totalexpenses_priorityserviceexpansion,ccof_totalexpenses_wageincrease,ccof_limitfeestonmfbenchmark,ccof_meficap,ccof_ccfriqcdecision,ccof_newmodifiedfacilityqcdecision&$expand=ccof_ProgramYear($select=ccof_programyearnumber)");
             var ccfriFacilityQCDecision = ccfriFacilityInfo['ccof_ccfriqcdecision'];
-            var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount";
             // var ccfriFacilityAppCCFRI = ccfriFacilityInfo['_ccof_applicationccfri_value'];
             var ccfriFacilityAppCCFRI = formContext.getAttribute("ccof_ccfri").getValue()[0].id;
             var newModifiedQCDecision = ccfriFacilityInfo['ccof_newmodifiedfacilityqcdecision'];
@@ -22,8 +22,13 @@ CCOF.ChangeActionMTFI.Calculation = {
             var MTFISequenceNumber = formContext.getAttribute("ccof_mtfi_sequence_number").getValue();
             var MTFIUnusedExpenses = formContext.getAttribute("ccof_unused_carried_forward_amount").getValue();
             var currentMTFIentityId = formContext.data.entity.getId();
+            // Richard 20240501
+            currentMTFIentityId = getCleanedGuid(currentMTFIentityId);
             var MTFIappCCFRI = formContext.getAttribute("ccof_ccfri").getValue()[0].id;
-            var ccfri_facility_allowable_amount_mtfiEntityName = "ccof_ccfri_facility_allowable_amount_mtfi";
+            // var ccfri_facility_allowable_amount_mtfiEntityName = "ccof_ccfri_facility_allowable_amount_mtfi"; Richard 20240501
+            var ccfri_facility_allowable_amount_mtfiEntityName = "ccof_ccfri_facility_allowable_amount_mtfis";
+            var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amounts";
+
             var alertOptions = { height: 240, width: 320 };
 
             // Get Region, Median, NMF
@@ -116,7 +121,7 @@ CCOF.ChangeActionMTFI.Calculation = {
                                 FacilityFeeIncreaseInfo[PreviousMTFIFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] + PreviousMTFIFeeIncreaseDetails[i]['ccof_mtfi_amount']
                                 : FacilityFeeIncreaseInfo[PreviousMTFIFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] = PreviousMTFIFeeIncreaseDetails[i]['ccof_mtfi_amount'];
                         }
-                     }
+                    }
                 }
             }
             //  MTFI CALCULATION STARTED
@@ -145,10 +150,10 @@ CCOF.ChangeActionMTFI.Calculation = {
                             ifCalculateMTFI = false;
                         } // ticket 2959
                         else {
-                            FacilityFeeIncreaseInfo.hasOwnProperty(mtfiFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue'])?
+                            FacilityFeeIncreaseInfo.hasOwnProperty(mtfiFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']) ?
                                 FacilityFeeIncreaseInfo[mtfiFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] =
-                                    FacilityFeeIncreaseInfo[mtfiFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] + mtfiFeeIncreaseDetails[i]['ccof_mtfi_amount']
-                                :FacilityFeeIncreaseInfo[mtfiFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] = mtfiFeeIncreaseDetails[i]['ccof_mtfi_amount'];
+                                FacilityFeeIncreaseInfo[mtfiFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] + mtfiFeeIncreaseDetails[i]['ccof_mtfi_amount']
+                                : FacilityFeeIncreaseInfo[mtfiFeeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue']] = mtfiFeeIncreaseDetails[i]['ccof_mtfi_amount'];
                         }
                     }
                 }
@@ -167,7 +172,8 @@ CCOF.ChangeActionMTFI.Calculation = {
                         "ccof_stage3calculatornotesinitial": returnValue['AdjudicatorNote']
                     }
                     mtfistage3calculatornotes['ccof_stage3calculatornotesinitial'] = mtfistage3calculatornotes['ccof_stage3calculatornotesinitial'] + "\n" + "MEFI CAPPED: " + ((MEFIcappedcategoriesString.trim() === "") ? "None" : MEFIcappedcategoriesString);
-                    UpdateEntityRecord("ccof_change_request_mtfi", currentMTFIentityId, mtfistage3calculatornotes);
+                    // UpdateEntityRecord("ccof_change_request_mtfi", currentMTFIentityId, mtfistage3calculatornotes); Richard 20240501
+                    UpdateEntityRecord("ccof_change_request_mtfis", currentMTFIentityId, mtfistage3calculatornotes);
                     console.log("End MTFI Adjudication Calculation");
                     formContext.data.save();
                     ////refresh the summary grid
@@ -864,7 +870,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
     //    + "MEFI CAPPED: " + ((MEFIcappedcategories.trim() == "") ? "None" : MEFIcappedcategories) + "\n" + "NMF Benchmark CAPPED: " + ((string70cappedcategories.trim() == "") ? "None" : string70cappedcategories);
     var AdjudicatorNote = "S3CV: " + (CalculatorValidation ? "Pass;" : "Fail;") + " RESULT: " + ((!CheckFullRequestApprovable) ? "Not Approvable" : "Approvable") + "; MAX APPROVABLE: "
         + resultString + stringPOLICIESUSED + " SDA: " + SDA + "; PERCENTILE CAP: " + (Limitfeesto70Percentile ? "Yes" : "No") + "; UNUSED EXPENSES: $" + (TotalMonthlyExpenses - TotalAllowedExpenses).toFixed(2) + "\n"
-       + "NMF Benchmark CAPPED: " + ((string70cappedcategories.trim() == "") ? "None" : string70cappedcategories);
+        + "NMF Benchmark CAPPED: " + ((string70cappedcategories.trim() == "") ? "None" : string70cappedcategories);
     console.log("AdjudicatorNote:" + AdjudicatorNote);
 
     var returnValue = {};
@@ -880,19 +886,41 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
 
     return returnValue;
 }
+// Change function UpdateEntityRecord from Ansync way to Sync way  20240501 Richard
+//function UpdateEntityRecord(entityname, entityId, data) {
+//    Xrm.WebApi.updateRecord(entityname, entityId, data).then(
+//        function success(result) {
+//            console.log("updated the record");
 
-function UpdateEntityRecord(entityname, entityId, data) {
-    Xrm.WebApi.updateRecord(entityname, entityId, data).then(
-        function success(result) {
-            console.log("updated the record");
-
-        },
-        function (error) {
-            console.log(error.message);
+//        },
+//        function (error) {
+//            console.log(error.message);
+//        }
+//    );
+//}
+function UpdateEntityRecord(entityName, varEntityId, data) {
+    var req = new XMLHttpRequest();
+    req.open("PATCH", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + entityName + "(" + varEntityId + ")", false); // synchronous request
+    req.setRequestHeader("OData-MaxVersion", "4.0");
+    req.setRequestHeader("OData-Version", "4.0");
+    req.setRequestHeader("Accept", "application/json");
+    req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+    req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+    req.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            req.onreadystatechange = null;
+            if (this.status === 204) {
+                // Record updated successfully
+                console.log("Record updated successfully");
+            } else {
+                // Handle error
+                var error = JSON.parse(this.response).error;
+                console.error("Error updating record: " + error.message);
+            }
         }
-    );
+    };
+    req.send(JSON.stringify(data));
 }
-
 
 function PopulateSummaryApprovedAmount(returnValue, FacilityAmountAllowedRecords, entityname, FeeIncreaseDetails, RegionInfos, entityId, mefiCAP, limitfeestonmfbenchmark, InitialTotalAllowableStagePolicy, Initialstage2capammount, newModifiedQCDecision) {
     // this is for MTFI
@@ -1121,8 +1149,10 @@ function IndicateCap(feeIncreaseDetails, TotalAllowableStagePolicy, regionInfo, 
     // set the indicator as pass or fail.
     var NMFCAPReached = false;
     var MEFICAPReached = false;
-    var entityname = "ccof_change_request_mtfi";
-    var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount_mtfi";
+    //var entityname = "ccof_change_request_mtfi";  // 20240501 Richard
+    //var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount_mtfi";
+    var entityname = "ccof_change_request_mtfis";
+    var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount_mtfis";
     var AllowableFeeIncreaseEntityName = "";
     var ReachedCap;
     var TotalAllowableStagePolicywithMEFICAP = {};
@@ -1298,8 +1328,10 @@ function IndicateCapCCFRIFacility(feeIncreaseDetails, TotalAllowableStagePolicy,
     // set the indicator as pass or fail.
     var NMFCAPReached = false;
     var MEFICAPReached = false;
-    var entityname = "ccof_adjudication_ccfri_facility";
-    var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount";
+    //var entityname = "ccof_adjudication_ccfri_facility"; // Richard 20240501 looks like we don't use function anymore
+    //var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amount";
+    var entityname = "ccof_adjudication_ccfri_facilities";
+    var ccfri_facility_allowable_amountEntityName = "ccof_ccfri_facility_allowable_amounts";
     var AllowableFeeIncreaseEntityName = "";
     var ReachedCap;
     var TotalAllowableStagePolicywithMEFICAP = {};
@@ -1382,13 +1414,14 @@ function IndicateCapCCFRIFacility(feeIncreaseDetails, TotalAllowableStagePolicy,
             ReachedCap = {
                 "ccof_capsindicator": 100000002
             }
+            //update based on the ticket BCEDAM-5485
             TotalAllowableStagePolicywithMEFICAP = {
-                "ccof_0to18months": MediansFee['0-18_Per10'],
-                "ccof_18to36months": MediansFee['18-36_Per10'],
-                "ccof_preschool": MediansFee['PRE_Per10'],
-                "ccof_outofschoolcarekindergarten": MediansFee['OOSC-K_Per10'],
-                "ccof_3yearstokindergarten": MediansFee['3Y-K_Per10'],
-                "ccof_outofschoolcaregrade1": MediansFee['OOSC-G_Per10']
+                "ccof_0to18months": TotalAllowableStagePolicy['ccof_0to18months'] > MediansFee['0-18_Per10'] ? MediansFee['0-18_Per10'] : TotalAllowableStagePolicy['ccof_0to18months'],
+                "ccof_18to36months": TotalAllowableStagePolicy['ccof_18to36months'] > MediansFee['18-36_Per10'] ? MediansFee['18-36_Per10'] : TotalAllowableStagePolicy['ccof_18to36months'],
+                "ccof_preschool": TotalAllowableStagePolicy['ccof_preschool'] > MediansFee['PRE_Per10'] ? MediansFee['PRE_Per10'] : TotalAllowableStagePolicy['ccof_preschool'],
+                "ccof_outofschoolcarekindergarten": TotalAllowableStagePolicy['ccof_outofschoolcarekindergarten'] > MediansFee['OOSC-K_Per10'] ? MediansFee['OOSC-K_Per10'] : TotalAllowableStagePolicy['ccof_outofschoolcarekindergarten'],
+                "ccof_3yearstokindergarten": TotalAllowableStagePolicy['ccof_3yearstokindergarten'] > MediansFee['3Y-K_Per10'] ? MediansFee['3Y-K_Per10'] : TotalAllowableStagePolicy['ccof_3yearstokindergarten'],
+                "ccof_outofschoolcaregrade1": TotalAllowableStagePolicy['ccof_outofschoolcaregrade1'] > MediansFee['OOSC-G_Per10'] ? MediansFee['OOSC-G_Per10'] : TotalAllowableStagePolicy['ccof_outofschoolcaregrade1']
             }
 
             UpdateEntityRecord(entityname, entityId, ReachedCap);
@@ -1398,13 +1431,14 @@ function IndicateCapCCFRIFacility(feeIncreaseDetails, TotalAllowableStagePolicy,
             ReachedCap = {
                 "ccof_capsindicator": 100000000
             }
+            //update based on the ticket BCEDAM-5485
             TotalAllowableStagePolicywithMEFICAP = {
-                "ccof_0to18months": MediansFee['0-18_Per10'],
-                "ccof_18to36months": MediansFee['18-36_Per10'],
-                "ccof_preschool": MediansFee['PRE_Per10'],
-                "ccof_outofschoolcarekindergarten": MediansFee['OOSC-K_Per10'],
-                "ccof_3yearstokindergarten": MediansFee['3Y-K_Per10'],
-                "ccof_outofschoolcaregrade1": MediansFee['OOSC-G_Per10']
+                "ccof_0to18months": TotalAllowableStagePolicy['ccof_0to18months'] > MediansFee['0-18_Per10'] ? MediansFee['0-18_Per10'] : TotalAllowableStagePolicy['ccof_0to18months'],
+                "ccof_18to36months": TotalAllowableStagePolicy['ccof_18to36months'] > MediansFee['18-36_Per10'] ? MediansFee['18-36_Per10'] : TotalAllowableStagePolicy['ccof_18to36months'],
+                "ccof_preschool": TotalAllowableStagePolicy['ccof_preschool'] > MediansFee['PRE_Per10'] ? MediansFee['PRE_Per10'] : TotalAllowableStagePolicy['ccof_preschool'],
+                "ccof_outofschoolcarekindergarten": TotalAllowableStagePolicy['ccof_outofschoolcarekindergarten'] > MediansFee['OOSC-K_Per10'] ? MediansFee['OOSC-K_Per10'] : TotalAllowableStagePolicy['ccof_outofschoolcarekindergarten'],
+                "ccof_3yearstokindergarten": TotalAllowableStagePolicy['ccof_3yearstokindergarten'] > MediansFee['3Y-K_Per10'] ? MediansFee['3Y-K_Per10'] : TotalAllowableStagePolicy['ccof_3yearstokindergarten'],
+                "ccof_outofschoolcaregrade1": TotalAllowableStagePolicy['ccof_outofschoolcaregrade1'] > MediansFee['OOSC-G_Per10'] ? MediansFee['OOSC-G_Per10'] : TotalAllowableStagePolicy['ccof_outofschoolcaregrade1']
             }
 
             UpdateEntityRecord(entityname, entityId, ReachedCap);
