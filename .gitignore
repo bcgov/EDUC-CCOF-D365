@@ -413,3 +413,7 @@ FodyWeavers.xsd
 *.sln.iml
 /.vs/CCOF/DesignTimeBuild/.dtbcache.v2
 /CCOF.Application.WebResources/Scripts/FormHandler/JavaScript.js
+/ChangeRequestFundingAgreementshow.html
+/ShowFundingAgreement.html
+/.gitignore
+/.vs/CCOF/v17/.suo
