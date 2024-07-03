@@ -1,4 +1,4 @@
-name: 4 PROD - Deploy Dynamics-API
+name: 2 QA - Deploy Dynamics-API
 
 env:
   # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
@@ -7,7 +7,7 @@ env:
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
   # 🖊️ EDIT to set the kube context's namespace after login. Leave blank to use your user's default namespace.
-  OPENSHIFT_NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-prod
+  OPENSHIFT_NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-dev
 
   # SPLUNK_TOKEN: ${{ secrets.SPLUNK_TOKEN }}
 
@@ -24,8 +24,7 @@ env:
   REPO_NAME: "educ-ccof-d365"
   BRANCH:  ${{ github.ref_name }}
   IMAGE_NAME: "d365api"
-  APP_ENVIRONMENT: "prod"
-
+  APP_ENVIRONMENT: "qa"
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
 
   MIN_REPLICAS: "3"
@@ -34,15 +33,15 @@ env:
   MAX_CPU: "100m"
   MIN_MEM: "200Mi"
   MAX_MEM: "250Mi"
-
+  
 on:
   workflow_dispatch:
 
 jobs:
   openshift-ci-cd:
-    name: Deploy D365 API to PROD
+    name: Deploy D365 API to QA
     runs-on: ubuntu-24.04
-    environment: prod
+    environment: qa
 
     outputs:
       ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
@@ -111,10 +110,10 @@ jobs:
         oc rollout cancel dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}-${{ env.BRANCH }} 2> /dev/null \
             || true && echo "No rollout in progress"
 
-        # Create tag for PROD env from DEV env image
+        # Create tag for TEST env from DEV env image
         oc tag \
            ${{ env.NAMESPACE }}-dev/${{ env.REPO_NAME }}-${{ env.IMAGE_NAME }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }} \
-           ${{ env.NAMESPACE }}-prod/${{ env.REPO_NAME }}-${{ env.IMAGE_NAME }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }}
+           ${{ env.NAMESPACE }}-test/${{ env.REPO_NAME }}-${{ env.IMAGE_NAME }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }}
 
         # Process and apply deployment template
         oc process \

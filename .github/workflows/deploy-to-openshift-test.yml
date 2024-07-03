@@ -41,7 +41,7 @@ jobs:
   openshift-ci-cd:
     name: Deploy D365 API to UAT
     runs-on: ubuntu-24.04
-    environment: test
+    environment: uat
 
     outputs:
       ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
