@@ -41,7 +41,7 @@ on:
 jobs:
   openshift-ci-cd:
     name: Deploy D365 API to PROD
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: prod
 
     outputs:
@@ -99,7 +99,7 @@ jobs:
     - name: Install oc
       uses: redhat-actions/openshift-tools-installer@v1
       with:
-        oc: 4
+        oc: 4.16
 
     - name: Deploy
       run: |
