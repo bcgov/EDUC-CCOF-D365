@@ -23,7 +23,8 @@ env:
   APP_NAME: 'ccof'
   REPO_NAME: "educ-ccof-d365"
   BRANCH: ${{ github.ref_name }}
-  APP_NAME_BACKEND: "d365api"
+  IMAGE_NAME: "d365api"
+  APP_ENVIRONMENT: "dev"
 
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
   NAMESPACE_TOOLS: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}-tools
@@ -43,7 +44,7 @@ on:
 jobs:
   openshift-ci-cd:
     name: Build and deploy Backend to DEV
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: dev
 
     outputs:
@@ -105,7 +106,7 @@ jobs:
       id: build-image-backend
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ env.APP_NAME_BACKEND }}
+        image: ${{ env.IMAGE_NAME }}
         tags: "latest"
 
         # If you don't have a Dockerfile/Containerfile, refer to https://github.com/redhat-actions/buildah-build#scratch-build-inputs
@@ -129,7 +130,7 @@ jobs:
     - name: Install oc
       uses: redhat-actions/openshift-tools-installer@v1
       with:
-        oc: 4
+        oc: 4.16
 
       # https://github.com/redhat-actions/oc-login#readme
 #    - uses: actions/checkout@v2
@@ -140,21 +141,37 @@ jobs:
         oc login --token=${{ env.OPENSHIFT_TOKEN }} --server=${{ env.OPENSHIFT_SERVER }}
         oc project ${{ env.OPENSHIFT_NAMESPACE }}
         # Cancel any rollouts in progress
-        oc rollout cancel dc/${{ env.APP_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }} 2> /dev/null \
-        || true && echo "No rollout in progress"
-        
+        oc rollout cancel dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}-${{ env.BRANCH }} 2> /dev/null \
+            || true && echo "No rollout in progress"
+
         # Create the image stream if it doesn't exist
-        oc create imagestream ${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }} 2> /dev/null || true && echo "Backend image stream in place"
-        
-        oc tag ${{ steps.push-image-backend.outputs.registry-path }} ${{ env.REPO_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}:${{ env.TAG }}
-        
+        oc create imagestream ${{ env.REPO_NAME }}-${{ env.IMAGE_NAME }}-${{ env.BRANCH }} 2> /dev/null \
+            || true && echo "Backend image stream in place"
+
+        oc tag \
+           ${{ steps.push-image-backend.outputs.registry-path }} \
+           ${{ env.REPO_NAME }}-${{ env.IMAGE_NAME }}-${{ env.BRANCH }}:${{ env.TAG }}
+
         # Process and apply deployment template
-        oc process -f tools/openshift/d365api.dc.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p TAG=${{ env.TAG }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }}\
-        | oc apply -f -
-        
+        oc process \
+           -f tools/openshift/d365api.dc.yaml \
+           -p APP_NAME=${{ env.APP_NAME }} \
+           -p REPO_NAME=${{ env.REPO_NAME }} \
+           -p BRANCH=${{ env.BRANCH }} \
+           -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} \
+           -p TAG=${{ env.TAG }} \
+           -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} \
+           -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} \
+           -p MIN_CPU=${{ env.MIN_CPU }} \
+           -p MAX_CPU=${{ env.MAX_CPU }} \
+           -p MIN_MEM=${{ env.MIN_MEM }} \
+           -p MAX_MEM=${{ env.MAX_MEM }} \
+           -p APP_ENVIRONMENT=${{ env.APP_ENVIRONMENT }} \
+            | oc apply -f -
+
         # Start rollout (if necessary) and follow it
-        oc rollout latest dc/${{ env.APP_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }} 2> /dev/null \
-        || true && echo "Rollout in progress"
+        oc rollout latest dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}-${{ env.BRANCH }} 2> /dev/null \
+            || true && echo "Rollout in progress"
 
         # Get status, returns 0 if rollout is successful
-        oc rollout status dc/${{ env.APP_NAME }}-${{ env.APP_NAME_BACKEND }}-${{ env.BRANCH }}
+        oc rollout status dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}-${{ env.BRANCH }}
