@@ -14,7 +14,7 @@ objects:
     creationTimestamp:
     labels:
       app: "${APP_NAME}-${BRANCH}"
-    name: "${APP_NAME}-d365api-${APP_ENVIRONMENT}-${BRANCH}"
+    name: "${APP_NAME}-d365api-${APP_ENVIRONMENT}"
   spec:
     replicas: ${{MIN_REPLICAS}}
     selector:
