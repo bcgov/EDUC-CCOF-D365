@@ -1,4 +1,4 @@
-name: 3 UAT - Deploy Dynamics-API
+name: 4 EFX - Deploy Dynamics-API
 
 env:
   # EDIT your repository secrets to log into your OpenShift cluster and set up the context.
@@ -24,7 +24,7 @@ env:
   REPO_NAME: "educ-ccof-d365"
   BRANCH:  ${{ github.ref_name }}
   IMAGE_NAME: "d365api"
-  APP_ENVIRONMENT: "uat"
+  APP_ENVIRONMENT: "efx"
   NAMESPACE: ${{ secrets.CCOF_NAMESPACE_NO_ENV }}
 
   MIN_REPLICAS: "2"
@@ -39,9 +39,9 @@ on:
 
 jobs:
   openshift-ci-cd:
-    name: Deploy D365 API to UAT
+    name: Deploy D365 API to EFX
     runs-on: ubuntu-24.04
-    environment: uat
+    environment: efx
 
     outputs:
       ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
@@ -107,7 +107,7 @@ jobs:
         oc login --token=${{ env.OPENSHIFT_TOKEN }} --server=${{ env.OPENSHIFT_SERVER }}
         oc project ${{ env.OPENSHIFT_NAMESPACE }}
         # Cancel any rollouts in progress
-        oc rollout cancel dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}-${{ env.BRANCH }} 2> /dev/null \
+        oc rollout cancel dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }} 2> /dev/null \
             || true && echo "No rollout in progress"
 
         # Create tag for TEST env from DEV env image
@@ -145,9 +145,9 @@ jobs:
             /tmp/authentication_settings
 
         # Start rollout (if necessary) and follow it
-        oc rollout latest dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}-${{ env.BRANCH }} 2> /dev/null \
+        oc rollout latest dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }} 2> /dev/null \
             || true && echo "Rollout in progress"
 
         # Get status, returns 0 if rollout is successful
-        oc rollout status dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}-${{ env.BRANCH }}
+        oc rollout status dc/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}
 

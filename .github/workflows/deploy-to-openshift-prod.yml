@@ -1,4 +1,4 @@
-name: 4 PROD - Deploy Dynamics-API
+name: 5 PROD - Deploy Dynamics-API
 
 env:
   # EDIT your repository secrets to log into your OpenShift cluster and set up the context.
