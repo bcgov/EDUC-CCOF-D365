@@ -12,13 +12,13 @@ objects:
     annotations:
       openshift.io/generated-by: OpenShiftNewApp
     labels:
-      app: "${APP_NAME}-${BRANCH}-d365api-deployment"
+      app: "${APP_NAME}-d365api-deployment"
     name: "${APP_NAME}-d365api-${APP_ENVIRONMENT}"
   spec:
     replicas: ${{MIN_REPLICAS}}
     selector:
       matchLabels:
-        app: "${APP_NAME}-${BRANCH}-d365api-deployment"
+        app: "${APP_NAME}-d365api-deployment"
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -29,7 +29,7 @@ objects:
         annotations:
           openshift.io/generated-by: OpenShiftNewApp
         labels:
-          app: "${APP_NAME}-${BRANCH}-d365api-deployment"
+          app: "${APP_NAME}-d365api-deployment"
       spec:
         containers:
         - image: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${REPO_NAME}-d365api-${BRANCH}:${TAG}
@@ -93,7 +93,7 @@ objects:
       service.alpha.openshift.io/serving-cert-secret-name: "ccof-backend-cert"
       openshift.io/generated-by: OpenShiftNewApp
     labels:
-      app: "${APP_NAME}-${BRANCH}-d365api-deployment"
+      app: "${APP_NAME}-d365api-deployment"
     name: "${APP_NAME}-d365api-${APP_ENVIRONMENT}"
   spec:
     ports:
@@ -106,7 +106,7 @@ objects:
       protocol: TCP 
       targetPort: 443
     selector:
-      app: "${APP_NAME}-${BRANCH}-d365api-deployment"
+      app: "${APP_NAME}-d365api-deployment"
 - apiVersion: autoscaling/v2
   kind: HorizontalPodAutoscaler
   metadata:
