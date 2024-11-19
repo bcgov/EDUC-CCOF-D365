@@ -27,8 +27,3 @@ oc create -n "$OPENSHIFT_NAMESPACE" configmap \
   --from-file="appsettings.json=/tmp/appsettings.json" \
   --dry-run -o yaml | oc apply -f -
 
-echo
-echo Setting environment variables for "$APP_NAME-d365api-$ENV_VAL" application
-oc -n "$OPENSHIFT_NAMESPACE" set env \
-  --from="configmap/$APP_NAME-d365api-$ENV_VAL-config-map" \
-  "deployment/$APP_NAME-d365api-$ENV_VAL"
