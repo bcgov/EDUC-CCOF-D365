@@ -103,7 +103,7 @@ objects:
       targetPort: 5091
     - name: 443-https
       port: 443
-      protocol: TCP 
+      protocol: TCP
       targetPort: 443
     selector:
       app: "${APP_NAME}-d365api-${APP_ENVIRONMENT}-deployment"
