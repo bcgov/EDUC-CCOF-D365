@@ -19,12 +19,10 @@ namespace CCOF.Infrastructure.Plugins
             (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
             // Obtain the execution context from the service provider.  
-            IPluginExecutionContext context = (IPluginExecutionContext)
-                serviceProvider.GetService(typeof(IPluginExecutionContext));
+            IPluginExecutionContext context = (IPluginExecutionContext) serviceProvider.GetService(typeof(IPluginExecutionContext));
 
             // The InputParameters collection contains all the data passed in the message request.  
-            if (context.InputParameters.Contains("Target") &&
-                context.InputParameters["Target"] is Entity)
+            if (context.InputParameters.Contains("Target") && context.InputParameters["Target"] is Entity)
             {
                 // Obtain the target entity from the input parameters.  
                 Entity entity = (Entity)context.InputParameters["Target"];
@@ -43,33 +41,59 @@ namespace CCOF.Infrastructure.Plugins
                     // Or use context.UserId if impersonation is involved
                     Guid executingUserId = context.UserId;
                     EntityReference postApp = null;
-                    OptionSetValue preValue;
-                    int preStatus = 99999;
-                    switch (entity.LogicalName)
+                    EntityReference account = null;
+                    OptionSetValue preStatus =new OptionSetValue(9999);
+                    OptionSetValue postStatus= new OptionSetValue(9999);
+                    tracingService.Trace("Entity is: " + entity.LogicalName+"; Message Type is:"+context.MessageName);
+                    if (context.PostEntityImages.Contains("PostImage") && context.PostEntityImages["PostImage"] is Entity postImage)
                     {
-                        case "ccof_adjudication_ccfri":
-                        case "ccof_adjudication_ccfri_facility":
-                            tracingService.Trace("Starging log:"+entity.LogicalName);
+                        var postValue = postImage.Contains("statuscode") ? (OptionSetValue)postImage["statuscode"] : null;
+                        postApp = postImage.Contains("ccof_application") ? (EntityReference)postImage["ccof_application"] : null;
+                        switch (context.PrimaryEntityName)
+                        {
+                            case "ccof_adjudication_ccfri":
+                                account = postImage.Contains("ccof_organization") ? (EntityReference)postImage["ccof_organization"] : null;
+                                break;
+                            case "ccof_adjudication_ccfri_facility":
+                                account = postImage.Contains("ccof_facility") ? (EntityReference)postImage["ccof_facility"] : null;
+                                break;
+
+                            case "ccof_adjudication_ecewe":
+                                account = postImage.Contains("ccof_organization") ? (EntityReference)postImage["ccof_organization"] : null;
+                                break;
+                            case "ccof_adjudication_ecewe_facility":
+                                account = postImage.Contains("ccof_facility") ? (EntityReference)postImage["ccof_facility"] : null;
+                                break;
+                            case "ccof_adjudication":
+                                account = postImage.Contains("ccof_organization") ? (EntityReference)postImage["ccof_organization"] : null;
+                                break;
+                            default:
+                                throw new InvalidPluginExecutionException($"Entity '{context.PrimaryEntityName}' is not supported for account lookup.");
+                        }
+                        tracingService.Trace("postValue" + postValue.Value.ToString() + ";" + postApp.Name);
+
+                    }
+
+                    switch (context.MessageName)
+                    {
+                        case "Create":
+
+                            break;
+                        case "Update":
                             if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
                             {
-                                // Access a value from Pre-Image
-                                preValue = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
-                                preStatus = preValue.Value;
-                                tracingService.Trace("preStatus" + preStatus.ToString());
-
+                                preStatus = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
+                                tracingService.Trace("preStatus" + preStatus.Value);
                             }
-                            if (context.PostEntityImages.Contains("PostImage") && context.PostEntityImages["PostImage"] is Entity postImage)
+                            // not track statuscode no changes
+                            if (!entity.Contains("statuscode"))
                             {
-                                // Access a value from Post-Image
-                                var postValue = postImage.Contains("statuscode") ? (OptionSetValue)postImage["statuscode"] : null;
-                                postApp = postImage.Contains("ccof_application") ? (EntityReference)postImage["ccof_application"] : null;
-                                tracingService.Trace("postValue" + postValue.Value.ToString() + ";" + postApp.Name);
-
+                                tracingService.Trace("The Statuscode value doesn't change. The vlaue is " + preStatus.Value);
+                                break;
                             }
-                            int postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode").Value;
-                            tracingService.Trace($"Choice Value: {postStatus}");
+                            postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
+                            tracingService.Trace($"Choice Value: {postStatus.Value}");
 
-                            // Retrieve Choice Metadata for Label
                             var request = new RetrieveAttributeRequest
                             {
                                 EntityLogicalName = entity.LogicalName,
@@ -80,9 +104,8 @@ namespace CCOF.Infrastructure.Plugins
                             var response = (RetrieveAttributeResponse)service.Execute(request);
                             var attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
 
-                            // Find the matching label
-                            var preOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == preStatus);
-                            var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus);
+                            var preOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == preStatus.Value);
+                            var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus.Value);
                             string preChoiceLabel = string.Empty;
                             string postChoiceLabel = string.Empty;
                             if (preOption != null)
@@ -103,14 +126,15 @@ namespace CCOF.Infrastructure.Plugins
                             {
                                 tracingService.Trace("Choice value not found in metadata.");
                             }
-                            // new a row
+                            // new a row to track statuscode change
                             Entity statusHistoryRecord = new Entity("ccof_applicationstatushistory");
-                            statusHistoryRecord["ccof_prestatusvalue"] = preStatus;
+                            statusHistoryRecord["ccof_prestatusvalue"] = (int)preStatus.Value;
                             statusHistoryRecord["ccof_prestatuslabel"] = preChoiceLabel;
-                            statusHistoryRecord["ccof_statusvalue"] = postStatus;
+                            statusHistoryRecord["ccof_statusvalue"] = (int)postStatus.Value;
                             statusHistoryRecord["ccof_statuslabel"] = postChoiceLabel;
                             statusHistoryRecord["ccof_logdate"] = DateTime.UtcNow;
                             statusHistoryRecord["ccof_lookuptable"] = entity.LogicalName;
+                            statusHistoryRecord["ccof_messagetype"] = new OptionSetValue(100000001);
                             statusHistoryRecord["ccof_application"] = new EntityReference(
                                     "ccof_application",
                                     postApp.Id
@@ -123,15 +147,17 @@ namespace CCOF.Infrastructure.Plugins
                                  "systemuser",
                                   currentUserId
                             );
+                            statusHistoryRecord["ccof_account"] = new EntityReference(
+                                  "account",
+                                  account.Id
+                            );
                             Guid recordId = service.Create(statusHistoryRecord);
                             tracingService.Trace($"Record created successfully with ID: {recordId}");
                             break;
-                        case "ccof_adjudication_ccfri_facility00000":
-
+                        case "Assign":
                             break;
                         default:
-                            tracingService.Trace($"No specific handler for entity: {entity.LogicalName}");
-                            break;
+                            throw new InvalidPluginExecutionException($"Unhandled Message: {context.MessageName}");
                     }
 
                     tracingService.Trace("End App Status History plugin");
