@@ -86,12 +86,6 @@ namespace CCOF.Infrastructure.Plugins
                             break;
 
                         case "Update":
-                            if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity)
-                            {
-                                preImage = (Entity)context.PreEntityImages["PreImage"];
-                                preStatus = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
-                                tracingService.Trace("preStatus" + preStatus.Value);
-                            }
                             // not track statuscode no changes
                             if (!entity.Contains("statuscode"))
                             {
@@ -104,7 +98,12 @@ namespace CCOF.Infrastructure.Plugins
                             }
                             if (entity.Contains("statuscode"))
                             {
-
+                                if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity)
+                                {
+                                    preImage = (Entity)context.PreEntityImages["PreImage"];
+                                    preStatus = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
+                                    tracingService.Trace("preStatus" + preStatus.Value);
+                                }
                                 postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
                                 tracingService.Trace($"Choice Value: {postStatus.Value}");
 
