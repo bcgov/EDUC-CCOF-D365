@@ -39,75 +39,66 @@ namespace CCOF.Infrastructure.Plugins.AFS_History
                 {
                     tracingService.Trace("Starting AFS History plugin");
                     //Retrieve MTFI record
-                    var mtfi = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_mtfi_qcdecision", "ownerid"));
+                    var mtfi = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_mtfi_qcdecision", "ownerid", "ccof_afs_process_began_on", "statuscode"));
                     if (mtfi != null && ((OptionSetValue)mtfi.Attributes["ccof_mtfi_qcdecision"]).Value == 100000007)
                     {
                         Entity afsHistory = new Entity("ccof_approvable_fee_schedule_history");
                         OptionSetValue preValue;
                         int preStatus = 0;
-                        if (entity.Attributes.Contains("ownerid"))
+                        if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
                         {
-                            if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
-                            {
-                                var ownerId = preImage.Contains("ownerid") ? ((EntityReference)preImage["ownerid"]).Id : new Guid();
-                                afsHistory["ccof_previous_owner"] = new EntityReference("systemuser", ownerId);
-                                afsHistory["ccof_current_owner"] = mtfi.GetAttributeValue<EntityReference>("ownerid").Id;
-                            }
+                            var ownerId = preImage.Contains("ownerid") ? ((EntityReference)preImage["ownerid"]).Id : new Guid();
+                            afsHistory["ccof_previous_owner"] = new EntityReference("systemuser", ownerId);
+                            afsHistory["ccof_current_owner"] = new EntityReference("systemuser", mtfi.GetAttributeValue<EntityReference>("ownerid").Id);
+                            preValue = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
+                            preStatus = preValue.Value;
+                            tracingService.Trace("preStatus" + preStatus.ToString());
                         }
+                        int postStatus = mtfi.GetAttributeValue<OptionSetValue>("statuscode").Value;
+                        tracingService.Trace($"Choice Value: {postStatus}");
+
+                        // Retrieve Choice Metadata for Label
+                        var request = new RetrieveAttributeRequest
+                        {
+                            EntityLogicalName = entity.LogicalName,
+                            LogicalName = "statuscode",
+                            RetrieveAsIfPublished = true
+                        };
+
+                        var response = (RetrieveAttributeResponse)service.Execute(request);
+                        var attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
+
+                        // Find the matching label
+                        var preOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == preStatus);
+                        var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus);
+                        string preChoiceLabel = string.Empty;
+                        string postChoiceLabel = string.Empty;
+                        if (preOption != null)
+                        {
+                            preChoiceLabel = preOption.Label.UserLocalizedLabel.Label;
+                            tracingService.Trace($"Choice Label: {preChoiceLabel}");
+                        }
+                        else
+                        {
+                            tracingService.Trace("Choice value not found in metadata.");
+                        }
+                        if (postOption != null)
+                        {
+                            postChoiceLabel = postOption.Label.UserLocalizedLabel.Label;
+                            tracingService.Trace($"Choice Label: {postChoiceLabel}");
+                        }
+                        else
+                        {
+                            tracingService.Trace("Choice value not found in metadata.");
+                        }
+                        afsHistory["ccof_previous_status"] = preChoiceLabel;
+                        afsHistory["ccof_current_status"] = postChoiceLabel;
                         //--------------------------------------------------------
-                        if (entity.Attributes.Contains("statuscode"))
-                        {
-                            if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
-                            {
-                                preValue = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
-                                preStatus = preValue.Value;
-                                tracingService.Trace("preStatus" + preStatus.ToString());
-                            }
-                            int postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode").Value;
-                            tracingService.Trace($"Choice Value: {postStatus}");
 
-                            // Retrieve Choice Metadata for Label
-                            var request = new RetrieveAttributeRequest
-                            {
-                                EntityLogicalName = entity.LogicalName,
-                                LogicalName = "statuscode",
-                                RetrieveAsIfPublished = true
-                            };
-
-                            var response = (RetrieveAttributeResponse)service.Execute(request);
-                            var attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
-
-                            // Find the matching label
-                            var preOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == preStatus);
-                            var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus);
-                            string preChoiceLabel = string.Empty;
-                            string postChoiceLabel = string.Empty;
-                            if (preOption != null)
-                            {
-                                preChoiceLabel = preOption.Label.UserLocalizedLabel.Label;
-                                tracingService.Trace($"Choice Label: {preChoiceLabel}");
-                            }
-                            else
-                            {
-                                tracingService.Trace("Choice value not found in metadata.");
-                            }
-                            if (postOption != null)
-                            {
-                                postChoiceLabel = postOption.Label.UserLocalizedLabel.Label;
-                                tracingService.Trace($"Choice Label: {postChoiceLabel}");
-                            }
-                            else
-                            {
-                                tracingService.Trace("Choice value not found in metadata.");
-                            }
-                            afsHistory["ccof_previous_status"] = preChoiceLabel;
-                            afsHistory["ccof_current_status"] = postChoiceLabel;
-                        }
-                            //--------------------------------------------------------
-                            
                         // add a new row                        
                         afsHistory["ccof_log_date"] = DateTime.UtcNow;
                         afsHistory["ccof_regarding_id"] = new EntityReference(entity.LogicalName, entity.Id);
+                        afsHistory["ccof_afs_process_began_on"] = mtfi.GetAttributeValue<DateTime>("ccof_afs_process_began_on");
                         Guid recordId = service.Create(afsHistory);
                         tracingService.Trace($"Record created successfully with ID: {recordId}");
                         tracingService.Trace("End App Status History plugin");
