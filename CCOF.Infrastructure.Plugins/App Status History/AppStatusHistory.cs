@@ -14,21 +14,12 @@ namespace CCOF.Infrastructure.Plugins
     {
         void IPlugin.Execute(IServiceProvider serviceProvider)
         {
-            // Obtain the tracing service
             ITracingService tracingService =
             (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-
-            // Obtain the execution context from the service provider.  
             IPluginExecutionContext context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
-
-            // The InputParameters collection contains all the data passed in the message request.  
             if (context.InputParameters.Contains("Target") && context.InputParameters["Target"] is Entity)
             {
-                // Obtain the target entity from the input parameters.  
                 Entity entity = (Entity)context.InputParameters["Target"];
-
-                // Obtain the IOrganizationService instance which you will need for  
-                // web service calls.  
                 IOrganizationServiceFactory serviceFactory =
                     (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
                 IOrganizationService service = serviceFactory.CreateOrganizationService(context.UserId);
@@ -40,15 +31,9 @@ namespace CCOF.Infrastructure.Plugins
                     Guid currentUserId = context.InitiatingUserId;
                     // Or use context.UserId if impersonation is involved
                     Guid executingUserId = context.UserId;
-                    EntityReference postApp = null;
-                    EntityReference account = null;
-                    OptionSetValue preStatus = new OptionSetValue(9999);
-                    OptionSetValue postStatus = new OptionSetValue(9999);
-                    Entity preImage = null;
-                    Entity postImage = null;
-                    EntityReference preOwner = null;
-                    EntityReference postOwner = null;
-                    Entity statusHistoryRecord = null;
+                    EntityReference postApp = null,account=null, preOwner = null, postOwner = null;
+                    OptionSetValue preStatus = new OptionSetValue(9999), postStatus = new OptionSetValue(9999);
+                    Entity preImage = null, postImage = null, statusHistoryRecord = null;
                     tracingService.Trace("Entity is: " + entity.LogicalName + "; Message Type is:" + context.MessageName);
                     if (context.PostEntityImages.Contains("PostImage") && context.PostEntityImages["PostImage"] is Entity)
                     {
@@ -76,7 +61,7 @@ namespace CCOF.Infrastructure.Plugins
                             default:
                                 throw new InvalidPluginExecutionException($"Entity '{context.PrimaryEntityName}' is not supported for account lookup.");
                         }
-                        tracingService.Trace("postValue" + postValue.Value.ToString() + ";" + postApp.Name);
+                        tracingService.Trace("account:" + account.Name + "; App:" + postApp.Name);
 
                     }
 
@@ -85,7 +70,7 @@ namespace CCOF.Infrastructure.Plugins
                         case "Create":
                             postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
                             postOwner = entity.GetAttributeValue<EntityReference>("ownerid");
-                            tracingService.Trace($"Choice Value: {postStatus.Value}");
+                            tracingService.Trace($"StatusCodee: {postStatus.Value};Owner:{postOwner.Name}");
 
                             var request = new RetrieveAttributeRequest
                             {
@@ -96,14 +81,13 @@ namespace CCOF.Infrastructure.Plugins
 
                             var response = (RetrieveAttributeResponse)service.Execute(request);
                             var attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
-
                             var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus.Value);
                             string preChoiceLabel = string.Empty;
                             string postChoiceLabel = string.Empty;
                             if (postOption != null)
                             {
                                 postChoiceLabel = postOption.Label.UserLocalizedLabel.Label;
-                                tracingService.Trace($"Choice Label: {postChoiceLabel}");
+                                tracingService.Trace($"Statuscode Choice Label: {postChoiceLabel}");
                             }
                             else
                             {
@@ -161,18 +145,15 @@ namespace CCOF.Infrastructure.Plugins
                                     tracingService.Trace("preStatus" + preStatus.Value);
                                 }
                                 postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
-                                tracingService.Trace($"Choice Value: {postStatus.Value}");
-
+                                tracingService.Trace($"postStatus: {postStatus.Value}");
                                 request = new RetrieveAttributeRequest
                                 {
                                     EntityLogicalName = entity.LogicalName,
                                     LogicalName = "statuscode",
                                     RetrieveAsIfPublished = true
                                 };
-
                                 response = (RetrieveAttributeResponse)service.Execute(request);
                                 attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
-
                                 var preOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == preStatus.Value);
                                 postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus.Value);
                                 preChoiceLabel = string.Empty;
@@ -180,7 +161,7 @@ namespace CCOF.Infrastructure.Plugins
                                 if (preOption != null)
                                 {
                                     preChoiceLabel = preOption.Label.UserLocalizedLabel.Label;
-                                    tracingService.Trace($"Choice Label: {preChoiceLabel}");
+                                    tracingService.Trace($"preStatus Choice Label: {preChoiceLabel}");
                                 }
                                 else
                                 {
@@ -189,7 +170,7 @@ namespace CCOF.Infrastructure.Plugins
                                 if (postOption != null)
                                 {
                                     postChoiceLabel = postOption.Label.UserLocalizedLabel.Label;
-                                    tracingService.Trace($"Choice Label: {postChoiceLabel}");
+                                    tracingService.Trace($"postStatus Choice Label: {postChoiceLabel}");
                                 }
                                 else
                                 {
@@ -229,10 +210,10 @@ namespace CCOF.Infrastructure.Plugins
                                 {
                                     preImage = (Entity)context.PreEntityImages["PreImage"];
                                     preOwner = preImage.Contains("ownerid") ? (EntityReference)preImage["ownerid"] : null;
-                                    tracingService.Trace("preOwner" + preOwner.Id);
+                                    tracingService.Trace("preOwner" + preOwner.Name);
                                 }
                                 postOwner = entity.GetAttributeValue<EntityReference>("ownerid");
-                                tracingService.Trace($"Ownerid: {postOwner.Id.ToString()}");
+                                tracingService.Trace($"post Ownerid: {postOwner.Name}");
 
                                 statusHistoryRecord = new Entity("ccof_applicationstatushistory");
                                 statusHistoryRecord["ccof_logdate"] = DateTime.UtcNow;
