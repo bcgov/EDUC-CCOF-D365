@@ -219,7 +219,7 @@ namespace CCOF.Infrastructure.Plugins
                                       "account",
                                       account.Id
                                 );
-                                Guid recordId = service.Create(statusHistoryRecord);
+                                recordId = service.Create(statusHistoryRecord);
                                 tracingService.Trace($"Record created successfully with ID: {recordId}");
                             }
                             if (entity.Contains("ownerid"))
@@ -261,7 +261,7 @@ namespace CCOF.Infrastructure.Plugins
                                       "account",
                                       account.Id
                                 );
-                                Guid recordId = service.Create(statusHistoryRecord);
+                                recordId = service.Create(statusHistoryRecord);
                                 tracingService.Trace($"Record created successfully with ID: {recordId}");
                             }
                             break;
