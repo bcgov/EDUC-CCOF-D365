@@ -15,8 +15,7 @@ namespace CCOF.Infrastructure.Plugins
     {
         void IPlugin.Execute(IServiceProvider serviceProvider)
         {
-            ITracingService tracingService =
-            (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            ITracingService tracingService =(ITracingService)serviceProvider.GetService(typeof(ITracingService));
             IPluginExecutionContext context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             if (context.InputParameters.Contains("Target") && context.InputParameters["Target"] is Entity)
             {
@@ -32,7 +31,7 @@ namespace CCOF.Infrastructure.Plugins
                     Guid currentUserId = context.InitiatingUserId;
                     // Or use context.UserId if impersonation is involved
                     Guid executingUserId = context.UserId;
-                    EntityReference postApp = null,account=null, preOwner = null, postOwner = null;
+                    EntityReference postApp = null, account = null, preOwner = null, postOwner = null;
                     OptionSetValue preStatus = new OptionSetValue(9999), postStatus = new OptionSetValue(9999);
                     Entity preImage = null, postImage = null, statusHistoryRecord = null;
                     tracingService.Trace("Entity is: " + entity.LogicalName + "; Message Type is:" + context.MessageName);
@@ -56,7 +55,7 @@ namespace CCOF.Infrastructure.Plugins
                             case "ccof_adjudication_ecewe_facility":
                                 account = postImage.Contains("ccof_facility") ? (EntityReference)postImage["ccof_facility"] : null;
                                 EntityReference adjECEWE = (EntityReference)postImage["ccof_adjudication_ecewe"];
-                                Entity adjECEWERecord = service.Retrieve(adjECEWE.LogicalName, adjECEWE.Id,new ColumnSet(true));
+                                Entity adjECEWERecord = service.Retrieve(adjECEWE.LogicalName, adjECEWE.Id, new ColumnSet(true));
                                 postApp = adjECEWERecord.Contains("ccof_application") ? (EntityReference)adjECEWERecord["ccof_application"] : null;
                                 break;
                             case "ccof_adjudication":
@@ -250,8 +249,6 @@ namespace CCOF.Infrastructure.Plugins
                                 recordId = service.Create(statusHistoryRecord);
                                 tracingService.Trace($"Record created successfully with ID: {recordId}");
                             }
-                            break;
-                        case "Assign":
                             break;
                         default:
                             throw new InvalidPluginExecutionException($"Unhandled Message: {context.MessageName}");
