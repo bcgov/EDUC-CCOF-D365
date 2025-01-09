@@ -83,6 +83,61 @@ namespace CCOF.Infrastructure.Plugins
                     switch (context.MessageName)
                     {
                         case "Create":
+                            postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
+                            tracingService.Trace($"Choice Value: {postStatus.Value}");
+
+                            var request = new RetrieveAttributeRequest
+                            {
+                                EntityLogicalName = entity.LogicalName,
+                                LogicalName = "statuscode",
+                                RetrieveAsIfPublished = true
+                            };
+
+                            var response = (RetrieveAttributeResponse)service.Execute(request);
+                            var attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
+
+                            var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus.Value);
+                            string preChoiceLabel = string.Empty;
+                            string postChoiceLabel = string.Empty;
+                            if (postOption != null)
+                            {
+                                postChoiceLabel = postOption.Label.UserLocalizedLabel.Label;
+                                tracingService.Trace($"Choice Label: {postChoiceLabel}");
+                            }
+                            else
+                            {
+                                tracingService.Trace("Choice value not found in metadata.");
+                            }
+
+                            statusHistoryRecord = new Entity("ccof_applicationstatushistory");
+                            statusHistoryRecord["ccof_logdate"] = DateTime.UtcNow;
+                            statusHistoryRecord["ccof_lookuptable"] = entity.LogicalName;
+                            statusHistoryRecord["ccof_statusvalue"] = (int)postStatus.Value;
+                            statusHistoryRecord["ccof_statuslabel"] = postChoiceLabel;
+                            statusHistoryRecord["ccof_messagetype"] = new OptionSetValue(100000000);
+                            statusHistoryRecord["ccof_postownerid"] = new EntityReference(
+                                       postOwner.LogicalName,
+                                       postOwner.Id
+                                  );
+                            statusHistoryRecord["ccof_application"] = new EntityReference(
+                                    "ccof_application",
+                                    postApp.Id
+                                );
+                            statusHistoryRecord["ccof_statushistoryregardingid"] = new EntityReference(
+                                entity.LogicalName,
+                                entity.Id
+                            );
+                            statusHistoryRecord["ccof_operationuser"] = new EntityReference(
+                                 "systemuser",
+                                  currentUserId
+                            );
+                            statusHistoryRecord["ccof_account"] = new EntityReference(
+                                  "account",
+                                  account.Id
+                            );
+                            Guid recordId = service.Create(statusHistoryRecord);
+                            tracingService.Trace($"Record created successfully with ID: {recordId}");
+
                             break;
 
                         case "Update":
@@ -107,20 +162,20 @@ namespace CCOF.Infrastructure.Plugins
                                 postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
                                 tracingService.Trace($"Choice Value: {postStatus.Value}");
 
-                                var request = new RetrieveAttributeRequest
+                                request = new RetrieveAttributeRequest
                                 {
                                     EntityLogicalName = entity.LogicalName,
                                     LogicalName = "statuscode",
                                     RetrieveAsIfPublished = true
                                 };
 
-                                var response = (RetrieveAttributeResponse)service.Execute(request);
-                                var attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
+                                response = (RetrieveAttributeResponse)service.Execute(request);
+                                attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
 
                                 var preOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == preStatus.Value);
-                                var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus.Value);
-                                string preChoiceLabel = string.Empty;
-                                string postChoiceLabel = string.Empty;
+                                postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus.Value);
+                                preChoiceLabel = string.Empty;
+                                postChoiceLabel = string.Empty;
                                 if (preOption != null)
                                 {
                                     preChoiceLabel = preOption.Label.UserLocalizedLabel.Label;
