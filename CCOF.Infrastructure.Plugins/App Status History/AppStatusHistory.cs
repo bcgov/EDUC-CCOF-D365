@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,9 @@ namespace CCOF.Infrastructure.Plugins
                                 break;
                             case "ccof_adjudication_ecewe_facility":
                                 account = postImage.Contains("ccof_facility") ? (EntityReference)postImage["ccof_facility"] : null;
+                                EntityReference adjECEWE = (EntityReference)postImage["ccof_adjudication_ecewe"];
+                                Entity adjECEWERecord = service.Retrieve(adjECEWE.LogicalName, adjECEWE.Id,new ColumnSet(true));
+                                postApp = adjECEWERecord.Contains("ccof_application") ? (EntityReference)adjECEWERecord["ccof_application"] : null;
                                 break;
                             case "ccof_adjudication":
                                 account = postImage.Contains("ccof_organization") ? (EntityReference)postImage["ccof_organization"] : null;
