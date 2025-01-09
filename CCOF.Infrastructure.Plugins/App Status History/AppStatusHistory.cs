@@ -84,6 +84,7 @@ namespace CCOF.Infrastructure.Plugins
                     {
                         case "Create":
                             postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
+                            postOwner = entity.GetAttributeValue<EntityReference>("ownerid");
                             tracingService.Trace($"Choice Value: {postStatus.Value}");
 
                             var request = new RetrieveAttributeRequest
