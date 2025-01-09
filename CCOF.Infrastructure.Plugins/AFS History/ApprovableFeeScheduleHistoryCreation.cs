@@ -34,71 +34,63 @@ namespace CCOF.Infrastructure.Plugins.AFS_History
                 IOrganizationServiceFactory serviceFactory =
                     (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
                 IOrganizationService service = serviceFactory.CreateOrganizationService(context.UserId);
-
+                tracingService.Trace("Starting AFS History plugin");
                 try
                 {
-                    tracingService.Trace("Starting AFS History plugin");
-                    //Retrieve MTFI record
-                    var mtfi = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_mtfi_qcdecision", "ownerid", "ccof_afs_process_began_on", "statuscode"));
+                    Entity mtfi = null;
+                    string providerResponse = string.Empty;
+                    Entity afsHistory = new Entity("ccof_approvable_fee_schedule_history");
+                    switch (entity.LogicalName)
+                    {
+                        case "ccof_change_request_mtfi":
+                            //Retrieve MTFI record
+                            mtfi = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_mtfi_qcdecision", "ownerid", "ccof_afs_process_began_on", "statuscode", "ccof_ccfri"));
+                            var applicationCCFRI = service.Retrieve("ccof_applicationccfri", mtfi.GetAttributeValue<EntityReference>("ccof_ccfri").Id, new ColumnSet("ccof_afs_status_mtfi"));
+                            providerResponse = applicationCCFRI.FormattedValues["ccof_afs_status_mtfi"].ToString();
+                            break;
+                        case "ccof_applicationccfri":
+                            var query = new QueryExpression()
+                            {
+                                EntityName = "ccof_change_request_mtfi",
+                                ColumnSet = new ColumnSet("ccof_mtfi_qcdecision", "ownerid", "ccof_afs_process_began_on", "statuscode"),
+                                Criteria = new FilterExpression()
+                                {
+                                    Conditions =
+                                    {
+                                        new ConditionExpression("ccof_ccfri",ConditionOperator.Equal,entity.Id)
+                                    }
+                                }
+                            };
+                            mtfi = service.RetrieveMultiple(query).Entities.First();
+                            applicationCCFRI = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_afs_status_mtfi"));
+                            providerResponse = entity.Attributes.Contains("ccof_afs_status_mtfi") ? applicationCCFRI.FormattedValues["ccof_afs_status_mtfi"].ToString() : null;
+                            break;
+                    }                    
+
                     if (mtfi != null && ((OptionSetValue)mtfi.Attributes["ccof_mtfi_qcdecision"]).Value == 100000007)
                     {
-                        Entity afsHistory = new Entity("ccof_approvable_fee_schedule_history");
-                        OptionSetValue preValue;
-                        int preStatus = 0;
+                        
+                        string preChoiceLabel = string.Empty;
                         if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
                         {
                             var ownerId = preImage.Contains("ownerid") ? ((EntityReference)preImage["ownerid"]).Id : new Guid();
                             afsHistory["ccof_previous_owner"] = new EntityReference("systemuser", ownerId);
-                            afsHistory["ccof_current_owner"] = new EntityReference("systemuser", mtfi.GetAttributeValue<EntityReference>("ownerid").Id);
-                            preValue = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
-                            preStatus = preValue.Value;
-                            tracingService.Trace("preStatus" + preStatus.ToString());
-                        }
-                        int postStatus = mtfi.GetAttributeValue<OptionSetValue>("statuscode").Value;
-                        tracingService.Trace($"Choice Value: {postStatus}");
-
-                        // Retrieve Choice Metadata for Label
-                        var request = new RetrieveAttributeRequest
-                        {
-                            EntityLogicalName = entity.LogicalName,
-                            LogicalName = "statuscode",
-                            RetrieveAsIfPublished = true
-                        };
-
-                        var response = (RetrieveAttributeResponse)service.Execute(request);
-                        var attributeMetadata = (EnumAttributeMetadata)response.AttributeMetadata;
-
-                        // Find the matching label
-                        var preOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == preStatus);
-                        var postOption = attributeMetadata.OptionSet.Options.FirstOrDefault(opt => opt.Value == postStatus);
-                        string preChoiceLabel = string.Empty;
-                        string postChoiceLabel = string.Empty;
-                        if (preOption != null)
-                        {
-                            preChoiceLabel = preOption.Label.UserLocalizedLabel.Label;
-                            tracingService.Trace($"Choice Label: {preChoiceLabel}");
+                            preChoiceLabel = preImage.FormattedValues["statuscode"].ToString();
+                            afsHistory["ccof_previous_status"] = preChoiceLabel;
                         }
                         else
                         {
-                            tracingService.Trace("Choice value not found in metadata.");
+                            afsHistory["ccof_previous_owner"] = new EntityReference("systemuser", mtfi.GetAttributeValue<EntityReference>("ownerid").Id);
+                            afsHistory["ccof_previous_status"] = mtfi.FormattedValues["statuscode"].ToString();
                         }
-                        if (postOption != null)
-                        {
-                            postChoiceLabel = postOption.Label.UserLocalizedLabel.Label;
-                            tracingService.Trace($"Choice Label: {postChoiceLabel}");
-                        }
-                        else
-                        {
-                            tracingService.Trace("Choice value not found in metadata.");
-                        }
-                        afsHistory["ccof_previous_status"] = preChoiceLabel;
-                        afsHistory["ccof_current_status"] = postChoiceLabel;
-                        //--------------------------------------------------------
+                        afsHistory["ccof_current_status"] = mtfi.FormattedValues["statuscode"].ToString();
 
-                        // add a new row                        
+                        // add a new row
+                        afsHistory["ccof_current_owner"] = new EntityReference("systemuser", mtfi.GetAttributeValue<EntityReference>("ownerid").Id);
                         afsHistory["ccof_log_date"] = DateTime.UtcNow;
-                        afsHistory["ccof_regarding_id"] = new EntityReference(entity.LogicalName, entity.Id);
+                        afsHistory["ccof_regarding_id"] = new EntityReference(mtfi.LogicalName, mtfi.Id);
                         afsHistory["ccof_afs_process_began_on"] = mtfi.GetAttributeValue<DateTime>("ccof_afs_process_began_on");
+                        afsHistory["ccof_provider_response_history"] = providerResponse;
                         Guid recordId = service.Create(afsHistory);
                         tracingService.Trace($"Record created successfully with ID: {recordId}");
                         tracingService.Trace("End App Status History plugin");
