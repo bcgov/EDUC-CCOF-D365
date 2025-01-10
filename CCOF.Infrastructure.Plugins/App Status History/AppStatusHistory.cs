@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,15 +22,16 @@ namespace CCOF.Infrastructure.Plugins
             if (context.InputParameters.Contains("Target") && context.InputParameters["Target"] is Entity)
             {
                 Entity entity = (Entity)context.InputParameters["Target"];
-                IOrganizationServiceFactory serviceFactory =
-                    (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+                IOrganizationServiceFactory serviceFactory =(IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
                 IOrganizationService service = serviceFactory.CreateOrganizationService(context.UserId);
+                IOrganizationService serviceForSA = serviceFactory.CreateOrganizationService(null);
 
                 try
                 {
                     tracingService.Trace("Starging App Status History plugin");
                     // Retrieve the current user ID (the user who triggered the plugin).
                     Guid currentUserId = context.InitiatingUserId;
+                    tracingService.Trace("context.InitiatingUserId: " + currentUserId);
                     // Or use context.UserId if impersonation is involved
                     Guid executingUserId = context.UserId;
                     EntityReference postApp = null, account = null, preOwner = null, postOwner = null;
@@ -124,7 +126,7 @@ namespace CCOF.Infrastructure.Plugins
                                   "account",
                                   account.Id
                             );
-                            Guid recordId = service.Create(statusHistoryRecord);
+                            Guid recordId = serviceForSA.Create(statusHistoryRecord);
                             tracingService.Trace($"Record created successfully with ID: {recordId}");
 
                             break;
@@ -133,10 +135,10 @@ namespace CCOF.Infrastructure.Plugins
                             // not track statuscode no changes
                             if (!entity.Contains("statuscode"))
                             {
-                                tracingService.Trace("The Statuscode value doesn't change. The vlaue is " + preStatus.Value);
+                                tracingService.Trace("There is no statuscode field in context. The vlaue is ");
                                 if (!entity.Contains("ownerid"))
                                 {
-                                    tracingService.Trace("The Ownerid value doesn't change. The vlaue is " + preStatus.Value);
+                                    tracingService.Trace("There is no Ownerid field in context.");
                                     break;
                                 }
                             }
@@ -147,6 +149,11 @@ namespace CCOF.Infrastructure.Plugins
                                     preImage = (Entity)context.PreEntityImages["PreImage"];
                                     preStatus = preImage.Contains("statuscode") ? (OptionSetValue)preImage["statuscode"] : null;
                                     tracingService.Trace("preStatus" + preStatus.Value);
+                                }
+                                if (preStatus.Value == postStatus.Value)
+                                {
+                                    tracingService.Trace("Status code value doesn't change. preValue is: "+preStatus.Value);
+                                    break;
                                 }
                                 postStatus = entity.GetAttributeValue<OptionSetValue>("statuscode");
                                 tracingService.Trace($"postStatus: {postStatus.Value}");
@@ -205,7 +212,7 @@ namespace CCOF.Infrastructure.Plugins
                                       "account",
                                       account.Id
                                 );
-                                recordId = service.Create(statusHistoryRecord);
+                                recordId = serviceForSA.Create(statusHistoryRecord);
                                 tracingService.Trace($"Record created successfully with ID: {recordId}");
                             }
                             if (entity.Contains("ownerid"))
