@@ -8,6 +8,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace CCOF.Infrastructure.Plugins
 {
@@ -257,12 +258,11 @@ namespace CCOF.Infrastructure.Plugins
                     tracingService.Trace("End App Status History plugin");
 
                 }
-
                 catch (FaultException<OrganizationServiceFault> ex)
                 {
+                    tracingService.Trace("An error occurred in AppStatusHistory Plugin." +ex.ToString());
                     throw new InvalidPluginExecutionException("An error occurred in AppStatusHistory Plugin.", ex);
                 }
-
                 catch (Exception ex)
                 {
                     tracingService.Trace("AppStatusHistory Plugin: {0}", ex.ToString());
