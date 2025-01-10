@@ -43,14 +43,14 @@ namespace CCOF.Infrastructure.Plugins.AFS_History
                     {
                         case "ccof_change_request_mtfi":
                             //Retrieve MTFI record
-                            mtfi = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_afs_confirmed", "ownerid", "ccof_afs_process_began_on", "statuscode"));
-                            
+                            mtfi = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_afs_confirmed", "ownerid", "ccof_afs_process_began_on", "statuscode", "ccof_change_action"));                            
                             break;
+
                         case "ccof_applicationccfri":
                             var query = new QueryExpression()
                             {
                                 EntityName = "ccof_change_request_mtfi",
-                                ColumnSet = new ColumnSet("ccof_afs_confirmed", "ccof_afs_process_began_on"),
+                                ColumnSet = new ColumnSet("ccof_afs_confirmed", "ccof_afs_process_began_on", "ccof_change_action"),
                                 Criteria = new FilterExpression()
                                 {
                                     Conditions =
@@ -61,7 +61,11 @@ namespace CCOF.Infrastructure.Plugins.AFS_History
                             };
                             mtfi = service.RetrieveMultiple(query).Entities.First();                            
                             break;
+
+                        default:
+                            throw new InvalidPluginExecutionException($"Entity '{context.PrimaryEntityName}' is not configured for this plugin.");
                     }
+
                     if (mtfi != null && (bool)mtfi.Attributes["ccof_afs_confirmed"] == true)
                     {
                         if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
@@ -85,13 +89,16 @@ namespace CCOF.Infrastructure.Plugins.AFS_History
                             var providerResponse = entity.Attributes.Contains("ccof_afs_status_mtfi") ? applicationCCFRI.FormattedValues["ccof_afs_status_mtfi"].ToString() : null;
                             afsHistory["ccof_provider_response_history"] = providerResponse;
                         }
+
+                        //get change request record
+                        var changeAction = service.Retrieve("ccof_change_action", mtfi.GetAttributeValue<EntityReference>("ccof_change_action").Id, new ColumnSet("ccof_change_request"));
+                        // add a new row                                
+                        afsHistory["ccof_log_date"] = DateTime.UtcNow;
+                        afsHistory["ccof_regarding_id"] = new EntityReference("ccof_change_request", changeAction.GetAttributeValue<EntityReference>("ccof_change_request").Id);
+                        afsHistory["ccof_afs_process_began_on"] = mtfi.GetAttributeValue<DateTime>("ccof_afs_process_began_on");
+                        Guid recordId = service.Create(afsHistory);
+                        tracingService.Trace($"Record created successfully with ID: {recordId}");
                     }
-                    // add a new row                                
-                    afsHistory["ccof_log_date"] = DateTime.UtcNow;
-                    afsHistory["ccof_regarding_id"] = new EntityReference(mtfi.LogicalName, mtfi.Id);
-                    afsHistory["ccof_afs_process_began_on"] = mtfi.GetAttributeValue<DateTime>("ccof_afs_process_began_on");
-                    Guid recordId = service.Create(afsHistory);
-                    tracingService.Trace($"Record created successfully with ID: {recordId}");
                     tracingService.Trace("End ApprovableFeeScheduleHistoryCreation plugin");
                 }
 
