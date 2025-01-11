@@ -261,7 +261,7 @@ namespace CCOF.Infrastructure.Plugins
                                           "account",
                                           account.Id
                                     );
-                                    recordId = service.Create(statusHistoryRecord);
+                                    recordId = serviceForSA.Create(statusHistoryRecord);
                                     tracingService.Trace($"Record created successfully with ID: {recordId}");
                                 }
                             }
