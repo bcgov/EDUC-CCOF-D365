@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="AFS History\ApprovableFeeScheduleHistoryCreation.cs" />
     <Compile Include="App Status History\AppStatusHistory.cs" />
+    <Compile Include="ECE-WE-Facility\ValidateECEWEFacilityApproval.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
