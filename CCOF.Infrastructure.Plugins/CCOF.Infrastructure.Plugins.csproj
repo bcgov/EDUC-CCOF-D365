@@ -121,6 +121,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assigned Date\UpdateAssignedDate.cs" />
     <Compile Include="AFS History\ApprovableFeeScheduleHistoryCreation.cs" />
     <Compile Include="App Status History\AppStatusHistory.cs" />
     <Compile Include="ECE-WE-Facility\ValidateECEWEFacilityApproval.cs" />
