@@ -41,54 +41,54 @@ namespace CCOF.Infrastructure.Plugins.ECE_WE_Facility
                     // Ensure "PreImage" exists and is an Entity
                     if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
                     {
-                        tracingService.Trace("entered");
-                        // Check if the attribute "ccof_adjudication_ecewe" exists in the entity
-                        if (preImage.Attributes.Contains("ccof_adjudication_ecewe"))
-                        {
-                            tracingService.Trace("Yes, contains ecewe");
-
-                            // Retrieve the ECEWE entity reference from the pre-image
-                            var eceweReference = preImage.GetAttributeValue<EntityReference>("ccof_adjudication_ecewe");
-                            if (eceweReference != null)
+                        OptionSetValue statusCode = entity["statuscode"] as OptionSetValue;
+                        if(statusCode.Value == 5)
                             {
-                                Guid ECEWEId = eceweReference.Id;
-                                tracingService.Trace("ECEWEId: " + ECEWEId);
+                            tracingService.Trace("Yes, contains statuscode" + statusCode.Value);
 
-                                // Retrieve the ECEWE entity
-                                Entity ECEWE = service.Retrieve("ccof_adjudication_ecewe", ECEWEId, new ColumnSet("ccof_adjudication"));
-                                tracingService.Trace("Retrieved ECE WE record");
+                            if (preImage.Attributes.Contains("ccof_adjudication_ecewe"))
+                            {
+                                tracingService.Trace("Yes, contains ecewe");
 
-                                // Get the reference to the CCOF entity from the ECEWE record
-                                var ccofReference = ECEWE.GetAttributeValue<EntityReference>("ccof_adjudication");
-                                if (ccofReference != null)
+                                // Retrieve the ECEWE entity reference from the pre-image
+                                var eceweReference = preImage.GetAttributeValue<EntityReference>("ccof_adjudication_ecewe");
+                                if (eceweReference != null)
                                 {
-                                    Guid CCOFId = ccofReference.Id;
-                                    tracingService.Trace("Starting ECE WE Facility plugin");
+                                    Guid ECEWEId = eceweReference.Id;
+                                    tracingService.Trace("ECEWEId: " + ECEWEId);
 
-                                    // Retrieve the CCOF entity
-                                    Entity CCOF = service.Retrieve("ccof_adjudication", CCOFId, new ColumnSet("ccof_basepayactivated"));
-                                    tracingService.Trace("Retrieved CCOF");
+                                    // Retrieve the ECEWE entity
+                                    Entity ECEWE = service.Retrieve("ccof_adjudication_ecewe", ECEWEId, new ColumnSet("ccof_adjudication"));
+                                    tracingService.Trace("Retrieved ECE WE record");
 
-                                    // Check if base pay is activated
-                                    bool basePayActivated = CCOF.GetAttributeValue<bool>("ccof_basepayactivated");
-                                    tracingService.Trace("CCOF Base Pay Activated? " + basePayActivated.ToString());
-
-                                    // If base pay is not activated, throw an exception
-                                    if (!basePayActivated)
+                                    // Get the reference to the CCOF entity from the ECEWE record
+                                    var ccofReference = ECEWE.GetAttributeValue<EntityReference>("ccof_adjudication");
+                                    if (ccofReference != null)
                                     {
-                                        throw new InvalidPluginExecutionException("Base Pay must be Active in order to approve.");
+                                        Guid CCOFId = ccofReference.Id;
+                                        tracingService.Trace("Starting ECE WE Facility plugin");
+
+                                        // Retrieve the CCOF entity
+                                        Entity CCOF = service.Retrieve("ccof_adjudication", CCOFId, new ColumnSet("ccof_basepayactivated"));
+                                        tracingService.Trace("Retrieved CCOF");
+
+                                        // Check if base pay is activated
+                                        bool basePayActivated = CCOF.GetAttributeValue<bool>("ccof_basepayactivated");
+                                        tracingService.Trace("CCOF Base Pay Activated? " + basePayActivated.ToString());
+
+                                        // If base pay is not activated, throw an exception
+                                        if (!basePayActivated)
+                                        {
+                                            throw new InvalidPluginExecutionException("Base Pay must be Active in order to approve.");
+                                        }
                                     }
+                                   
                                 }
-                                else
-                                {
-                                    throw new InvalidPluginExecutionException("CCOF entity reference not found in ECEWE.");
-                                }
-                            }
-                            else
-                            {
-                                throw new InvalidPluginExecutionException("ECEWE entity reference not found in PreImage.");
+                                
                             }
                         }
+
+                        tracingService.Trace("End ECEWEApproval plugin");
                     }
                 }
                 catch (Exception ex)
