@@ -36,7 +36,7 @@ namespace CCOF.Infrastructure.Plugins
                     Guid executingUserId = context.UserId;
                     EntityReference postApp = null, account = null, preOwner = null, postOwner = null;
                     OptionSetValue preStatus = new OptionSetValue(9999), postStatus = new OptionSetValue(9999);
-                    Entity preImage = null, postImage = null, statusHistoryRecord = null;
+                    Entity preImage = null, postImage = null, statusHistoryRecord = null, changeRequest=null;
                     tracingService.Trace("Entity is: " + entity.LogicalName + "; Message Type is:" + context.MessageName);
                     if (context.PostEntityImages.Contains("PostImage") && context.PostEntityImages["PostImage"] is Entity)
                     {
@@ -63,6 +63,25 @@ namespace CCOF.Infrastructure.Plugins
                                 break;
                             case "ccof_adjudication":
                                 account = postImage.Contains("ccof_organization") ? (EntityReference)postImage["ccof_organization"] : null;
+                                break;
+                            case "ccof_change_request":
+                                if (context.MessageName == "Create")
+                                {
+                                    Entity application = service.Retrieve(postApp.LogicalName, postApp.Id, new ColumnSet(true));
+                                    account = application.Contains("ccof_organization") ? (EntityReference)application["ccof_organization"] : null;
+                                }
+                                else
+                                {
+                                    account = postImage.Contains("ccof_organization") ? (EntityReference)postImage["ccof_organization"] : null;
+                                }
+                                break;
+                            case "ccof_change_request_mtfi":
+                                account = postImage.Contains("ccof_facility") ? (EntityReference)postImage["ccof_facility"] : null;
+                                EntityReference changeActionRef = (EntityReference)postImage["ccof_change_action"];
+                                Entity changeAction = service.Retrieve(changeActionRef.LogicalName, changeActionRef.Id, new ColumnSet(true));
+                                EntityReference changeRequestRef = (EntityReference)changeAction["ccof_change_request"];
+                                changeRequest = service.Retrieve(changeRequestRef.LogicalName, changeRequestRef.Id, new ColumnSet(true));
+                                postApp = changeRequest.Contains("ccof_application") ? (EntityReference)changeRequest["ccof_application"] : null;
                                 break;
                             default:
                                 throw new InvalidPluginExecutionException($"Entity '{context.PrimaryEntityName}' is not supported for account lookup.");
@@ -126,6 +145,20 @@ namespace CCOF.Infrastructure.Plugins
                                   "account",
                                   account.Id
                             );
+                            if (context.PrimaryEntityName == "ccof_change_request")
+                            {
+                                statusHistoryRecord["ccof_change_request"] = new EntityReference(
+                                    entity.LogicalName,
+                                    entity.Id
+                                );
+                            }
+                            if (context.PrimaryEntityName == "ccof_change_request_mtfi")
+                            {
+                                statusHistoryRecord["ccof_change_request"] = new EntityReference(
+                                    "ccof_change_request",
+                                    changeRequest.Id
+                                );
+                            }
                             Guid recordId = serviceForSA.Create(statusHistoryRecord);
                             tracingService.Trace($"Record created successfully with ID: {recordId}");
 
@@ -213,6 +246,20 @@ namespace CCOF.Infrastructure.Plugins
                                           "account",
                                           account.Id
                                     );
+                                    if (context.PrimaryEntityName== "ccof_change_request")
+                                    {
+                                        statusHistoryRecord["ccof_change_request"] = new EntityReference(
+                                            entity.LogicalName,
+                                            entity.Id
+                                        );
+                                    }
+                                    if (context.PrimaryEntityName == "ccof_change_request_mtfi")
+                                    {
+                                        statusHistoryRecord["ccof_change_request"] = new EntityReference(
+                                            "ccof_change_request",
+                                            changeRequest.Id
+                                        );
+                                    }
                                     recordId = serviceForSA.Create(statusHistoryRecord);
                                     tracingService.Trace($"Record created successfully with ID: {recordId}");
                                 }
@@ -261,6 +308,20 @@ namespace CCOF.Infrastructure.Plugins
                                           "account",
                                           account.Id
                                     );
+                                    if (context.PrimaryEntityName == "ccof_change_request")
+                                    {
+                                        statusHistoryRecord["ccof_change_request"] = new EntityReference(
+                                            entity.LogicalName,
+                                            entity.Id
+                                        );
+                                    }
+                                    if (context.PrimaryEntityName == "ccof_change_request_mtfi")
+                                    {
+                                        statusHistoryRecord["ccof_change_request"] = new EntityReference(
+                                            "ccof_change_request",
+                                            changeRequest.Id
+                                        );
+                                    }
                                     recordId = serviceForSA.Create(statusHistoryRecord);
                                     tracingService.Trace($"Record created successfully with ID: {recordId}");
                                 }
