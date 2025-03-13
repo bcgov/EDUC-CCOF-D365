@@ -44,6 +44,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         <attribute name=""ccof_contractstatus"" />
         <attribute name=""ccof_formcomplete"" />
         <attribute name=""ccof_fundingagreementnumber""/>
+        <attribute name=""ccof_bypass_goodstanding_check""/>
+        <attribute name=""ccof_good_standing_status""/>
         <link-entity name=""ccof_application"" from=""ccof_organization"" to=""accountid"" link-type=""outer"" alias=""Application"">
           <attribute name=""ccof_organization"" />
           <attribute name=""ccof_applicationtype"" />
