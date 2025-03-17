@@ -50,6 +50,10 @@ namespace CCOF.Infrastructure.WebAPI.Models
 
         [JsonPropertyName("Organization.ccof_fundingagreementnumber")]
         public string? organization_ccof_fundingagreementnumber { get; set; }
+        [JsonPropertyName("Organization.ccof_bypass_goodstanding_check")]
+        public bool? organization_ccof_bypass_goodstanding_check { get; set; }
+        [JsonPropertyName("Organization.ccof_good_standing_status")]
+        public int? organization_ccof_good_standing_status { get; set; }
 
         [JsonPropertyName("Organization.ccof_contractstatus")]
         public int? organization_ccof_contractstatus { get; set; }
