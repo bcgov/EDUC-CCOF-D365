@@ -92,6 +92,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? statuscode { get; set; }
         [JsonPropertyName("ccof_providertype@OData.Community.Display.V1.FormattedValue")]
         public string? ccof_providertype_formatted { get; set; }
+        public string? ccof_application_template_version { get; set; }
         public int? ccof_providertype { get; set; }
         public string? _ccof_organization_value { get; set; }
         public int? ccof_unlock_ccof { get; set; }

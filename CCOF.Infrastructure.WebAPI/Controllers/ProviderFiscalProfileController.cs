@@ -59,6 +59,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
           <attribute name=""ccof_unlock_supportingdocument"" />
           <attribute name=""ccof_unlock_ccof"" />
           <attribute name=""ccof_unlock_ecewe"" />
+          <attribute name=""ccof_application_template_version"" />
           <link-entity name=""ccof_program_year"" from=""ccof_program_yearid"" to=""ccof_programyear"" link-type=""outer"" alias=""ProgramYear"">
             <attribute name=""ccof_name"" />
             <attribute name=""ccof_program_yearid"" />
