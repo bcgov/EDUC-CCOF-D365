@@ -31,6 +31,7 @@ function hideFacilitiesSection(executionContext) {
             //hide the mtfi and new facilities
             formContext.ui.tabs.get("general_tab").sections.get("new_facilities_section").setVisible(false);
             formContext.ui.tabs.get("general_tab").sections.get("mtfi_facilities_section").setVisible(false);
+            formContext.ui.tabs.get("general_tab").sections.get("change_action_closure_section").setVisible(false);
 
             //show the unlock section
             formContext.ui.tabs.get("general_tab").sections.get("org_unlock_section").setVisible(true);
