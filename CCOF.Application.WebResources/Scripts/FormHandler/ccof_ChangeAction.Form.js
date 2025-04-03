@@ -14,11 +14,13 @@ function hideFacilitiesSection(executionContext) {
             //hide the change request unlock and document unlock field
             formContext.getControl("ccof_unlock_change_request").setVisible(false);
             formContext.getControl("ccof_unlock_other_changes_document").setVisible(false);
+            formContext.ui.tabs.get("general_tab").sections.get("change_action_closure_section").setVisible(false);
 
         } else if (changeType.getValue() == 100000007) { //Value of "MTFI"
             //hide the document list and new facilities
             //formContext.ui.tabs.get("general_tab").sections.get("attachments_section").setVisible(false);
             formContext.ui.tabs.get("general_tab").sections.get("new_facilities_section").setVisible(false);
+            formContext.ui.tabs.get("general_tab").sections.get("change_action_closure_section").setVisible(false);
         }
         else if (changeType.getValue() == 100000015 || changeType.getValue() == 100000016 || changeType.getValue() == 100000017) { //Value of "NEW CLOSURE" "EDIT CLOSURE" "REMOVE CLOSURE"
             debugger;
