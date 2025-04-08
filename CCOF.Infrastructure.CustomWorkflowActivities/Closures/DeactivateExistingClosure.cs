@@ -31,6 +31,7 @@ namespace CCOF.Infrastructure.CustomWorkflowActivities.Closures
                                     <filter type=""and"">
                                       <condition attribute=""ccof_facilityinfo"" operator=""eq"" uitype=""account"" value=""{recordId}"" />
                                       <condition attribute=""ccof_closure_status"" operator=""eq"" value=""100000003"" />
+                                      <condition attribute=""statecode"" operator=""eq"" value=""0"" />
                                     </filter>
                                   </entity>
                                 </fetch>";
