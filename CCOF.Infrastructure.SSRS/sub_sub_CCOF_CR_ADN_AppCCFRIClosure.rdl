@@ -321,7 +321,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_startdate.Value</Value>
+                                  <Value>=Format(Fields!ccof_startdateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -353,7 +353,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_enddate.Value</Value>
+                                  <Value>=Format(Fields!ccof_enddateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>

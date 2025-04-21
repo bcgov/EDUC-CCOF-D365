@@ -424,7 +424,7 @@
                 <Value>checkmarkxxl</Value>
                 <Sizing>FitProportional</Sizing>
                 <Top>3.55555in</Top>
-                <Left>0.32873in</Left>
+                <Left>0.01162in</Left>
                 <Height>0.13542in</Height>
                 <Width>0.18751in</Width>
                 <Style>
@@ -490,10 +490,22 @@
                         </Style>
                       </TextRun>
                       <TextRun>
-                        <Value>Each facility must be licensed under the Community Care and Assisted Living Act;
+                        <Value>Each facility must be licensed under the Community Care and Assisted Living Act;</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -506,10 +518,22 @@
                         </Style>
                       </TextRun>
                       <TextRun>
-                        <Value>Each facility must be in compliance with the Community Care and Assisted Living Act and Child Care Licensing Regulation;
+                        <Value>Each facility must be in compliance with the Community Care and Assisted Living Act and Child Care Licensing Regulation;</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -522,10 +546,22 @@
                         </Style>
                       </TextRun>
                       <TextRun>
-                        <Value>Each facility must be willing to provide services to families who receive the Affordable Child Care Benefit;
+                        <Value>Each facility must be willing to provide services to families who receive the Affordable Child Care Benefit;</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -538,10 +574,22 @@
                         </Style>
                       </TextRun>
                       <TextRun>
-                        <Value>The organization must be in good standing with BC Registrar of Companies (if a nonprofit society or a registered company); and
+                        <Value>The organization must be in good standing with BC Registrar of Companies (if a nonprofit society or a registered company); and</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -576,6 +624,7 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox4</rd:DefaultName>
+                <Left>0.01162in</Left>
                 <Height>3.32292in</Height>
                 <Width>8.5325in</Width>
                 <ZIndex>1</ZIndex>
@@ -607,7 +656,7 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Paragraphs>
                 <rd:DefaultName>Textbox5</rd:DefaultName>
                 <Top>3.44792in</Top>
-                <Left>0.58568in</Left>
+                <Left>0.25469in</Left>
                 <Height>0.39236in</Height>
                 <Width>7.8496in</Width>
                 <ZIndex>2</ZIndex>
@@ -639,8 +688,7 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox6</rd:DefaultName>
-                <Top>4.23263in</Top>
-                <Left>0.32873in</Left>
+                <Top>3.9993in</Top>
                 <Height>0.25in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>3</ZIndex>
@@ -671,8 +719,7 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox7</rd:DefaultName>
-                <Top>4.49652in</Top>
-                <Left>0.32873in</Left>
+                <Top>4.44374in</Top>
                 <Height>0.2in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>4</ZIndex>
@@ -712,10 +759,10 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox92</rd:DefaultName>
-                <Top>4.49652in</Top>
+                <Top>4.44374in</Top>
                 <Left>5.59833in</Left>
                 <Height>0.2in</Height>
-                <Width>2.03125in</Width>
+                <Width>2.49434in</Width>
                 <ZIndex>5</ZIndex>
                 <Style>
                   <Border>
@@ -729,9 +776,9 @@ Intentionally supplying information that is false or misleading with respect to 
               </Textbox>
             </ReportItems>
             <Top>2.10708in</Top>
-            <Left>0.27083in</Left>
+            <Left>0.25921in</Left>
             <Height>4.84721in</Height>
-            <Width>8.5325in</Width>
+            <Width>8.54412in</Width>
             <ZIndex>1</ZIndex>
             <Visibility>
               <Hidden>=IIF(First(Fields!cr_ccof_showdeclarationonreportValue.Value, "OtherChange")=100000000,False,True)</Hidden>
@@ -749,7 +796,7 @@ Intentionally supplying information that is false or misleading with respect to 
                 <Value>checkmarkxxl</Value>
                 <Sizing>FitProportional</Sizing>
                 <Top>1.47569in</Top>
-                <Left>0.20604in</Left>
+                <Left>0.01162in</Left>
                 <Height>0.15625in</Height>
                 <Width>0.18751in</Width>
                 <Style>
@@ -813,6 +860,7 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox4</rd:DefaultName>
+                <Left>0in</Left>
                 <Height>1.23958in</Height>
                 <Width>8.41667in</Width>
                 <ZIndex>1</ZIndex>
@@ -845,7 +893,7 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Paragraphs>
                 <rd:DefaultName>Textbox6</rd:DefaultName>
                 <Top>1.81597in</Top>
-                <Left>0.1238in</Left>
+                <Left>0.01162in</Left>
                 <Height>0.25in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>2</ZIndex>
@@ -877,7 +925,6 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Paragraphs>
                 <rd:DefaultName>Textbox7</rd:DefaultName>
                 <Top>2.13541in</Top>
-                <Left>0.1238in</Left>
                 <Height>0.2in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>3</ZIndex>
@@ -909,7 +956,7 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Paragraphs>
                 <rd:DefaultName>Textbox5</rd:DefaultName>
                 <Top>1.35416in</Top>
-                <Left>0.46299in</Left>
+                <Left>0.26857in</Left>
                 <Height>0.39236in</Height>
                 <Width>7.89583in</Width>
                 <ZIndex>4</ZIndex>
@@ -950,9 +997,9 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Paragraphs>
                 <rd:DefaultName>Textbox92</rd:DefaultName>
                 <Top>2.13541in</Top>
-                <Left>5.59833in</Left>
+                <Left>5.44835in</Left>
                 <Height>0.2in</Height>
-                <Width>2.03125in</Width>
+                <Width>2.18123in</Width>
                 <ZIndex>5</ZIndex>
                 <Style>
                   <Border>
@@ -986,7 +1033,7 @@ Intentionally supplying information that is false or misleading with respect to 
                 <Value>checkmarkxxl</Value>
                 <Sizing>FitProportional</Sizing>
                 <Top>4.88194in</Top>
-                <Left>0.19791in</Left>
+                <Left>0.01162in</Left>
                 <Height>0.15625in</Height>
                 <Width>0.18751in</Width>
                 <Style>
@@ -1089,6 +1136,7 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                 </Paragraphs>
                 <rd:DefaultName>Textbox4</rd:DefaultName>
                 <Top>0.11458in</Top>
+                <Left>0.01162in</Left>
                 <Height>4.69792in</Height>
                 <Width>8.41667in</Width>
                 <ZIndex>1</ZIndex>
@@ -1119,8 +1167,8 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox5</rd:DefaultName>
-                <Top>4.86806in</Top>
-                <Left>0.42708in</Left>
+                <Top>4.85417in</Top>
+                <Left>0.26857in</Left>
                 <Height>0.25in</Height>
                 <Width>2.41667in</Width>
                 <ZIndex>2</ZIndex>
@@ -1152,8 +1200,8 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox6</rd:DefaultName>
-                <Top>5.15972in</Top>
-                <Left>0.15625in</Left>
+                <Top>5.17361in</Top>
+                <Left>0.01162in</Left>
                 <Height>0.25in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>3</ZIndex>
@@ -1184,8 +1232,7 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox7</rd:DefaultName>
-                <Top>5.47917in</Top>
-                <Left>0.15625in</Left>
+                <Top>5.49306in</Top>
                 <Height>0.2in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>4</ZIndex>
@@ -1226,7 +1273,7 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                 </Paragraphs>
                 <rd:DefaultName>Textbox92</rd:DefaultName>
                 <Top>5.47917in</Top>
-                <Left>5.59833in</Left>
+                <Left>5.60995in</Left>
                 <Height>0.2in</Height>
                 <Width>2.03125in</Width>
                 <ZIndex>5</ZIndex>
@@ -1242,9 +1289,9 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
               </Textbox>
             </ReportItems>
             <Top>7.02374in</Top>
-            <Left>0.27083in</Left>
+            <Left>0.25921in</Left>
             <Height>5.81944in</Height>
-            <Width>8.5325in</Width>
+            <Width>8.54412in</Width>
             <ZIndex>3</ZIndex>
             <Visibility>
               <Hidden>=IIF(First(Fields!cr_ccof_showdeclarationonreportValue.Value, "OtherChange")=100000001,False,True)</Hidden>
@@ -1306,7 +1353,6 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />

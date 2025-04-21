@@ -338,7 +338,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.4in</Height>
+                  <Height>0.5in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -388,6 +388,17 @@
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ccof_frequency.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -848,7 +859,7 @@
             <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCFRIAFS</DataSetName>
             <Top>0.01958in</Top>
-            <Height>1.05in</Height>
+            <Height>1.15in</Height>
             <Width>6.70833in</Width>
             <Style>
               <Border>
@@ -857,7 +868,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.13417in</Height>
+        <Height>1.16958in</Height>
         <Style />
       </Body>
       <Width>6.70833in</Width>

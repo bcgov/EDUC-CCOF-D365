@@ -321,7 +321,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_startdate.Value</Value>
+                                  <Value>=Format(Fields!ccof_startdateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Normal</FontWeight>
@@ -354,7 +354,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_enddate.Value</Value>
+                                  <Value>=Format(Fields!ccof_enddateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Normal</FontWeight>
@@ -468,7 +468,7 @@
             <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCFRIClosure</DataSetName>
             <Height>0.4in</Height>
-            <Width>6.95834in</Width>
+            <Width>6.95835in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -479,7 +479,7 @@
         <Height>0.45833in</Height>
         <Style />
       </Body>
-      <Width>6.95834in</Width>
+      <Width>6.95835in</Width>
       <Page>
         <PageWidth>11.5in</PageWidth>
         <LeftMargin>1in</LeftMargin>

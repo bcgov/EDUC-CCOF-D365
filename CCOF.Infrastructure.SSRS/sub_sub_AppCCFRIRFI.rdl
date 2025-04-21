@@ -1196,7 +1196,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_dateofexpense.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateofexpenseValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -1692,7 +1692,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_applicationdate.Value</Value>
+                                  <Value>=Format(Fields!ccof_applicationdateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2521,7 +2521,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_wageincreasedate.Value</Value>
+                                  <Value>=Format(Fields!ccof_wageincreasedateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2607,6 +2607,20 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>Is there anything else about your facility's challenges or staffing you would like us to know?</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -3471,7 +3485,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_dateofchange.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateofchangeValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -4034,7 +4048,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_date.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -4055,6 +4069,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>

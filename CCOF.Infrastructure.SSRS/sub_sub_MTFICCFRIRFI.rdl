@@ -1140,7 +1140,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_dateofexpense.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateofexpenseValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -1627,7 +1627,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_applicationdate.Value</Value>
+                                  <Value>=Format(Fields!ccof_applicationdateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -1770,8 +1770,8 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>APPCCFRIRFIOtherFunding</DataSetName>
-            <Top>2.18889in</Top>
-            <Left>0.05121in</Left>
+            <Top>2.20278in</Top>
+            <Left>0.03418in</Left>
             <Height>0.4in</Height>
             <Width>8.39722in</Width>
             <ZIndex>3</ZIndex>
@@ -2466,7 +2466,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_wageincreasedate.Value</Value>
+                                  <Value>=Format(Fields!ccof_wageincreasedateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -3417,7 +3417,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_dateofchange.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateofchangeValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -3575,7 +3575,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Is there anything else about your change in hours of operation you would like us to know</Value>
+                                  <Value>Is there anything else about your change in hours of operation you would like us to know?</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -3591,14 +3591,6 @@
                                   <Value>=First(Fields!ccof_isthereanythingelseaboutyourchangeinhours.Value, "AppCCFRIRFI")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>?</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3976,7 +3968,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_date.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -4077,7 +4069,8 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Is there anything else about your expenses you would like us to know?</Value>
+                                  <Value>Is there anything else about your expenses you would like us to know?
+</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -4085,11 +4078,6 @@
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
                                 <TextRun>
                                   <Value>=First(Fields!ccof_indigenouscommunityexpense_reasonforincreased.Value, "AppCCFRIRFI")</Value>
                                   <Style>
@@ -4422,7 +4410,6 @@
             </TablixRowHierarchy>
             <DataSetName>AppCCFRIRFI</DataSetName>
             <Top>10.08611in</Top>
-            <Left>0.027in</Left>
             <Height>1.81in</Height>
             <Width>8.39721in</Width>
             <ZIndex>10</ZIndex>

@@ -1195,7 +1195,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_dateofexpense.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateofexpenseValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -1362,8 +1362,8 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>AppCCFRIRFIExpenseInfo</DataSetName>
-            <Top>0.66389in</Top>
-            <Left>0.06343in</Left>
+            <Top>0.67778in</Top>
+            <Left>0.03739in</Left>
             <Height>1.01in</Height>
             <Width>8.39722in</Width>
             <ZIndex>1</ZIndex>
@@ -1665,7 +1665,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_applicationdate.Value</Value>
+                                  <Value>=Format(Fields!ccof_applicationdateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2470,7 +2470,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_wageincreasedate.Value</Value>
+                                  <Value>=Format(Fields!ccof_wageincreasedateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -3397,7 +3397,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_dateofchange.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateofchangeValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -3941,7 +3941,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_date.Value</Value>
+                                  <Value>=Format(Fields!ccof_dateValue.Value,"yyyy-MM-dd")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -3961,6 +3961,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
