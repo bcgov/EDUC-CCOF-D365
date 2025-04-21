@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DynamicsDev">
+  <ConnectionProperties>
+    <Extension>MSCRMFETCH</Extension>
+    <ConnectString>https://mychildcareservicesdev.crm3.dynamics.com/</ConnectString>
+  </ConnectionProperties>
+  <DataSourceID>c4445c18-00bc-43e1-a666-f18f4de1eb36</DataSourceID>
+</RptDataSource>
