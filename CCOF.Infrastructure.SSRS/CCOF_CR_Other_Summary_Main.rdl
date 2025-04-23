@@ -65,7 +65,7 @@
               </Parameter>
             </Parameters>
             <Height>0.35417in</Height>
-            <Width>5.49875in</Width>
+            <Width>4.54042in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -73,10 +73,10 @@
             </Style>
           </Subreport>
         </ReportItems>
-        <Height>0.47792in</Height>
+        <Height>0.39459in</Height>
         <Style />
       </Body>
-      <Width>5.49875in</Width>
+      <Width>4.61333in</Width>
       <Page>
         <PageHeight>12in</PageHeight>
         <PageWidth>11.5in</PageWidth>
