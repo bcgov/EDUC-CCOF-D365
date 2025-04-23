@@ -860,7 +860,6 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox4</rd:DefaultName>
-                <Left>0in</Left>
                 <Height>1.23958in</Height>
                 <Width>8.41667in</Width>
                 <ZIndex>1</ZIndex>

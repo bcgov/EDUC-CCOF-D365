@@ -45,6 +45,11 @@
       &lt;attribute name="accountnumber" /&gt;
       &lt;attribute name="ccof_facilitylicencenumber" /&gt;
     &lt;/link-entity&gt;
+    &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_ccfri" link-type="inner" alias="appccfri"&gt;
+      &lt;attribute name="ccof_afs_status_mtfi" /&gt;
+      &lt;attribute name="ccof_unlock_afs" /&gt;
+      &lt;attribute name="ccof_unlock_afsenable" /&gt;
+    &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
       </Query>
@@ -144,6 +149,30 @@
         <Field Name="facility_ccof_facilitylicencenumber">
           <DataField>facility_ccof_facilitylicencenumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_afs_status_mtfi">
+          <DataField>appccfri_ccof_afs_status_mtfi</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_afs_status_mtfiValue">
+          <DataField>appccfri_ccof_afs_status_mtfiValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_unlock_afs">
+          <DataField>appccfri_ccof_unlock_afs</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_unlock_afsValue">
+          <DataField>appccfri_ccof_unlock_afsValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_unlock_afsenable">
+          <DataField>appccfri_ccof_unlock_afsenable</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_unlock_afsenableValue">
+          <DataField>appccfri_ccof_unlock_afsenableValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -291,18 +320,18 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.79015in</Width>
+                  <Width>2.78363in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.76931in</Width>
+                  <Width>3.76279in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.81098in</Width>
+                  <Width>1.80446in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.4in</Height>
+                  <Height>0.48055in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -405,7 +434,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.8in</Height>
+                  <Height>0.88055in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -413,18 +442,18 @@
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>2.79015in</Width>
+                                <Width>2.78362in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>2.79015in</Width>
+                                <Width>2.78362in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>2.79015in</Width>
+                                <Width>2.78362in</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17611in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -435,6 +464,7 @@
                                             <Value>=Fields!ccof_ccfriValue.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -449,7 +479,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17611in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -460,6 +490,7 @@
                                             <Value>=Fields!ccof_ccfriValue.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -474,7 +505,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17611in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -485,6 +516,7 @@
                                             <Value>=Fields!ccof_ccfriValue.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -499,7 +531,33 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17611in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Subreport Name="SubreportAFSDoc">
+                                        <ReportName>sub_sub_MTFI_AFS_Doc</ReportName>
+                                        <Parameters>
+                                          <Parameter Name="MTFIID">
+                                            <Value>=Fields!ccof_change_request_mtfiid.Value</Value>
+                                          </Parameter>
+                                        </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Subreport>
+                                      <ColSpan>3</ColSpan>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.17611in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -510,6 +568,7 @@
                                             <Value>=Fields!ccof_change_request_mtfiid.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -536,7 +595,16 @@
                             <TablixMembers>
                               <TablixMember />
                               <TablixMember />
-                              <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(First(Fields!appccfri_ccof_unlock_afsenableValue.Value, "MTFI")=1,false,true)</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(First(Fields!appccfri_ccof_unlock_afsenableValue.Value, "MTFI")=1,false,true)</Hidden>
+                                </Visibility>
+                              </TablixMember>
                               <TablixMember />
                             </TablixMembers>
                           </TablixRowHierarchy>
@@ -578,8 +646,8 @@
             <DataSetName>MTFI</DataSetName>
             <Top>1.53695in</Top>
             <Left>0.24418in</Left>
-            <Height>1.2in</Height>
-            <Width>8.37044in</Width>
+            <Height>1.3611in</Height>
+            <Width>8.35087in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -934,8 +1002,8 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>2.74181in</Top>
-            <Left>0.23376in</Left>
+            <Top>2.9675in</Top>
+            <Left>0.21877in</Left>
             <Height>4.35763in</Height>
             <Width>8.3971in</Width>
             <ZIndex>2</ZIndex>
@@ -1162,8 +1230,8 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>13.07165in</Top>
-            <Left>0.23376in</Left>
+            <Top>13.2522in</Top>
+            <Left>0.21418in</Left>
             <Height>2.4861in</Height>
             <Width>8.42833in</Width>
             <ZIndex>3</ZIndex>
@@ -1421,7 +1489,7 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>7.16888in</Top>
+            <Top>7.39457in</Top>
             <Left>0.23376in</Left>
             <Height>5.81944in</Height>
             <Width>8.40875in</Width>
@@ -1460,7 +1528,7 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>4b752b84-aece-ef11-8ee9-7c1e5240b09b</Value>
+          <Value>66b37c58-ef13-f011-998a-7c1e524098a2</Value>
         </Values>
       </DefaultValue>
       <Prompt>Change Request ID</Prompt>

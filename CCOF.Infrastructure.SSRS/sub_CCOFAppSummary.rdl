@@ -272,7 +272,10 @@
       &lt;attribute name="ccof_faclilityid" /&gt;
       &lt;attribute name="ccof_name" /&gt;
       &lt;attribute name="ccof_chargefeeccfri" /&gt;
-    &lt;attribute name="ccof_informationccfri" /&gt;
+      &lt;attribute name="ccof_informationccfri" /&gt;
+      &lt;attribute name="ccof_afs_status" /&gt;
+      &lt;attribute name="ccof_unlock_afs" /&gt;
+      &lt;attribute name="ccof_unlock_afsenable" /&gt;
       &lt;order attribute="ccof_facility" /&gt;
       &lt;link-entity name="account" from="accountid" to="ccof_facility" link-type="inner" alias="facility"&gt;
         &lt;attribute name="accountid" /&gt;
@@ -376,6 +379,10 @@
           <DataField>AppCCFRI_ccof_informationccfri</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="AppCCFRI_ccof_afs_status">
+          <DataField>AppCCFRI_ccof_afs_status</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_accountnumber">
           <DataField>facility_accountnumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -384,17 +391,37 @@
           <DataField>AppCCFRI_ccof_chargefeeccfriValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="AppCCFRI_ccof_afs_statusValue">
+          <DataField>AppCCFRI_ccof_afs_statusValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="facility_ccof_facilitylicencenumber">
           <DataField>facility_ccof_facilitylicencenumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AppCCFRI_ccof_unlock_afs">
+          <DataField>AppCCFRI_ccof_unlock_afs</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AppCCFRI_ccof_unlock_afsValue">
+          <DataField>AppCCFRI_ccof_unlock_afsValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="facility_address1_city">
           <DataField>facility_address1_city</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="AppCCFRI_ccof_unlock_afsenable">
+          <DataField>AppCCFRI_ccof_unlock_afsenable</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_address1_composite">
           <DataField>facility_address1_composite</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AppCCFRI_ccof_unlock_afsenableValue">
+          <DataField>AppCCFRI_ccof_unlock_afsenableValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="facility_address1_postalcode">
           <DataField>facility_address1_postalcode</DataField>
@@ -1981,7 +2008,6 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell>
@@ -2140,7 +2166,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2168,7 +2194,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2197,7 +2223,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2251,7 +2277,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2279,7 +2305,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.6in</Height>
+                                <Height>0.57778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2364,7 +2390,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2378,6 +2404,7 @@
                                             <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -2392,7 +2419,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2406,6 +2433,7 @@
                                             <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -2420,7 +2448,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.17778in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2434,6 +2462,7 @@
                                             <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -2441,6 +2470,36 @@
                                         </Style>
                                       </Subreport>
                                       <ColSpan>3</ColSpan>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.17778in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Subreport Name="SubreportAFSDoc">
+                                        <ReportName>sub_sub_App_AFS_Doc</ReportName>
+                                        <Parameters>
+                                          <Parameter Name="ApplicationID">
+                                            <Value>=Parameters!ApplicationID.Value</Value>
+                                          </Parameter>
+                                          <Parameter Name="FacilityID">
+                                            <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
+                                          </Parameter>
+                                        </Parameters>
+                                        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Subreport>
+                                      <ColSpan>3</ColSpan>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
@@ -2469,7 +2528,16 @@
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
-                              <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(Fields!AppCCFRI_ccof_unlock_afsenableValue.Value=1,false,true)</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(Fields!AppCCFRI_ccof_unlock_afsenableValue.Value=1,false,true)</Hidden>
+                                </Visibility>
+                              </TablixMember>
                             </TablixMembers>
                           </TablixRowHierarchy>
                           <KeepTogether>true</KeepTogether>
@@ -2501,6 +2569,7 @@
                               <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
                             </Parameter>
                           </Parameters>
+                          <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2529,6 +2598,7 @@
                               <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
                             </Parameter>
                           </Parameters>
+                          <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2594,7 +2664,6 @@
                 <Value>checkmarkxxl</Value>
                 <Sizing>FitProportional</Sizing>
                 <Top>3.14956in</Top>
-                <Left>0in</Left>
                 <Height>0.13542in</Height>
                 <Width>0.18751in</Width>
                 <Style>
@@ -2685,7 +2754,6 @@
                 </Paragraphs>
                 <rd:DefaultName>Textbox7</rd:DefaultName>
                 <Top>3.78845in</Top>
-                <Left>0in</Left>
                 <Height>0.2in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>3</ZIndex>

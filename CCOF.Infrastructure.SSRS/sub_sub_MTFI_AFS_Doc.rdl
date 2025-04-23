@@ -29,15 +29,8 @@
     &lt;attribute name="subject" /&gt;
     &lt;attribute name="createdon" /&gt;
     &lt;filter type="or"&gt;
-      &lt;condition attribute="subject" operator="eq" value="Facility License" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="SUPPORTING" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="NOTIFICATION_FORM" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="SUPPORTING_DOC" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="RFI-EC" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="RFI-DCSWI" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="RFI-PSE" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="RFI-ACCUP" /&gt;
-      &lt;condition attribute="subject" operator="eq" value="RFI-PSEIC" /&gt;
+      &lt;condition attribute="subject" operator="like" value="AFS - Supporting Documents - Submitted" /&gt;
+      &lt;condition attribute="subject" operator="like" value="AFS - Supporting Documents" /&gt;
     &lt;/filter&gt;
     &lt;order attribute="subject" /&gt;
     &lt;link-entity name="ccof_application_facility_document" from="ccof_application_facility_documentid" to="objectid" link-type="inner" alias="appdoc"&gt;
@@ -101,13 +94,13 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.27083in</Width>
+                  <Width>2.78819in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.65277in</Width>
+                  <Width>2.47917in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.05555in</Width>
+                  <Width>3.74305in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -116,15 +109,16 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox2">
+                        <Textbox Name="Textbox10">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Uploaded Documents</Value>
+                                  <Value>Approvable Fee Schedule Uploaded Documents</Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
                                     <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>SteelBlue</Color>
@@ -134,7 +128,7 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -158,7 +152,7 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox3">
+                        <Textbox Name="Textbox4">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -175,7 +169,7 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -385,7 +379,7 @@
             <KeepTogether>true</KeepTogether>
             <DataSetName>AFSUploadDoc</DataSetName>
             <Height>0.65in</Height>
-            <Width>8.97915in</Width>
+            <Width>9.0104in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -396,7 +390,7 @@
         <Height>0.69098in</Height>
         <Style />
       </Body>
-      <Width>8.97915in</Width>
+      <Width>9.02082in</Width>
       <Page>
         <PageWidth>11.5in</PageWidth>
         <LeftMargin>1in</LeftMargin>
@@ -410,11 +404,6 @@
   <ReportParameters>
     <ReportParameter Name="MTFIID">
       <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>94d39979-ef13-f011-998a-7c1e524098a2</Value>
-        </Values>
-      </DefaultValue>
       <Prompt>MTFIID</Prompt>
     </ReportParameter>
   </ReportParameters>

@@ -68,6 +68,7 @@
     <Report Include="sub_sub_AppCCOF.rdl" />
     <Report Include="sub_sub_AppDoc.rdl" />
     <Report Include="sub_sub_AppECEWE.rdl" />
+    <Report Include="sub_sub_App_AFS_Doc.rdl" />
     <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRIClosure.rdl" />
     <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRINMF.rdl" />
     <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRIParentFee.rdl" />
@@ -80,6 +81,7 @@
     <Report Include="sub_sub_MTFICCFRIRFI.rdl" />
     <Report Include="sub_sub_MTFINewCCFRIParentFee.rdl" />
     <Report Include="sub_sub_MTFI_AFS.rdl" />
+    <Report Include="sub_sub_MTFI_AFS_Doc.rdl" />
     <Report Include="sub_sub_MTFI_Doc.rdl" />
     <Report Include="sub_sub_sub_CurrentApprovedParentFeeForMTFI.rdl" />
   </ItemGroup>
