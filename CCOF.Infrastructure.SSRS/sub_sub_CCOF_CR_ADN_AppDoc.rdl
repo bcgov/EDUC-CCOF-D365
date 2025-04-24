@@ -34,8 +34,15 @@
     &lt;attribute name="createdon" /&gt;
     &lt;order attribute="subject" /&gt;
     &lt;filter type="or"&gt;
-      &lt;condition attribute="subject" operator="like" value="SUPPORTING" /&gt;
-      &lt;condition attribute="subject" operator="like" value="Facility License" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="Facility License" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="SUPPORTING" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="NOTIFICATION_FORM" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="SUPPORTING_DOC" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="RFI-EC" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="RFI-DCSWI" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="RFI-PSE" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="RFI-ACCUP" /&gt;
+      &lt;condition attribute="subject" operator="eq" value="RFI-PSEIC" /&gt;
     &lt;/filter&gt;
     &lt;link-entity name="ccof_application_facility_document" from="ccof_application_facility_documentid" to="objectid" link-type="inner" alias="app"&gt;
       &lt;attribute name="ccof_application" /&gt;
@@ -135,6 +142,9 @@
                 <TablixColumn>
                   <Width>3.54861in</Width>
                 </TablixColumn>
+                <TablixColumn>
+                  <Width>3.61458in</Width>
+                </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
@@ -173,9 +183,10 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>2</ColSpan>
+                        <ColSpan>3</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                   </TablixCells>
                 </TablixRow>
@@ -237,6 +248,39 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox4">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Descrption:</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -319,12 +363,45 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="notetext">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!notetext.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>notetext</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
               </TablixMembers>
@@ -344,7 +421,7 @@
             </TablixRowHierarchy>
             <DataSetName>AppDoc</DataSetName>
             <Height>0.65in</Height>
-            <Width>5.55555in</Width>
+            <Width>9.17013in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -355,7 +432,7 @@
         <Height>0.6875in</Height>
         <Style />
       </Body>
-      <Width>5.55555in</Width>
+      <Width>9.17013in</Width>
       <Page>
         <PageWidth>11.5in</PageWidth>
         <LeftMargin>1in</LeftMargin>
