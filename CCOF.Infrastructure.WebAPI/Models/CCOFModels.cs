@@ -143,6 +143,8 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? statuscode { get; set; }
         public int? ccof_ccfrioptin { get; set; }
         public bool? ccof_formcomplete { get; set; }
+        public bool? ccof_closureformcomplete { get; set; }
+
         public int? ccof_unlock_rfi { get; set; }
         public int? ccof_unlock_ccfri { get; set; }
         public int? ccof_unlock_nmf_rfi { get; set; }
