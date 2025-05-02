@@ -6,6 +6,7 @@ CCOF.Closure.Form = CCOF.Closure.Form || {};
 CCOF.Closure.Form = {
     onLoad: function (executionContext) {
         this.startAndEndDateOnClosureRequest(executionContext);
+        this.requiredFieldsonApproval(executionContext);
     },
 
     startAndEndDateOnClosureRequest: function (executionContext) {
@@ -46,5 +47,17 @@ CCOF.Closure.Form = {
         }
     },
 
-
+    requiredFieldsonApproval: function (executionContext) {
+        debugger;
+        var formContext = executionContext.getFormContext();
+        var statusReason = formContext.getAttribute("ccof_closure_status").getValue();
+        if (statusReason == 100000001) {
+            formContext.getAttribute("ccof_approved_as").setRequiredLevel("required");
+            formContext.getAttribute("ccof_payment_eligibility").setRequiredLevel("required");
+        }
+        else {
+            formContext.getAttribute("ccof_approved_as").setRequiredLevel("none");
+            formContext.getAttribute("ccof_payment_eligibility").setRequiredLevel("none");
+        }
+    }
 }
