@@ -53,6 +53,7 @@
       &lt;attribute name="ccof_facility" /&gt;
       &lt;attribute name="ccof_faclilityid" /&gt;
       &lt;attribute name="ccof_name" /&gt;
+      &lt;attribute name="ccof_afs_status_mtfi" /&gt;
       &lt;filter&gt;
         &lt;condition attribute="ccof_applicationccfriid" operator="eq" value="@ApplicationCCFRIID" /&gt;
       &lt;/filter&gt;
@@ -252,6 +253,14 @@
         <Field Name="ccof_sepValue">
           <DataField>ccof_sepValue</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_afs_status_mtfi">
+          <DataField>appccfri_ccof_afs_status_mtfi</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_afs_status_mtfiValue">
+          <DataField>appccfri_ccof_afs_status_mtfiValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -815,6 +824,7 @@
             <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCFRIAFS</DataSetName>
             <Top>0.01958in</Top>
+            <Left>0in</Left>
             <Height>1.03958in</Height>
             <Width>6.70833in</Width>
             <Style>
@@ -823,8 +833,54 @@
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="Textbox1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Please select one of the following options regarding the approvable fee schedule:</Value>
+                    <Style>
+                      <FontFamily>Arial</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <TextDecoration>None</TextDecoration>
+                      <Color>Gray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!appccfri_ccof_afs_status_mtfi.Value, "AppCCFRIAFS")</Value>
+                    <Style>
+                      <FontFamily>Arial</FontFamily>
+                      <TextDecoration>None</TextDecoration>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>1.08694in</Top>
+            <Height>0.4in</Height>
+            <Width>6.70833in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>1.14459in</Height>
+        <Height>1.51959in</Height>
         <Style />
       </Body>
       <Width>6.79167in</Width>

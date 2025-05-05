@@ -56,6 +56,7 @@
       &lt;attribute name="ccof_facility" /&gt;
       &lt;attribute name="ccof_faclilityid" /&gt;
       &lt;attribute name="ccof_name" /&gt;
+      &lt;attribute name="ccof_afs_status" /&gt;
       &lt;filter&gt;
         &lt;condition attribute="ccof_facility" operator="eq" value="@FacilityID" /&gt;
       &lt;/filter&gt;
@@ -260,6 +261,14 @@
         <Field Name="ccof_sepValue">
           <DataField>ccof_sepValue</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_afs_status">
+          <DataField>appccfri_ccof_afs_status</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_afs_statusValue">
+          <DataField>appccfri_ccof_afs_statusValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -867,8 +876,54 @@
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="Textbox1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Please select one of the following options regarding the approvable fee schedule:</Value>
+                    <Style>
+                      <FontFamily>Arial</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <TextDecoration>None</TextDecoration>
+                      <Color>Gray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!appccfri_ccof_afs_status.Value, "AppCCFRIAFS")</Value>
+                    <Style>
+                      <FontFamily>Arial</FontFamily>
+                      <TextDecoration>None</TextDecoration>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>1.19736in</Top>
+            <Height>0.4in</Height>
+            <Width>6.70833in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>1.16958in</Height>
+        <Height>1.60708in</Height>
         <Style />
       </Body>
       <Width>6.70833in</Width>
@@ -885,10 +940,20 @@
   <ReportParameters>
     <ReportParameter Name="ApplicationID">
       <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>58f67f45-e8d1-ef11-8ee9-7c1e5240b09b</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>Application GUID</Prompt>
     </ReportParameter>
     <ReportParameter Name="FacilityID">
       <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>e016607f-e8d1-ef11-8ee9-7c1e524078c7</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>Facility GUID</Prompt>
     </ReportParameter>
   </ReportParameters>

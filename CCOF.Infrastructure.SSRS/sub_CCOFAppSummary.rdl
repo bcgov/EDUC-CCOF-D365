@@ -2499,7 +2499,6 @@
                                         </Style>
                                       </Subreport>
                                       <ColSpan>3</ColSpan>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
