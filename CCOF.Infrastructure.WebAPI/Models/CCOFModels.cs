@@ -74,6 +74,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("ccof_facilitystatus@OData.Community.Display.V1.FormattedValue")]
         public string? ccof_facilitystatus_formatted { get; set; }
         public int? ccof_facilitystatus { get; set; }
+        [JsonPropertyName("ccof_healthauthority@OData.Community.Display.V1.FormattedValue")]
+        public string? ccof_healthauthority_formatted { get; set; }
+        public int? ccof_healthauthority { get; set; }
         public string? ccof_facilitylicencenumber { get; set; }
         public bool? ccof_formcomplete { get; set; }
         public string? _parentaccountid_value { get; set; }
