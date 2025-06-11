@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            color: #333;
+            margin: 0;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        /* Main Container */
+        .report-container {
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        /* Header Section */
+        .report-header {
+            padding: 10px 20px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f7f7f7;
+        }
+
+        .report-header h1 {
+            font-size: 1.5em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* Metadata Section Below Header */
+        .report-meta {
+            padding: 10px 20px;
+            border-bottom: 1px solid #ccc;
+            background-color: #fdfdfd;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 120px auto;
+            gap: 5px 15px;
+        }
+
+        .meta-grid strong {
+            font-weight: 600;
+        }
+
+        .meta-grid #report-status {
+            font-weight: bold;
+            color: #006400;
+            /* Dark Green */
+        }
+
+        /* Table Styling */
+        .enrolment-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .enrolment-table th,
+        .enrolment-table td {
+            border: 1px solid #ddd;
+            padding: 6px 4px;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        .enrolment-table thead th {
+            background-color: #eef2f7;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 11px;
+        }
+
+        .enrolment-table tbody th,
+        .enrolment-table tfoot th {
+            text-align: left;
+            font-weight: normal;
+            background-color: #f7f9fc;
+            padding-left: 8px;
+        }
+
+        .enrolment-table tbody tr.highlight_weekend td {
+            background-color: #ffffcc;
+        }
+
+        .enrolment-table tbody tr.highlight_holiday td {
+            background-color: #e0f7ff;
+        }
+
+        .enrolment-table .day-col {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .enrolment-table td span {
+            display: block;
+            min-height: 14px;
+            /* Ensures cell height even if empty */
+        }
+
+        .enrolment-table tfoot tr {
+            background-color: #e0ffe0;
+            /* Common background for all tfoot rows */
+        }
+
+        .enrolment-table tfoot th {
+            background-color: #e0ffe0;
+            /* Ensure th within tfoot also get this background */
+            text-align: left;
+            /* Default for tfoot row headers */
+            font-weight: bold;
+            /* All tfoot th are bold as per your inline styles */
+            padding-left: 8px;
+        }
+
+        .enrolment-table tfoot td {
+            background-color: #e0ffe0;
+            /* Ensure td within tfoot also get this background if needed, though tr style might cover it */
+            /* text-align: right; is already default for all td */
+        }
+
+        .enrolment-table tfoot .grand-totals-header th {
+            /* Specific class for the "GRAND TOTALS" header row's th */
+            text-align: center;
+            font-weight: bold;
+            /* background-color is already #e0ffe0 from the tfoot tr rule */
+        }
+
+        /* Footer Info Section */
+        .report-footer {
+            padding: 10px 20px;
+            background-color: #f7f7f7;
+            border-top: 2px solid #aaa;
+        }
+
+        .report-footer p {
+            margin: 4px 0;
+            font-size: 12px;
+        }
+
+        .report-footer strong {
+            font-weight: 600;
+        }
+
+        .cell-updated {
+            /* border: 2px solid red !important; /* Use !important to override other border styles */
+            box-shadow: inset 0 0 0 2px red;
+        }
+    </style>
+    <script src="/WebResources/ClientGlobalContext.js.aspx" type="text/javascript"></script>
+</head>
+
+<body onload="onLoad()">
+    <div class="report-container">
+        <table class="enrolment-table" id="enrolment-table">
+            <thead id="enrollment-table-header">
+            </thead>
+            <tbody id="enrolment-tbody">
+                <!-- Example for Day 1. Repeat this structure for all days -->
+                <tr class="=highlight_holiday">
+                    <th scope="row" class="day-col">1</th>
+                    <td><span id="day1-0_18_mos-less_4"></span></td>
+                    <td><span id="day1-0_18_mos-over_4"></span></td>
+                    <td><span id="day1-18_36_mos-less_4"></span></td>
+                    <td><span id="day1-18_36_mos-over_4"></span></td>
+                    <td><span id="day1-3_yr_kinder-less_4"></span></td>
+                    <td><span id="day1-3_yr_kinder-over_4"></span></td>
+                    <td><span id="day1-kinder_ba-less_4"></span></td>
+                    <td><span id="day1-kinder_ba-over_4"></span></td>
+                    <td><span id="day1-grade_1_12-less_4"></span></td>
+                    <td><span id="day1-grade_1_12-over_4"></span></td>
+                    <td><span id="day1-preschool"></span></td>
+                </tr>
+                <tr class="highlight_weekend">
+                    <th scope="row" class="day-col">2</th>
+                    <td><span id="day2-0_18_mos-less_4"></span></td>
+                    <td><span id="day2-0_18_mos-over_4"></span></td>
+                    <td><span id="day2-18_36_mos-less_4"></span></td>
+                    <td><span id="day2-18_36_mos-over_4"></span></td>
+                    <td><span id="day2-3_yr_kinder-less_4"></span></td>
+                    <td><span id="day2-3_yr_kinder-over_4"></span></td>
+                    <td><span id="day2-kinder_ba-less_4"></span></td>
+                    <td><span id="day2-kinder_ba-over_4"></span></td>
+                    <td><span id="day2-grade_1_12-less_4"></span></td>
+                    <td><span id="day2-grade_1_12-over_4"></span></td>
+                    <td><span id="day2-preschool"></span></td>
+                </tr>
+            </tbody>
+            <tfoot id="enrolment-tfoot">
+                <tr class="grand-totals-header">
+                    <th scope="row" colspan="7">GRAND TOTALS</th>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="1"></th>
+                    <td colspan="2">Base</td>
+                    <td colspan="2">CCFRI Payment</td>
+                    <td colspan="2">CCFRI Provider Payment</td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="1">Current $</th>
+                    <td colspan="2">100</td>
+                    <td colspan="2">100</td>
+                    <td colspan="2">100</td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="1">Prev Paid $</th>
+                    <td colspan="2">200</td>
+                    <td colspan="2">200</td>
+                    <td colspan="2">200</td>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="1">Difference $</th>
+                    <td colspan="2">300</td>
+                    <td colspan="2">300</td>
+                    <td colspan="2">300</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script>
+        var selectedColumns = [100000000, 100000001, 100000002, 100000003, 100000004, 100000005];   // 100000000 0-18, 100000001 18-36
+        var enrollmentRecord;
+
+        function onLoad() {
+            debugger;
+            const params = new URLSearchParams(window.location.search);
+            const recordId = params.get("id");
+            const entityName = params.get("typename"); // Logical name of the entity
+            console.log("Record ID:", recordId);
+            console.log("Entity:", entityName);
+            getEnrollmentRecord(recordId);
+            if (enrollmentRecord["ccof_providertype"] === 100000000) {
+                selectedColumns = [100000000, 100000001, 100000002, 100000003, 100000004, 100000005];
+
+            } else {
+                selectedColumns = [100000000, 100000001, 100000002, 100000003, 100000004];
+            }
+            initalHeader(enrollmentRecord, selectedColumns);
+            loadDailyEnrollments(recordId);
+            loadRestEnrollments(enrollmentRecord, selectedColumns);
+            loadFootEnrollments(enrollmentRecord);
+
+        }
+        function getEnrollmentRecord(parentGuid) {
+            debugger;
+            const odataQuery = `/ccof_monthlyenrollmentreports(${parentGuid})?$expand=ccof_ccfriproviderpaymentrate,ccof_ccofbaserate`;
+            const req = new XMLHttpRequest();
+            req.open("GET", Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0" + odataQuery, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        const result = JSON.parse(this.response);
+                        if (result) {
+                            enrollmentRecord = result;
+                        } else {
+                            const tableBody = document.getElementById("enrolment-tbody");
+                            tableBody.innerHTML = '<tr><td colspan="12" style="text-align:center; padding: 20px;">No daily enrollment records found.</td></tr>';
+                        }
+                        console.log(`Successfully loaded and built table for ${result["ccof_monthlyenrollmentreportid"]} daily enrollment records.`);
+                    } else {
+                        const error = JSON.parse(this.response).error;
+                        console.error("Failed to retrieve Daily Enrollment data:", error);
+                        alert("Error retrieving data. Please check your security permissions and network connection.");
+                    }
+                }
+            };
+            req.send();
+        }
+        function loadFootEnrollments(var_enrollmentRecord) {
+            const tfootElement = document.getElementById("enrolment-tfoot");
+            if (!tfootElement) {
+                console.error("Could not find the table foot element with id 'enrolment-tfoot'.");
+                return;
+            }
+            tfootElement.innerHTML = ''; // Clear any existing static content
+            // Row 1: GRAND TOTALS header
+            let row1 = document.createElement("tr");
+            row1.classList.add("grand-totals-header"); // Apply class for styling - THIS IS KEY
+            let th1 = document.createElement("th");
+            th1.setAttribute("scope", "row");
+            th1.setAttribute("colspan", "7");
+            th1.innerText = "GRAND TOTALS";
+            row1.appendChild(th1);
+            tfootElement.appendChild(row1);
+
+            let GrandTotalRow = document.createElement("tr"); // CSS '.enrolment-table tfoot tr' will apply background
+            let th_label = document.createElement("th"); // CSS '.enrolment-table tfoot th' will apply styles
+            th_label.setAttribute("scope", "row");
+            th_label.setAttribute("colspan", "1");
+            GrandTotalRow.appendChild(th_label);
+            GrandTotalRow.appendChild(createCellforFoot("Base", 2));
+            GrandTotalRow.appendChild(createCellforFoot("CCFRI Payment", 2));
+            GrandTotalRow.appendChild(createCellforFoot("CCFRI Payment", 2));
+            tfootElement.appendChild(GrandTotalRow);
+
+            GrandTotalRow = document.createElement("tr");
+            th_label = document.createElement("th");
+            th_label.setAttribute("scope", "row");
+            th_label.setAttribute("colspan", "1");
+            th_label.innerText = "Current $";
+            GrandTotalRow.appendChild(th_label);
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalbase"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalccfri"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalccfriprovider"], 2));
+            tfootElement.appendChild(GrandTotalRow);
+
+            GrandTotalRow = document.createElement("tr");
+            th_label = document.createElement("th");
+            th_label.setAttribute("scope", "row");
+            th_label.setAttribute("colspan", "1");
+            th_label.innerText = "Prev Paid $";
+            GrandTotalRow.appendChild(th_label);
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevgrandtotalbase"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevgrandtotalccfri"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevgrandtotalccfriprovider"], 2));
+            tfootElement.appendChild(GrandTotalRow);
+
+            GrandTotalRow = document.createElement("tr");
+            th_label = document.createElement("th");
+            th_label.setAttribute("scope", "row");
+            th_label.setAttribute("colspan", "1");
+            th_label.innerText = "Difference $";
+            GrandTotalRow.appendChild(th_label);
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_diffgrandtotalbase"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_diffgrandtotalbase"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_diffgrandtotalccfriprovider"], 2));
+            tfootElement.appendChild(GrandTotalRow);
+
+
+        }
+        function initalHeader(var_enrollmentRecord, var_selectedColumns) {
+            const columnConfig = [
+                {
+                    label: "0 - 18 Months",
+                    value: 100000000,
+                    subheaders: ["4 Hours Or Less", "Over 4 Hours"]
+                },
+                {
+                    label: "18 - 36 Months",
+                    value: 100000001,
+                    subheaders: ["4 Hours Or Less", "Over 4 Hours"]
+                },
+                {
+                    label: "3 Years to Kinder",
+                    value: 100000002,
+                    subheaders: ["4 Hours Or Less", "Over 4 Hours"]
+                },
+                {
+                    label: "Kinder Before & After",
+                    value: 100000003,
+                    subheaders: ["4 Hours Or Less", "Over 4 Hours"]
+                },
+                {
+                    label: "Grade 1 - 12 Years",
+                    value: 100000004,
+                    subheaders: ["4 Hours Or Less", "Over 4 Hours"]
+                },
+                {
+                    label: "Preschool",
+                    value: 100000005,
+                    subheaders: ["Preschool"]
+                }
+            ];
+            const theadElement = document.getElementById('enrollment-table-header');
+
+            if (theadElement && theadElement.tagName === 'THEAD') {
+                theadElement.innerHTML = '';
+
+                // Filter the configurations based on selectedColumns
+                const activeColumns = columnConfig.filter(config => selectedColumns.includes(config.value));
+
+                if (activeColumns.length === 0) {
+                    console.warn("No columns selected to display in the header.");
+                } else {
+                    const tr1 = document.createElement('tr'); // First header row (main labels)
+                    const tr2 = document.createElement('tr'); // Second header row (Total Enrolled + spacers)                
+                    const tr3 = document.createElement('tr'); // Approved Parent Fee
+                    const tr4 = document.createElement('tr'); // Approved Parent Fee Frequency
+                    const tr5 = document.createElement('tr'); // Day + subheaders
+
+                    // --- Populate Row 1 (Main column labels) ---
+                    const th1Leading = document.createElement('th');
+                    // th1Leading.colSpan = 1; // Default
+                    tr1.appendChild(th1Leading); // Empty cell at the start
+                    activeColumns.forEach(col => {
+                        const th = document.createElement('th');
+                        th.colSpan = col.subheaders.length;
+                        th.textContent = col.label;
+                        if (col.label === "Preschool" && col.subheaders.length === 1) {
+                            th.style.width = "7%";
+                        }
+                        tr1.appendChild(th);
+                    });
+                    // --- Populate Row 2 ("Total Enrolled" and empty spacers) ---
+                    const th2Leading = document.createElement('th');
+                    th2Leading.colSpan = 1;
+                    th2Leading.textContent = "Total Enrolled";
+                    tr2.appendChild(th2Leading);
+                    if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                        tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolled0to18"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000001)) {  //  100000001  18-36column
+                        tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolled18to36"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000002)) {  //  100000002 3YK column
+                        tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolled3yk"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000003)) {  //  100000003  OOSC-K column
+                        tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolledoosck"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000004)) {  //  100000004  OOSC-G column
+                        tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolledooscg"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
+                        tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolledpre"], 1));
+                    }
+                    // activeColumns.forEach(col => {
+                    //     const th = document.createElement('th');
+                    //     th.colSpan = col.subheaders.length;
+                    //     if (col.label === "Preschool" && col.subheaders.length === 1) {
+                    //         th.style.width = "7%";
+                    //     }
+                    //     tr2.appendChild(th); // Empty spacer cells
+                    // });
+                    // Approved Parent Fee Frequency
+                    const th3Leading = document.createElement('th');
+                    th3Leading.colSpan = 1;
+                    th3Leading.textContent = "Approved Parent Fees";
+                    tr3.appendChild(th3Leading);
+                    if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee0to18"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000001)) {  //  100000001  18-36column
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee18to36"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000002)) {  //  100000002 3YK column
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee3yk"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000003)) {  //  100000003  OOSC-K column
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeeoosck"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000004)) {  //  100000004  OOSC-G column
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeeooscg"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeepre"], 1));
+                    }
+                    // activeColumns.forEach(col => {
+                    //     const th = document.createElement('th');
+                    //     th.colSpan = col.subheaders.length;
+                    //     if (col.label === "Preschool" && col.subheaders.length === 1) {
+                    //         th.style.width = "7%";
+                    //     }
+                    //     tr3.appendChild(th); // Empty spacer cells
+                    // });
+                    // Approved Parent Fee Frequency
+                    const th4Leading = document.createElement('th');
+                    th4Leading.colSpan = 1;
+                    th4Leading.textContent = "Frequency";
+                    tr4.appendChild(th4Leading);
+                    if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency0to18@OData.Community.Display.V1.FormattedValue"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000001)) {  //  100000001  18-36column
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency18to36@OData.Community.Display.V1.FormattedValue"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000002)) {  //  100000002 3YK column
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency3yk@OData.Community.Display.V1.FormattedValue"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000003)) {  //  100000003  OOSC-K column
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencyoosck@OData.Community.Display.V1.FormattedValue"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000004)) {  //  100000004  OOSC-G column
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencyooscg@OData.Community.Display.V1.FormattedValue"], 2));
+                    }
+                    if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencypre@OData.Community.Display.V1.FormattedValue"], 1));
+                    }
+                    // activeColumns.forEach(col => {
+                    //     const th = document.createElement('th');
+                    //     th.colSpan = col.subheaders.length;
+                    //     if (col.label === "Preschool" && col.subheaders.length === 1) {
+                    //         th.style.width = "7%";
+                    //     }
+                    //     tr4.appendChild(th); // Empty spacer cells
+                    // });
+
+                    // --- Populate Row  ("Day" and subheaders) ---
+                    const th5Leading = document.createElement('th');
+                    th5Leading.textContent = "Day";
+                    tr5.appendChild(th5Leading);
+
+                    activeColumns.forEach(col => {
+                        col.subheaders.forEach(subheaderText => {
+                            const th = document.createElement('th');
+                            th.textContent = subheaderText;
+                            if (col.label === "Preschool" && subheaderText === "Preschool" && col.subheaders.length === 1) {
+                                th.style.width = "7%";
+                            }
+                            tr5.appendChild(th);
+                        });
+                    });
+
+                    // Append the generated rows to the thead element
+                    theadElement.appendChild(tr1);
+                    theadElement.appendChild(tr2);
+                    theadElement.appendChild(tr3);
+                    theadElement.appendChild(tr4);
+                    theadElement.appendChild(tr5);
+
+                }
+
+            } else if (theadElement && theadElement.tagName !== 'THEAD') {
+                console.error("Element with ID 'enrollment-table-header' was found, but it is not a THEAD element. It is a " + theadElement.tagName + ".");
+            } else {
+                console.error("Thead element with ID 'enrollment-table-header' not found in the document.");
+            }
+
+        }
+        //          async function loadDailyEnrollments(parentGuid) {
+        function loadDailyEnrollments(parentGuid) {
+            debugger;
+            const odataQuery = `/ccof_dailyenrollments?$filter=_ccof_monthlyenrollmentreport_value eq ${parentGuid}&$orderby=ccof_day asc`;
+            const req = new XMLHttpRequest();
+            req.open("GET", Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0" + odataQuery, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        const results = JSON.parse(this.response).value;
+                        if (results && results.length > 0) {
+                            buildTableFromData(results, selectedColumns);
+                        } else {
+                            const tableBody = document.getElementById("enrolment-tbody");
+                            tableBody.innerHTML = '<tr><td colspan="12" style="text-align:center; padding: 20px;">No daily enrollment records found.</td></tr>';
+                        }
+                        console.log(`Successfully loaded and built table for ${results.entities.length} daily enrollment records.`);
+                    } else {
+                        const error = JSON.parse(this.response).error;
+                        console.error("Failed to retrieve Daily Enrollment data:", error);
+                        alert("Error retrieving data. Please check your security permissions and network connection.");
+                    }
+                }
+            };
+            req.send();
+        }
+        function buildTableFromData(dailyenrollmentrecords, var_selectedColumns) {
+            const tableBody = document.getElementById("enrolment-tbody");
+            if (!tableBody) {
+                console.error("Could not find the table body element with id 'enrolment-tbody'.");
+                return;
+            }
+            tableBody.innerHTML = '';
+            const fields = {
+                day: "ccof_day",
+                // 0-18 Months
+                mos0_18_less4: "ccof_less0to18",
+                mos0_18_over4: "ccof_over0to18",
+                // 18-36 Months
+                mos18_36_less4: "ccof_less18to36",
+                mos18_36_over4: "ccof_over18to36",
+                // 3 Years to Kinder
+                yr3_kinder_less4: "ccof_less3yk",
+                yr3_kinder_over4: "ccof_over3yk",
+                // Kinder Before & After
+                kinderBALess4: "ccof_lessoosck",
+                kinderBAOver4: "ccof_overoosck",
+                // Grade 1-12
+                grade112Less4: "ccof_lessooscg",
+                grade112Over4: "ccof_overooscg",
+                // Preschool
+                preschool: "ccof_lesspre",
+                daytype: "ccof_daytype",
+                updatedColumns: "ccof_columnsareupdated"
+            };
+            // Loop through each record and create a table row
+            dailyenrollmentrecords.forEach(record => {
+                // Create a new table row element
+                const row = document.createElement("tr");
+                const updatedColumnValuesForRow = record[fields.updatedColumns] ? record[fields.updatedColumns].split(',') : [];
+                const dayNumber = record[fields.day];
+                if (record[fields.daytype] === 100000001) { // highlight weekends
+                    row.classList.add("highlight_weekend");
+                }
+                if (record[fields.daytype] === 100000002) { // highlight holidays
+                    row.classList.add("highlight_holiday");
+                }
+                // Create the "Day" header cell (<th>)
+                const dayCell = document.createElement("th");
+                dayCell.setAttribute("scope", "row");
+                dayCell.classList.add("day-col");
+                dayCell.innerText = dayNumber;
+                row.appendChild(dayCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCell(record[fields.mos0_18_less4], "100000000", updatedColumnValuesForRow));  // 100000000 0-18 Month 4 hours or less
+                    row.appendChild(createCell(record[fields.mos0_18_over4], "100000001", updatedColumnValuesForRow));  // 100000001 0-18 Month Over 4 hours
+                };
+                if (var_selectedColumns.includes(100000001)) {  //100000001  18-36 column
+                    row.appendChild(createCell(record[fields.mos18_36_less4], "100000002", updatedColumnValuesForRow));
+                    row.appendChild(createCell(record[fields.mos18_36_over4], "100000003", updatedColumnValuesForRow));
+                };
+                if (var_selectedColumns.includes(100000002)) {  //100000002  3Y-K column
+                    row.appendChild(createCell(record[fields.yr3_kinder_less4], "100000004", updatedColumnValuesForRow));
+                    row.appendChild(createCell(record[fields.yr3_kinder_over4], "100000005", updatedColumnValuesForRow));
+                };
+                if (var_selectedColumns.includes(100000003)) {  //100000003  oosc-k column
+
+                    row.appendChild(createCell(record[fields.kinderBALess4], "100000006", updatedColumnValuesForRow));
+                    row.appendChild(createCell(record[fields.kinderBAOver4], "100000007", updatedColumnValuesForRow));
+                };
+                if (var_selectedColumns.includes(100000004)) {  //100000004  oosc-g column
+                    row.appendChild(createCell(record[fields.grade112Less4], "100000008", updatedColumnValuesForRow));
+                    row.appendChild(createCell(record[fields.grade112Over4], "100000009", updatedColumnValuesForRow));
+                };
+                if (var_selectedColumns.includes(100000005)) {  //100000005  pre column
+                    row.appendChild(createCell(record[fields.preschool], "100000010", updatedColumnValuesForRow));
+                };
+                tableBody.appendChild(row);
+            });
+        }
+        /**
+         * Creates a table cell (<td>), populates it with data, and applies a red  border if its corresponding optionSetValue is in the updatedValues array.
+         * @param {*} data - The value to display in the cell.
+         * @param {string} optionSetValue - currently coloumn value;
+         * @param {string[]} updatedValues - An array of updated choice values for the current row (e.g., ["100000001", "100000006"]).
+         * @returns {HTMLTableCellElement} The created <td> element.
+         */
+        function createCell(data, optionSetValue, updatedValues) {
+            const cell = document.createElement("td");
+            cell.innerText = data ?? ""; // Display data, or empty string if null/undefined
+            if (updatedValues.includes(optionSetValue)) {
+                cell.classList.add("cell-updated");
+            }
+
+            return cell;
+        }
+        function createCellforInitial(data, var_colSpan) {
+            const cell = document.createElement("td");
+            cell.colSpan = var_colSpan;
+            cell.style.textAlign = "center";
+            cell.style.verticalAlign = "middle";
+            cell.innerText = data ?? "";
+            return cell;
+        }
+        function createCellforRest(data) {
+            const cell = document.createElement("td");
+            cell.innerText = data ?? ""; // Display data, or empty string if null/undefined
+            return cell;
+        }
+        function createCellforFoot(data, var_colSpan) {
+            const cell = document.createElement("td");
+            cell.colSpan = var_colSpan;
+            cell.innerText = data ?? "";
+            return cell;
+        }
+        function loadRestEnrollments(var_enrollmentRecord, var_selectedColumns) {
+            const tableBody = document.getElementById("enrolment-tbody");
+            if (!tableBody) {
+                console.error("Could not find the table body element with id 'enrolment-tbody'.");
+                return;
+            }
+            //  Current Total Line
+            let row = document.createElement("tr");
+            let firstCell = document.createElement("th");
+            firstCell.setAttribute("scope", "row");
+            firstCell.classList.add("day-col");
+            firstCell.innerText = "Current Total";
+            row.appendChild(firstCell);
+            if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotalless0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotalover0to18"]));
+            }
+            if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotalless18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotalover18to36"]));
+            }
+            if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotalless3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotalover3yk"]));
+            }
+            if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotallessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotaloveroosck"]));
+            }
+            if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotallessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotaloverooscg"]));
+            }
+            if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_currenttotallesspre"]));
+            }
+            tableBody.appendChild(row);
+            //  Prev Approved  and Difference 
+            if (var_enrollmentRecord["ccof_reporttype"] === 100000001) {  // Adjustment
+                // Prev Approved
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Prev Approved";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedlesspre"]));
+                }
+                tableBody.appendChild(row);
+                // Difference
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Difference";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differencelessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differencelessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differencelesspre"]));
+                }
+                tableBody.appendChild(row);
+            }
+            // CCOF Base Rate
+            row = document.createElement("tr");
+            firstCell = document.createElement("th");
+            firstCell.setAttribute("scope", "row");
+            firstCell.classList.add("day-col");
+            firstCell.innerText = "CCOF Base Rate";
+            row.appendChild(firstCell);
+            if (var_selectedColumns.includes(100000000)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_less0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_over0to18"]));
+            }
+            if (var_selectedColumns.includes(100000001)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_less18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_over18to36"]));
+            }
+            if (var_selectedColumns.includes(100000002)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_less3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_over3yk"]));
+            }
+            if (var_selectedColumns.includes(100000003)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_lessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_overoosck"]));
+            }
+            if (var_selectedColumns.includes(100000004)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_lessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_overooscg"]));
+            }
+            if (var_selectedColumns.includes(100000005)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaserate"]["ccof_lesspre"]));
+            }
+
+            tableBody.appendChild(row);
+            // CCOF Base $  (CCOF Base Amount)
+            row = document.createElement("tr");
+            firstCell = document.createElement("th");
+            firstCell.setAttribute("scope", "row");
+            firstCell.classList.add("day-col");
+            firstCell.innerText = "CCOF Base $";
+            row.appendChild(firstCell);
+            if (var_selectedColumns.includes(100000000)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountless0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountover0to18"]));
+            }
+            if (var_selectedColumns.includes(100000001)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountless18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountover18to36"]));
+            }
+            if (var_selectedColumns.includes(100000002)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountless3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountover3yk"]));
+            }
+            if (var_selectedColumns.includes(100000003)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountlessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountoveroosck"]));
+            }
+            if (var_selectedColumns.includes(100000004)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountlessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountoverooscg"]));
+            }
+            if (var_selectedColumns.includes(100000005)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccofbaseamountlesspre"]));
+            }
+            tableBody.appendChild(row);
+            //  Prev Base $  and Difference Base $
+            if (var_enrollmentRecord["ccof_reporttype"] === 100000001) {  // Adjustment
+                // Prev Base $
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Prev Base $";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountlesspre"]));
+                }
+                tableBody.appendChild(row);
+                // Difference Base $
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Difference Base $";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountaesspre"]));
+                }
+                tableBody.appendChild(row);
+            }
+            // Daily CCFRI Rate   
+            row = document.createElement("tr");
+            firstCell = document.createElement("th");
+            firstCell.setAttribute("scope", "row");
+            firstCell.classList.add("day-col");
+            firstCell.innerText = " Daily CCFRI Rate";
+            row.appendChild(firstCell);
+            if (var_selectedColumns.includes(100000000)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover0to18"]));
+            }
+            if (var_selectedColumns.includes(100000001)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover18to36"]));
+            }
+            if (var_selectedColumns.includes(100000002)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover3yk"]));
+            }
+            if (var_selectedColumns.includes(100000003)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailccfriratelessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateoveroosck"]));
+            }
+            if (var_selectedColumns.includes(100000004)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfriratelessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateoverooscg"]));
+            }
+            if (var_selectedColumns.includes(100000005)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfriratelesspre"]));
+            }
+            tableBody.appendChild(row);
+            // CCFRI $ (CCFRI Amount)
+            row = document.createElement("tr");
+            firstCell = document.createElement("th");
+            firstCell.setAttribute("scope", "row");
+            firstCell.classList.add("day-col");
+            firstCell.innerText = "CCFRI $";
+            row.appendChild(firstCell);
+            if (var_selectedColumns.includes(100000000)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountless0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountover0to18"]));
+            }
+            if (var_selectedColumns.includes(100000001)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountless18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountover18to36"]));
+            }
+            if (var_selectedColumns.includes(100000002)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountless3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountover3yk"]));
+            }
+            if (var_selectedColumns.includes(100000003)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountlessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountoveroosck"]));
+            }
+            if (var_selectedColumns.includes(100000004)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountlessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountoverooscg"]));
+            }
+            if (var_selectedColumns.includes(100000005)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriamountlesspre"]));
+            }
+            tableBody.appendChild(row);
+            //  Prev CCFRI $  and Difference CCFRI $
+            if (var_enrollmentRecord["ccof_reporttype"] === 100000001) {  // Adjustment
+                // Prev CCFRI $
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Prev CCFRI $";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountlesspre"]));
+                }
+                tableBody.appendChild(row);
+                // Difference CCFRI $
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Difference CCFRI $";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfrimountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountlesspre"]));
+                }
+                tableBody.appendChild(row);
+            }
+            // CCFRI Provider Payment Rate 
+            row = document.createElement("tr");
+            firstCell = document.createElement("th");
+            firstCell.setAttribute("scope", "row");
+            firstCell.classList.add("day-col");
+            firstCell.innerText = "CCFRI Provider Payment Rate";
+            row.appendChild(firstCell);
+            if (var_selectedColumns.includes(100000000)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_less0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_over0to18"]));
+            }
+            if (var_selectedColumns.includes(100000001)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_less18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_over18to36"]));
+            }
+            if (var_selectedColumns.includes(100000002)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_less3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_over3yk"]));
+            }
+            if (var_selectedColumns.includes(100000003)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_lessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_overoosck"]));
+            }
+            if (var_selectedColumns.includes(100000004)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_lessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_overooscg"]));
+            }
+            if (var_selectedColumns.includes(100000005)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_lesspre"]));
+            }
+            tableBody.appendChild(row);
+            // CCFRI Provider $ (CCFRI Amount)
+            row = document.createElement("tr");
+            firstCell = document.createElement("th");
+            firstCell.setAttribute("scope", "row");
+            firstCell.classList.add("day-col");
+            firstCell.innerText = "CCFRI Provider $";
+            row.appendChild(firstCell);
+            if (var_selectedColumns.includes(100000000)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountless0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountover0to18"]));
+            }
+            if (var_selectedColumns.includes(100000001)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountless18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountover18to36"]));
+            }
+            if (var_selectedColumns.includes(100000002)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountless3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountover3yk"]));
+            }
+            if (var_selectedColumns.includes(100000003)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountlessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountoveroosck"]));
+            }
+            if (var_selectedColumns.includes(100000004)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountlessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountoverooscg"]));
+            }
+            if (var_selectedColumns.includes(100000005)) {
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriprovideramountlesspre"]));
+            }
+            tableBody.appendChild(row);
+            //  Prev CCFRI Provider $  and Difference CCFRI Provider $
+            if (var_enrollmentRecord["ccof_reporttype"] === 100000001) {  // Adjustment
+                // Prev CCFRI Provider $
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Prev CCFRI Provider $";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountlesspre"]));
+                }
+                tableBody.appendChild(row);
+                // Difference CCFRI Provider $
+                row = document.createElement("tr");
+                firstCell = document.createElement("th");
+                firstCell.setAttribute("scope", "row");
+                firstCell.classList.add("day-col");
+                firstCell.innerText = "Difference CCFRI Provider$";
+                row.appendChild(firstCell);
+                if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountover0to18"]));
+                }
+                if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountover18to36"]));
+                }
+                if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountover3yk"]));
+                }
+                if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountoveroosck"]));
+                }
+                if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountoverooscg"]));
+                }
+                if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountlesspre"]));
+                }
+                tableBody.appendChild(row);
+            }
+        }
+    </script>
+</body>
+
+</html>

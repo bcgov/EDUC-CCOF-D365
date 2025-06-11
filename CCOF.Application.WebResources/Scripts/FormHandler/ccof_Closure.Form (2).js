@@ -5,8 +5,12 @@ CCOF.Closure.Form = CCOF.Closure.Form || {};
 //Formload logic starts here
 CCOF.Closure.Form = {
     onLoad: function (executionContext) {
+        debugger;
         this.startAndEndDateOnClosureRequest(executionContext);
         this.requiredFieldsonApproval(executionContext);
+        this.requiredFieldsonClosureType(executionContext);
+        var formContext = executionContext.getFormContext();
+        formContext.getAttribute("ccof_closure_type").addOnChange(this.requiredFieldsonClosureType);
     },
 
     startAndEndDateOnClosureRequest: function (executionContext) {
@@ -21,11 +25,11 @@ CCOF.Closure.Form = {
             Xrm.WebApi.retrieveRecord("ccof_change_action_closure", closureRequestId, "?$select=ccof_closure_end_date,ccof_closure_start_date").then(
                 function success(result) {
                     console.log(result);
-                    var requestStartDate = new Date(result["ccof_closure_start_date"]);
-                    var requestEndDate = new Date(result["ccof_closure_end_date"]);
+                    var requestStartDate = (new Date(result["ccof_closure_start_date"])).toLocaleDateString('en', { timeZone: 'UTC' });
+                    var requestEndDate = new Date(result["ccof_closure_end_date"]).toLocaleDateString('en', { timeZone: 'UTC' });
 
-                    var closureStartDate = formContext.getAttribute("ccof_startdate")?.getValue();
-                    var closureEndDate = formContext.getAttribute("ccof_enddate")?.getValue();
+                    var closureStartDate = (formContext.getAttribute("ccof_startdate")?.getValue()).toLocaleDateString();
+                    var closureEndDate = formContext.getAttribute("ccof_enddate")?.getValue().toLocaleDateString();
 
                     // Clear existing notifications
                     formContext.ui.clearFormNotification("dateValidation");
@@ -59,5 +63,34 @@ CCOF.Closure.Form = {
             formContext.getAttribute("ccof_approved_as").setRequiredLevel("none");
             formContext.getAttribute("ccof_payment_eligibility").setRequiredLevel("none");
         }
-    }
+    },
+    requiredFieldsonClosureType: function (executionContext) {
+        debugger;
+        var formContext = executionContext.getFormContext();
+        var closureType = formContext.getAttribute("ccof_closure_type").getValue();
+        if (closureType == 100000002) // Unexpected Closure
+        {
+            formContext.getAttribute("ccof_emergency_closure_type").setRequiredLevel("none");
+            formContext.getAttribute("ccof_closure_approved_under_emergency_type").setRequiredLevel("none");
+            formContext.getAttribute("ccof_enrollment_report_submitted_reviewed").setRequiredLevel("none");
+        };
+        if (closureType == 100000000) // Planed Closure
+        {
+            formContext.getAttribute("ccof_emergency_closure_type").setRequiredLevel("none");
+            formContext.getAttribute("ccof_closure_approved_under_emergency_type").setRequiredLevel("none");
+            formContext.getAttribute("ccof_enrollment_report_submitted_reviewed").setRequiredLevel("none");
+        };
+        //		else
+        //		{
+        //			formContext.getAttribute("ccof_emergency_closure_type").setRequiredLevel("required");
+        //            formContext.getAttribute("ccof_closure_approved_under_emergency_type").setRequiredLevel("required");
+        //			formContext.getAttribute("ccof_enrollment_report_submitted_reviewed").setRequiredLevel("required");
+        //		};
+        if (closureType != null) {
+            formContext.getAttribute("ccof_closure_type").setRequiredLevel("none");
+        }
+        else {
+            formContext.getAttribute("ccof_closure_type").setRequiredLevel("required");
+        }
+    },
 }
