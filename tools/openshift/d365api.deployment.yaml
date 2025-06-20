@@ -110,9 +110,9 @@ objects:
   - apiVersion: v1
     kind: Route
     metadata:
-      name: '${APP_NAME}-d365api-${ENVIRONMENT}'
+      name: '${APP_NAME}-d365api-${APP_ENVIRONMENT}'
       labels:
-        app: '${APP_NAME}-d365api-${ENVIRONMENT}-deployment'
+        app: '${APP_NAME}-d365api-${APP_ENVIRONMENT}-deployment'
       annotations:
         openshift.io/host.generated: 'true'
         router.openshift.io/cookie-same-site: 'Strict'
@@ -121,7 +121,7 @@ objects:
     spec:
       to:
         kind: Service
-        name: '${APP_NAME}-d365api-${ENVIRONMENT}'
+        name: '${APP_NAME}-d365api-${APP_ENVIRONMENT}'
         weight: 100
       port:
         targetPort: 5091-tcp
