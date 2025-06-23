@@ -101,7 +101,14 @@ public record D365AuthSettings
     public required List<AZAppUser> AZAppUsers { get; set; }
     public required string HttpClientName { get; set; }
     public required Guid CallerObjectId { get; set; }
-    
+  
+    public string TenantId { get; set; } = string.Empty;
+    public string ClientId { get; set; } = string.Empty; // Azure Registered Application ID
+    public string ClientSecret { get; set; } = string.Empty;
+   
+    public string APIVersion { get; set; } = string.Empty;
+   
+
 }
 
 public record AZAppUser
@@ -190,8 +197,7 @@ public record BCCASApi
     public required string transactionType { get; set; }
     public required string batchType { get; set; }
     public required string delimiter { get; set; }
-    public required InvoiceHeader InvoiceHeader { get; set; }
-    public required InvoiceLines InvoiceLines { get; set; }
+ 
 }
 
 
