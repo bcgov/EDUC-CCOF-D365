@@ -1,5 +1,5 @@
 using CCOF.Infrastructure.WebAPI.Models;
-using CCOF.Infrastructure.WebAPI.Services;
+using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 

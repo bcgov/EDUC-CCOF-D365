@@ -1,10 +1,10 @@
 ﻿using CCOF.Infrastructure.WebAPI.Models;
-using CCOF.Infrastructure.WebAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net;
+using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 
 namespace CCOF.Infrastructure.WebAPI.Controllers
 {

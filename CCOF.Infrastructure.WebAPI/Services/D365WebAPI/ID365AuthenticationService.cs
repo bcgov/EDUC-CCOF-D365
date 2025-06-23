@@ -1,4 +1,4 @@
-﻿namespace CCOF.Infrastructure.WebAPI.Services
+﻿namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
 {
     public interface ID365AuthenticationService
     {

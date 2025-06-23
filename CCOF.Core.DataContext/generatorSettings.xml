@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AudibleCompletionNotification>true</AudibleCompletionNotification>
+  <CodeCustomizationService>DLaB.ModelBuilderExtensions.CustomizeCodeDomService,DLaB.ModelBuilderExtensions</CodeCustomizationService>
+  <CodeGenerationService>DLaB.ModelBuilderExtensions.CodeGenerationService,DLaB.ModelBuilderExtensions</CodeGenerationService>
+  <CodeWriterFilterService>DLaB.ModelBuilderExtensions.CodeWriterFilterService,DLaB.ModelBuilderExtensions</CodeWriterFilterService>
+  <CodeWriterMessageFilterService>DLaB.ModelBuilderExtensions.CodeWriterMessageFilterService,DLaB.ModelBuilderExtensions</CodeWriterMessageFilterService>
+  <EmitEntityETC>false</EmitEntityETC>
+  <EmitVirtualAttributes>true</EmitVirtualAttributes>
+  <EntityTypesFolder>Entities</EntityTypesFolder>
+  <ExtensionConfig>
+    <ActionPrefixesWhitelist />
+    <ActionsWhitelist>analyze</ActionsWhitelist>
+    <ActionsToSkip />
+    <AddDebuggerNonUserCode>true</AddDebuggerNonUserCode>
+    <AddNewFilesToProject>true</AddNewFilesToProject>
+    <AddOptionSetMetadataAttribute>true</AddOptionSetMetadataAttribute>
+    <AdjustCasingForEnumOptions>true</AdjustCasingForEnumOptions>
+    <AttributeBlacklist />
+    <BuilderSettingsJsonRelativePath>builderSettings.json</BuilderSettingsJsonRelativePath>
+    <CamelCaseClassNames>true</CamelCaseClassNames>
+    <CamelCaseCustomWords />
+    <CamelCaseMemberNames>true</CamelCaseMemberNames>
+    <CamelCaseNamesDictionaryRelativePath>DLaB.EarlyBoundGeneratorV2\DLaB.Dictionary.txt</CamelCaseNamesDictionaryRelativePath>
+    <CleanupCrmSvcUtilLocalOptionSets>false</CleanupCrmSvcUtilLocalOptionSets>
+    <CreateOneFilePerAction>true</CreateOneFilePerAction>
+    <CreateOneFilePerEntity>true</CreateOneFilePerEntity>
+    <CreateOneFilePerOptionSet>true</CreateOneFilePerOptionSet>
+    <DeleteFilesFromOutputFolders>false</DeleteFilesFromOutputFolders>
+    <EntitiesToSkip />
+    <EntitiesWhitelist>account|
+activityparty|
+activitypointer|
+businessunit|
+ccof_adjudication_ccfri|
+ccof_adjudication_ccfri_facility|
+ccof_adjudication_ecewe|
+ccof_adjudication_ecewe_facility|
+ccof_application|
+ccof_application_basefunding|
+ccof_application_ccfri_childcarecategory|
+ccof_application_ccfri_closure|
+ccof_application_deadline|
+ccof_application_facility_document|
+ccof_applicationccfri|
+ccof_applicationecewe|
+ccof_applicationstatushistory|
+ccof_applicationsummary|
+ccof_approvable_fee_schedule|
+ccof_approvable_fee_schedule_history|
+ccof_auditlog|
+ccof_bceid_organization|
+ccof_ccfri_email|
+ccof_ccfri_facility_allowable_amount|
+ccof_ccfri_facility_allowable_amount_mtfi|
+ccof_ccfri_facility_dcsw|
+ccof_ccfri_facility_dcsw_24_month|
+ccof_ccfri_facility_dcsw_mtfi|
+ccof_ccfri_facility_ec_24month|
+ccof_ccfri_facility_ex_circumstance_mtfi|
+ccof_ccfri_facility_exceptional_circumstance|
+ccof_ccfri_facility_fee_increase_mtfi|
+ccof_ccfri_facility_parent_fee|
+ccof_ccfri_facility_priority_serviceexp_mtfi|
+ccof_ccfri_facility_priorityserviceexpansion|
+ccof_ccfrifacilityallowableamount_24month|
+ccof_ccfrifacilityfeeincrease24month|
+ccof_ccfrifacilitypriorityserviceexpansion24|
+ccof_change_action|
+ccof_change_action_closure|
+ccof_change_request|
+ccof_change_request_facility_address|
+ccof_change_request_facility_name|
+ccof_change_request_mtfi|
+ccof_change_request_mtfi_ccof_rfipfi|
+ccof_change_request_new_facility|
+ccof_change_request_summary|
+ccof_childcare_category|
+ccof_configuration|
+ccof_dailyenrollment|
+ccof_ece_wage|
+ccof_email_reminder|
+ccof_facility_licenses|
+ccof_facility_region|
+ccof_fee_benchmark|
+ccof_fee_benchmark_sda|
+ccof_fee_region|
+ccof_fee_region_lookup|
+ccof_fee_update_schedule|
+ccof_feefloorexempt|
+ccof_funding_agreement|
+ccof_license|
+ccof_license_category|
+ccof_license_childcare_category|
+ccof_median_fee|
+ccof_median_fee_sda|
+ccof_monthlybusinessday|
+ccof_monthlyenrollmentreport|
+ccof_organization_contact|
+ccof_parent_fees|
+ccof_program_year|
+ccof_rate|
+ccof_reasonpendingoption|
+ccof_region_fee_schedule|
+ccof_rfi_pfi_dcs_wi_detail|
+ccof_rfi_pfi_fee_history_detail|
+ccof_rfi_pfi_nmf|
+ccof_rfi_pfi_nmf_change_request_mtfi|
+ccof_rfi_pfi_other_funding|
+ccof_rfipfi|
+ccof_rfipfiexpenseinfo|
+ccof_rfipfiserviceexpansiondetail|
+ccof_rfipfiserviceexpansionindigenouscommunity|
+ccof_service_delivery_details|
+ccof_system_recommendation|
+ccof_systemmessage|
+ccof_unlock_history|
+contact|
+email|
+ofm_payment|
+systemuser|
+transactioncurrency</EntitiesWhitelist>
+    <EntityAttributeSpecifiedNames />
+    <EntityClassNameOverrides />
+    <EntityPrefixesToSkip />
+    <EntityPrefixesWhitelist />
+    <GenerateActionAttributeNameConsts>true</GenerateActionAttributeNameConsts>
+    <GenerateAllOptionSetLabelMetadata>false</GenerateAllOptionSetLabelMetadata>
+    <GenerateAttributeNameConsts>true</GenerateAttributeNameConsts>
+    <GenerateAnonymousTypeConstructor>true</GenerateAnonymousTypeConstructor>
+    <GenerateConstructorsSansLogicalName>true</GenerateConstructorsSansLogicalName>
+    <GenerateEntityRelationships>true</GenerateEntityRelationships>
+    <GenerateEnumProperties>true</GenerateEnumProperties>
+    <GenerateGlobalOptionSets>false</GenerateGlobalOptionSets>
+    <GenerateINotifyPattern>false</GenerateINotifyPattern>
+    <GenerateOptionSetMetadataAttribute>true</GenerateOptionSetMetadataAttribute>
+    <GenerateTypesAsInternal>false</GenerateTypesAsInternal>
+    <GroupLocalOptionSetsByEntity>false</GroupLocalOptionSetsByEntity>
+    <GroupMessageRequestWithResponse>true</GroupMessageRequestWithResponse>
+    <InvalidCSharpNamePrefix>_</InvalidCSharpNamePrefix>
+    <MakeAllFieldsEditable>false</MakeAllFieldsEditable>
+    <MakeReadonlyFieldsEditable>false</MakeReadonlyFieldsEditable>
+    <MakeResponseActionsEditable>true</MakeResponseActionsEditable>
+    <LocalOptionSetFormat>{0}_{1}</LocalOptionSetFormat>
+    <MakeReferenceTypesNullable>false</MakeReferenceTypesNullable>
+    <ModelBuilderLogLevel>2</ModelBuilderLogLevel>
+    <OptionSetLanguageCodeOverride
+      xsi:nil="true" />
+    <OptionSetNames />
+    <ProjectNameForEarlyBoundFiles />
+    <PropertyEnumMappings />
+    <ReadSerializedMetadata>false</ReadSerializedMetadata>
+    <RemoveRuntimeVersionComment>true</RemoveRuntimeVersionComment>
+    <ReplaceOptionSetPropertiesWithEnum>true</ReplaceOptionSetPropertiesWithEnum>
+    <SerializeMetadata>false</SerializeMetadata>
+    <SuppressAutogeneratedFileHeaderComment>false</SuppressAutogeneratedFileHeaderComment>
+    <TokenCapitalizationOverrides>AccessTeam|
+ActiveState|
+AssignedTo|
+BusinessAs|
+CardUci|
+DefaultOnCase|
+EmailAnd|
+EmailSend|
+EmailSender|
+FeatureSet|
+FedEx|
+ForAn|
+Geronimo|
+IsMsTeams|
+IsPaiEnabled|
+IsSopIntegration|
+MsDynCe_|
+MsDynMkt_|
+MsDyUsd|
+O365Admin|
+OcSkillIdentMlModel|
+OnHold|
+OrderId|
+OwnerOnAssign|
+ParticipatesIn|
+PartiesOnEmail|
+PauseStates|
+PredictiveAddress|
+SentOn|
+SettingsAndSummary|
+SlaId|
+SlaKpi|
+SyncOptIn|
+Timeout|
+TradeShow|
+UserPuid|
+VoiceMail</TokenCapitalizationOverrides>
+    <TransliterationRelativePath>DLaB.EarlyBoundGeneratorV2\alphabets</TransliterationRelativePath>
+    <UseCrmSvcUtilStateEnumNamingConvention>false</UseCrmSvcUtilStateEnumNamingConvention>
+    <UseDisplayNameForBpfName>true</UseDisplayNameForBpfName>
+    <UseEnumForStateCodes>false</UseEnumForStateCodes>
+    <UseLogicalNames>false</UseLogicalNames>
+    <UseTfsToCheckoutFiles>false</UseTfsToCheckoutFiles>
+    <WaitForAttachedDebugger>false</WaitForAttachedDebugger>
+  </ExtensionConfig>
+  <GenerateMessages>true</GenerateMessages>
+  <IncludeCommandLine>false</IncludeCommandLine>
+  <MessageTypesFolder>Messages</MessageTypesFolder>
+  <MetadataProviderService>DLaB.ModelBuilderExtensions.MetadataProviderService,DLaB.ModelBuilderExtensions</MetadataProviderService>
+  <MetadataQueryProviderService>DLaB.ModelBuilderExtensions.MetadataQueryProviderService,DLaB.ModelBuilderExtensions</MetadataQueryProviderService>
+  <NamingService>DLaB.ModelBuilderExtensions.NamingService,DLaB.ModelBuilderExtensions</NamingService>
+  <OptionSetsTypesFolder>OptionSets</OptionSetsTypesFolder>
+  <Namespace>DataverseModel</Namespace>
+  <ServiceContextName>DataverseContext</ServiceContextName>
+  <SuppressGeneratedCodeAttribute>true</SuppressGeneratedCodeAttribute>
+  <SettingsVersion>2.2025.4.20</SettingsVersion>
+  <UpdateBuilderSettingsJson>true</UpdateBuilderSettingsJson>
+  <Version>2.2025.4.20</Version>
+</Config>

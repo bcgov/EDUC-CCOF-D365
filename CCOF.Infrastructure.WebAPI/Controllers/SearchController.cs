@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CCOF.Infrastructure.WebAPI.Models;
-using CCOF.Infrastructure.WebAPI.Services;
+using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

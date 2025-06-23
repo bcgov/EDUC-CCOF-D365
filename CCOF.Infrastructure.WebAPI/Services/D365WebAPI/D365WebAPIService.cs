@@ -1,5 +1,4 @@
-﻿using CCOF.Infrastructure.WebAPI.Services;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCOF.Infrastructure.WebAPI.Services
+namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
 {
     public interface ID365WebAPIService
     {
@@ -31,7 +30,7 @@ namespace CCOF.Infrastructure.WebAPI.Services
             _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
 
-        public HttpResponseMessage SendRetrieveRequestAsync(string query, Boolean formatted = false, int maxPageSize = 200)
+        public HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 200)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, query);
             request.Headers.Add("Prefer", "odata.maxpagesize=" + maxPageSize.ToString());
@@ -101,7 +100,7 @@ namespace CCOF.Infrastructure.WebAPI.Services
 
         private HttpResponseMessage SendAsync(HttpMethod operation, string endPoint, string body)
         {
-            var message = new HttpRequestMessage(operation, endPoint)  ;
+            var message = new HttpRequestMessage(operation, endPoint);
             message.Content = new StringContent(body, Encoding.UTF8, "application/json");
             message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
