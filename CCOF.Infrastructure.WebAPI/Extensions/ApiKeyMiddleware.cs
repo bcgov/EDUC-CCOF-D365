@@ -34,7 +34,7 @@ public class ApiKeyMiddleware(RequestDelegate next, ILoggerFactory loggerFactory
             var pattern = @"(?<=[\w]{5})[\w-\._\+%]*(?=[\w]{3})";
             var maskedKey = Regex.Replace(newKeyValue ?? "", pattern, m => new string('*', m.Length));
 
-            _logger.LogInformation(CustomLogEvent.API, "x-ofm-apikey:{maskedKey}", maskedKey);
+            _logger.LogInformation(CustomLogEvent.API, "x-ccof-apikey:{maskedKey}", maskedKey);
 
             await _next(context);
 
@@ -50,7 +50,7 @@ public class ApiKeyMiddleware(RequestDelegate next, ILoggerFactory loggerFactory
             return;
         }
 
-        _logger.LogError(CustomLogEvent.API, "Attempted Key: [x-ofm-apikey:{extractedApiKey}]", string.IsNullOrEmpty(extractedApiKey) ? "NA" : extractedApiKey);
+        _logger.LogError(CustomLogEvent.API, "Attempted Key: [x-ccof-apikey:{extractedApiKey}]", string.IsNullOrEmpty(extractedApiKey) ? "NA" : extractedApiKey);
 
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
         await context.Response.WriteAsync(options.Value.Schemes.ApiKeyScheme.ApiKeyErrorMesssage);
