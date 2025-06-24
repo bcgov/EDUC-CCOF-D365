@@ -99,5 +99,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CCOF.Core.DataContext\CCOF.Core.DataContext.projitems*{7e11d821-093b-4e0c-b139-04348871a472}*SharedItemsImports = 13
+		CCOF.Core.DataContext\CCOF.Core.DataContext.projitems*{95a4c435-55e7-402f-81c9-6e78ba6b14fc}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

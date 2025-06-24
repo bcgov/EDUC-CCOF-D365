@@ -41,4 +41,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
   </ItemGroup>
 
+  <Import Project="..\CCOF.Core.DataContext\CCOF.Core.DataContext.projitems" Label="Shared" />
+
 </Project>
