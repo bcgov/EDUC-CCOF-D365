@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataverseModel
+namespace CCOF.Core.DataContext
 {
 	
 	

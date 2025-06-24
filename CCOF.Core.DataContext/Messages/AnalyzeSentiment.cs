@@ -123,7 +123,7 @@ namespace DataverseModel
 			}
 			set
 			{
-				this.Results["documentScores"] = value;
+				this.Results["DocumentsCores"] = value;
 			}
 		}
 		
@@ -142,7 +142,7 @@ namespace DataverseModel
 			}
 			set
 			{
-				this.Results["sentences"] = value;
+				this.Results["Sentences"] = value;
 			}
 		}
 		
@@ -161,7 +161,7 @@ namespace DataverseModel
 			}
 			set
 			{
-				this.Results["sentiment"] = value;
+				this.Results["Sentiment"] = value;
 			}
 		}
 	}

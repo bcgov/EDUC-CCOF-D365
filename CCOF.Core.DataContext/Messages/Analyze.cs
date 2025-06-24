@@ -102,7 +102,7 @@ namespace DataverseModel
 			}
 			set
 			{
-				this.Results["response"] = value;
+				this.Results["Response"] = value;
 			}
 		}
 	}

@@ -7,7 +7,7 @@
   <CodeWriterMessageFilterService>DLaB.ModelBuilderExtensions.CodeWriterMessageFilterService,DLaB.ModelBuilderExtensions</CodeWriterMessageFilterService>
   <EmitEntityETC>false</EmitEntityETC>
   <EmitVirtualAttributes>true</EmitVirtualAttributes>
-  <EntityTypesFolder>Entities</EntityTypesFolder>
+  <EntityTypesFolder>Entities\Entities.cs</EntityTypesFolder>
   <ExtensionConfig>
     <ActionPrefixesWhitelist />
     <ActionsWhitelist>analyze</ActionsWhitelist>
@@ -15,7 +15,7 @@
     <AddDebuggerNonUserCode>true</AddDebuggerNonUserCode>
     <AddNewFilesToProject>true</AddNewFilesToProject>
     <AddOptionSetMetadataAttribute>true</AddOptionSetMetadataAttribute>
-    <AdjustCasingForEnumOptions>true</AdjustCasingForEnumOptions>
+    <AdjustCasingForEnumOptions>false</AdjustCasingForEnumOptions>
     <AttributeBlacklist />
     <BuilderSettingsJsonRelativePath>builderSettings.json</BuilderSettingsJsonRelativePath>
     <CamelCaseClassNames>true</CamelCaseClassNames>
@@ -24,32 +24,23 @@
     <CamelCaseNamesDictionaryRelativePath>DLaB.EarlyBoundGeneratorV2\DLaB.Dictionary.txt</CamelCaseNamesDictionaryRelativePath>
     <CleanupCrmSvcUtilLocalOptionSets>false</CleanupCrmSvcUtilLocalOptionSets>
     <CreateOneFilePerAction>true</CreateOneFilePerAction>
-    <CreateOneFilePerEntity>true</CreateOneFilePerEntity>
-    <CreateOneFilePerOptionSet>true</CreateOneFilePerOptionSet>
+    <CreateOneFilePerEntity>false</CreateOneFilePerEntity>
+    <CreateOneFilePerOptionSet>false</CreateOneFilePerOptionSet>
     <DeleteFilesFromOutputFolders>false</DeleteFilesFromOutputFolders>
     <EntitiesToSkip />
     <EntitiesWhitelist>account|
 activityparty|
 activitypointer|
 businessunit|
+ccof_adjudication|
+ccof_adjudication_ccfri_facility|
 ccof_application|
-ccof_application_basefunding|
-ccof_application_ccfri_childcarecategory|
-ccof_applicationccfri|
-ccof_applicationecewe|
-ccof_change_action|
-ccof_change_action_closure|
 ccof_change_request|
-ccof_change_request_facility_address|
-ccof_change_request_mtfi|
-ccof_change_request_new_facility|
-ccof_change_request_summary|
-ccof_organization_contact|
+ccof_monthlyenrollmentreporttransactioncurrency|
 contact|
 email|
 ofm_payment|
-systemuser|
-transactioncurrency</EntitiesWhitelist>
+systemuser</EntitiesWhitelist>
     <EntityAttributeSpecifiedNames />
     <EntityClassNameOverrides />
     <EntityPrefixesToSkip />
@@ -61,7 +52,7 @@ transactioncurrency</EntitiesWhitelist>
     <GenerateConstructorsSansLogicalName>true</GenerateConstructorsSansLogicalName>
     <GenerateEntityRelationships>true</GenerateEntityRelationships>
     <GenerateEnumProperties>true</GenerateEnumProperties>
-    <GenerateGlobalOptionSets>false</GenerateGlobalOptionSets>
+    <GenerateGlobalOptionSets>true</GenerateGlobalOptionSets>
     <GenerateINotifyPattern>false</GenerateINotifyPattern>
     <GenerateOptionSetMetadataAttribute>true</GenerateOptionSetMetadataAttribute>
     <GenerateTypesAsInternal>false</GenerateTypesAsInternal>
@@ -129,17 +120,17 @@ VoiceMail</TokenCapitalizationOverrides>
     <UseTfsToCheckoutFiles>false</UseTfsToCheckoutFiles>
     <WaitForAttachedDebugger>false</WaitForAttachedDebugger>
   </ExtensionConfig>
-  <GenerateMessages>true</GenerateMessages>
+  <GenerateMessages>false</GenerateMessages>
   <IncludeCommandLine>false</IncludeCommandLine>
   <MessageTypesFolder>Messages</MessageTypesFolder>
   <MetadataProviderService>DLaB.ModelBuilderExtensions.MetadataProviderService,DLaB.ModelBuilderExtensions</MetadataProviderService>
   <MetadataQueryProviderService>DLaB.ModelBuilderExtensions.MetadataQueryProviderService,DLaB.ModelBuilderExtensions</MetadataQueryProviderService>
   <NamingService>DLaB.ModelBuilderExtensions.NamingService,DLaB.ModelBuilderExtensions</NamingService>
-  <OptionSetsTypesFolder>OptionSets</OptionSetsTypesFolder>
-  <Namespace>DataverseModel</Namespace>
+  <OptionSetsTypesFolder>OptionSets\OptionSets.cs</OptionSetsTypesFolder>
+  <Namespace>CCOF.Core.DataContext</Namespace>
   <ServiceContextName>DataverseContext</ServiceContextName>
   <SuppressGeneratedCodeAttribute>true</SuppressGeneratedCodeAttribute>
-  <SettingsVersion>2.2025.4.20</SettingsVersion>
+  <SettingsVersion>2.2024.5.16</SettingsVersion>
   <UpdateBuilderSettingsJson>true</UpdateBuilderSettingsJson>
-  <Version>2.2025.4.20</Version>
+  <Version>2.2024.5.16</Version>
 </Config>
