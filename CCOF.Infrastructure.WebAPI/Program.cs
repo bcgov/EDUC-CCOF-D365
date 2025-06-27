@@ -14,9 +14,12 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using CCOF.Infrastructure.WebAPI.Services.Documents;
 using CCOF.Infrastructure.WebAPI.Services.Batches;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Hellang.Middleware.ProblemDetails;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(serverOptions => serverOptions.AddServerHeader = false);
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -44,16 +47,17 @@ builder.Services.AddScoped<ID365AuthenticationService, AuthenticationServiceMSAL
 builder.Services.AddScoped<ID365WebAPIService, D365WebAPIService>();
 builder.Services.AddScoped<ID365TokenService, D365TokenService>();
 builder.Services.AddScoped<ID365AppUserService, D365AppUserService>();
+
 builder.Services.AddScoped<ID365ScheduledProcessService, ProcessService>();
 builder.Services.AddScoped<ID365ProcessProvider, P505GeneratePaymentLinesProvider>();
 builder.Services.AddScoped<ID365DataService, D365DataService>();
 builder.Services.AddScoped<D365Email>();
 builder.Services.AddScoped<ID365BackgroundProcessHandler, D365BackgroundProcessHandler>();
-
+builder.Services.AddScoped<ID365DocumentProvider, DocumentProvider>();
+builder.Services.AddScoped<ID365DocumentProvider, ApplicationDocumentProvider>();
+builder.Services.AddScoped<ID365DocumentService, D365DocumentService>();
 builder.Services.AddScoped<ID365BatchService, D365BatchService>();
 builder.Services.AddScoped<ID365BatchProvider, BatchProvider>();
-
-
 
 builder.Services.AddD365HttpClient(builder.Configuration);
 builder.Services.AddMvcCore().AddApiExplorer();
@@ -80,8 +84,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseApiKey();
+app.UseProblemDetails();
 
+app.MapFallback(() => Results.Redirect("/swagger"));
 app.UseHttpsRedirection();
+app.UseAuthentication();
+
 
 app.UseRouting();
 
