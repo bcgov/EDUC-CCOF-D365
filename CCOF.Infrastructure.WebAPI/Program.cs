@@ -59,6 +59,8 @@ builder.Services.AddScoped<ID365DocumentService, D365DocumentService>();
 builder.Services.AddScoped<ID365BatchService, D365BatchService>();
 builder.Services.AddScoped<ID365BatchProvider, BatchProvider>();
 
+builder.Services.AddScoped<ID365ProcessProvider, P505GeneratePaymentLinesProvider>();
+
 builder.Services.AddD365HttpClient(builder.Configuration);
 builder.Services.AddMvcCore().AddApiExplorer();
 builder.Services.AddAuthentication();
