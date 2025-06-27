@@ -6,26 +6,16 @@ using System.Threading.Tasks;
 
 namespace CCOF.Infrastructure.WebAPI.Models
 {
-    public class D365AuthSettings
+    public class D365AuthSettingsCCOF
     {
-        public Func<Task<string>>? GetAccessToken { get; set; }
-        public required string BaseUrl { get; set; } // Dynamics Base URL
-        public required string ResourceUrl { get; set; }
-        public required string WebApiUrl { get; set; }
-        public required string BatchUrl { get; set; }
-        public required string BaseServiceUrl { get; set; } // Dynamics Base Service URL for Dataverse Search, Batch Operations etc.
-        public required string RedirectUrl { get; set; }
-        public required string ApiVersion { get; set; }
-        public required Int16 TimeOutInSeconds { get; set; }
-        public required string SearchVersion { get; set; }
-        public required List<AZAppUser> AZAppUsers { get; set; }
-        public required string HttpClientName { get; set; }
-        public required Guid CallerObjectId { get; set; }
-
-       public string TenantId { get; set; } = string.Empty;
+        public string BaseUrl { get; set; } = string.Empty; // Base URL
+        public string ResourceUrl { get; set; } = string.Empty;
+        public string WebApiUrl { get; set; } = string.Empty;
+        public string TenantId { get; set; } = string.Empty;
         public string ClientId { get; set; } = string.Empty; // Azure Registered Application ID
-       public string ClientSecret { get; set; } = string.Empty;
-
+        public string ClientSecret { get; set; } = string.Empty;
+        public string RedirectUrl { get; set; } = string.Empty;
         public string APIVersion { get; set; } = string.Empty;
+        public string SearchVersion { get; set; } = "v1.0";
     }
 }

@@ -14,14 +14,14 @@ using Microsoft.Extensions.Options;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
-    public class P505GeneratePaymentLinesProvider(IOptionsSnapshot<ExternalServices> bccasApiSettings, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ILoggerFactory loggerFactory, TimeProvider timeProvider) : ID365ProcessProvider
+    public class P505GeneratePaymentLinesProvider( ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ILoggerFactory loggerFactory) : ID365ProcessProvider
     {
-        private readonly BCCASApi _BCCASApi = bccasApiSettings.Value.BCCASApi;
+       // private readonly BCCASApi _BCCASApi = bccasApiSettings.Value.BCCASApi;
         private readonly ID365AppUserService _appUserService = appUserService;
-        private readonly D365WebApi.ID365WebApiService _d365WebApiService = d365WebApiService;
+        private readonly ID365WebApiService _d365WebApiService = d365WebApiService;
         private readonly ILogger _logger = loggerFactory.CreateLogger(LogCategory.Process);
 
-        private readonly TimeProvider _timeProvider = timeProvider;
+        
         private ProcessParameter? _processParams;
 
 
