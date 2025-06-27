@@ -22,9 +22,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public required string HttpClientName { get; set; }
         public required Guid CallerObjectId { get; set; }
 
-        public string TenantId { get; set; } = string.Empty;
+       public string TenantId { get; set; } = string.Empty;
         public string ClientId { get; set; } = string.Empty; // Azure Registered Application ID
-        public string ClientSecret { get; set; } = string.Empty;
+       public string ClientSecret { get; set; } = string.Empty;
 
         public string APIVersion { get; set; } = string.Empty;
     }

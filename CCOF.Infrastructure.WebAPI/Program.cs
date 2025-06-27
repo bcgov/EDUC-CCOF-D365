@@ -1,8 +1,14 @@
+using CCOF.Infrastructure.WebAPI.Caching;
 using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Services.AppUsers;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
+using System.Reflection.PortableExecutable;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,10 +30,20 @@ builder.Services.AddSwaggerGen(config =>
     var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
     config.IncludeXmlComments(xmlCommentsFullPath);
 });
+builder.Services.AddCustomProblemDetails();
+builder.Services.AddHttpClient();
 
-builder.Services.AddTransient<ID365AuthenticationService, AuthenticationServiceMSAL>();
-builder.Services.AddTransient<ID365WebAPIService, D365WebAPIService>();
-builder.Services.AddScoped<D365AuthSettings>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.TryAddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
+builder.Services.TryAddSingleton(TimeProvider.System);
+builder.Services.AddScoped<ID365AuthenticationService, AuthenticationServiceMSAL>();
+builder.Services.AddScoped<ID365WebAPIService, D365WebAPIService>();
+builder.Services.AddScoped<ID365TokenService, D365TokenService>();
+builder.Services.AddScoped<ID365AppUserService, D365AppUserService>();
+
+
+builder.Services.Configure<D365AuthSettings>(builder.Configuration.GetSection(nameof(D365AuthSettings)));
+
 
 var app = builder.Build();
 

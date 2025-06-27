@@ -1,11 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CCOF.Infrastructure.WebAPI.Extensions;
+using CCOF.Infrastructure.WebAPI.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
 
 namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
 {
@@ -18,6 +22,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
         HttpResponseMessage SendDeleteRequestAsync(string endPoint);
         HttpResponseMessage SendUpdateRequestAsync(string endPoint, string content);
         HttpResponseMessage SendMessageAsync(HttpMethod httpMethod, string messageUri);
+        HttpResponseMessage SendRetrieveAsync(AZAppUser spn, HttpMethod httpMethod, string messageUri);
+      HttpResponseMessage SendRetrieveRequestAsync1(AZAppUser spn,string query, bool formatted = false, int maxPageSize = 200);
+
         HttpResponseMessage SendSearchRequestAsync(string body);
     }
 
@@ -42,6 +49,18 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
             return client.SendAsync(request).Result;
         }
 
+        public HttpResponseMessage SendRetrieveRequestAsync1(AZAppUser spn, string query, bool formatted = false, int maxPageSize = 200)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, query);
+               request.Headers.Add("Prefer", "odata.maxpagesize=" + maxPageSize.ToString());
+
+            if (formatted)
+                request.Headers.Add("Prefer", "odata.include-annotations=OData.Community.Display.V1.FormattedValue");
+
+            HttpClient client =  _authenticationService.GetHttpClientAsync(D365ServiceType.CRUD, spn).Result;
+
+            return  client.SendAsync(request).Result;
+        }
         public HttpResponseMessage SendCreateRequestAsync(string endPoint, string content)
         {
             return SendAsync(HttpMethod.Post, endPoint, content);
@@ -76,13 +95,26 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
             return client.SendAsync(message).Result;
         }
 
-        public HttpResponseMessage SendMessageAsync(HttpMethod httpMethod, string messageUri)
+        public  HttpResponseMessage SendMessageAsync( HttpMethod httpMethod, string requestUri)
         {
-            var client = _authenticationService.GetHttpClient().Result;
-            HttpRequestMessage message = new(httpMethod, messageUri);
 
-            // Send the message to the WebAPI. 
+            var client = _authenticationService.GetHttpClient().Result;
+            HttpRequestMessage message = new(httpMethod, requestUri);
+
             return client.SendAsync(message).Result;
+        }
+
+        public HttpResponseMessage SendRetrieveAsync(AZAppUser spn, HttpMethod httpMethod, string requestUri)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+
+            var client =  _authenticationService.GetHttpClientAsync(D365ServiceType.CRUD, spn).Result;
+
+            return  client.SendAsync(request).Result;
+            // var client = _authenticationService.GetHttpClient().Result;
+            // HttpRequestMessage message = new(httpMethod, messageUri);
+
+            // return client.SendAsync(message).Result;
         }
 
         public HttpResponseMessage SendSearchRequestAsync(string body)
