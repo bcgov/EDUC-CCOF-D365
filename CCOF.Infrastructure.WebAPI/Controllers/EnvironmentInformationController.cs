@@ -29,7 +29,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            var _authSettingsSection = _configuration.GetSection("DynamicsAuthenticationSettings");
+            var _authSettingsSection = _configuration.GetSection("D365AuthSettings");
             var _authSettings = _authSettingsSection.Get<D365AuthSettings>();
 
             _authSettings.ClientId = "*********";
