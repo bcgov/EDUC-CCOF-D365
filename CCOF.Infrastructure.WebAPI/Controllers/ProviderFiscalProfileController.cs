@@ -15,8 +15,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     [ApiController]
     public class ProviderFiscalProfileController : ControllerBase
     {
-        private readonly ID365WebAPIService _d365webapiservice;
-        public ProviderFiscalProfileController(ID365WebAPIService d365webapiservice)
+        private readonly D365WebApiService _d365webapiservice;
+        public ProviderFiscalProfileController(D365WebApiService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }

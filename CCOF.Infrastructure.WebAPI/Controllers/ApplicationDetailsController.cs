@@ -14,9 +14,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     public class ApplicationDetailsController : ControllerBase
     {
 
-        private readonly ID365WebAPIService _d365webapiservice;
+        private readonly D365WebApiService _d365webapiservice;
         private readonly ID365AppUserService _appuser;
-        public ApplicationDetailsController(ID365WebAPIService d365webapiservice, ID365AppUserService appuser)
+        public ApplicationDetailsController(D365WebApiService d365webapiservice, ID365AppUserService appuser)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
             _appuser = appuser;

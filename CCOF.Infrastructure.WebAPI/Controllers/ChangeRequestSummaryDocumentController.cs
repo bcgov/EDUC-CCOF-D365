@@ -20,8 +20,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     [ApiController]
     public class ChangeRequestSummaryDocumentController : ControllerBase
     {
-        private readonly ID365WebAPIService _d365webapiservice;
-        public ChangeRequestSummaryDocumentController(ID365WebAPIService d365webapiservice)
+        private readonly D365WebApiService _d365webapiservice;
+        public ChangeRequestSummaryDocumentController(D365WebApiService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }

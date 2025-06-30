@@ -17,8 +17,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     [ApiController]
     public class ProviderProfileController : ControllerBase
     {
-        private readonly ID365WebAPIService _d365webapiservice;
-        public ProviderProfileController(ID365WebAPIService d365webapiservice)
+        private readonly D365WebApiService _d365webapiservice;
+        public ProviderProfileController(D365WebApiService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }

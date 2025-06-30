@@ -19,8 +19,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     [ApiController]
     public class SubmissionPDFHistoryController : ControllerBase
     {
-        private readonly ID365WebAPIService _d365webapiservice;
-        public SubmissionPDFHistoryController(ID365WebAPIService d365webapiservice)
+        private readonly D365WebApiService _d365webapiservice;
+        public SubmissionPDFHistoryController(D365WebApiService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }
