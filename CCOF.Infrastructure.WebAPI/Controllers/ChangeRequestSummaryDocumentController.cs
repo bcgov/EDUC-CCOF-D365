@@ -6,6 +6,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,8 +21,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     [ApiController]
     public class ChangeRequestSummaryDocumentController : ControllerBase
     {
-        private readonly D365WebApiService _d365webapiservice;
-        public ChangeRequestSummaryDocumentController(D365WebApiService d365webapiservice)
+        private readonly ID365WebApiService _d365webapiservice;
+        public ChangeRequestSummaryDocumentController(ID365WebApiService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }
