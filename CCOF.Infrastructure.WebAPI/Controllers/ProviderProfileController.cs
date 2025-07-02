@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,8 +18,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     [ApiController]
     public class ProviderProfileController : ControllerBase
     {
-        private readonly ID365WebAPIService _d365webapiservice;
-        public ProviderProfileController(ID365WebAPIService d365webapiservice)
+        private readonly ID365WebApiService _d365webapiservice;
+        public ProviderProfileController(ID365WebApiService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }

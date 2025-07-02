@@ -44,12 +44,12 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.TryAddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
 builder.Services.TryAddSingleton(TimeProvider.System);
 builder.Services.AddScoped<ID365AuthenticationService, AuthenticationServiceMSAL>();
-builder.Services.AddScoped<ID365WebAPIService, D365WebAPIService>();
+builder.Services.AddScoped<ID365WebApiService, D365WebApiService>();
 builder.Services.AddScoped<ID365TokenService, D365TokenService>();
 builder.Services.AddScoped<ID365AppUserService, D365AppUserService>();
 
 builder.Services.AddScoped<ID365ScheduledProcessService, ProcessService>();
-builder.Services.AddScoped<ID365ProcessProvider, P505GeneratePaymentLinesProvider>();
+
 builder.Services.AddScoped<ID365DataService, D365DataService>();
 builder.Services.AddScoped<D365Email>();
 builder.Services.AddScoped<ID365BackgroundProcessHandler, D365BackgroundProcessHandler>();

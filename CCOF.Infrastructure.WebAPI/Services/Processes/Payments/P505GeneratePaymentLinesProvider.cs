@@ -109,7 +109,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
         {
             #region Validation & Setup
-            var entitySetName = "ccof_application_ccfri_closure";
+            var entitySetName = "ccof_application_ccfri_closures";
             var payload2 = new JsonObject {
                                 { "ccof_name", "test123" }
                              
