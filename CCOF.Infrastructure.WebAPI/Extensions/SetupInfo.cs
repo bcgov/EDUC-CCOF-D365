@@ -205,17 +205,17 @@ public static class Setup
 
 public class LogCategory
 {
-    public const string API = "OFM.API.ApiKey";
+    public const string API = "CCOF.API.ApiKey";
 
-    public const string ProviderProfile = "OFM.Portal.ProviderProfile";
-    public const string Operation = "OFM.Portal.Operation";
-    public const string Document = "OFM.Portal.Document";
+    public const string ProviderProfile = "CCOF.Portal.ProviderProfile";
+    public const string Operation = "CCOF.Portal.Operation";
+    public const string Document = "CCOF.Portal.Document";
 
-    public const string Contact = "OFM.D365.Contact";
-    public const string Request = "OFM.D365.Request";
-    public const string Process = "OFM.D365.Process";
-    public const string Batch = "OFM.D365.Batch";
-    public const string Email = "OFM.D365.Email";
+    public const string Contact = "CCOF.D365.Contact";
+    public const string Request = "CCOF.D365.Request";
+    public const string Process = "CCOF.D365.Process";
+    public const string Batch = "CCOF.D365.Batch";
+    public const string Email = "CCOF.D365.Email";
 }
 
 public class CustomLogEvent

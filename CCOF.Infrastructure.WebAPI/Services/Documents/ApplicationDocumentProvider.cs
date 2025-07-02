@@ -10,7 +10,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Documents;
 
 sealed class ApplicationDocumentProvider : ID365DocumentProvider
 {
-    public string EntityNameSet => "ofm_applications";
+    public string EntityNameSet => "ccof_applications";
 
     public async Task<string> PrepareDocumentBodyAsync(JsonObject jsonData,ID365AppUserService appUserService, ID365WebApiService d365WebApiService)
     {
