@@ -21,12 +21,7 @@ public static class EndpointRouteBuilderExtensions
         searchesEndpoints.MapPost("", SearchesHandlers.DataverseSearchAsync).WithTags("Portal Searches").Produces(200).ProducesProblem(404);
     }
 
-    public static void RegisterProviderProfileEndpoints(this IEndpointRouteBuilder endpointRouteBuilder)
-    {
-        var searchesEndpoints = endpointRouteBuilder.MapGroup("/api/providerprofile");
-
-        searchesEndpoints.MapGet("", ProviderProfilesHandlers.GetProfileAsync).WithTags("Portal Providers").Produces(200).ProducesProblem(404);
-    }
+  
 
     public static void RegisterOperationsEndpoints(this IEndpointRouteBuilder endpointRouteBuilder)
     {
@@ -36,15 +31,6 @@ public static class EndpointRouteBuilderExtensions
         operationsEndpoints.MapPost("", OperationsHandlers.PostAsync).WithTags("Portal Operations").Produces(200).ProducesProblem(404);
         operationsEndpoints.MapPatch("", OperationsHandlers.PatchAsync).WithTags("Portal Operations").Produces(200).ProducesProblem(404);
         operationsEndpoints.MapDelete("", OperationsHandlers.DeleteAsync).WithTags("Portal Operations").Produces(200).ProducesProblem(404);
-    }
-
-    public static void RegisterDocumentsEndpoints(this IEndpointRouteBuilder endpointRouteBuilder)
-    {
-        var documentsEndpoints = endpointRouteBuilder.MapGroup("/api/documents");
-
-        documentsEndpoints.MapGet("", DocumentsHandlers.GetAsync).WithTags("Portal Documents").Produces(200).ProducesProblem(404);
-        documentsEndpoints.MapPost("", DocumentsHandlers.PostAsync).WithTags("Portal Documents").Produces(200).ProducesProblem(404).DisableAntiforgery();
-        documentsEndpoints.MapDelete("", DocumentsHandlers.DeleteAsync).WithTags("Portal Documents").Produces(200).ProducesProblem(404);
     }
 
     public static void RegisterBatchOperationsEndpoints(this IEndpointRouteBuilder endpointRouteBuilder)

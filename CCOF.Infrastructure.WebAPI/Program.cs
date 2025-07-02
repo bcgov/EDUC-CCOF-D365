@@ -51,11 +51,9 @@ builder.Services.AddScoped<ID365AppUserService, D365AppUserService>();
 builder.Services.AddScoped<ID365ScheduledProcessService, ProcessService>();
 
 builder.Services.AddScoped<ID365DataService, D365DataService>();
-builder.Services.AddScoped<D365Email>();
+
 builder.Services.AddScoped<ID365BackgroundProcessHandler, D365BackgroundProcessHandler>();
-builder.Services.AddScoped<ID365DocumentProvider, DocumentProvider>();
-builder.Services.AddScoped<ID365DocumentProvider, ApplicationDocumentProvider>();
-builder.Services.AddScoped<ID365DocumentService, D365DocumentService>();
+
 builder.Services.AddScoped<ID365BatchService, D365BatchService>();
 builder.Services.AddScoped<ID365BatchProvider, BatchProvider>();
 
