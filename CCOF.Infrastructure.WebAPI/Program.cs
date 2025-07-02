@@ -107,4 +107,22 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
+
+#region Api Health
+
+app.MapGet("/api/health", (ILogger<string> logger) =>
+
+{
+
+    //logger.LogInformation("Health checked on {currentTime}", DateTime.Now);
+
+    return TypedResults.Ok("I am healthy!");
+
+}).WithTags("Portal Environment").Produces(200).ProducesProblem(404).AllowAnonymous();
+
+app.MapHealthChecks("/api/health");
+
+#endregion
+
+
 app.Run();
