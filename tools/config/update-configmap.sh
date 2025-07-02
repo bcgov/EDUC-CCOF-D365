@@ -4,6 +4,7 @@ readonly ENV_VAL=$1
 readonly APP_NAME=$2
 readonly OPENSHIFT_NAMESPACE=$3
 readonly DYNAMICS_AUTHENTICATION_SETTINGS=$4
+readonly D365_API_KEY_SCHEME=$5
 
 D365_CONFIGURATION=$(jq << JSON
 {
@@ -13,8 +14,22 @@ D365_CONFIGURATION=$(jq << JSON
       "Microsoft.AspNetCore": "Warning"
     }
   },
-  "DynamicsAuthenticationSettings": $(cat "$DYNAMICS_AUTHENTICATION_SETTINGS")
+  "AuthenticationSettings": {
+    "Schemes": {
+      "ApiKeyScheme": $(cat "$D365_API_KEY_SCHEME")
+    }
+  },
+  "AppSettings": {
+    "PageSize": 50,
+    "MaxPageSize": 2000,
+    "RetryEnabled": true,
+    "MaxRetries": 5,
+    "AutoRetryDelay": "00:00:08",
+    "MinsToCache": 60
+  },
+  "D365AuthSettings": $(cat "$DYNAMICS_AUTHENTICATION_SETTINGS")
 }
+
 JSON
 )
 readonly D365_CONFIGURATION
