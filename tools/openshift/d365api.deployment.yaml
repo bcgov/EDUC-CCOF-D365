@@ -184,3 +184,6 @@ parameters:
   - name: APP_ENVIRONMENT
     description: The environment being created ('dev', 'qa', 'uat', 'prod')
     required: true
+  - name: HAPROXY_IP_WHITELIST
+    description: List of ip addresses delimited by space for access to api. (ex. 12.12.123.12 13.13.123.13). use * to allow access to all.
+    required: true
