@@ -84,25 +84,29 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRouting();
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/processes"),
+ appBuilder => appBuilder.UseMiddleware<ApiKeyMiddleware>());
+
+
 app.UseApiKey();
 app.UseProblemDetails();
 
 app.MapFallback(() => Results.Redirect("/swagger"));
 app.UseHttpsRedirection();
-app.UseAuthentication();
 
 
-app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
-app.RegisterBatchProcessesEndpoints();
 
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+app.RegisterBatchProcessesEndpoints();
+
 
 app.Run();
