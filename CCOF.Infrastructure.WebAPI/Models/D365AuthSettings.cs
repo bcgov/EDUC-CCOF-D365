@@ -1,11 +1,12 @@
-﻿using System;
+﻿using CCOF.Infrastructure.WebAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CCOF.Infrastructure.WebAPI.Models
 {
-    public class D365AuthSettings
+    public class D365AuthSettingsCCOF
     {
         public string BaseUrl { get; set; } = string.Empty; // Base URL
         public string ResourceUrl { get; set; } = string.Empty;

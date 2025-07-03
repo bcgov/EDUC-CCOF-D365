@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using CCOF.Infrastructure.WebAPI.Models;
-using CCOF.Infrastructure.WebAPI.Services;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
+using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     [ApiController]
     public class ProviderFiscalProfileController : ControllerBase
     {
-        private readonly ID365WebAPIService _d365webapiservice;
-        public ProviderFiscalProfileController(ID365WebAPIService d365webapiservice)
+        private readonly ID365WebApiService _d365webapiservice;
+        public ProviderFiscalProfileController(ID365WebApiService d365webapiservice)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
         }
