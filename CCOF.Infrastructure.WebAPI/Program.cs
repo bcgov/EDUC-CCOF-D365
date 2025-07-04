@@ -51,11 +51,9 @@ builder.Services.AddScoped<ID365AppUserService, D365AppUserService>();
 builder.Services.AddScoped<ID365ScheduledProcessService, ProcessService>();
 
 builder.Services.AddScoped<ID365DataService, D365DataService>();
-builder.Services.AddScoped<D365Email>();
+
 builder.Services.AddScoped<ID365BackgroundProcessHandler, D365BackgroundProcessHandler>();
-builder.Services.AddScoped<ID365DocumentProvider, DocumentProvider>();
-builder.Services.AddScoped<ID365DocumentProvider, ApplicationDocumentProvider>();
-builder.Services.AddScoped<ID365DocumentService, D365DocumentService>();
+
 builder.Services.AddScoped<ID365BatchService, D365BatchService>();
 builder.Services.AddScoped<ID365BatchProvider, BatchProvider>();
 
@@ -86,25 +84,29 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRouting();
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/processes"),
+ appBuilder => appBuilder.UseMiddleware<ApiKeyMiddleware>());
+
+
 app.UseApiKey();
 app.UseProblemDetails();
 
 app.MapFallback(() => Results.Redirect("/swagger"));
 app.UseHttpsRedirection();
-app.UseAuthentication();
 
 
-app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
-app.RegisterBatchProcessesEndpoints();
 
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+app.RegisterBatchProcessesEndpoints();
+
 
 app.Run();
