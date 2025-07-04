@@ -67,9 +67,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Application[]? application { get; set; }
     }
 
-    public class Facility : Account
-    {
-        public string? accountid { get; set; }
+    public class Facility
+    {        
+        public string? accountid { get; set; }        
         public string? accountnumber { get; set; }
         public string? name { get; set; }
         [JsonPropertyName("ccof_facilitystatus@OData.Community.Display.V1.FormattedValue")]
