@@ -417,3 +417,6 @@ FodyWeavers.xsd
 /ShowFundingAgreement.html
 /.gitignore
 /.vs/CCOF/v17/.suo
+/CCOF.Infrastructure.WebAPI/appsettings.Production.json
+/CCOF.Infrastructure.WebAPI/appsettings.QA.json
+/CCOF.Infrastructure.WebAPI/appsettings.UAT.json
