@@ -139,18 +139,18 @@ jobs:
              -p MIN_MEM=${{ env.MIN_MEM }} \
              -p MAX_MEM=${{ env.MAX_MEM }} \
              -p APP_ENVIRONMENT=${{ env.APP_ENVIRONMENT }} \
-             -p HAPROXY_IP_WHITELIST='${{ env.HAPROXY_IP_WHITELIST }}' \             
+             -p HAPROXY_IP_WHITELIST='${{ env.HAPROXY_IP_WHITELIST }}' \
               | oc apply -f -
 
           # Process update-configmap
           cat << JSON > /tmp/authentication_settings
             ${{ secrets.D365_AUTHENTICATION_SETTINGS }}
           JSON
-          
+
           cat << JSON > /tmp/auth_schema_settings
             ${{ secrets.D365_API_KEY_SCHEME }}
           JSON
-          
+
           curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ env.BRANCH }}/tools/config/update-configmap.sh \
             | bash /dev/stdin \
               ${{ env.APP_ENVIRONMENT }} \
