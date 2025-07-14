@@ -221,7 +221,6 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
             }
             return applicationJson;
         }
-       
 
     }
 }
