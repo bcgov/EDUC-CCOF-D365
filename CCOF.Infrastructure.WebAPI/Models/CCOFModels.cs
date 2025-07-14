@@ -9,9 +9,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? ccof_username { get; set; }
 
         public string? ccof_userid { get; set; }
-
         [JsonPropertyName("Organization.accountid")]
-
         public string? organization_accountid { get; set; }
         [JsonPropertyName("Organization.accountnumber")]
 
@@ -32,6 +30,11 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Facility[]? facilities { get; set; }
 
         public Application? application { get; set; }
+        [JsonPropertyName("Portalrole.ofm_portal_roleid")]
+        public string? portalrole_id { get; set; }
+
+        [JsonPropertyName("Portalrole.ofm_portal_role_number")]
+        public string? portalrole_number { get; set; }
     }
     public class FiscalUserProfile
     {
@@ -125,6 +128,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public DateTime? ccof_intakeperiodstart { get; set; }
         public DateTime? ccof_intakeperiodend { get; set; }
     }
+    
 
     public class Ccof_Application_Basefunding_Application
     {
