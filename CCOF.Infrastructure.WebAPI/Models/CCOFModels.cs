@@ -65,6 +65,8 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Facility[]? facilities { get; set; }
 
         public Application[]? application { get; set; }
+        [JsonPropertyName("Portalrole.ofm_portal_roleid")]
+        public string? portalrole_id { get; set; }
     }
 
     public class Facility
