@@ -413,28 +413,28 @@
                     if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
                         tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolledpre"], 1));
                     }
-                    // Approved Parent Fee Frequency
+                    // Approved Parent Fee
                     const th3Leading = document.createElement('th');
                     th3Leading.colSpan = 1;
                     th3Leading.textContent = "Approved Parent Fees";
                     tr3.appendChild(th3Leading);
                     if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee0to18"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfee0to18"], 2));
                     }
                     if (var_selectedColumns.includes(100000001)) {  //  100000001  18-36column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee18to36"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfee18to36"], 2));
                     }
                     if (var_selectedColumns.includes(100000002)) {  //  100000002 3YK column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee3yk"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfee3yk"], 2));
                     }
                     if (var_selectedColumns.includes(100000003)) {  //  100000003  OOSC-K column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeeoosck"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeeoosck"], 2));
                     }
                     if (var_selectedColumns.includes(100000004)) {  //  100000004  OOSC-G column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeeooscg"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeeooscg"], 2));
                     }
                     if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeepre"], 1));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeepre"], 1));
                     }
 
                     // Approved Parent Fee Frequency
@@ -443,22 +443,22 @@
                     th4Leading.textContent = "Frequency";
                     tr4.appendChild(th4Leading);
                     if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency0to18@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequency0to18@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000001)) {  //  100000001  18-36column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency18to36@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequency18to36@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000002)) {  //  100000002 3YK column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency3yk@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequency3yk@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000003)) {  //  100000003  OOSC-K column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencyoosck@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequencyoosck@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000004)) {  //  100000004  OOSC-G column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencyooscg@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequencyooscg@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencypre@OData.Community.Display.V1.FormattedValue"], 1));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequencypre@OData.Community.Display.V1.FormattedValue"], 1));
                     }
 
                     // --- Populate Row  ("Day" and subheaders) ---
@@ -930,7 +930,7 @@
                     row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountaesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountlesspre"]));
                 }
                 tableBody.appendChild(row);
             }
@@ -943,27 +943,27 @@
             firstCell.innerText = " Daily CCFRI Rate";
             row.appendChild(firstCell);
             if (var_selectedColumns.includes(100000000)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless0to18"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateless0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateover0to18"]));
             }
             if (var_selectedColumns.includes(100000001)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless18to36"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateless18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateover18to36"]));
             }
             if (var_selectedColumns.includes(100000002)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless3yk"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateless3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateover3yk"]));
             }
             if (var_selectedColumns.includes(100000003)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailccfriratelessoosck"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateoveroosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailccfriratelessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateoveroosck"]));
             }
             if (var_selectedColumns.includes(100000004)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfriratelessooscg"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateoverooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfriratelessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateoverooscg"]));
             }
             if (var_selectedColumns.includes(100000005)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfriratelesspre"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfriratelesspre"]));
             }
             tableBody.appendChild(row);
             // CCFRI $ (CCFRI Amount)
@@ -1253,7 +1253,7 @@
                 th_label.innerText = "Difference $";
                 GrandTotalRow.appendChild(th_label);
                 GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_reportextension"]["ccof_diffgrandtotalbase"], 2));
-                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_reportextension"]["ccof_diffgrandtotalbase"], 2));
+                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_reportextension"]["ccof_diffgrandtotalccfri"], 2));
                 GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_reportextension"]["ccof_diffgrandtotalccfriprovider"], 2));
                 tfootElement.appendChild(GrandTotalRow);
             }
