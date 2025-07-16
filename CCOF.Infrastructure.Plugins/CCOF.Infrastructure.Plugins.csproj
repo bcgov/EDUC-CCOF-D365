@@ -127,6 +127,7 @@
     <Compile Include="ECE-WE-Facility\ValidateECEWEFacilityApproval.cs" />
     <Compile Include="FundingAgreement\RestrictFundingStatus.cs" />
     <Compile Include="FundingAgreement\CreateFundingMOD.cs" />
+    <Compile Include="MonthlyEnrolmentReport\UpdateSubmissionDeadline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
