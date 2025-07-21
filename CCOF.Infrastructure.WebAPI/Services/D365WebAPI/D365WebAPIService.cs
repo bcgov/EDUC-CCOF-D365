@@ -15,6 +15,8 @@ using System.Text.Json.Nodes;
 using System.Text.Json;
 using System.Threading.Tasks;
 using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
+using System.Net;
+using Microsoft.Extensions.Options;
 
 namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
 {
@@ -23,9 +25,11 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
     public class D365WebApiService : ID365WebApiService
     {
         private readonly ID365AuthenticationService _authenticationService;
+        private readonly D365AuthSettings _d365AuthSettings;
 
-        public D365WebApiService(ID365AuthenticationService authenticationService)
+        public D365WebApiService(IOptionsSnapshot<D365AuthSettings> d365AuthSettings, ID365AuthenticationService authenticationService)
         {
+            _d365AuthSettings = d365AuthSettings.Value;
             _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
 
@@ -236,7 +240,55 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
             return await client.SendAsync(message);
         }
 
-      
+        public async Task<BatchResult> SendBatchMessageAsync(AZAppUser spn, List<HttpRequestMessage> requestMessages, Guid? callerObjectId)
+        {
+            BatchRequest batchRequest = new(_d365AuthSettings)
+            {
+                Requests = requestMessages,
+                ContinueOnError = true
+            };
+            if (callerObjectId != null && callerObjectId != Guid.Empty)
+                batchRequest.Headers.Add("CallerObjectId", callerObjectId.ToString());
+
+            HttpClient client = await _authenticationService.GetHttpClientAsync(D365ServiceType.Batch, spn);
+            BatchResponse batchResponse = await SendAsync<BatchResponse>(batchRequest, client);
+
+            Int16 processed = 0;
+            List<string> errors = [];
+            List<JsonObject> results = [];
+
+            if (batchResponse.IsSuccessStatusCode)
+                batchResponse.HttpResponseMessages.ForEach(async res =>
+                {
+                    if (res.IsSuccessStatusCode)
+                    {
+                        processed++;
+                        if (res.StatusCode != HttpStatusCode.NoContent)
+                        {
+                            results.Add(await res.Content.ReadFromJsonAsync<JsonObject>());
+                        }
+                    }
+                    else
+                    {
+                        errors.Add(await res.Content.ReadAsStringAsync());
+                    }
+                });
+
+            if (errors.Any())
+            {
+                var batchResult = BatchResult.Failure(errors, 0, 0);
+
+                if (errors.Count < requestMessages.Count)
+                    batchResult = BatchResult.PartialSuccess(null, errors, processed, requestMessages.Count);
+
+                //_logger.LogError(CustomLogEvent.Batch, "Batch operation finished with an error {error}", JsonValue.Create<BatchResult>(batchResult));
+
+                return batchResult;
+            }
+
+            return BatchResult.Success(results, processed, requestMessages.Count); ;
+        }
+
         #region Helpers
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpClient client)
