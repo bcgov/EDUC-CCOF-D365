@@ -73,7 +73,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         </link-entity>
       </link-entity>
     </link-entity>
-<link-entity name=""ofm_portal_role"" from=""ofm_portal_roleid"" to=""ofm_portal_role_id"" alias=""Portalrole"" link-type=""inner"">
+<link-entity name=""ofm_portal_role"" from=""ofm_portal_roleid"" to=""ofm_portal_role_id"" alias=""Portalrole"" link-type=""outer"">
       <attribute name=""ofm_portal_role_number"" />
  <attribute name=""ofm_portal_roleid"" />
     </link-entity>
