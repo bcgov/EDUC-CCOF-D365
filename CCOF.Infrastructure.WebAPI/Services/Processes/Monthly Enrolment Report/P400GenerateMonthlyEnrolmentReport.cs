@@ -332,7 +332,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
             return result;
         }
-        public JsonObject CalculateDailyCCFRIRate(JsonObject approvedParentFee, JsonObject CCFRIMax, JsonObject CCFRIMin, bool feeFloorExempt, int providerType)
+        public JsonObject CalculateDailyCCFRIRate(JsonObject approvedParentFee, JsonObject CCFRIMax, JsonObject CCFRIMin, bool feeFloorExempt, int monthlyBusinessDay, int providerType)
         {
             return new JsonObject()
             {
@@ -385,7 +385,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 List<JsonNode> facilityLicence = await FetchAllRecordsFromCRMAsync(FacilityLicenceRequestUri);
 
                 // Batch processing
-                int batchSize = 1000;
+                // int batchSize = 1000;
+                int batchSize = 500;
                 for (int i = 0; i < _processParams.InitialEnrolmentReport.FacilityGuid.Count(); i += batchSize)
                 {
                     List<HttpRequestMessage> createEnrolmentReportRequests = [];
@@ -439,22 +440,44 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                 node?["_ccof_facility_value"].GetValue<string>() == record);
                         var approvedParentFee = new JsonObject()
                         {
-                            ["ccof_approvedparentfee0to18"] = (approvedParentfee0to18 == null || approvedParentfee18to36[MonthLogicalName] == null ||
+                            ["ccof_approvedparentfee0to18"] = (approvedParentfee0to18 == null || approvedParentfee0to18[MonthLogicalName] == null ||
+                                                                    approvedParentfee0to18[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfee0to18[MonthLogicalName].GetValue<decimal>(),
+                            ["ccof_approvedparentfee18to36"] = (approvedParentfee18to36 == null || approvedParentfee18to36[MonthLogicalName] == null ||
                                                                     approvedParentfee18to36[MonthLogicalName].GetValue<decimal>() == 0)
                                                                     ? null : approvedParentfee18to36[MonthLogicalName].GetValue<decimal>(),
-                            ["ccof_approvedparentfee18to36"] = 1,
-                            ["ccof_approvedparentfee3yk"] = 1,
-                            ["ccof_approvedparentfeeoosck"] = 1,
-                            ["ccof_approvedparentfeeooscg"] = 1,
-                            ["ccof_approvedparentfeepre"] = 1,
-                            ["ccof_approvedparentfeefrequency0to18"] = 100000000,
-                            ["ccof_approvedparentfeefrequency18to36"] = 100000000,
-                            ["ccof_approvedparentfeefrequency3yk"] = 100000000,
-                            ["ccof_approvedparentfeefrequencyoosck"] = 100000000,
-                            ["ccof_approvedparentfeefrequencyooscg"] = 100000000,
-                            ["ccof_approvedparentfeefrequencypre"] = 100000002,
+                            ["ccof_approvedparentfee3yk"] = (approvedParentfee3YK == null || approvedParentfee3YK[MonthLogicalName] == null ||
+                                                                    approvedParentfee3YK[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfee3YK[MonthLogicalName].GetValue<decimal>(),
+                            ["ccof_approvedparentfeeoosck"] = (approvedParentfeeOOSCK == null || approvedParentfeeOOSCK[MonthLogicalName] == null ||
+                                                                    approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfee18to36[MonthLogicalName].GetValue<decimal>(),
+                            ["ccof_approvedparentfeeooscg"] = (approvedParentfeeOOSCG == null || approvedParentfeeOOSCG[MonthLogicalName] == null ||
+                                                                    approvedParentfeeOOSCG[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>(),
+                            ["ccof_approvedparentfeepre"] = (approvedParentfeePre == null || approvedParentfeePre[MonthLogicalName] == null ||
+                                                                    approvedParentfeePre[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfeePre[MonthLogicalName].GetValue<decimal>(),
+                            ["ccof_approvedparentfeefrequency0to18"] = (approvedParentfee0to18 == null || approvedParentfee0to18[MonthLogicalName] == null ||
+                                                                    approvedParentfee0to18[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfee0to18["ccof_frequency"].GetValue<int>(),
+                            ["ccof_approvedparentfeefrequency18to36"] = (approvedParentfee18to36 == null || approvedParentfee18to36[MonthLogicalName] == null ||
+                                                                    approvedParentfee18to36[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfee18to36["ccof_frequency"].GetValue<int>(),
+                            ["ccof_approvedparentfeefrequency3yk"] = (approvedParentfee3YK == null || approvedParentfee3YK[MonthLogicalName] == null ||
+                                                                    approvedParentfee3YK[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfee3YK["ccof_frequency"].GetValue<int>(),
+                            ["ccof_approvedparentfeefrequencyoosck"] = (approvedParentfeeOOSCK == null || approvedParentfeeOOSCK[MonthLogicalName] == null ||
+                                                                    approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfeeOOSCK["ccof_frequency"].GetValue<int>(),
+                            ["ccof_approvedparentfeefrequencyooscg"] = (approvedParentfeeOOSCG == null || approvedParentfeeOOSCG[MonthLogicalName] == null ||
+                                                                    approvedParentfeeOOSCG[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfeeOOSCG["ccof_frequency"].GetValue<int>(),
+                            ["ccof_approvedparentfeefrequencypre"] = (approvedParentfeePre == null || approvedParentfeePre[MonthLogicalName] == null ||
+                                                                    approvedParentfeePre[MonthLogicalName].GetValue<decimal>() == 0)
+                                                                    ? null : approvedParentfeePre["ccof_frequency"].GetValue<int>()
                         };
-                        var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFee, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, providerType);
+                        var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFee, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, businessDay, providerType);
                         var EnrolmentReportToCreate = new JsonObject()
                         {
                             ["ccof_year"] = _processParams.InitialEnrolmentReport.Year,
