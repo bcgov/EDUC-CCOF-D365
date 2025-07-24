@@ -1,44 +1,59 @@
-﻿
+﻿﻿
 var CCOF = CCOF || {};
 CCOF.MonthlyEnrollment = CCOF.MonthlyEnrollment || {};
 CCOF.MonthlyEnrollment.Form = CCOF.MonthlyEnrollment.Form || {};
-//Formload logic starts here
 CCOF.MonthlyEnrollment.Form = {
 	onLoad: function (executionContext) {
 		debugger;
-		var formContext = executionContext.getFormContext();
-		var reportType = formContext.getAttribute("ccof_reporttype").getValue();
-		// alert("er_general_section_prev_approved,er_general_section_prev_base,er_general_section_prev_ccfri,er_general_section_prev_ccfri_provider");
-		var tab = formContext.ui.tabs.get("er_general");
-		if (reportType === 100000000) // Orignal
-		{
-			formContext.ui.tabs.get("adjustment_er").setVisible(true);
-			tab.sections.get("er_general_difference").setVisible(false);
-			tab.sections.get("er_general_difference_base_amount").setVisible(false);
-			tab.sections.get("er_general_difference_ccfri_amount").setVisible(false);
-			tab.sections.get("er_general_difference_ccfri_provider_amount").setVisible(false);
-			tab.sections.get("er_general_section_prev_approved").setVisible(false);
-			tab.sections.get("er_general_section_prev_base").setVisible(false);
-			tab.sections.get("er_general_section_prev_ccfri").setVisible(false);
-			tab.sections.get("er_general_section_prev_ccfri_provider").setVisible(false);
-			tab.sections.get("er_general_difference_grandtotal").setVisible(false);
-			formContext.getControl("ccof_monthlyenrollmentreport").setVisible(false);
-			formContext.getControl("ccof_prevenrollmentreport").setVisible(false);
+		let formContext = executionContext.getFormContext();
+		// if (formContext.getAttribute("ccof_locked").getValue()) {
+		// 	formContext.getControl("ccof_locked").setDisabled(false);
+		// } else {
+		// 	formContext.getControl("ccof_locked").setDisabled(true);
+		// }
+		formContext.getAttribute("ccof_locked").addOnChange(onChange_locked);
+	},
+	onSave: function (executionContext) {
+		debugger;
+		let formContext = executionContext.getFormContext();
+		if ((formContext.getAttribute("ccof_ccfri_internal_status").getValue() === 1 || formContext.getAttribute("ccof_ccfri_internal_status").getValue() === 2)
+			&& (formContext.getAttribute("ccof_ccof_internal_status").getValue() === 1 || formContext.getAttribute("ccof_ccof_internal_status").getValue() === 2)) {
+			let today = new Date();
+			today.setHours(0, 0, 0, 0);
+			let submissionDeadline = formContext.getAttribute("ccof_submissiondeadline").getValue();
+			submissionDeadline.setHours(0, 0, 0, 0);
+			if (submissionDeadline < today) {
+				formContext.ui.setFormNotification("The date must be greater than today.", "ERROR", "date_check");
+				if (executionContext.getEventArgs()) {
+					executionContext.getEventArgs().preventDefault();
+				}
+			}
+			else {
+				formContext.ui.clearFormNotification("date_check");
+			}
 		}
-		else // Adjustment
-		{
-			formContext.ui.tabs.get("adjustment_er").setVisible(false);
-			tab.sections.get("er_general_difference").setVisible(true);
-			tab.sections.get("er_general_difference_base_amount").setVisible(true);
-			tab.sections.get("er_general_difference_ccfri_amount").setVisible(true);
-			tab.sections.get("er_general_difference_ccfri_provider_amount").setVisible(true);
-			tab.sections.get("er_general_section_prev_approved").setVisible(true);
-			tab.sections.get("er_general_section_prev_base").setVisible(true);
-			tab.sections.get("er_general_section_prev_ccfri").setVisible(true);
-			tab.sections.get("er_general_section_prev_ccfri_provider").setVisible(true);
-			tab.sections.get("er_general_difference_grandtotal").setVisible(true);
-			formContext.getControl("ccof_monthlyenrollmentreport").setVisible(true);
-			formContext.getControl("ccof_prevenrollmentreport").setVisible(true);
-		}
+	}
+}
+function onChange_locked(executionContext) {
+	debugger;
+	let formContext = executionContext.getFormContext();
+	if (!formContext.getAttribute("ccof_locked").getValue()) {
+		// formContext.getControl("ccof_locked").setDisabled(true);
+		formContext.getAttribute("ccof_submissiondeadline").setValue(null);
+		formContext.getAttribute("ccof_submissiondeadline").setRequiredLevel("required")
+		formContext.getAttribute("ccof_lockedunlockedreason").setRequiredLevel("required")
+		formContext.getAttribute("ccof_ccfri_internal_status").setValue(1); // Created
+		formContext.getAttribute("ccof_ccof_internal_status").setValue(1); // Created
+
+		let alertStrings = { confirmButtonLabel: "OK", text: "Please input unlock reason and reset submission deadline and save it!" };
+		let alertOptions = { height: 120, width: 260 };
+		Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+			function () {
+				console.log("Alert closed");
+			},
+			function (error) {
+				console.log("Error showing alert: ", error.message);
+			}
+		);
 	}
 }

@@ -27,4 +27,7 @@ public interface ID365WebApiService
     Task<HttpResponseMessage> SendDocumentRequestAsync(AZAppUser spn, string entityNameSet, Guid id, Byte[] data, string fileName);
     Task<D365ServiceException> ParseError(HttpResponseMessage response);
     Task<HttpResponseMessage> GetRecordTemplateForClone(AZAppUser spn, Guid recordId, string targetEntityName, string targetEntityNameSet);
+    // Copy from OFM project
+    Task<BatchResult> SendBatchMessageAsync(AZAppUser spn, List<HttpRequestMessage> requestMessages, Guid? callerObjectId);
+
 }
