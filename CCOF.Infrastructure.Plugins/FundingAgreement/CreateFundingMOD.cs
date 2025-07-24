@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace CCOF.Infrastructure.Plugins.FundingAgreement
 
@@ -34,19 +35,15 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
 
                     if (entity != null && entity.Attributes.Count > 0)
                     {
+                       
 
-
-                        
-
-                        var fetchXml = $@"<fetch version='1.0' mapping='logical' no-lock='false' distinct='true'>
+                        var funfetchXml = $@"<fetch version='1.0' mapping='logical' no-lock='false' distinct='true'>
                                      <entity name='ccof_funding_agreement'>
                                         <attribute name='statecode'/>
                                       <attribute name='ccof_funding_agreementid'/>
                                           <attribute name='ccof_name'/>
                                           <attribute name='createdon'/>
-                                          <attribute name='ccof_programyear'/>
-                                          <attribute name='ccof_start_date'/>
-                                          <attribute name='ccof_end_date'/>                                        
+                                          <attribute name='ccof_programyear'/>                                                                                  
                                           <attribute name='ccof_organization'/>
                                            <attribute name='ccof_facility'/>
                                             <attribute name='ccof_application'/>
@@ -55,14 +52,12 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                                           <order attribute='ccof_version' descending='true'/>
                                         <filter type='and'><condition attribute='statecode' operator='eq' value='0'/>
                                          <condition attribute='ccof_organization' operator='eq' value='{recordId}'  uitype='account'/>
-                                         </filter></entity></fetch>
-                            ";
+                                         </filter></entity></fetch>";
 
-                        EntityCollection colfunding = service.RetrieveMultiple(new FetchExpression(fetchXml));
+                        EntityCollection colfunding = service.RetrieveMultiple(new FetchExpression(funfetchXml));
                         Entity funding = colfunding[0]; //the first return result
 
-                        tracingService.Trace("This funding agreement: " + funding["ccof_name"]);
-
+                     
                         #region Clone Funding Record and tag license
                         Entity newFundingRecord = new Entity("ccof_funding_agreement");
                         var excludedFields = new List<string>{funding.LogicalName + "id", "createdon", "createdby", "modifiedon", "modifiedby",
@@ -80,34 +75,74 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                                 newFundingRecord[attr.Key] = Convert.ToInt32(attr.Value) + 1;
 
                             }
-                            else { 
-                            tracingService.Trace("All Funding  fields{0}:{1} ", attr.Key, attr.Value);
-                            newFundingRecord[attr.Key] = attr.Value;
-                        }
+                            else
+                            {
+                                tracingService.Trace("All Funding  fields{0}:{1} ", attr.Key, attr.Value);
+                                newFundingRecord[attr.Key] = attr.Value;
+                            }
                         }
 
-                        
                         Guid fundingID = service.Create(newFundingRecord);
 
-                      
+
                         if (funding.Contains("ccof_facility"))
                         {
-                            fetchXml = $@"<fetch version=""1.0"" mapping=""logical"" distinct=""true"">
+                            var licfetchXml = $@"<fetch version=""1.0"" mapping=""logical"" distinct=""true"">
                                          <entity name=""ccof_license"">
                                          <attribute name=""statecode""/>
                                          <attribute name=""ccof_licenseid""/>
+                                          <attribute name=""ccof_licenseid""/>
                                          <attribute name=""ccof_name""/>
-                                        <order attribute=""ccof_name"" descending=""false""/>
+                                        <order attribute=""ccof_start_date"" descending=""true""/>
                                         <attribute name=""ccof_facility""/>
                                        <filter type=""and"">
                                        <condition attribute=""statecode"" operator=""eq"" value=""0""/>
                                       <condition attribute=""ccof_facility"" operator=""eq"" value=""{((EntityReference)funding["ccof_facility"]).Id}"" uitype=""account""/>
-                                        <condition attribute=""statuscode"" operator=""eq"" value=""100000001""/></filter>
-                                      </entity>
-                                       </fetch>
-                            ";
+                                      <condition attribute=""ccof_new_version_available"" operator=""ne"" value=""true""/></filter>
+                                     </entity>
+                                     </fetch>";
 
-                            EntityCollection colLicense = service.RetrieveMultiple(new FetchExpression(fetchXml));
+                            EntityCollection colLicense = service.RetrieveMultiple(new FetchExpression(licfetchXml));
+
+
+                            
+                            #region set date/ deactivate on old funding
+                            if (colLicense.Entities[0].Attributes.Contains("ccof_start_date"))
+                            {
+                                var license = colLicense.Entities[0];
+                                var startDate = Convert.ToDateTime(license["ccof_start_date"]).Date;
+                                //newFundingRecord["ccof_start_date"] = license["ccof_start_date"];
+
+                                if (startDate <= DateTime.Today)
+                                {
+                                    var deactivateRequest = new OrganizationRequest("SetState")
+                                    {
+                                        ["EntityMoniker"] = new EntityReference("ccof_funding_agreement", funding.Id),
+                                        ["State"] = new OptionSetValue(1),              // 1 = Inactive
+                                        ["Status"] = new OptionSetValue(101510007)      // 2 = Replaced
+                                    };
+
+                                    service.Execute(deactivateRequest);
+                                    tracingService.Trace("Deactivated Funding Agreement: " + funding["ccof_name"]);
+                                }
+                                
+                            }
+                            else
+                            {
+                                var deactivateRequest = new OrganizationRequest("SetState")
+                                {
+                                    ["EntityMoniker"] = new EntityReference("ccof_funding_agreement", funding.Id),
+                                    ["State"] = new OptionSetValue(1),              // 1 = Inactive
+                                    ["Status"] = new OptionSetValue(101510007)      // 2 = Replaced
+                                };
+
+                                service.Execute(deactivateRequest);
+                                tracingService.Trace("Deactivated Funding Agreement: " + funding["ccof_name"]);
+
+
+                            }
+
+                            #endregion
                             // Entity license = colLicense[0]; //the first return result
 
                             // tracingService.Trace("This funding agreement: " + license["ccof_name"]);
@@ -118,22 +153,11 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                                 updateLicense["ccof_associated_funding_agreement_number"] = new EntityReference("ccof_funding_agreement", fundingID);
                                 service.Update(updateLicense);
                             }
+
+                            #endregion
+
+
                         }
-                        #endregion
-                        #region Deactivate old Funding
-                        var deactivateRequest = new OrganizationRequest("SetState")
-                        {
-                            ["EntityMoniker"] = new EntityReference("ccof_funding_agreement", funding.Id),
-                            ["State"] = new OptionSetValue(1),     // 1 = Inactive
-                            ["Status"] = new OptionSetValue(101510007)    //  2 = Replaced
-                        };
-
-                        // Execute the request
-                        service.Execute(deactivateRequest);
-                        tracingService.Trace("Deactivate Funding  agreement: " + funding["ccof_name"]);
-                        #endregion
-
-
                         tracingService.Trace("\nUpdate Agreement Number Base and create first Funding record successfully.");
 
 
