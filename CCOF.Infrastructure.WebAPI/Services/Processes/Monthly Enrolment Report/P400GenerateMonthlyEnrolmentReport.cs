@@ -332,23 +332,104 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
             return result;
         }
-        public JsonObject CalculateDailyCCFRIRate(JsonObject approvedParentFee, JsonObject CCFRIMax, JsonObject CCFRIMin, bool feeFloorExempt, int monthlyBusinessDay, int providerType)
+        private decimal? CalculateDailyParentFee(decimal? fee, int? frequency, int businessDay)
         {
-            return new JsonObject()
-            {
-                ["ccof_dailyccfrirateless0to18"] = 1,
-                ["ccof_dailyccfrirateover0to18"] = 1,
-                ["ccof_dailyccfrirateless18to36"] = 1,
-                ["ccof_dailyccfrirateover18to36"] = 1,
-                ["ccof_dailyccfrirateless3yk"] = 1,
-                ["ccof_dailyccfrirateover3yk"] = 1,
-                ["ccof_dailccfriratelessoosck"] = 1,
-                ["ccof_dailyccfrirateoveroosck"] = 1,
-                ["ccof_dailyccfriratelessooscg"] = 1,
-                ["ccof_dailyccfrirateoverooscg"] = 1,
-                ["ccof_dailyccfriratelesspre"] = 1,
+            if (frequency == null)
+                return null;
+            if (frequency == 100000002)              // Monthly
+                return fee;
+            if (businessDay >= 20)
+                return fee.HasValue ? fee.Value / 20 : null;
+            else
+                return fee.HasValue ? fee.Value / 19 : null;
+        }
+        decimal? CalculateRate(decimal? fee, bool isExempt, decimal deduction, bool isLess)
+        {
+            if (fee == null) return null;
 
+            if (isLess)
+            {
+                return isExempt ? fee * 0.5m : (fee - deduction) * 0.5m;
+            }
+            else
+            {
+                return isExempt ? fee : fee - deduction;
+            }
+        }
+        decimal? ApplyMinMaxCap(decimal? value, decimal? min, decimal? max)
+        {
+            if (value == null) return null;
+
+            if (max != null && value > max)
+                return max;
+            if (min != null && value < min)
+                return min;
+
+            return value;
+        }
+        public JsonObject CalculateDailyCCFRIRate(JsonObject approvedParentFee, JsonObject ccfriMax, JsonObject ccfriMin, bool feeFloorExempt, int monthlyBusinessDay, int providerType)
+        {
+            var dailyParentFee0to18 = CalculateDailyParentFee(approvedParentFee["ccof_approvedparentfee0to18"]?.GetValue<decimal?>(),
+                                       approvedParentFee["ccof_approvedparentfeefrequency0to18"]?.GetValue<int?>(), monthlyBusinessDay);
+            var dailyParentFee18to36 = CalculateDailyParentFee(approvedParentFee["ccof_approvedparentfee18to36"]?.GetValue<decimal?>(),
+                                        approvedParentFee["ccof_approvedparentfeefrequency18to36"]?.GetValue<int?>(),monthlyBusinessDay);
+            var dailyParentFee3yk = CalculateDailyParentFee(approvedParentFee["ccof_approvedparentfee3yk"]?.GetValue<decimal?>(),
+                approvedParentFee["ccof_approvedparentfeefrequency3yk"]?.GetValue<int?>(),monthlyBusinessDay);
+            var dailyParentFeeoosck = CalculateDailyParentFee(approvedParentFee["ccof_approvedparentfeeoosck"]?.GetValue<decimal?>(),
+                approvedParentFee["ccof_approvedparentfeefrequencyoosck"]?.GetValue<int?>(), monthlyBusinessDay);
+            var dailyParentFeeooscg = CalculateDailyParentFee(approvedParentFee["ccof_approvedparentfeeooscg"]?.GetValue<decimal?>(),
+                approvedParentFee["ccof_approvedparentfeefrequencyooscg"]?.GetValue<int?>(), monthlyBusinessDay);
+            decimal? dailyParentFeepre = null;
+            if (providerType == 100000000)   // Group
+            {
+                dailyParentFeepre = CalculateDailyParentFee(approvedParentFee["ccof_approvedparentfeepre"]?.GetValue<decimal?>(),
+                    approvedParentFee["ccof_approvedparentfeefrequencypre"]?.GetValue<int?>(),monthlyBusinessDay      );
+            }
+            var dailyCCFRIRateMiddleStep = new Dictionary<string, decimal?>
+            {
+                ["ccof_dailyccfrirateless0to18"] = CalculateRate(dailyParentFee0to18, feeFloorExempt, 10, true),
+                ["ccof_dailyccfrirateover0to18"] = CalculateRate(dailyParentFee0to18, feeFloorExempt, 10, false),
+
+                ["ccof_dailyccfrirateless18to36"] = CalculateRate(dailyParentFee18to36, feeFloorExempt, 10, true),
+                ["ccof_dailyccfrirateover18to36"] = CalculateRate(dailyParentFee18to36, feeFloorExempt, 10, false),
+
+                ["ccof_dailyccfrirateless3yk"] = CalculateRate(dailyParentFee3yk, feeFloorExempt, 10, true),
+                ["ccof_dailyccfrirateover3yk"] = CalculateRate(dailyParentFee3yk, feeFloorExempt, 10, false),
+
+                ["ccof_dailccfriratelessoosck"] = CalculateRate(dailyParentFeeoosck, feeFloorExempt, 10, true),
+                ["ccof_dailyccfrirateoveroosck"] = CalculateRate(dailyParentFeeoosck, feeFloorExempt, 10, false),
+
+                ["ccof_dailyccfriratelessooscg"] = CalculateRate(dailyParentFeeooscg, feeFloorExempt, 10, true),
+                ["ccof_dailyccfrirateoverooscg"] = CalculateRate(dailyParentFeeooscg, feeFloorExempt, 10, false),
+
+                ["ccof_dailyccfriratelesspre"] = CalculateRate(dailyParentFeepre, feeFloorExempt, 7, false) 
             };
+            var finaldailyCCFRIRate = new Dictionary<string, decimal?>
+            {
+                ["ccof_dailyccfrirateless0to18"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateless0to18"], ccfriMin["ccof_less0to18"].GetValue<decimal>(), ccfriMax["ccof_less0to18"].GetValue<decimal>()),
+                ["ccof_dailyccfrirateover0to18"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateover0to18"], ccfriMin["ccof_over0to18"].GetValue<decimal>(), ccfriMax["ccof_over0to18"].GetValue<decimal>()),
+
+                ["ccof_dailyccfrirateless18to36"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateless18to36"], ccfriMin["ccof_less18to36"].GetValue<decimal>(), ccfriMax["ccof_less18to36"].GetValue<decimal>()),
+                ["ccof_dailyccfrirateover18to36"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateover18to36"], ccfriMin["ccof_over18to36"].GetValue<decimal>(), ccfriMax["ccof_over18to36"].GetValue<decimal>()),
+
+                ["ccof_dailyccfrirateless3yk"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateless3yk"], ccfriMin["ccof_less3yk"].GetValue<decimal>(), ccfriMax["ccof_less3yk"].GetValue<decimal>()),
+                ["ccof_dailyccfrirateover3yk"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateover3yk"], ccfriMin["ccof_over3yk"].GetValue<decimal>(), ccfriMax["ccof_over3yk"].GetValue<decimal>()),
+
+                ["ccof_dailccfriratelessoosck"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailccfriratelessoosck"], ccfriMin["ccof_lessoosck"].GetValue<decimal>(), ccfriMax["ccof_lessoosck"].GetValue<decimal>()),
+                ["ccof_dailyccfrirateoveroosck"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateoveroosck"], ccfriMin["ccof_overoosck"].GetValue<decimal>(), ccfriMax["ccof_overoosck"].GetValue<decimal>()),
+
+                ["ccof_dailyccfriratelessooscg"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfriratelessooscg"], ccfriMin["ccof_lessooscg"].GetValue<decimal>(), ccfriMax["ccof_lessooscg"].GetValue<decimal>()),
+                ["ccof_dailyccfrirateoverooscg"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfrirateoverooscg"], ccfriMin["ccof_overooscg"].GetValue<decimal>(), ccfriMax["ccof_overooscg"].GetValue<decimal>()),
+
+                ["ccof_dailyccfriratelesspre"] = ApplyMinMaxCap(dailyCCFRIRateMiddleStep["ccof_dailyccfriratelesspre"], ccfriMin["ccof_lesspre"].GetValue<decimal>(), ccfriMax["ccof_lesspre"].GetValue<decimal>())
+            };
+             JsonObject dailyCCFRIRate = new JsonObject();
+
+            foreach (var kvp in finaldailyCCFRIRate)
+            {
+                dailyCCFRIRate[kvp.Key] = kvp.Value is null ? null : JsonValue.Create(kvp.Value);
+            }
+            return dailyCCFRIRate; 
         }
 
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
@@ -395,7 +476,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     {
                         int providerType = 100000000;  // Group
                         // Fee Floor Exempt
-                        Boolean feeFloorExempt = false;
+                        Boolean feeFloorExempt = true;
                         var org = orgInfo.FirstOrDefault(node => node?["accountid"]?.GetValue<string>() == record);
                         if (org != null)
                         {
