@@ -109,7 +109,6 @@
             background-color: #eef2f7;
         }
 
-        /* .enrolment-table thead tr:first-child th { */
         .enrolment-table thead {
             position: -webkit-sticky;
             /* For Safari */
@@ -206,9 +205,7 @@
             background-color: #84ee8a;
             /*                      background-color: #d1e7fd !important;*/
 
-            /* A light blue highlight, !important to override other BGs if needed */
             cursor: pointer;
-            /* Optional: change cursor to indicate interactivity */
         }
 
         .enrolment-table tfoot tr.row-hover-highlight td,
@@ -381,7 +378,6 @@
                     const tr4 = document.createElement('tr'); // Approved Parent Fee Frequency
                     const tr5 = document.createElement('tr'); // Day + subheaders
 
-                    // --- Populate Row 1 (Main column labels) ---
                     const th1Leading = document.createElement('th');
                     // th1Leading.colSpan = 1; // Default
                     tr1.appendChild(th1Leading);
@@ -417,28 +413,28 @@
                     if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
                         tr2.appendChild(createCellforInitial(var_enrollmentRecord["ccof_totalenrolledpre"], 1));
                     }
-                    // Approved Parent Fee Frequency
+                    // Approved Parent Fee
                     const th3Leading = document.createElement('th');
                     th3Leading.colSpan = 1;
                     th3Leading.textContent = "Approved Parent Fees";
                     tr3.appendChild(th3Leading);
                     if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee0to18"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfee0to18"], 2));
                     }
                     if (var_selectedColumns.includes(100000001)) {  //  100000001  18-36column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee18to36"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfee18to36"], 2));
                     }
                     if (var_selectedColumns.includes(100000002)) {  //  100000002 3YK column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfee3yk"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfee3yk"], 2));
                     }
                     if (var_selectedColumns.includes(100000003)) {  //  100000003  OOSC-K column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeeoosck"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeeoosck"], 2));
                     }
                     if (var_selectedColumns.includes(100000004)) {  //  100000004  OOSC-G column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeeooscg"], 2));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeeooscg"], 2));
                     }
                     if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
-                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeepre"], 1));
+                        tr3.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeepre"], 1));
                     }
 
                     // Approved Parent Fee Frequency
@@ -447,22 +443,22 @@
                     th4Leading.textContent = "Frequency";
                     tr4.appendChild(th4Leading);
                     if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency0to18@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequency0to18@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000001)) {  //  100000001  18-36column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency18to36@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequency18to36@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000002)) {  //  100000002 3YK column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequency3yk@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequency3yk@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000003)) {  //  100000003  OOSC-K column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencyoosck@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequencyoosck@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000004)) {  //  100000004  OOSC-G column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencyooscg@OData.Community.Display.V1.FormattedValue"], 2));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequencyooscg@OData.Community.Display.V1.FormattedValue"], 2));
                     }
                     if (var_selectedColumns.includes(100000005)) {  //  100000005  Pre column
-                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_approvedparentfeefrequencypre@OData.Community.Display.V1.FormattedValue"], 1));
+                        tr4.appendChild(createCellforInitial(var_enrollmentRecord["ccof_reportextension"]["ccof_approvedparentfeefrequencypre@OData.Community.Display.V1.FormattedValue"], 1));
                     }
 
                     // --- Populate Row  ("Day" and subheaders) ---
@@ -538,7 +534,7 @@
         }
         function getEnrollmentRecord(parentGuid) {
             debugger;
-            const odataQuery = `/ccof_monthlyenrollmentreports(${parentGuid})?$expand=ccof_ccfriproviderpaymentrate,ccof_ccofbaserate`;
+            const odataQuery = `/ccof_monthlyenrollmentreports(${parentGuid})?$expand=ccof_ccfriproviderpaymentrate,ccof_ccofbaserate,ccof_prevenrollmentreport,ccof_reportextension`;
             const req = new XMLHttpRequest();
             req.open("GET", Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.0" + odataQuery, false);
             req.setRequestHeader("OData-MaxVersion", "4.0");
@@ -566,67 +562,6 @@
                 }
             };
             req.send();
-        }
-        function loadFootEnrollments(var_enrollmentRecord) {
-            const tfootElement = document.getElementById("enrolment-tfoot");
-            if (!tfootElement) {
-                console.error("Could not find the table foot element with id 'enrolment-tfoot'.");
-                return;
-            }
-            tfootElement.innerHTML = '';
-            // Row 1: GRAND TOTALS header
-            let row1 = document.createElement("tr");
-            row1.classList.add("grand-totals-header");
-            let th1 = document.createElement("th");
-            th1.setAttribute("scope", "row");
-            th1.setAttribute("colspan", "7");
-            th1.innerText = "GRAND TOTALS";
-            row1.appendChild(th1);
-            tfootElement.appendChild(row1);
-
-            let GrandTotalRow = document.createElement("tr");
-            let th_label = document.createElement("th");
-            th_label.setAttribute("scope", "row");
-            th_label.setAttribute("colspan", "1");
-            GrandTotalRow.appendChild(th_label);
-            GrandTotalRow.appendChild(createCellforFoot("Base", 2));
-            GrandTotalRow.appendChild(createCellforFoot("CCFRI Payment", 2));
-            GrandTotalRow.appendChild(createCellforFoot("CCFRI Provider Payment", 2));
-            tfootElement.appendChild(GrandTotalRow);
-
-            GrandTotalRow = document.createElement("tr");
-            th_label = document.createElement("th");
-            th_label.setAttribute("scope", "row");
-            th_label.setAttribute("colspan", "1");
-            th_label.innerText = "Current $";
-            GrandTotalRow.appendChild(th_label);
-            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalbase"], 2));
-            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalccfri"], 2));
-            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalccfriprovider"], 2));
-            tfootElement.appendChild(GrandTotalRow);
-            if (var_enrollmentRecord["ccof_reporttype"] === 100000001) {  // Adjustment
-                GrandTotalRow = document.createElement("tr");
-                th_label = document.createElement("th");
-                th_label.setAttribute("scope", "row");
-                th_label.setAttribute("colspan", "1");
-                th_label.innerText = "Prev Paid $";
-                GrandTotalRow.appendChild(th_label);
-                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevgrandtotalbase"], 2));
-                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevgrandtotalccfri"], 2));
-                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevgrandtotalccfriprovider"], 2));
-                tfootElement.appendChild(GrandTotalRow);
-
-                GrandTotalRow = document.createElement("tr");
-                th_label = document.createElement("th");
-                th_label.setAttribute("scope", "row");
-                th_label.setAttribute("colspan", "1");
-                th_label.innerText = "Difference $";
-                GrandTotalRow.appendChild(th_label);
-                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_diffgrandtotalbase"], 2));
-                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_diffgrandtotalbase"], 2));
-                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_diffgrandtotalccfriprovider"], 2));
-                tfootElement.appendChild(GrandTotalRow);
-            }
         }
         //          async function loadDailyEnrollments(parentGuid) {
         function loadDailyEnrollments(parentGuid) {
@@ -811,27 +746,27 @@
                 firstCell.innerText = "Prev Approved";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotalless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotalover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotalless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotalover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotalless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotalover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedlessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotallessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotaloveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedlessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotallessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotaloverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevapprovedlesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_currenttotallesspre"]));
                 }
                 tableBody.appendChild(row);
                 // Difference
@@ -843,27 +778,27 @@
                 firstCell.innerText = "Difference";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differencelessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differencelessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceoveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differencelessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differenceoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differencelessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differenceoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_differencelesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_differencelesspre"]));
                 }
                 tableBody.appendChild(row);
             }
@@ -943,27 +878,27 @@
                 firstCell.innerText = "Prev Base $";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountlessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountoveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountlessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevbaseamountlesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccofbaseamountlesspre"]));
                 }
                 tableBody.appendChild(row);
                 // Difference Base $
@@ -975,27 +910,27 @@
                 firstCell.innerText = "Difference Base $";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountlessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountoveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountlessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffbaseamountaesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffbaseamountlesspre"]));
                 }
                 tableBody.appendChild(row);
             }
@@ -1008,27 +943,27 @@
             firstCell.innerText = " Daily CCFRI Rate";
             row.appendChild(firstCell);
             if (var_selectedColumns.includes(100000000)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless0to18"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateless0to18"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateover0to18"]));
             }
             if (var_selectedColumns.includes(100000001)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless18to36"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateless18to36"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateover18to36"]));
             }
             if (var_selectedColumns.includes(100000002)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateless3yk"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateover3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateless3yk"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateover3yk"]));
             }
             if (var_selectedColumns.includes(100000003)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailccfriratelessoosck"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateoveroosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailccfriratelessoosck"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateoveroosck"]));
             }
             if (var_selectedColumns.includes(100000004)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfriratelessooscg"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfrirateoverooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfriratelessooscg"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfrirateoverooscg"]));
             }
             if (var_selectedColumns.includes(100000005)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_dailyccfriratelesspre"]));
+                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_dailyccfriratelesspre"]));
             }
             tableBody.appendChild(row);
             // CCFRI $ (CCFRI Amount)
@@ -1074,27 +1009,27 @@
                 firstCell.innerText = "Prev CCFRI $";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountlessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountoveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountlessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriamountlesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriamountlesspre"]));
                 }
                 tableBody.appendChild(row);
                 // Difference CCFRI $
@@ -1106,27 +1041,27 @@
                 firstCell.innerText = "Difference CCFRI $";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfrimountless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfrimountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountlessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountoveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountlessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriamountlesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriamountlesspre"]));
                 }
                 tableBody.appendChild(row);
             }
@@ -1205,27 +1140,27 @@
                 firstCell.innerText = "Prev CCFRI Provider $";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountlessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountoveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountlessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevccfriprovideramountlesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_ccfriprovideramountlesspre"]));
                 }
                 tableBody.appendChild(row);
                 // Difference CCFRI Provider $
@@ -1237,29 +1172,90 @@
                 firstCell.innerText = "Difference CCFRI Provider$";
                 row.appendChild(firstCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountless0to18"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountover0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountless0to18"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountover0to18"]));
                 }
                 if (var_selectedColumns.includes(100000001)) {  //  100000001  18 -36 column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountless18to36"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountover18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountless18to36"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountover18to36"]));
                 }
                 if (var_selectedColumns.includes(100000002)) {  //  100000000  3Y-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountless3yk"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountover3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountless3yk"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountover3yk"]));
                 }
                 if (var_selectedColumns.includes(100000003)) {  //  100000000  OOSC-K column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountlessoosck"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountoveroosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountlessoosck"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountoveroosck"]));
                 }
                 if (var_selectedColumns.includes(100000004)) {  //  100000000  OOSC-G column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountlessooscg"]));
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountoverooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountlessooscg"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountoverooscg"]));
                 }
                 if (var_selectedColumns.includes(100000005)) {  //  100000000  PreSchool column
-                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_diffccfriprovideramountlesspre"]));
+                    row.appendChild(createCellforRest(var_enrollmentRecord["ccof_reportextension"]["ccof_diffccfriprovideramountlesspre"]));
                 }
                 tableBody.appendChild(row);
+            }
+        }
+        function loadFootEnrollments(var_enrollmentRecord) {
+            const tfootElement = document.getElementById("enrolment-tfoot");
+            if (!tfootElement) {
+                console.error("Could not find the table foot element with id 'enrolment-tfoot'.");
+                return;
+            }
+            tfootElement.innerHTML = '';
+            // Row 1: GRAND TOTALS header
+            let row1 = document.createElement("tr");
+            row1.classList.add("grand-totals-header");
+            let th1 = document.createElement("th");
+            th1.setAttribute("scope", "row");
+            th1.setAttribute("colspan", "7");
+            th1.innerText = "GRAND TOTALS";
+            row1.appendChild(th1);
+            tfootElement.appendChild(row1);
+
+            let GrandTotalRow = document.createElement("tr");
+            let th_label = document.createElement("th");
+            th_label.setAttribute("scope", "row");
+            th_label.setAttribute("colspan", "1");
+            GrandTotalRow.appendChild(th_label);
+            GrandTotalRow.appendChild(createCellforFoot("Base", 2));
+            GrandTotalRow.appendChild(createCellforFoot("CCFRI Payment", 2));
+            GrandTotalRow.appendChild(createCellforFoot("CCFRI Provider Payment", 2));
+            tfootElement.appendChild(GrandTotalRow);
+
+            GrandTotalRow = document.createElement("tr");
+            th_label = document.createElement("th");
+            th_label.setAttribute("scope", "row");
+            th_label.setAttribute("colspan", "1");
+            th_label.innerText = "Current $";
+            GrandTotalRow.appendChild(th_label);
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalbase"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalccfri"], 2));
+            GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_grandtotalccfriprovider"], 2));
+            tfootElement.appendChild(GrandTotalRow);
+            if (var_enrollmentRecord["ccof_reporttype"] === 100000001) {  // Adjustment
+                GrandTotalRow = document.createElement("tr");
+                th_label = document.createElement("th");
+                th_label.setAttribute("scope", "row");
+                th_label.setAttribute("colspan", "1");
+                th_label.innerText = "Prev Paid $";
+                GrandTotalRow.appendChild(th_label);
+                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_grandtotalbase"], 2));
+                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_grandtotalccfri"], 2));
+                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_prevenrollmentreport"]["ccof_grandtotalccfriprovider"], 2));
+                tfootElement.appendChild(GrandTotalRow);
+
+                GrandTotalRow = document.createElement("tr");
+                th_label = document.createElement("th");
+                th_label.setAttribute("scope", "row");
+                th_label.setAttribute("colspan", "1");
+                th_label.innerText = "Difference $";
+                GrandTotalRow.appendChild(th_label);
+                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_reportextension"]["ccof_diffgrandtotalbase"], 2));
+                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_reportextension"]["ccof_diffgrandtotalccfri"], 2));
+                GrandTotalRow.appendChild(createCellforFoot(var_enrollmentRecord["ccof_reportextension"]["ccof_diffgrandtotalccfriprovider"], 2));
+                tfootElement.appendChild(GrandTotalRow);
             }
         }
     </script>

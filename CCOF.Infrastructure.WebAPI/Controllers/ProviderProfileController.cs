@@ -76,6 +76,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         </link-entity>
       </link-entity>
     </link-entity>
+    <link-entity name=""ofm_portal_role"" from=""ofm_portal_roleid"" to=""ofm_portal_role_id"" alias=""Portalrole"" link-type=""inner"">
+      <attribute name=""ofm_portal_role_number"" />
+ <attribute name=""ofm_portal_roleid"" />
+    </link-entity>
   </entity>
 </fetch>";
             var message = $"contacts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
