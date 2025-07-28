@@ -94,6 +94,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.RegisterBatchProcessesEndpoints();
 });
 
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/processes"),
@@ -108,7 +109,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-app.RegisterBatchProcessesEndpoints();
+//app.RegisterBatchProcessesEndpoints();
 
 
 app.Run();
