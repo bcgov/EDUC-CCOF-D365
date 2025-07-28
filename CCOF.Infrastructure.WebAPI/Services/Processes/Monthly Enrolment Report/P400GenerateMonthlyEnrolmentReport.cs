@@ -127,7 +127,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             "",
             _processParams.InitialEnrolmentReport.FacilityGuid.Select(guid => $"<value>{guid}</value>")
         );
-                // fetch xml doesn't support binary data type
+                // fetchxml query is for reference only
                 var fetchXml = $$"""
                         <fetch>
                           <entity name="ccof_parent_fees">
@@ -175,6 +175,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         {
             get
             {
+                // fetchxml query is for reference only
                 // FacilityStatus not Closed, Not Null, not Cancelled
                 var fetchXml = $$"""
                         <fetch>
@@ -203,6 +204,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         }
         public string FacilityLicenceRequestUri
         {
+            // fetchxml query is for reference only
             get
             {
                 var fetchXml = $$"""
