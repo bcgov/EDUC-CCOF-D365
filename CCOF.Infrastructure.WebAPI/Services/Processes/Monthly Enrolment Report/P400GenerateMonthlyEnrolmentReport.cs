@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
@@ -58,6 +59,23 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         """;
                 var requestUri = $"ccof_rates?fetchXml=" + WebUtility.UrlEncode(fetchXml);
                 return requestUri;
+            }
+        }
+        public string RateRequestUritest
+        {
+            get
+            {
+                var fetchXml = $$"""
+                        <fetch>
+                          <entity name="ccof_rate">
+                            <filter>
+                              <condition attribute="statecode" operator="eq" value="0" />
+                            </filter>
+                          </entity>
+                        </fetch>
+                        """;
+                var requestUri = $"ccof_rates?fetchXml=" + WebUtility.UrlEncode(fetchXml);
+                return fetchXml;
             }
         }
         public string MonthlyBusinessDayRequestUri
@@ -135,13 +153,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             <attribute name="statecode" />
                             <attribute name="statuscode" />
                             <filter>
-                              <condition attribute="ccof_facility" operator="in">
-                                {{facilityValuesXml}}
-                              </condition>
                               <condition attribute="statecode" operator="eq" value="0" />
                               <condition attribute="statuscode" operator="eq" value="1" />
                               <condition attribute="ccof_type" operator="eq" value="1" />
-                              <condition attribute="ccof_programyear" operator="eq" value="{{_processParams.InitialEnrolmentReport.ProgramYearId}}" />
+                              <condition attribute="ccof_programyear" operator="eq" value="fdc2fce3-d1a2-ef11-8a6a-000d3af474a4" />
                             </filter>
                             <link-entity name="ccof_childcare_category" from="ccof_childcare_categoryid" to="ccof_childcarecategory" link-type="inner" alias="childcareCategory">
                               <attribute name="ccof_childcarecategorynumber" />
@@ -151,27 +166,26 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                           </entity>
                         </fetch>
                         """;
-                var requestUri = $"ccof_parent_feeses?fetchXml=" + WebUtility.UrlEncode(fetchXml);
-                return requestUri;
+                // var requestUri = $"ccof_parent_feeses?fetchXml=" + WebUtility.UrlEncode(fetchXml);
+                var requestUri = $"ccof_parent_feeses?$select=ccof_apr,ccof_aug,ccof_availability,_ccof_childcarecategory_value,ccof_dec,_ccof_facility_value,ccof_feb,ccof_frequency,ccof_jan,ccof_jul,ccof_jun,ccof_mar,ccof_may,ccof_name,ccof_nov,ccof_oct,_ccof_programyear_value,ccof_sep,ccof_type,statecode,statuscode&$expand=ccof_ChildcareCategory($select=ccof_childcarecategorynumber,ccof_name)&$filter=(statecode eq 0 and statuscode eq 1 and ccof_type eq 1 and _ccof_programyear_value eq "+_processParams.InitialEnrolmentReport.ProgramYearId+") and (ccof_ChildcareCategory/ccof_childcare_categoryid ne null)";
+                return requestUri.CleanCRLF();
             }
         }
         public string OrgRequestUri
         {
             get
             {
-                var facilityValuesXml = string.Join(
-            "",
-            _processParams.InitialEnrolmentReport.FacilityGuid.Select(guid => $"<value>{guid}</value>")
-        );
-                // fetch xml doesn't support binary data type
+                // FacilityStatus not Closed, Not Null, not Cancelled
                 var fetchXml = $$"""
                         <fetch>
                           <entity name="account">
                             <attribute name="name" />
                             <filter>
-                              <condition attribute="accountid" operator="in">
-                                {{facilityValuesXml}}
-                              </condition>
+                              <condition attribute="ccof_accounttype" operator="eq" value="100000001" />
+                              <condition attribute="parentaccountid" operator="not-null" />
+                              <condition attribute="ccof_facilitystatus" operator="not-null" />
+                              <condition attribute="ccof_facilitystatus" operator="ne" value="100000010" />
+                              <condition attribute="ccof_facilitystatus" operator="ne" value="100000009" />
                             </filter>
                             <link-entity name="account" from="accountid" to="parentaccountid" link-type="inner" alias="org">
                               <attribute name="accountnumber" />
@@ -180,19 +194,17 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                           </entity>
                         </fetch>
                         """;
-                var requestUri = $"accounts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
-                return requestUri;
+                var requestUri = $"accounts?$select=name&$expand=parentaccountid($select=accountnumber,accountid)&$filter=(ccof_accounttype eq 100000001 and _parentaccountid_value ne null and ccof_facilitystatus ne null and ccof_facilitystatus ne 100000010 and ccof_facilitystatus ne 100000009) and (parentaccountid/accountid ne null)";
+                // var requestUri = $"accounts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
+                return requestUri.CleanCRLF();
+
+                // return requestUri;
             }
         }
         public string FacilityLicenceRequestUri
         {
             get
             {
-                var facilityValuesXml = string.Join(
-            "",
-            _processParams.InitialEnrolmentReport.FacilityGuid.Select(guid => $"<value>{guid}</value>")
-        );
-                // fetch xml doesn't support binary data type
                 var fetchXml = $$"""
                         <fetch>
                           <entity name="ccof_facility_licenses">
@@ -201,12 +213,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             <attribute name="statecode" />
                             <attribute name="statuscode" />
                             <attribute name="ccof_licensecategory" />
-                            <filter>
-                              <condition attribute="ccof_facility" operator="in">
-                                {{facilityValuesXml}}
-                              </condition>
-                              <condition attribute="statecode" operator="eq" value="0" />
-                            </filter>
                             <link-entity name="ccof_license_category" from="ccof_license_categoryid" to="ccof_licensecategory" link-type="inner" alias="licenceCategory">
                               <attribute name="ccof_categorynumber" />
                               <attribute name="ccof_name" />
@@ -216,11 +222,17 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                 <condition attribute="ccof_categorynumber" operator="eq" value="5" />
                               </filter>
                             </link-entity>
+                            <link-entity name="account" from="accountid" to="ccof_facility" link-type="inner" alias="facility">
+                              <filter>
+                                <condition attribute="ccof_accounttype" operator="eq" value="100000001" />
+                              </filter>
+                            </link-entity>
                           </entity>
                         </fetch>
                         """;
-                var requestUri = $"ccof_facility_licenseses?fetchXml=" + WebUtility.UrlEncode(fetchXml);
-                return requestUri;
+                // var requestUri = $"ccof_facility_licenseses?fetchXml=" + WebUtility.UrlEncode(fetchXml);
+                var requestUri = $"ccof_facility_licenseses?$select=_ccof_facility_value,ccof_name,statecode,statuscode,_ccof_licensecategory_value&$expand=ccof_LicenseCategory($select=ccof_categorynumber,ccof_name,ccof_providertype),ccof_Facility($select=accountid)&$filter=(ccof_LicenseCategory/ccof_categorynumber eq 6 or ccof_LicenseCategory/ccof_categorynumber eq 5) and (ccof_Facility/ccof_accounttype eq 100000001)";
+                return requestUri.CleanCRLF();
             }
         }
         public string monthLogicalNameString = """
@@ -284,7 +296,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             _logger.LogDebug(CustomLogEvent.Process, "Total records fetched: {totalRecords}", allRecords.Count);
             return allRecords;
         }
-
         public static List<JsonNode> GenerateDailyEnrolment(int year, int month, string statutoryHolidaysJson)
         {
             // Parse statutory holiday dates
@@ -444,7 +455,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 var MonthLogicalNameTemp = JsonNode.Parse(monthLogicalNameString)?.AsArray() ?? throw new Exception("Invalid JSON");
                 List<JsonNode> MonthLogicalNameArray = MonthLogicalNameTemp.Select(node => node!).ToList();
                 string MonthLogicalName = MonthLogicalNameArray.FirstOrDefault(node => node["enrolmentMonth"].GetValue<int>() == _processParams.InitialEnrolmentReport.Month)["monthNameinApprovedParentFee"]?.GetValue<string>();
-                _processParams = processParams;
                 // Retrive all Rates
                 List<JsonNode> rate = await FetchAllRecordsFromCRMAsync(RateRequestUri);
                 //Retrive all statuary days
@@ -466,8 +476,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 List<JsonNode> facilityLicence = await FetchAllRecordsFromCRMAsync(FacilityLicenceRequestUri);
 
                 // Batch processing
-                // int batchSize = 1000;
-                int batchSize = 500;
+                //int batchSize = 1000;
+                // int batchSize = 100;
+                int batchSize = 50;
+
                 for (int i = 0; i < _processParams.InitialEnrolmentReport.FacilityGuid.Count(); i += batchSize)
                 {
                     List<HttpRequestMessage> createEnrolmentReportRequests = [];
@@ -476,7 +488,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     {
                         int providerType = 100000000;  // Group
                         // Fee Floor Exempt
-                        Boolean feeFloorExempt = true;
+                        Boolean feeFloorExempt = false;
                         var org = orgInfo.FirstOrDefault(node => node?["accountid"]?.GetValue<string>() == record);
                         if (org != null)
                         {
@@ -492,10 +504,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                 providerType = 100000001; // Family
                             }
                         }
-                        else
-                        {
-                            throw new InvalidOperationException($"Organization with accountid '{record}' not found.");
-                        }
+                        //else
+                        //{
+                        //    throw new InvalidOperationException($"Organization with accountid '{record}' not found.");
+                        //}
                         bool IHMALicenceExist = facilityLicence.Any(node => node?["_ccof_facility_value"]?.GetValue<string>() == record);
                         var ccofBaseRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                                                node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000)); // 100000001 IHMA Base Funding;  100000000 Base Funding
@@ -507,18 +519,20 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         var ccfriMin = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                                                    node?["ccof_ratetype"]?.GetValue<int>() == 100000005 &&
                                                                    node?["ccof_businessday"]?.GetValue<int>() == businessDay); // 100000005 CCFRI Min
-                        var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"].GetValue<int>() == 1 &&
-                                                                        node?["_ccof_facility_value"].GetValue<string>() == record);
-                        var approvedParentfee18to36 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"].GetValue<int>() == 2 &&
-                                                node?["_ccof_facility_value"].GetValue<string>() == record);
-                        var approvedParentfee3YK = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"].GetValue<int>() == 3 &&
-                                                node?["_ccof_facility_value"].GetValue<string>() == record);
-                        var approvedParentfeeOOSCK = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"].GetValue<int>() == 4 &&
-                                                node?["_ccof_facility_value"].GetValue<string>() == record);
-                        var approvedParentfeeOOSCG = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"].GetValue<int>() == 5 &&
-                                                node?["_ccof_facility_value"].GetValue<string>() == record);
-                        var approvedParentfeePre = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"].GetValue<int>() == 6 &&
-                                                node?["_ccof_facility_value"].GetValue<string>() == record);
+                        //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
+                        //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
+                        var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
+                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
+                        var approvedParentfee18to36 = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2 &&
+                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                        var approvedParentfee3YK = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 3 &&
+                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                        var approvedParentfeeOOSCK = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 4 &&
+                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                        var approvedParentfeeOOSCG = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 5 &&
+                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                        var approvedParentfeePre = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6 &&
+                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
                         var approvedParentFee = new JsonObject()
                         {
                             ["ccof_approvedparentfee0to18"] = (approvedParentfee0to18 == null || approvedParentfee0to18[MonthLogicalName] == null ||
@@ -567,12 +581,14 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             ["ccof_feefloorexempt"] = feeFloorExempt,
                             ["ccof_providertype"] = providerType,
                             ["ccof_facility@odata.bind"] = $"/accounts(" + record + ")",
-                            ["ccof_organization@odata.bind"] = $"/accounts(" + org["org.accountid"]?.GetValue<string>() + ")",
+                            ["ccof_organization@odata.bind"] = (org==null)?null:$"/accounts(" + org["parentaccountid"]["accountid"]?.GetValue<string>() + ")",
+                           // ["ccof_organization@odata.bind"] = (org == null) ? null : $"/accounts(" + org["org.accountid"]?.GetValue<string>() + ")",
+
                             ["ccof_programyear@odata.bind"] = $"/ccof_program_years(" + _processParams.InitialEnrolmentReport.ProgramYearId + ")",
-                            ["ccof_ccofbaserate@odata.bind"] = ccofBaseRate["ccof_rateid"]?.GetValue<string>() is string baseRateId ? $"/ccof_rates({baseRateId})" : null,
-                            ["ccof_ccfriproviderpaymentrate@odata.bind"] = ccfriProviderPaymentRate["ccof_rateid"]?.GetValue<string>() is string providerRateId ? $"/ccof_rates({providerRateId})" : null,
-                            ["ccof_ccfridailyratemax@odata.bind"] = ccfriMax["ccof_rateid"]?.GetValue<string>() is string CCFRIMaxRateId ? $"/ccof_rates({CCFRIMaxRateId})" : null,
-                            ["ccof_ccfridailyratemin@odata.bind"] = ccfriMin["ccof_rateid"]?.GetValue<string>() is string CCFRIMinRateId ? $"/ccof_rates({CCFRIMinRateId})" : null,
+                            ["ccof_ccofbaserate@odata.bind"] = ccofBaseRate?["ccof_rateid"]?.GetValue<string>() is string baseRateId ? $"/ccof_rates({baseRateId})" : null,
+                            ["ccof_ccfriproviderpaymentrate@odata.bind"] = ccfriProviderPaymentRate?["ccof_rateid"]?.GetValue<string>() is string providerRateId ? $"/ccof_rates({providerRateId})" : null,
+                            ["ccof_ccfridailyratemax@odata.bind"] = ccfriMax?["ccof_rateid"]?.GetValue<string>() is string CCFRIMaxRateId ? $"/ccof_rates({CCFRIMaxRateId})" : null,
+                            ["ccof_ccfridailyratemin@odata.bind"] = ccfriMin?["ccof_rateid"]?.GetValue<string>() is string CCFRIMinRateId ? $"/ccof_rates({CCFRIMinRateId})" : null,
                             ["ccof_reportextension"] = new JsonObject()
                             {
                                 // Approved Parent Fee
@@ -613,6 +629,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         _logger.LogError(CustomLogEvent.Process, "Failed to Create Enrolment Report: {error}", JsonValue.Create(errorInfos)!.ToString());
                     }
                     _logger.LogDebug(CustomLogEvent.Process, "Create Batch process record index:{index}", i);
+                    await Task.Delay(10000);  // deplay 10 seconds avoid api throtting.
                 }
                 return ProcessResult.Completed(ProcessId).SimpleProcessResult;
             }
