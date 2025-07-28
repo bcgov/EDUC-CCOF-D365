@@ -22,6 +22,35 @@ public static class HttpClientExtensions
         return services;
     }
 
+    //private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(AppSettings appSettings)
+    //{
+    //    return HttpPolicyExtensions
+    //        .HandleTransientHttpError()
+    //        .OrResult(httpResponseMessage => httpResponseMessage.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+    //        .WaitAndRetryAsync(
+    //            retryCount: appSettings.MaxRetries,
+    //            sleepDurationProvider: (count, response, context) =>
+    //            {
+    //                int seconds;
+    //                HttpResponseHeaders headers = response.Result.Headers;
+
+    //                // Use the value of the Retry-After header if it exists
+    //                // See https://docs.microsoft.com/power-apps/developer/data-platform/api-limits#retry-operations
+
+    //                if (headers.Contains("Retry-After"))
+    //                {
+    //                    seconds = int.Parse(headers.GetValues("Retry-After").FirstOrDefault() ?? "0");
+    //                }
+    //                else
+    //                {
+    //                    seconds = (int)Math.Pow(2, count);
+    //                }
+    //                return TimeSpan.FromSeconds(seconds);
+    //            },
+    //            onRetryAsync: (_, _, _, _) => { return Task.CompletedTask; }
+    //        );
+    //}
+    // Added Jul 27,2025
     private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(AppSettings appSettings)
     {
         return HttpPolicyExtensions
@@ -31,23 +60,38 @@ public static class HttpClientExtensions
                 retryCount: appSettings.MaxRetries,
                 sleepDurationProvider: (count, response, context) =>
                 {
-                    int seconds;
-                    HttpResponseHeaders headers = response.Result.Headers;
+                    // Default to exponential backoff
+                    int seconds = (int)Math.Pow(2, count);
 
-                    // Use the value of the Retry-After header if it exists
-                    // See https://docs.microsoft.com/power-apps/developer/data-platform/api-limits#retry-operations
-
-                    if (headers.Contains("Retry-After"))
+                    // Check for a Retry-After header ONLY if we have a result.
+                    // This is the key fix: Check for response.Result != null
+                    if (response.Result != null && response.Result.Headers.Contains("Retry-After"))
                     {
-                        seconds = int.Parse(headers.GetValues("Retry-After").FirstOrDefault() ?? "0");
+                        // Use TryParse for safety in case the header value is not a valid integer
+                        if (int.TryParse(response.Result.Headers.GetValues("Retry-After").FirstOrDefault(), out int retryAfterSeconds))
+                        {
+                            seconds = retryAfterSeconds;
+                        }
+                    }
+
+                    return TimeSpan.FromSeconds(seconds);
+                },
+                onRetryAsync: (response, timespan, retryAttempt, context) =>
+                {
+                    // Optional: Add logging here to see why retries are happening.
+                    // This is very useful for debugging!
+                    if (response.Exception != null)
+                    {
+                        // Log exception-based retries
+                        System.Diagnostics.Debug.WriteLine($"[Polly] Retry {retryAttempt} due to exception: {response.Exception.Message}. Waiting {timespan.TotalSeconds}s.");
                     }
                     else
                     {
-                        seconds = (int)Math.Pow(2, count);
+                        // Log result-based retries
+                        System.Diagnostics.Debug.WriteLine($"[Polly] Retry {retryAttempt} due to status code: {response.Result.StatusCode}. Waiting {timespan.TotalSeconds}s.");
                     }
-                    return TimeSpan.FromSeconds(seconds);
-                },
-                onRetryAsync: (_, _, _, _) => { return Task.CompletedTask; }
+                    return Task.CompletedTask;
+                }
             );
     }
 

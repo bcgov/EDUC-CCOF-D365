@@ -49,6 +49,23 @@ public record ProcessParameter
         public string? paymentfileId { get; set; }
     }
 
-   
+    #endregion
+    #region Initial CCOF Enrolment Report 
+    [property: JsonPropertyName("initialEnrolmentReport")]
+    public InitialEnrolmentReportParameter? InitialEnrolmentReport { get; set; }
+    public record InitialEnrolmentReportParameter
+    {
+        [property: JsonPropertyName("year")]
+        public string? Year { get; set; }
+
+        [property: JsonPropertyName("month")]
+        public int? Month { get; set; }
+
+        [property: JsonPropertyName("programYearId")]
+        public string? ProgramYearId { get; set; }
+
+        [property: JsonPropertyName("facilityGuid")]
+        public string[]? FacilityGuid { get; set; }
+    }
     #endregion
 }

@@ -70,19 +70,25 @@ public static class Setup
             public const string CalculateDefaultSpacesAllocationName = "Calculate the default spaces allocation in the room split scenario";
         }
 
-        public static class ProviderProfiles
+        //public static class ProviderProfiles
+        //{
+        //    public const Int16 VerifyGoodStandingId = 400;
+        //    public const string VerifyGoodStandingName = "Verify Good Standing Status for Organization";
+
+        //    public const Int16 VerifyGoodStandingBatchId = 405;
+        //    public const string VerifyGoodStandingBatchName = "Verify Good Standing Status for Organizations in batch";
+
+        //    public const Int16 GetDBAId = 410;
+        //    public const string GetDBAName = "Get DBA Information for Organization";
+
+        //    public const Int16 GetDBABatchId = 415;
+        //    public const string GetDBABatchName = "Get DBA Information for Organization in batch";
+        //}
+
+        public static class MonthlyEnrolmentReports
         {
-            public const Int16 VerifyGoodStandingId = 400;
-            public const string VerifyGoodStandingName = "Verify Good Standing Status for Organization";
-
-            public const Int16 VerifyGoodStandingBatchId = 405;
-            public const string VerifyGoodStandingBatchName = "Verify Good Standing Status for Organizations in batch";
-
-            public const Int16 GetDBAId = 410;
-            public const string GetDBAName = "Get DBA Information for Organization";
-
-            public const Int16 GetDBABatchId = 415;
-            public const string GetDBABatchName = "Get DBA Information for Organization in batch";
+            public const Int16 CreateMonthlyEnrolmentReportsId = 400;
+            public const string CreateMonthlyEnrolmentReportsName = "Generate Monthly Enrolment Reports";
         }
 
         public static class Payments
