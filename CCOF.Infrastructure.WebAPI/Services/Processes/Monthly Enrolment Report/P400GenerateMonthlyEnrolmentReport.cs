@@ -10,6 +10,7 @@ using System.Net;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using System.Text.Json;
 using System.Xml.Linq;
+using Polly.Caching;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
@@ -447,9 +448,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
         {
-            _logger.LogInformation(CustomLogEvent.Process, "Beging to Initial ER process");
+            _logger.LogInformation(CustomLogEvent.Process, "Begin to Initial ER process");
             try
             {
+                var startTime = _timeProvider.GetTimestamp();
                 _processParams = processParams;
                 int businessDay = 0;
                 var entitySetName = "ccof_monthlyenrollmentreports";
@@ -630,9 +632,13 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
                         _logger.LogError(CustomLogEvent.Process, "Failed to Create Enrolment Report: {error}", JsonValue.Create(errorInfos)!.ToString());
                     }
-                    _logger.LogDebug(CustomLogEvent.Process, "Create Batch process record index:{index}", i);
+                    _logger.LogInformation(CustomLogEvent.Process, "Create Batch process record index:{index}", i);
                     await Task.Delay(10000);  // deplay 10 seconds avoid api throtting.
                 }
+                var endtime = _timeProvider.GetTimestamp();
+                var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
+                _logger.LogInformation(CustomLogEvent.Process, "Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
+                _logger.LogInformation(CustomLogEvent.Process, "End Create ER Batch process record");
                 return ProcessResult.Completed(ProcessId).SimpleProcessResult;
             }
             catch (Exception ex)
