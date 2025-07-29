@@ -448,7 +448,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
         {
-            _logger.LogInformation(CustomLogEvent.Process, "Begin to Initial ER process");
+            var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
+            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss")+" Begin to Initial ER process");
             try
             {
                 var startTime = _timeProvider.GetTimestamp();
@@ -496,7 +498,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         var org = orgInfo.FirstOrDefault(node => node?["accountid"]?.GetValue<string>() == record);
                         if (org != null)
                         {
-                            var accountNumber = org["org.accountnumber"]?.GetValue<string>();
+                            var accountNumber = org["parentaccountid"]?["accountnumber"]?.GetValue<string>();
 
                             if (!string.IsNullOrEmpty(accountNumber) &&
                                 accountNumber.StartsWith("G", StringComparison.OrdinalIgnoreCase))
@@ -632,13 +634,13 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
                         _logger.LogError(CustomLogEvent.Process, "Failed to Create Enrolment Report: {error}", JsonValue.Create(errorInfos)!.ToString());
                     }
-                    _logger.LogInformation(CustomLogEvent.Process, "Create Batch process record index:{index}", i);
+                    _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss")+" Create Batch process record index:{index}", i);
                     await Task.Delay(10000);  // deplay 10 seconds avoid api throtting.
                 }
                 var endtime = _timeProvider.GetTimestamp();
                 var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-                _logger.LogInformation(CustomLogEvent.Process, "Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
-                _logger.LogInformation(CustomLogEvent.Process, "End Create ER Batch process record");
+                _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss")+" Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
+                _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss")+ "End Create ER Batch process record");
                 return ProcessResult.Completed(ProcessId).SimpleProcessResult;
             }
             catch (Exception ex)
