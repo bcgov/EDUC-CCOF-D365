@@ -584,12 +584,12 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             ["ccof_year"] = _processParams.InitialEnrolmentReport.Year,
                             ["ccof_month"] = _processParams.InitialEnrolmentReport.Month,
                             ["ccof_reportversion"] = 1,
+                            ["ccof_reporttype"] = 100000000, // 100000000 Baseline
                             ["ccof_feefloorexempt"] = feeFloorExempt,
                             ["ccof_providertype"] = providerType,
                             ["ccof_facility@odata.bind"] = $"/accounts(" + record + ")",
                             ["ccof_organization@odata.bind"] = (org==null)?null:$"/accounts(" + org["parentaccountid"]["accountid"]?.GetValue<string>() + ")",
                            // ["ccof_organization@odata.bind"] = (org == null) ? null : $"/accounts(" + org["org.accountid"]?.GetValue<string>() + ")",
-
                             ["ccof_programyear@odata.bind"] = $"/ccof_program_years(" + _processParams.InitialEnrolmentReport.ProgramYearId + ")",
                             ["ccof_ccofbaserate@odata.bind"] = ccofBaseRate?["ccof_rateid"]?.GetValue<string>() is string baseRateId ? $"/ccof_rates({baseRateId})" : null,
                             ["ccof_ccfriproviderpaymentrate@odata.bind"] = ccfriProviderPaymentRate?["ccof_rateid"]?.GetValue<string>() is string providerRateId ? $"/ccof_rates({providerRateId})" : null,
