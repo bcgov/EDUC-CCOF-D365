@@ -37,6 +37,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     <attribute name=""contactid"" />
     <attribute name=""ccof_userid"" />
     <attribute name=""ccof_username"" />
+    <attribute name=""statecode"" />
     <filter type=""or"">
       <condition attribute=""ccof_userid"" operator=""eq"" value=""{userId}"" />
       <condition attribute=""ccof_username"" operator=""eq"" value=""{userName}"" />
