@@ -10,6 +10,8 @@ namespace CCOF.Infrastructure.WebAPI.Models
 
         public string? ccof_userid { get; set; }
 
+        public int? statecode { get; set; }
+
         public string? contactid { get; set; }
 
         [JsonPropertyName("Organization.accountid")]
@@ -41,6 +43,8 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? ccof_username { get; set; }
 
         public string? ccof_userid { get; set; }
+
+        public int? statecode { get; set; }
 
         public string? contactid { get; set; }
 
