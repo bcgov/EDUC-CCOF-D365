@@ -58,6 +58,7 @@ builder.Services.AddScoped<ID365BatchService, D365BatchService>();
 builder.Services.AddScoped<ID365BatchProvider, BatchProvider>();
 
 builder.Services.AddScoped<ID365ProcessProvider, P505GeneratePaymentLinesProvider>();
+builder.Services.AddScoped<ID365ProcessProvider, P400GenerateMonthlyEnrolmentReport>();
 
 builder.Services.AddD365HttpClient(builder.Configuration);
 builder.Services.AddMvcCore().AddApiExplorer();
@@ -85,6 +86,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseRouting();
+
+
+
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.RegisterBatchProcessesEndpoints();
+});
+
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/processes"),
  appBuilder => appBuilder.UseMiddleware<ApiKeyMiddleware>());
 
@@ -95,18 +107,9 @@ app.UseProblemDetails();
 app.MapFallback(() => Results.Redirect("/swagger"));
 app.UseHttpsRedirection();
 
-
-
 app.UseAuthentication();
 
-app.UseAuthorization();
-
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
-app.RegisterBatchProcessesEndpoints();
+//app.RegisterBatchProcessesEndpoints();
 
 
 app.Run();

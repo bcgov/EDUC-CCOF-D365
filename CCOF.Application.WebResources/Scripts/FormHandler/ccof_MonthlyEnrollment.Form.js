@@ -7,6 +7,15 @@ CCOF.MonthlyEnrollment.Form = {
 		debugger;
 		let formContext = executionContext.getFormContext();
 		var reportType = formContext.getAttribute("ccof_reporttype").getValue();
+
+
+
+		// if (formContext.getAttribute("ccof_locked").getValue()) {
+		// 	formContext.getControl("ccof_locked").setDisabled(false);
+		// } else {
+		// 	formContext.getControl("ccof_locked").setDisabled(true);
+		// }
+
 		formContext.getAttribute("ccof_locked").addOnChange(onChange_locked);
 		if (reportType === 100000000) // Baseline
 		{
@@ -45,7 +54,12 @@ CCOF.MonthlyEnrollment.Form = {
 function onChange_locked(executionContext) {
 	debugger;
 	let formContext = executionContext.getFormContext();
+
 	if (formContext.getAttribute("ccof_locked").getValue()) {
+
+	if (!formContext.getAttribute("ccof_locked").getValue()) {
+		// formContext.getControl("ccof_locked").setDisabled(true);
+
 		formContext.getAttribute("ccof_submissiondeadline").setValue(null);
 		formContext.getAttribute("ccof_submissiondeadline").setRequiredLevel("required")
 		formContext.getAttribute("ccof_lockedunlockedreason").setRequiredLevel("required")
