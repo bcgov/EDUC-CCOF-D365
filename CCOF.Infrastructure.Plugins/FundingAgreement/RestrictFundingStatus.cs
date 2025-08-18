@@ -121,6 +121,7 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                         var allowedRoles = new List<string> { "System Administrator",
                                                               "CCOF - Admin",
                                                               "CCOF - Leadership",
+                                                              "CCOF - Super Awesome Mods Squad",															  
                                                               "CCOF - Mod QC",
                                                               "CCOF - QC",
                                                               "CCOF - Sr. Adjudicator",
