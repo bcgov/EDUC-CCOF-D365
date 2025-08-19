@@ -83,7 +83,7 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                                               <entity name='systemuser'>
                                                 <attribute name='fullname' />
                                                 <filter>
-                                                  <condition attribute='systemuserid' operator='eq' value='{{83fab296-c1d8-ed11-a7c6-000d3a09d4d4}}' />
+                                                  <condition attribute='systemuserid' operator='eq' value='{userId}' />
                                                 </filter>
                                                 <link-entity name='systemuserroles' from='systemuserid' to='systemuserid' link-type='outer'>
                                                   <link-entity name='role' from='roleid' to='roleid' alias='r1'>
@@ -99,7 +99,7 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                                               <entity name='systemuser'>
                                                 <attribute name='fullname' />
                                                 <filter>
-                                                  <condition attribute='systemuserid' operator='eq' value='{{83fab296-c1d8-ed11-a7c6-000d3a09d4d4}}' />
+                                                  <condition attribute='systemuserid' operator='eq' value='{userId}' />
                                                 </filter>
                                                 <link-entity name='teammembership' from='systemuserid' to='systemuserid' link-type='outer'>
                                                   <link-entity name='team' from='teamid' to='teamid'>
