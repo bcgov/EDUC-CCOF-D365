@@ -36,7 +36,39 @@ CCOF.Funding.Ribbon = {
                 }
             );
     },
+    GenerateFundingPDF: function (primaryControl) {
+        var formContext = primaryControl;
+        var recordId = formContext.data.entity.getId().replace(/[{}]/g, "");
+        var window_width = 400;
+        var window_height = 300;
+        var pageInput = {
+            pageType: "custom",
+            name: "ccof_generatefundingagreementpdf_efe89",
+            entityName: "ccof_funding_agreement",
+            recordId: recordId,
+        };
+        var navigationOptions = {
+            target: 2,
+            width: window_width,
+            height: window_height
+        };
+        Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+            .then(
+                function () {
+                    setTimeout(function () {
+                        Xrm.Navigation.openForm({
+                            entityName: formContext.data.entity.getEntityName(),
+                            entityId: formContext.data.entity.getId()
+                        });
+                    }, 1000)
 
+                }
+            ).catch(
+                function () {
+                    console.log(Error);
+                }
+            );
+    },
     showHideCreateMOD: function (primaryControl) {
         debugger;
         var formContext = primaryControl;
@@ -57,9 +89,9 @@ CCOF.Funding.Ribbon = {
                 function success(result) {
                     debugger;
                     var fundingAgreements = result.entities[0].value;
-                    if (fundingAgreements == null) { noDrafted = true;  }
+                    if (fundingAgreements == null) { noDrafted = true; }
                 }
-               
+
             )
 
         var showButton = false;
