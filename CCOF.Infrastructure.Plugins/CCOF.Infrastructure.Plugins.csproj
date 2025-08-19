@@ -129,6 +129,7 @@
     <Compile Include="FundingAgreement\CreateFundingMOD.cs" />
     <Compile Include="MonthlyEnrolmentReport\UpdateSubmissionDeadline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceDeliveryDetails\CountNoOfDaysPerWeek.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
