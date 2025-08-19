@@ -78,33 +78,62 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
 
                     // Fetch user roles
                     var userId = context.InitiatingUserId;
-                    var fetchXml = $@"
-                                    <fetch>
-                                      <entity name='systemuserroles'>
-                                        <attribute name='roleid' />
-                                        <filter>
-                                          <condition attribute='systemuserid' operator='eq' value='{userId}' />
-                                        </filter>
-                                        <link-entity name='role' from='roleid' to='roleid' alias='r'>
-                                          <attribute name='name' />
-                                        </link-entity>
-                                      </entity>
-                                    </fetch>";
+                    var fetchXmlUserRoles = $@"
+                                            <fetch>
+                                              <entity name='systemuser'>
+                                                <attribute name='fullname' />
+                                                <filter>
+                                                  <condition attribute='systemuserid' operator='eq' value='{{83fab296-c1d8-ed11-a7c6-000d3a09d4d4}}' />
+                                                </filter>
+                                                <link-entity name='systemuserroles' from='systemuserid' to='systemuserid' link-type='outer'>
+                                                  <link-entity name='role' from='roleid' to='roleid' alias='r1'>
+                                                    <attribute name='name' />
+                                                    <attribute name='roleid' />
+                                                  </link-entity>
+                                                </link-entity>
+                                              </entity>
+                                            </fetch>";
 
-                    var roles = service.RetrieveMultiple(new FetchExpression(fetchXml));
+                    var fetchXmlTeamRoles = $@"
+                                            <fetch>
+                                              <entity name='systemuser'>
+                                                <attribute name='fullname' />
+                                                <filter>
+                                                  <condition attribute='systemuserid' operator='eq' value='{{83fab296-c1d8-ed11-a7c6-000d3a09d4d4}}' />
+                                                </filter>
+                                                <link-entity name='teammembership' from='systemuserid' to='systemuserid' link-type='outer'>
+                                                  <link-entity name='team' from='teamid' to='teamid'>
+                                                    <link-entity name='teamroles' from='teamid' to='teamid'>
+                                                      <link-entity name='role' from='roleid' to='roleid' alias='r2'>
+                                                        <attribute name='name' />
+                                                        <attribute name='roleid' />
+                                                      </link-entity>
+                                                    </link-entity>
+                                                  </link-entity>
+                                                </link-entity>
+                                              </entity>
+                                            </fetch>";
+
+                    var roles1 = service.RetrieveMultiple(new FetchExpression(fetchXmlUserRoles));       // systemUserRoles
+                    var roles2 = service.RetrieveMultiple(new FetchExpression(fetchXmlTeamRoles));       // teamRoles
 
                     // Status transition - backward operation
 
                     if (draftedStatuses.Contains(newStatus))
                     {
                         var allowedRoles = new List<string> { "System Administrator", "CCOF - Admin" };
-                        bool isAuthorized = roles.Entities.Any(role =>
+                        bool isAuthorized1 = roles1.Entities.Any(role =>
                         {
-                            var roleName = (string)((AliasedValue)role["r.name"]).Value;
+                            var roleName = (string)((AliasedValue)role["r1.name"]).Value;
+                            return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
+                        });
+                        bool isAuthorized2 = roles2.Entities.Any(role =>
+                        {
+                            var roleName = (string)((AliasedValue)role["r2.name"]).Value;
                             return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
                         });
 
-                        if (!isAuthorized)
+                        if (isAuthorized1 == false && isAuthorized2 == false)
                         {
                             throw new InvalidPluginExecutionException("You do not have permission to change the funding status. Only Administrators can perform this action.");
                         }
@@ -127,13 +156,18 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                                                               "CCOF - Sr. Adjudicator",
                                                               "CCOF - Adjudicator"                      
                                                             };
-                        bool isAuthorized = roles.Entities.Any(role =>
+                        bool isAuthorized1 = roles1.Entities.Any(role =>
                         {
-                            var roleName = (string)((AliasedValue)role["r.name"]).Value;
+                            var roleName = (string)((AliasedValue)role["r1.name"]).Value;
+                            return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
+                        });
+                        bool isAuthorized2 = roles2.Entities.Any(role =>
+                        {
+                            var roleName = (string)((AliasedValue)role["r2.name"]).Value;
                             return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
                         });
 
-                        if (!isAuthorized)
+                        if (isAuthorized1 == false && isAuthorized2 == false)
                         {
                             throw new InvalidPluginExecutionException("You do not have permission to change the funding status. Only Adjudicator and higher can perform this action.");
                         }
