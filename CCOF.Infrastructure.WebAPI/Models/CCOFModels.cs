@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using CCOF.Core.DataContext;
+using Newtonsoft.Json;
 
 namespace CCOF.Infrastructure.WebAPI.Models
 {
@@ -35,10 +36,11 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Facility[]? facilities { get; set; }
 
         public Application? application { get; set; }
-        [JsonPropertyName("Portalrole.ofm_portal_roleid")]
-        public string? portalrole_id { get; set; }
+        public PortalRole? PortalRole { get; set; }
+
     }
-    public class FiscalUserProfile
+   
+        public class FiscalUserProfile
     {
         public string? ccof_username { get; set; }
 
@@ -74,8 +76,14 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Facility[]? facilities { get; set; }
 
         public Application[]? application { get; set; }
-        [JsonPropertyName("Portalrole.ofm_portal_roleid")]
-        public string? portalrole_id { get; set; }
+        public PortalRole? PortalRole { get; set; }
+
+    }
+
+    public class PortalRole
+    {
+        public string? ofm_portal_roleid { get; set; }
+        public string? ofm_portal_role_number { get; set; }
     }
 
     public class Facility
@@ -318,4 +326,5 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string programyear { get; set; }
 
     }
+
 }
