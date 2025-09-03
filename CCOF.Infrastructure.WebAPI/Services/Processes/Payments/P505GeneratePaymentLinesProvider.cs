@@ -192,9 +192,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             { "statuscode",4  }, //Approved for Payment in PaymentLine table
                             { "ofm_facility@odata.bind", $"/accounts({enrolmentReport["_ccof_facility_value"]})" },
                             { "ofm_organization@odata.bind", $"/accounts({enrolmentReport["_ccof_organization_value"]})" },
-                            { "ofm_description", $"{enrolmentReport["facility.name"] +" " +enrolmentReport["ccof_month"]+"/"+enrolmentReport["ccof_year"]+" " +paymentType}" },
+                            { "ofm_description", $"{enrolmentReport?["facility.name"] +" " +enrolmentReport?["ccof_month"]+"/"+enrolmentReport?["ccof_year"]+" " +paymentType}" },
                         };
             var requestBody = JsonSerializer.Serialize(payload);
+            _logger.LogInformation("Payment payload: {payload}", requestBody);
             var response = await _d365WebApiService.SendCreateRequestAsync(_appUserService.AZSystemAppUser, "ofm_payments", requestBody);
             if (!response.IsSuccessStatusCode)
             {
@@ -205,6 +206,14 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             }
 
             return ProcessResult.Completed(ProcessId).SimpleProcessResult;
+        }
+        private void CheckJsonField(JsonNode enrolmentReport, string key)
+        {
+            var value = enrolmentReport?[key];
+            if (value is null)
+                _logger.LogError("enrolmentReport[{key}] is null or missing", key);
+            else
+                _logger.LogInformation("enrolmentReport[{key}] = {value}", key, value.ToString());
         }
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
         {
@@ -229,9 +238,47 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 switch ((int)processParams.programapproved)
                 {
                     case 7:  // ofm_payment_type CCOF
+                        _logger.LogInformation("Checking enrolmentReport fields...");
+
+                        CheckJsonField(enrolmentReport, "ccof_monthlyenrollmentreportid");
+                        CheckJsonField(enrolmentReport, "_ccof_programyear_value");
+                        CheckJsonField(enrolmentReport, "_ccof_facility_value");
+                        CheckJsonField(enrolmentReport, "_ccof_organization_value");
+                        CheckJsonField(enrolmentReport, "facility.name");
+                        CheckJsonField(enrolmentReport, "ccof_month");
+                        CheckJsonField(enrolmentReport, "ccof_year");
+
+                        if (processParams == null)
+                            _logger.LogError("processParams is null");
+                        else
+                            _logger.LogInformation("processParams.programapproved = {value}", processParams.programapproved);
+
+                        if (holidaysList == null)
+                            _logger.LogError("holidaysList is null");
+                        else
+                            _logger.LogInformation("holidaysList count = {count}", holidaysList.Count);
                         await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccof_approved_date"], (decimal)enrolmentReport["ccof_grandtotalbase"], processParams!, holidaysList);
                         break;
                     case 8: // ofm_payment_type CCFRI
+                        _logger.LogInformation("Checking enrolmentReport fields...");
+
+                        CheckJsonField(enrolmentReport, "ccof_monthlyenrollmentreportid");
+                        CheckJsonField(enrolmentReport, "_ccof_programyear_value");
+                        CheckJsonField(enrolmentReport, "_ccof_facility_value");
+                        CheckJsonField(enrolmentReport, "_ccof_organization_value");
+                        CheckJsonField(enrolmentReport, "facility.name");
+                        CheckJsonField(enrolmentReport, "ccof_month");
+                        CheckJsonField(enrolmentReport, "ccof_year");
+
+                        if (processParams == null)
+                            _logger.LogError("processParams is null");
+                        else
+                            _logger.LogInformation("processParams.programapproved = {value}", processParams.programapproved);
+
+                        if (holidaysList == null)
+                            _logger.LogError("holidaysList is null");
+                        else
+                            _logger.LogInformation("holidaysList count = {count}", holidaysList.Count);
                         await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], ((decimal?)(enrolmentReport["ccof_grandtotalccfriprovider"]) ?? 0) + ((decimal?)(enrolmentReport["ccof_grandtotalccfri"]) ?? 0), processParams!, holidaysList);
                         break;
                     default:
