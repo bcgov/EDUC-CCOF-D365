@@ -157,7 +157,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             return await Task.FromResult(new ProcessData(d365Result));
         }
         private async Task<JsonObject> CreateSinglePayment(JsonNode enrolmentReport,
-                                                                           DateTime? paymentDate,
+                                                                           DateTime paymentDate,
                                                                            decimal? totalAmount,
                                                                            ProcessParameter processParams,
                                                                            List<DateTime> holidaysList)
@@ -261,7 +261,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             _logger.LogError("holidaysList is null");
                         else
                             _logger.LogInformation("holidaysList count = {count}", holidaysList.Count);
-                        await CreateSinglePayment(enrolmentReport, (DateTime?)enrolmentReport["ccof_ccof_approved_date"], (decimal)enrolmentReport["ccof_grandtotalbase"], processParams!, holidaysList);
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccof_approved_date"], (decimal)enrolmentReport["ccof_grandtotalbase"], processParams!, holidaysList);
                         break;
                     case 8: // ofm_payment_type CCFRI
                         _logger.LogInformation("Checking enrolmentReport fields...");
@@ -276,6 +276,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         CheckJsonField(enrolmentReport, "ccof_ccof_approved_date");
                         CheckJsonField(enrolmentReport, "ccof_ccfri_approved_date");
                         CheckJsonField(enrolmentReport, "ccof_grandtotalbase");
+                        CheckJsonField(enrolmentReport, "ccof_grandtotalccfriprovider");
+                        CheckJsonField(enrolmentReport, "ccof_grandtotalccfri");
+
                         if (processParams == null)
                             _logger.LogError("processParams is null");
                         else
@@ -285,7 +288,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             _logger.LogError("holidaysList is null");
                         else
                             _logger.LogInformation("holidaysList count = {count}", holidaysList.Count);
-                        await CreateSinglePayment(enrolmentReport, (DateTime?)enrolmentReport["ccof_ccfri_approved_date"], ((decimal?)(enrolmentReport["ccof_grandtotalccfriprovider"]) ?? 0) + ((decimal?)(enrolmentReport["ccof_grandtotalccfri"]) ?? 0), processParams!, holidaysList);
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], ((decimal?)(enrolmentReport["ccof_grandtotalccfriprovider"]) ?? 0) + ((decimal?)(enrolmentReport["ccof_grandtotalccfri"]) ?? 0), processParams!, holidaysList);
                         break;
                     default:
                         _logger.LogError(CustomLogEvent.Process, "Unable to generate payments for Erolment Report {ERid}. Invalid ApprovedType {programApproved}", processParams?.EnrolmentReportid, processParams?.programapproved);
