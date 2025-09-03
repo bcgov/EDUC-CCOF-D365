@@ -163,20 +163,23 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                                            List<DateTime> holidaysList)
         {
             DateTime invoiceDate = paymentDate.GetPreviousBusinessDay(holidaysList);
-            DateTime invoiceReceivedDate = invoiceDate.AddBusinessDays(_BCCASApi.PayableInDays, holidaysList);
+            _logger.LogInformation("_BCCASApi = {count}", _BCCASApi?.ToString());
+            // DateTime invoiceReceivedDate = invoiceDate.AddBusinessDays(_BCCASApi.PayableInDays, holidaysList);
+            DateTime invoiceReceivedDate = invoiceDate.AddBusinessDays(5, holidaysList);
+
             DateTime effectiveDate = invoiceDate;
             string paymentType = (int)processParams.programapproved switch
             {
                 7 => "CCOF",
                 8 => "CCFRI",
-                9 => "CCFRI Provider",
+                10 => "CCFRI Provider",
                 _ => "Unknown"
             };
             int invoiceLineNumber = (int)processParams.programapproved switch
             {
-                7 => 1,
-                8 => 2,
-                9 => 3,
+                7 => 1,  // CCOF
+                8 => 2,  // CCFRI 
+                10 => 3,  // CCFRI Provider
                 _ => 999999
             };
             var payload = new JsonObject()
