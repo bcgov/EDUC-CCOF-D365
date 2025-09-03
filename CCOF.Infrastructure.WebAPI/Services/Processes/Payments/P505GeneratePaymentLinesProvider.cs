@@ -20,7 +20,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
     public class P505GeneratePaymentLinesProvider(IOptionsSnapshot<ExternalServices> bccasApiSettings, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ILoggerFactory loggerFactory) : ID365ProcessProvider
     {
-        private readonly BCCASApi _BCCASApi = bccasApiSettings.Value.BCCASApi;
+       //  private readonly BCCASApi _BCCASApi = bccasApiSettings.Value.BCCASApi;
         private readonly ID365AppUserService _appUserService = appUserService;
         private readonly ID365WebApiService _d365WebApiService = d365WebApiService;
         private readonly ILogger _logger = loggerFactory.CreateLogger(LogCategory.Process);
@@ -163,8 +163,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                                            List<DateTime> holidaysList)
         {
             DateTime invoiceDate = paymentDate.GetPreviousBusinessDay(holidaysList);
-            _logger.LogInformation("_BCCASApi = {count}", _BCCASApi?.ToString());
+           //  _logger.LogInformation("_BCCASApi = {count}", _BCCASApi?.ToString());
             // DateTime invoiceReceivedDate = invoiceDate.AddBusinessDays(_BCCASApi.PayableInDays, holidaysList);
+            _logger.LogInformation("_BCCASApi line");
+
             DateTime invoiceReceivedDate = invoiceDate.AddBusinessDays(5, holidaysList);
 
             DateTime effectiveDate = invoiceDate;
