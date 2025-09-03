@@ -39,7 +39,12 @@ public record ProcessParameter
 
     [property: JsonPropertyName("dataImportId")]
     public Guid? DataImportId { get; set; }
-
+    [property: JsonPropertyName("enrolmentReportid")]
+    public Guid? EnrolmentReportid { get; set; }
+    [property: JsonPropertyName("organization")]
+    public OrganizationParameter? Organization { get; set; }
+    [property:JsonPropertyName("programApproved")]
+    public int? programapproved { get; set; }
 
     #region Inner Parameter Record Objects
 
@@ -68,4 +73,17 @@ public record ProcessParameter
         public string[]? FacilityGuid { get; set; }
     }
     #endregion
-}
+    public record OrganizationParameter
+    {
+        [property: JsonPropertyName("organizationId")]
+        public Guid? organizationId { get; set; }
+        [property: JsonPropertyName("facilityId")]
+        public Guid? facilityId { get; set; }
+
+        [property: JsonPropertyName("legalName")]
+        public string? legalName { get; set; }
+
+        [property: JsonPropertyName("incorporationNumber")]
+        public string? incorporationNumber { get; set; }
+    }
+ }
