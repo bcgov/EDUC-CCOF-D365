@@ -288,10 +288,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                                                         ? null : approvedParentfee3YK[MonthLogicalName].GetValue<decimal>(),
                 ["ccof_approvedparentfeeoosck"] = (approvedParentfeeOOSCK == null || approvedParentfeeOOSCK[MonthLogicalName] == null ||
                                                         approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>() == 0)
-                                                        ? null : approvedParentfee18to36[MonthLogicalName].GetValue<decimal>(),
+                                                        ? null : approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>(),
                 ["ccof_approvedparentfeeooscg"] = (approvedParentfeeOOSCG == null || approvedParentfeeOOSCG[MonthLogicalName] == null ||
                                                         approvedParentfeeOOSCG[MonthLogicalName].GetValue<decimal>() == 0)
-                                                        ? null : approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>(),
+                                                        ? null : approvedParentfeeOOSCG[MonthLogicalName].GetValue<decimal>(),
                 ["ccof_approvedparentfeepre"] = (approvedParentfeePre == null || approvedParentfeePre[MonthLogicalName] == null ||
                                                         approvedParentfeePre[MonthLogicalName].GetValue<decimal>() == 0)
                                                         ? null : approvedParentfeePre[MonthLogicalName].GetValue<decimal>(),
