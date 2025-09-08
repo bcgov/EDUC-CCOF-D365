@@ -250,7 +250,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
             var startTime = _timeProvider.GetTimestamp();
             ERGuid = value.ToString().Trim();
-            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Starting GenerateAdjusementER for Enrolment Report ID: {ERGuid}", ERGuid);
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Starting GenerateAdjusementER for Enrolment Report ID: {ERGuid}", ERGuid.Replace("\r", "").Replace("\n", ""));
             HttpResponseMessage response = null;
             // get Previous ER
             response = _d365webapiservice.SendRetrieveRequestAsync(MonthlyERRequestUri, true);
