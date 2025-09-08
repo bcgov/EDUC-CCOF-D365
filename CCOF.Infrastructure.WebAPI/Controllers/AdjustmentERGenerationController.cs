@@ -8,6 +8,7 @@ using System;
 using System.Net;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace CCOF.Infrastructure.WebAPI.Controllers
 {
@@ -19,6 +20,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         string programYearGuid = string.Empty;
         string facilityGuid = string.Empty;
         string ERGuid = string.Empty;
+        int month = 0;
+        string year = string.Empty;
         private readonly ILogger<AdjustmentERGenerationController> _logger;
         private readonly TimeProvider _timeProvider;
         public AdjustmentERGenerationController(ID365WebApiService d365webapiservice, ILogger<AdjustmentERGenerationController> logger, TimeProvider timeProvider)
@@ -60,9 +63,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             <attribute name="ccof_name" />
                             <attribute name="ccof_reportversion" />
                             <filter type="and">
-                              <condition attribute="ccof_facility" operator="eq" value="65cb95bd-4a95-ed11-aad0-000d3a09c3a2" />
-                              <condition attribute="ccof_month" operator="eq" value="7" />
-                              <condition attribute="ccof_year" operator="eq" value="2025" />
+                              <condition attribute="ccof_facility" operator="eq" value="{{facilityGuid}}" />
+                              <condition attribute="ccof_month" operator="eq" value="{{month}}" />
+                              <condition attribute="ccof_year" operator="eq" value="{{year}}" />
                             </filter>
                             <order attribute="ccof_reportversion" descending="true" />
                           </entity>
@@ -143,7 +146,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         {
             if (frequency == null)
                 return null;
-            if (frequency == 100000002)              // Monthly
+            if (frequency == 100000002)              // Daily
                 return fee;
             if (businessDay >= 20)
                 return fee.HasValue ? fee.Value / 20 : null;
@@ -247,13 +250,15 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
             var startTime = _timeProvider.GetTimestamp();
             ERGuid = value.ToString().Trim();
-            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Starting GenerateAdjusementER for Enrolment Report ID: {ERGuid}", ERGuid);
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Starting GenerateAdjusementER for Enrolment Report ID: {ERGuid}", ERGuid.Replace("\r", "").Replace("\n", ""));
             HttpResponseMessage response = null;
             // get Previous ER
             response = _d365webapiservice.SendRetrieveRequestAsync(MonthlyERRequestUri, true);
             JObject PreviousER = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
             programYearGuid = PreviousER["_ccof_programyear_value"]?.ToString();
             facilityGuid = PreviousER["_ccof_facility_value"]?.ToString();
+            month= (int)PreviousER["ccof_month"];
+            year= PreviousER["ccof_year"]?.ToString().Trim();
             JsonNode ccfriMax = JsonObject.Parse(PreviousER["ccof_ccfridailyratemax"].ToString());
             JsonNode ccfriMin = JsonObject.Parse(PreviousER["ccof_ccfridailyratemin"].ToString());
             bool feeFloorExempt = PreviousER["ccof_feefloorexempt"]?.Value<bool?>() ?? false;
@@ -314,6 +319,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                                                         approvedParentfeePre[MonthLogicalName].GetValue<decimal>() == 0)
                                                         ? null : approvedParentfeePre["ccof_frequency"].GetValue<int>()
             };
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER approvedParentFee json string: "+ approvedParentFee.ToJsonString());
             // recalculate Daily CCFRI Rate
             var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFee, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, businessDay, providerType);
             // get largest version number
@@ -457,6 +463,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 },
                 ["ccof_dailyenrollment_monthlyenrollmentreport"] = dailyEnrollmentSelected
             };
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER: EnrolmentReportToCreate json string "+ EnrolmentReportToCreate.ToJsonString());
             response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_monthlyenrollmentreports?$expand=ccof_reportextension,ccof_dailyenrollment_monthlyenrollmentreport", EnrolmentReportToCreate.ToJsonString());
             var content = response.Content.ReadAsStringAsync().Result.ToString();
             JObject returnRecord = new JObject();
