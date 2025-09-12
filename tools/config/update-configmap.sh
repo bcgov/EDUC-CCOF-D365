@@ -27,7 +27,8 @@ D365_CONFIGURATION=$(jq << JSON
     "AutoRetryDelay": "00:00:08",
     "MinsToCache": 60
   },
-  "D365AuthSettings": $(cat "$DYNAMICS_AUTHENTICATION_SETTINGS")
+  "D365AuthSettings": $(cat "$DYNAMICS_AUTHENTICATION_SETTINGS"),
+  "BCCASApi": $(cat "$BCCASApi")
 }
 
 JSON
