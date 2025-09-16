@@ -182,7 +182,7 @@ jobs:
               ${{ env.OPENSHIFT_NAMESPACE }} \
               /tmp/authentication_settings \
               /tmp/auth_schema_settings
-               ${{ secrets.BCCASApi }} \
+             /tmp/BCCASApi \
                
 
           # Start rollout (if necessary) and follow it
