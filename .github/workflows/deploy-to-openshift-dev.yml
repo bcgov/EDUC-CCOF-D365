@@ -181,7 +181,7 @@ jobs:
               ${{ env.APP_NAME }} \
               ${{ env.OPENSHIFT_NAMESPACE }} \
               /tmp/authentication_settings \
-              /tmp/auth_schema_settings
+              /tmp/auth_schema_settings \
              /tmp/BCCASApi \
                
 
