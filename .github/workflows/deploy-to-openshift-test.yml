@@ -150,17 +150,14 @@ jobs:
           cat << JSON > /tmp/auth_schema_settings
             ${{ secrets.D365_API_KEY_SCHEME }}
           JSON
-          cat << JSON > /tmp/BCCASApi
-            ${{ secrets.BCCASApi }}
-          JSON
+          
           curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ env.BRANCH }}/tools/config/update-configmap.sh \
             | bash /dev/stdin \
               ${{ env.APP_ENVIRONMENT }} \
               ${{ env.APP_NAME }} \
               ${{ env.OPENSHIFT_NAMESPACE }} \
               /tmp/authentication_settings \
-              /tmp/auth_schema_settings \
-              /tmp/BCCASApi
+              /tmp/auth_schema_settings 
           # Start rollout (if necessary) and follow it
           oc rollout restart deployment/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }} 2> /dev/null \
               || true && echo "Rollout in progress"
