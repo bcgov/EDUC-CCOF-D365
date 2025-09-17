@@ -30,6 +30,29 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
+        public string FeeFloorExemptRequestUri
+        {
+            get
+            {   
+                var fetchXml = $"""
+                    <fetch>
+                      <entity name="ccof_feefloorexempt">
+                        <attribute name="ccof_facility" />
+                        <attribute name="ccof_months" />
+                        <attribute name="ccof_name" />
+                        <attribute name="ccof_programyear" />
+                        <filter>
+                          <condition attribute="ccof_programyear" operator="eq" value="{programYearGuid}" />
+                          <condition attribute="ccof_facility" operator="eq" value="{facilityGuid}" />
+                          <condition attribute="statecode" operator="eq" value="0" />
+                        </filter>
+                      </entity>
+                    </fetch>
+                    """;
+                var requestUri = $"ccof_feefloorexempts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
+                return requestUri.CleanCRLF();
+            }
+        }
         public string MonthlyERRequestUri
         {
             get
@@ -144,6 +167,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         """;
         private decimal? CalculateDailyParentFee(decimal? fee, int? frequency, int businessDay)
         {
+            if ( fee == null )  
+                return null;
             if (frequency == null)
                 return null;
             if (frequency == 100000002)              // Daily
@@ -258,10 +283,19 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             programYearGuid = PreviousER["_ccof_programyear_value"]?.ToString();
             facilityGuid = PreviousER["_ccof_facility_value"]?.ToString();
             month= (int)PreviousER["ccof_month"];
-            year= PreviousER["ccof_year"]?.ToString().Trim();
-            JsonNode ccfriMax = JsonObject.Parse(PreviousER["ccof_ccfridailyratemax"].ToString());
-            JsonNode ccfriMin = JsonObject.Parse(PreviousER["ccof_ccfridailyratemin"].ToString());
-            bool feeFloorExempt = PreviousER["ccof_feefloorexempt"]?.Value<bool?>() ?? false;
+            int fiscalMonth = ((month + 8) % 12) + 1;
+            year = PreviousER["ccof_year"]?.ToString().Trim();
+            JsonNode? ccfriMax = JsonObject.Parse(PreviousER["ccof_ccfridailyratemax"].ToString());
+            JsonNode? ccfriMin = JsonObject.Parse(PreviousER["ccof_ccfridailyratemin"].ToString());
+            response = _d365webapiservice.SendRetrieveRequestAsync(FeeFloorExemptRequestUri, true);
+            JObject FeeFloorExemptObject = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
+            FeeFloorExemptObject = (JObject)FeeFloorExemptObject["value"]?.FirstOrDefault();
+            bool feeFloorExempt = false;
+            feeFloorExempt = FeeFloorExemptObject["ccof_months"] != null && FeeFloorExemptObject["ccof_months"]
+                          .ToString()
+                          .Split(',')
+                          .Select(v => int.Parse(v.Trim()))
+                          .Contains(fiscalMonth);
             int providerType = PreviousER["ccof_providertype"]?.Value<int?>() ?? 100000001; // Family
             int businessDay = ccfriMax?["ccof_businessday"]?.GetValue<int>() ?? 20;
             // get Monthlogicalname in Approved Parent Fee
@@ -359,7 +393,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ["ccof_month"] = PreviousER["ccof_month"]?.Value<int?>(),
                 ["ccof_reporttype"] = 100000001, // Adjustment
                 ["ccof_reportversion"] = reportVersion + 1,
-                ["ccof_feefloorexempt"] = PreviousER["ccof_feefloorexempt"]?.Value<bool?>(),
+                ["ccof_feefloorexempt"] = feeFloorExempt,
                 ["ccof_providertype"] = PreviousER["ccof_providertype"]?.Value<int?>(),
                 ["ccof_originalenrollmentreport@odata.bind"] = $"/ccof_monthlyenrollmentreports(" + ((PreviousER["_ccof_originalenrollmentreport_value"]?.ToString() == "") ? PreviousER["ccof_monthlyenrollmentreportid"]?.ToString() :
                                                                                                     PreviousER["_ccof_originalenrollmentreport_value"].ToString()) + ")",
