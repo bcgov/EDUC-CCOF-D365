@@ -33,7 +33,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         public string FeeFloorExemptRequestUri
         {
             get
-            {   
+            {
                 var fetchXml = $"""
                     <fetch>
                       <entity name="ccof_feefloorexempt">
@@ -167,7 +167,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         """;
         private decimal? CalculateDailyParentFee(decimal? fee, int? frequency, int businessDay)
         {
-            if ( fee == null )  
+            if (fee == null)
                 return null;
             if (frequency == null)
                 return null;
@@ -282,7 +282,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             JObject PreviousER = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
             programYearGuid = PreviousER["_ccof_programyear_value"]?.ToString();
             facilityGuid = PreviousER["_ccof_facility_value"]?.ToString();
-            month= (int)PreviousER["ccof_month"];
+            month = (int)PreviousER["ccof_month"];
             int fiscalMonth = ((month + 8) % 12) + 1;
             year = PreviousER["ccof_year"]?.ToString().Trim();
             JsonNode? ccfriMax = JsonObject.Parse(PreviousER["ccof_ccfridailyratemax"].ToString());
@@ -291,7 +291,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             JObject FeeFloorExemptObject = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
             FeeFloorExemptObject = (JObject)FeeFloorExemptObject["value"]?.FirstOrDefault();
             bool feeFloorExempt = false;
-            feeFloorExempt = FeeFloorExemptObject["ccof_months"] != null && FeeFloorExemptObject["ccof_months"]
+            feeFloorExempt = FeeFloorExemptObject != null && FeeFloorExemptObject["ccof_months"] != null && FeeFloorExemptObject["ccof_months"]
                           .ToString()
                           .Split(',')
                           .Select(v => int.Parse(v.Trim()))
@@ -353,7 +353,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                                                         approvedParentfeePre[MonthLogicalName].GetValue<decimal>() == 0)
                                                         ? null : approvedParentfeePre["ccof_frequency"].GetValue<int>()
             };
-            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER approvedParentFee json string: "+ approvedParentFee.ToJsonString());
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER approvedParentFee json string: " + approvedParentFee.ToJsonString());
             // recalculate Daily CCFRI Rate
             var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFee, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, businessDay, providerType);
             // get largest version number
@@ -470,7 +470,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ["ccof_reportextension"] = new JsonObject()
                 {
                     // Approved Parent Fee
-                    ["ccof_approvedparentfee0to18"] = approvedParentFee["ccof_approvedparentfee18to36"]?.DeepClone(),
+                    ["ccof_approvedparentfee0to18"] = approvedParentFee["ccof_approvedparentfee0to18"]?.DeepClone(),
                     ["ccof_approvedparentfee18to36"] = approvedParentFee["ccof_approvedparentfee18to36"]?.DeepClone(),
                     ["ccof_approvedparentfee3yk"] = approvedParentFee["ccof_approvedparentfee3yk"]?.DeepClone(),
                     ["ccof_approvedparentfeeoosck"] = approvedParentFee["ccof_approvedparentfeeoosck"]?.DeepClone(),
@@ -497,7 +497,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 },
                 ["ccof_dailyenrollment_monthlyenrollmentreport"] = dailyEnrollmentSelected
             };
-            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER: EnrolmentReportToCreate json string "+ EnrolmentReportToCreate.ToJsonString());
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER: EnrolmentReportToCreate json string " + EnrolmentReportToCreate.ToJsonString());
             response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_monthlyenrollmentreports?$expand=ccof_reportextension,ccof_dailyenrollment_monthlyenrollmentreport", EnrolmentReportToCreate.ToJsonString());
             var content = response.Content.ReadAsStringAsync().Result.ToString();
             JObject returnRecord = new JObject();
