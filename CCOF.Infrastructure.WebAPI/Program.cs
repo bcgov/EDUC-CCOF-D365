@@ -58,6 +58,7 @@ builder.Services.AddScoped<ID365BatchService, D365BatchService>();
 builder.Services.AddScoped<ID365BatchProvider, BatchProvider>();
 
 builder.Services.AddScoped<ID365ProcessProvider, P505GeneratePaymentLinesProvider>();
+builder.Services.AddScoped<ID365ProcessProvider, P500SendPaymentRequestProvider>();
 builder.Services.AddScoped<ID365ProcessProvider, P400GenerateMonthlyEnrolmentReport>();
 
 builder.Services.AddD365HttpClient(builder.Configuration);
