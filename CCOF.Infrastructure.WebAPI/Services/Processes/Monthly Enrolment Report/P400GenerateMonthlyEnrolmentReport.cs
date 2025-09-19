@@ -45,6 +45,28 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         }
 
         #region Data Queries
+        public string FeeFloorExemptRequestUri
+        {
+            get
+            {
+                var fetchXml = $$"""
+                        <fetch>
+                          <entity name="ccof_feefloorexempt">
+                            <attribute name="ccof_facility" />
+                            <attribute name="ccof_months" />
+                            <attribute name="ccof_name" />
+                            <attribute name="ccof_programyear" />
+                            <filter>
+                              <condition attribute="ccof_programyear" operator="eq" value="{{_processParams.InitialEnrolmentReport.ProgramYearId}}" />
+                              <condition attribute="statecode" operator="eq" value="0" />
+                            </filter>
+                          </entity>
+                        </fetch>
+                        """;
+                var requestUri = $"ccof_feefloorexempts?$select=_ccof_facility_value,ccof_months,ccof_name,_ccof_programyear_value&$filter=(_ccof_programyear_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + " and statecode eq 0)";
+                return requestUri.CleanCRLF();
+            }
+        }
         public string RateRequestUri
         {
             get
@@ -426,13 +448,14 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         {
             var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
-            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Begin to Initial ER process");
+            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") +" Starting Process P"+ ProcessId+" to Create Draft Monthly Enrolment Reports");
             try
             {
                 var startTime = _timeProvider.GetTimestamp();
                 _processParams = processParams;
                 int businessDay = 0;
                 var entitySetName = "ccof_monthlyenrollmentreports";
+                int fiscalMonth = (((int)_processParams.InitialEnrolmentReport.Month + 8) % 12) + 1;
                 // for Approved Parent fee
                 var MonthLogicalNameTemp = JsonNode.Parse(monthLogicalNameString)?.AsArray() ?? throw new Exception("Invalid JSON");
                 List<JsonNode> MonthLogicalNameArray = MonthLogicalNameTemp.Select(node => node!).ToList();
@@ -456,11 +479,14 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 List<JsonNode> ApprovedParentFee = await FetchAllRecordsFromCRMAsync(ApprovedParentFeeRequestUri);
                 List<JsonNode> orgInfo = await FetchAllRecordsFromCRMAsync(OrgRequestUri);
                 List<JsonNode> facilityLicence = await FetchAllRecordsFromCRMAsync(FacilityLicenceRequestUri);
+                List<JsonNode> feeFloorExemptArray = await FetchAllRecordsFromCRMAsync(FeeFloorExemptRequestUri);
 
                 // Batch processing
                 //int batchSize = 1000;
                 // int batchSize = 100;
-                int batchSize = 50;
+                // int batchSize = 50;
+                int batchSize = 25;
+                _logger.LogInformation("Creating Draft Monthly Enrolment Reports for " + _processParams.InitialEnrolmentReport.FacilityGuid.Count() +" Facilities");
 
                 for (int i = 0; i < _processParams.InitialEnrolmentReport.FacilityGuid.Count(); i += batchSize)
                 {
@@ -471,6 +497,14 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         int providerType = 100000000;  // Group
                         // Fee Floor Exempt
                         Boolean feeFloorExempt = false;
+                        var FeeFloorExemptObject = feeFloorExemptArray.FirstOrDefault(node => node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                        feeFloorExempt = FeeFloorExemptObject != null
+                                        && FeeFloorExemptObject["ccof_months"] != null
+                                        && FeeFloorExemptObject["ccof_months"]
+                                            .ToString()
+                                            .Split(',')
+                                            .Select(v => int.Parse(v.Trim()))
+                                            .Contains(fiscalMonth);
                         var org = orgInfo.FirstOrDefault(node => node?["accountid"]?.GetValue<string>() == record);
                         if (org != null)
                         {
@@ -528,10 +562,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                                     ? null : approvedParentfee3YK[MonthLogicalName].GetValue<decimal>(),
                             ["ccof_approvedparentfeeoosck"] = (approvedParentfeeOOSCK == null || approvedParentfeeOOSCK[MonthLogicalName] == null ||
                                                                     approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>() == 0)
-                                                                    ? null : approvedParentfee18to36[MonthLogicalName].GetValue<decimal>(),
+                                                                    ? null : approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>(),
                             ["ccof_approvedparentfeeooscg"] = (approvedParentfeeOOSCG == null || approvedParentfeeOOSCG[MonthLogicalName] == null ||
                                                                     approvedParentfeeOOSCG[MonthLogicalName].GetValue<decimal>() == 0)
-                                                                    ? null : approvedParentfeeOOSCK[MonthLogicalName].GetValue<decimal>(),
+                                                                    ? null : approvedParentfeeOOSCG[MonthLogicalName].GetValue<decimal>(),
                             ["ccof_approvedparentfeepre"] = (approvedParentfeePre == null || approvedParentfeePre[MonthLogicalName] == null ||
                                                                     approvedParentfeePre[MonthLogicalName].GetValue<decimal>() == 0)
                                                                     ? null : approvedParentfeePre[MonthLogicalName].GetValue<decimal>(),
@@ -574,7 +608,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             ["ccof_reportextension"] = new JsonObject()
                             {
                                 // Approved Parent Fee
-                                ["ccof_approvedparentfee0to18"] = approvedParentFee["ccof_approvedparentfee18to36"]?.DeepClone(),
+                                ["ccof_approvedparentfee0to18"] = approvedParentFee["ccof_approvedparentfee0to18"]?.DeepClone(),
                                 ["ccof_approvedparentfee18to36"] = approvedParentFee["ccof_approvedparentfee18to36"]?.DeepClone(),
                                 ["ccof_approvedparentfee3yk"] = approvedParentFee["ccof_approvedparentfee3yk"]?.DeepClone(),
                                 ["ccof_approvedparentfeeoosck"] = approvedParentFee["ccof_approvedparentfeeoosck"]?.DeepClone(),
@@ -603,6 +637,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         };
                         createEnrolmentReportRequests.Add(new CreateRequest(entitySetName, EnrolmentReportToCreate));
                     }
+                    _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Creating Draft ERs index:{index}", i);
                     var ERBatchResult = await _d365webapiservice.SendBatchMessageAsync(_appUserService.AZSystemAppUser, createEnrolmentReportRequests, null);
                     if (ERBatchResult.Errors.Any())
                     {
@@ -610,13 +645,12 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
                         _logger.LogError(CustomLogEvent.Process, "Failed to Create Enrolment Report: {error}", JsonValue.Create(errorInfos)!.ToString());
                     }
-                    _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Create Batch process record index:{index}", i);
-                    await Task.Delay(10000);  // deplay 10 seconds avoid api throtting.
+                    await Task.Delay(5000);  // deplay 5 seconds avoid api throtting.
                 }
                 var endtime = _timeProvider.GetTimestamp();
                 var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-                _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
-                _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "End Create ER Batch process record");
+                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
+                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Create ER Batch process records is Complete");
                 return ProcessResult.Completed(ProcessId).SimpleProcessResult;
             }
             catch (Exception ex)
