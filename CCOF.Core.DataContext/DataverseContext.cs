@@ -150,6 +150,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_Payment_File_Exchange"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_Payment_File_Exchange> OfM_Payment_File_ExchangeSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.OfM_Payment_File_Exchange>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.SystemUser"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.SystemUser> SystemUserSet
