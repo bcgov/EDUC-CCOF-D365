@@ -22,7 +22,7 @@ using CCOF.Infrastructure.WebAPI.Services.Processes;
 using System;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using CCOF.Core.DataContext;
-namespace OFM.Infrastructure.WebAPI.Services.Processes.Payments;
+namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments;
 
 public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> bccasApiSettings, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ID365DataService dataService, ILoggerFactory loggerFactory, TimeProvider timeProvider) : ID365ProcessProvider
 {
@@ -329,12 +329,12 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         {
             _oracleBatchNumber = Convert.ToInt32(serializedPFXData[0].ofm_oracle_batch_name) + 1;
             _cgiBatchNumber = (Convert.ToInt32(serializedPFXData[0].ofm_batch_number)).ToString("D9").Substring(0, 9);
-            oracleBatchName = _BCCASApi.clientCode + fiscalyear?.Substring(2) + "OFM" + (_oracleBatchNumber).ToString("D5");
+            oracleBatchName = _BCCASApi.clientCode + fiscalyear?.Substring(2) + "CCOF" + (_oracleBatchNumber).ToString("D5");
         }
         else
         {
             _cgiBatchNumber = _BCCASApi.cGIBatchNumber;
-            oracleBatchName = _BCCASApi.clientCode + fiscalyear?.Substring(2) + "OFM" + _BCCASApi.oracleBatchNumber;
+            oracleBatchName = _BCCASApi.clientCode + fiscalyear?.Substring(2) + "CCOF" + _BCCASApi.oracleBatchNumber;
         }
 
         #endregion
