@@ -12666,6 +12666,7 @@ namespace CCOF.Core.DataContext
 			public const string Business_Unit_CcOf_Adjudication_CcFri_Facility = "Business_Unit_CcOf_Adjudication_CcFri_Facility";
 			public const string Business_Unit_CcOf_Application = "Business_Unit_CcOf_Application";
 			public const string Business_Unit_CcOf_Change_Request = "Business_Unit_CcOf_Change_Request";
+			public const string Business_Unit_CcOf_Program_Year = "Business_Unit_CcOf_Program_Year";
 			public const string Business_Unit_Contacts = "Business_Unit_Contacts";
 			public const string Business_Unit_Email_Activities = "Business_Unit_Email_Activities";
 			public const string Business_Unit_OfM_Payment = "Business_Unit_OfM_Payment";
@@ -14570,6 +14571,24 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// 1:N business_unit_ccof_program_year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("business_unit_ccof_program_year")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Program_Year> Business_Unit_CcOf_Program_Year
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("business_unit_ccof_program_year", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("business_unit_ccof_program_year", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N business_unit_contacts
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("business_unit_contacts")]
@@ -14841,6 +14860,7 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_BasePayActivatedName = "ccof_basepayactivatedname";
 			public const string CcOf_BasePayEligible = "ccof_basepayeligible";
 			public const string CcOf_BasePayEligibleName = "ccof_basepayeligiblename";
+			public const string CcOf_CcOf_Program_Year_CcOf_Adjudication_ProgramYear = "ccof_ccof_program_year_ccof_adjudication_ProgramYear";
 			public const string CcOf_DM_SourceId = "ccof_dm_sourceid";
 			public const string CcOf_FirstSubmissionDate = "ccof_firstsubmissiondate";
 			public const string CcOf_FundingAgreementNumber = "ccof_fundingagreementnumber";
@@ -16564,6 +16584,25 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// N:1 ccof_ccof_program_year_ccof_adjudication_ProgramYear
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_programyear")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_ccof_program_year_ccof_adjudication_ProgramYear")]
+		public CCOF.Core.DataContext.CcOf_Program_Year CcOf_CcOf_Program_Year_CcOf_Adjudication_ProgramYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_ccof_program_year_ccof_adjudication_ProgramYear", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_ccof_program_year_ccof_adjudication_ProgramYear", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// N:1 lk_ccof_adjudication_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
@@ -16704,6 +16743,7 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_AdJ_CcFri_Facility_Organization = "ccof_adj_ccfri_facility_Organization";
 			public const string CcOf_Adjudication_CcFri_Facility_Facility = "ccof_adjudication_ccfri_facility_Facility";
 			public const string ReferencingCcOf_Adjudication_CcFri_Facility_Previous = "ccof_adjudication_ccfri_facility_Previous";
+			public const string CcOf_Adjudication_CcFri_Facility_PY = "ccof_adjudication_ccfri_facility_PY";
 			public const string CcOf_Adjudication_CcFri_Facility_UpdatedBy_AFs_Confirmed_SystemUser = "ccof_adjudication_ccfri_facility_updatedby_afs_confirmed_systemuser";
 			public const string CcOf_Adjudication_CcFri_FacilityId = "ccof_adjudication_ccfri_facilityid";
 			public const string Id = "ccof_adjudication_ccfri_facilityid";
@@ -23264,6 +23304,25 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// N:1 ccof_adjudication_ccfri_facility_PY
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_programyear")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_adjudication_ccfri_facility_PY")]
+		public CCOF.Core.DataContext.CcOf_Program_Year CcOf_Adjudication_CcFri_Facility_PY
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_adjudication_ccfri_facility_PY", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_adjudication_ccfri_facility_PY", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// N:1 ccof_adjudication_ccfri_facility_updatedby_afs_confirmed_systemuser
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_updatedby_afs_confirmed")]
@@ -23956,6 +24015,7 @@ namespace CCOF.Core.DataContext
 		{
 			public const string Business_Unit_CcOf_Application = "business_unit_ccof_application";
 			public const string CcOf_Adjudication_Application_CcOf_AppLIc = "CcOf_Adjudication_Application_CcOf_AppLIc";
+			public const string CcOf_Application_ProgramYear = "ccof_application_ProgramYear";
 			public const string CcOf_Application_Template_Version = "ccof_application_template_version";
 			public const string CcOf_ApplicationId = "ccof_applicationid";
 			public const string Id = "ccof_applicationid";
@@ -25806,6 +25866,25 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// N:1 ccof_application_ProgramYear
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_programyear")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_application_ProgramYear")]
+		public CCOF.Core.DataContext.CcOf_Program_Year CcOf_Application_ProgramYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_application_ProgramYear", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_application_ProgramYear", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// N:1 ccof_ccof_application_Organization_account
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_organization")]
@@ -25965,6 +26044,7 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_Assigned_Date = "ccof_assigned_date";
 			public const string CcOf_CcOf_Change_Request_Application_CcOf_AppL = "ccof_ccof_change_request_Application_ccof_appl";
 			public const string CcOf_CcOf_Change_Request_Organization = "ccof_ccof_change_request_Organization";
+			public const string CcOf_CcOf_Change_Request_Program_Year_CcOf_Pro = "ccof_ccof_change_request_program_year_ccof_pro";
 			public const string CcOf_CcOfDBUpdated = "ccof_ccofdbupdated";
 			public const string CcOf_CcOfDBUpdatedName = "ccof_ccofdbupdatedname";
 			public const string CcOf_Change_RequestId = "ccof_change_requestid";
@@ -27953,6 +28033,25 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// N:1 ccof_ccof_change_request_program_year_ccof_pro
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_program_year")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_ccof_change_request_program_year_ccof_pro")]
+		public CCOF.Core.DataContext.CcOf_Program_Year CcOf_CcOf_Change_Request_Program_Year_CcOf_Pro
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_ccof_change_request_program_year_ccof_pro", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_ccof_change_request_program_year_ccof_pro", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// N:1 lk_ccof_change_request_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
@@ -28058,6 +28157,1099 @@ namespace CCOF.Core.DataContext
                         Attributes["ccof_change_requestid"] = base.Id;
                         break;
                     case "ccof_change_requestid":
+                        var id = (System.Nullable<System.Guid>) value;
+                        if(id == null){ continue; }
+                        base.Id = id.Value;
+                        Attributes[name] = base.Id;
+                        break;
+                    case "formattedvalues":
+                        // Add Support for FormattedValues
+                        FormattedValues.AddRange((Microsoft.Xrm.Sdk.FormattedValueCollection)value);
+                        break;
+                    default:
+                        Attributes[name] = value;
+                        break;
+                }
+            }
+		}
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("ccof_program_year")]
+	public partial class CcOf_Program_Year : Microsoft.Xrm.Sdk.Entity
+	{
+		
+		/// <summary>
+		/// Available fields, a the time of codegen, for the ccof_program_year entity
+		/// </summary>
+		public partial class Fields
+		{
+			public const string Business_Unit_CcOf_Program_Year = "business_unit_ccof_program_year";
+			public const string CcOf_Adjudication_CcFri_Facility_PY = "CcOf_Adjudication_CcFri_Facility_PY";
+			public const string CcOf_Application_ProgramYear = "CcOf_Application_ProgramYear";
+			public const string CcOf_CcFri_Funding_Guidelines = "ccof_ccfri_funding_guidelines";
+			public const string CcOf_CcOf_Change_Request_Program_Year_CcOf_Pro = "CcOf_CcOf_Change_Request_Program_Year_CcOf_Pro";
+			public const string CcOf_CcOf_Program_Year_CcOf_Adjudication_ProgramYear = "CcOf_CcOf_Program_Year_CcOf_Adjudication_ProgramYear";
+			public const string CcOf_DecLaRatioNbStart = "ccof_declarationbstart";
+			public const string CcOf_ECEWe_Funding_Guidelines = "ccof_ecewe_funding_guidelines";
+			public const string CcOf_End_Date = "ccof_end_date";
+			public const string CcOf_IntakePeriodEnd = "ccof_intakeperiodend";
+			public const string CcOf_IntakePeriodStart = "ccof_intakeperiodstart";
+			public const string CcOf_Name = "ccof_name";
+			public const string CcOf_OfM_Payment_CcOf_Program_Year_CcOf_Program_Year = "CcOf_OfM_Payment_CcOf_Program_Year_CcOf_Program_Year";
+			public const string CcOf_PreviousYear = "ccof_previousyear";
+			public const string CcOf_PreviousYearName = "ccof_previousyearname";
+			public const string ReferencingCcOf_Program_Year_PreviousYear = "ccof_program_year_PreviousYear";
+			public const string CcOf_Program_YearId = "ccof_program_yearid";
+			public const string Id = "ccof_program_yearid";
+			public const string CcOf_ProgramYearNumber = "ccof_programyearnumber";
+			public const string CcOf_Start_Date = "ccof_start_date";
+			public const string CreatedBy = "createdby";
+			public const string CreatedByName = "createdbyname";
+			public const string CreatedByYomiName = "createdbyyominame";
+			public const string CreatedOn = "createdon";
+			public const string CreatedOnBehalfBy = "createdonbehalfby";
+			public const string CreatedOnBehalfByName = "createdonbehalfbyname";
+			public const string CreatedOnBehalfByYomiName = "createdonbehalfbyyominame";
+			public const string ImportSequenceNumber = "importsequencenumber";
+			public const string Lk_CcOf_Program_Year_CreatedBy = "lk_ccof_program_year_createdby";
+			public const string Lk_CcOf_Program_Year_CreatedOnBehalfBy = "lk_ccof_program_year_createdonbehalfby";
+			public const string Lk_CcOf_Program_Year_ModifiedBy = "lk_ccof_program_year_modifiedby";
+			public const string Lk_CcOf_Program_Year_ModifiedOnBehalfBy = "lk_ccof_program_year_modifiedonbehalfby";
+			public const string ModifiedBy = "modifiedby";
+			public const string ModifiedByName = "modifiedbyname";
+			public const string ModifiedByYomiName = "modifiedbyyominame";
+			public const string ModifiedOn = "modifiedon";
+			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string ModifiedOnBehalfByName = "modifiedonbehalfbyname";
+			public const string ModifiedOnBehalfByYomiName = "modifiedonbehalfbyyominame";
+			public const string OverriddenCreatedOn = "overriddencreatedon";
+			public const string OwnerId = "ownerid";
+			public const string OwnerIdName = "owneridname";
+			public const string OwnerIdYomiName = "owneridyominame";
+			public const string OwningBusinessUnit = "owningbusinessunit";
+			public const string OwningBusinessUnitName = "owningbusinessunitname";
+			public const string OwningTeam = "owningteam";
+			public const string OwningUser = "owninguser";
+			public const string ReferencedCcOf_Program_Year_PreviousYear = "ReferencedCcOf_Program_Year_PreviousYear";
+			public const string StateCode = "statecode";
+			public const string StateCodename = "statecodename";
+			public const string StatusCode = "statuscode";
+			public const string StatusCodename = "statuscodename";
+			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
+			public const string User_CcOf_Program_Year = "user_ccof_program_year";
+			public const string UtcConversionTimeZoneCode = "utcconversiontimezonecode";
+			public const string VersionNumber = "versionnumber";
+		}
+		
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public CcOf_Program_Year(System.Guid id) : 
+				base(EntityLogicalName, id)
+		{
+		}
+		
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public CcOf_Program_Year(string keyName, object keyValue) : 
+				base(EntityLogicalName, keyName, keyValue)
+		{
+		}
+		
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public CcOf_Program_Year(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
+				base(EntityLogicalName, keyAttributes)
+		{
+		}
+		
+		public const string AlternateKeys = "ccof_programyearnumber";
+		
+		/// <summary>
+		/// Default Constructor.
+		/// </summary>
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public CcOf_Program_Year() : 
+				base(EntityLogicalName)
+		{
+		}
+		
+		public const string PrimaryIdAttribute = "ccof_program_yearid";
+		
+		public const string PrimaryNameAttribute = "ccof_name";
+		
+		public const string EntitySchemaName = "ccof_Program_Year";
+		
+		public const string EntityLogicalName = "ccof_program_year";
+		
+		public const string EntityLogicalCollectionName = "ccof_program_years";
+		
+		public const string EntitySetName = "ccof_program_years";
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ccfri_funding_guidelines")]
+		public string CcOf_CcFri_Funding_Guidelines
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_ccfri_funding_guidelines");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_ccfri_funding_guidelines", value);
+			}
+		}
+		
+		/// <summary>
+		/// The switch-over date when the providers can start to submit the Declaration B
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_declarationbstart")]
+		public System.Nullable<System.DateTime> CcOf_DecLaRatioNbStart
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_declarationbstart");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_declarationbstart", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ecewe_funding_guidelines")]
+		public string CcOf_ECEWe_Funding_Guidelines
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_ecewe_funding_guidelines");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_ecewe_funding_guidelines", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_end_date")]
+		public System.Nullable<System.DateTime> CcOf_End_Date
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_end_date");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_end_date", value);
+			}
+		}
+		
+		/// <summary>
+		/// The date when renewing applications are longer accepted for the program year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_intakeperiodend")]
+		public System.Nullable<System.DateTime> CcOf_IntakePeriodEnd
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_intakeperiodend");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_intakeperiodend", value);
+			}
+		}
+		
+		/// <summary>
+		/// The date when new applications can begin for the program year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_intakeperiodstart")]
+		public System.Nullable<System.DateTime> CcOf_IntakePeriodStart
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_intakeperiodstart");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_intakeperiodstart", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_name")]
+		public string CcOf_Name
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_name");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_name", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_previousyear")]
+		public Microsoft.Xrm.Sdk.EntityReference CcOf_PreviousYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ccof_previousyear");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_previousyear", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_previousyearname")]
+		public string CcOf_PreviousYearName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ccof_previousyear"))
+				{
+					return this.FormattedValues["ccof_previousyear"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for entity instances
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_program_yearid")]
+		public System.Nullable<System.Guid> CcOf_Program_YearId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.Guid>>("ccof_program_yearid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_program_yearid", value);
+				if (value.HasValue)
+				{
+					base.Id = value.Value;
+				}
+				else
+				{
+					base.Id = System.Guid.Empty;
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_program_yearid")]
+		public override System.Guid Id
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return base.Id;
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.CcOf_Program_YearId = value;
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_programyearnumber")]
+		public System.Nullable<int> CcOf_ProgramYearNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("ccof_programyearnumber");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_programyearnumber", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_start_date")]
+		public System.Nullable<System.DateTime> CcOf_Start_Date
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_start_date");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_start_date", value);
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier of the user who created the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
+		public Microsoft.Xrm.Sdk.EntityReference CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdby");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyname")]
+		public string CreatedByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdby"))
+				{
+					return this.FormattedValues["createdby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyyominame")]
+		public string CreatedByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdby"))
+				{
+					return this.FormattedValues["createdby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Date and time when the record was created.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdon")]
+		public System.Nullable<System.DateTime> CreatedOn
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("createdon");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier of the delegate user who created the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
+		public Microsoft.Xrm.Sdk.EntityReference CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdonbehalfby");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("createdonbehalfby", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyname")]
+		public string CreatedOnBehalfByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdonbehalfby"))
+				{
+					return this.FormattedValues["createdonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyyominame")]
+		public string CreatedOnBehalfByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdonbehalfby"))
+				{
+					return this.FormattedValues["createdonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Sequence number of the import that created this record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("importsequencenumber")]
+		public System.Nullable<int> ImportSequenceNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("importsequencenumber");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("importsequencenumber", value);
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier of the user who modified the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
+		public Microsoft.Xrm.Sdk.EntityReference ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedby");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyname")]
+		public string ModifiedByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedby"))
+				{
+					return this.FormattedValues["modifiedby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyyominame")]
+		public string ModifiedByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedby"))
+				{
+					return this.FormattedValues["modifiedby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Date and time when the record was modified.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedon")]
+		public System.Nullable<System.DateTime> ModifiedOn
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("modifiedon");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier of the delegate user who modified the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
+		public Microsoft.Xrm.Sdk.EntityReference ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedonbehalfby");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("modifiedonbehalfby", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyname")]
+		public string ModifiedOnBehalfByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedonbehalfby"))
+				{
+					return this.FormattedValues["modifiedonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyyominame")]
+		public string ModifiedOnBehalfByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedonbehalfby"))
+				{
+					return this.FormattedValues["modifiedonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Date and time that the record was migrated.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("overriddencreatedon")]
+		public System.Nullable<System.DateTime> OverriddenCreatedOn
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("overriddencreatedon");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("overriddencreatedon", value);
+			}
+		}
+		
+		/// <summary>
+		/// Owner Id
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownerid")]
+		public Microsoft.Xrm.Sdk.EntityReference OwnerId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ownerid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ownerid", value);
+			}
+		}
+		
+		/// <summary>
+		/// Name of the owner
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridname")]
+		public string OwnerIdName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ownerid"))
+				{
+					return this.FormattedValues["ownerid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Yomi name of the owner
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridyominame")]
+		public string OwnerIdYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ownerid"))
+				{
+					return this.FormattedValues["ownerid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the business unit that owns the record
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningBusinessUnit
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningbusinessunit");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("owningbusinessunit", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunitname")]
+		public string OwningBusinessUnitName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("owningbusinessunit"))
+				{
+					return this.FormattedValues["owningbusinessunit"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the team that owns the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningteam")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningTeam
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningteam");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the user that owns the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningUser
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owninguser");
+			}
+		}
+		
+		/// <summary>
+		/// Status of the Program Year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
+		public virtual CcOf_Program_Year_StateCode? StateCode
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((CcOf_Program_Year_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("statecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecodename")]
+		public string StateCodename
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("statecode"))
+				{
+					return this.FormattedValues["statecode"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Reason for the status of the Program Year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
+		public virtual CcOf_Program_Year_StatusCode? StatusCode
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((CcOf_Program_Year_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("statuscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscodename")]
+		public string StatusCodename
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("statuscode"))
+				{
+					return this.FormattedValues["statuscode"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// For internal use only.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timezoneruleversionnumber")]
+		public System.Nullable<int> TimeZoneRuleVersionNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("timezoneruleversionnumber");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("timezoneruleversionnumber", value);
+			}
+		}
+		
+		/// <summary>
+		/// Time zone code that was in use when the record was created.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("utcconversiontimezonecode")]
+		public System.Nullable<int> UtcConversionTimeZoneCode
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("utcconversiontimezonecode");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("utcconversiontimezonecode", value);
+			}
+		}
+		
+		/// <summary>
+		/// Version Number
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("versionnumber")]
+		public System.Nullable<long> VersionNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// 1:N ccof_adjudication_ccfri_facility_PY
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_adjudication_ccfri_facility_PY")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility> CcOf_Adjudication_CcFri_Facility_PY
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility>("ccof_adjudication_ccfri_facility_PY", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility>("ccof_adjudication_ccfri_facility_PY", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N ccof_application_ProgramYear
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_application_ProgramYear")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Application> CcOf_Application_ProgramYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Application>("ccof_application_ProgramYear", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Application>("ccof_application_ProgramYear", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N ccof_ccof_change_request_program_year_ccof_pro
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_ccof_change_request_program_year_ccof_pro")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Change_Request> CcOf_CcOf_Change_Request_Program_Year_CcOf_Pro
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Change_Request>("ccof_ccof_change_request_program_year_ccof_pro", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Change_Request>("ccof_ccof_change_request_program_year_ccof_pro", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N ccof_ccof_program_year_ccof_adjudication_ProgramYear
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_ccof_program_year_ccof_adjudication_ProgramYear")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Adjudication> CcOf_CcOf_Program_Year_CcOf_Adjudication_ProgramYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Adjudication>("ccof_ccof_program_year_ccof_adjudication_ProgramYear", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Adjudication>("ccof_ccof_program_year_ccof_adjudication_ProgramYear", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N ccof_ofm_payment_ccof_program_year_ccof_program_year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_ofm_payment_ccof_program_year_ccof_program_year")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.OfM_Payment> CcOf_OfM_Payment_CcOf_Program_Year_CcOf_Program_Year
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.OfM_Payment>("ccof_ofm_payment_ccof_program_year_ccof_program_year", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.OfM_Payment>("ccof_ofm_payment_ccof_program_year_ccof_program_year", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N ccof_program_year_PreviousYear
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_program_year_PreviousYear", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Program_Year> ReferencedCcOf_Program_Year_PreviousYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_program_year_PreviousYear", Microsoft.Xrm.Sdk.EntityRole.Referenced);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_program_year_PreviousYear", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 business_unit_ccof_program_year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("business_unit_ccof_program_year")]
+		public CCOF.Core.DataContext.BusinessUnit Business_Unit_CcOf_Program_Year
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.BusinessUnit>("business_unit_ccof_program_year", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.BusinessUnit>("business_unit_ccof_program_year", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 ccof_program_year_PreviousYear
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_previousyear")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_program_year_PreviousYear", Microsoft.Xrm.Sdk.EntityRole.Referencing)]
+		public CCOF.Core.DataContext.CcOf_Program_Year ReferencingCcOf_Program_Year_PreviousYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_program_year_PreviousYear", Microsoft.Xrm.Sdk.EntityRole.Referencing);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_program_year_PreviousYear", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ccof_program_year_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_createdby")]
+		public CCOF.Core.DataContext.SystemUser Lk_CcOf_Program_Year_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ccof_program_year_createdby", null);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ccof_program_year_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_createdonbehalfby")]
+		public CCOF.Core.DataContext.SystemUser Lk_CcOf_Program_Year_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ccof_program_year_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ccof_program_year_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ccof_program_year_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_modifiedby")]
+		public CCOF.Core.DataContext.SystemUser Lk_CcOf_Program_Year_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ccof_program_year_modifiedby", null);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ccof_program_year_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_modifiedonbehalfby")]
+		public CCOF.Core.DataContext.SystemUser Lk_CcOf_Program_Year_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ccof_program_year_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ccof_program_year_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 user_ccof_program_year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_ccof_program_year")]
+		public CCOF.Core.DataContext.SystemUser User_CcOf_Program_Year
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("user_ccof_program_year", null);
+			}
+		}
+		
+		/// <summary>
+		/// Constructor for populating via LINQ queries given a LINQ anonymous type
+		/// <param name="anonymousType">LINQ anonymous type.</param>
+		/// </summary>
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public CcOf_Program_Year(object anonymousType) : 
+				this()
+		{
+            foreach (var p in anonymousType.GetType().GetProperties())
+            {
+                var value = p.GetValue(anonymousType, null);
+                var name = p.Name.ToLower();
+            
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                {
+                    value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
+                    name = name.Remove(name.Length - "enum".Length);
+                }
+            
+                switch (name)
+                {
+                    case "id":
+                        base.Id = (System.Guid)value;
+                        Attributes["ccof_program_yearid"] = base.Id;
+                        break;
+                    case "ccof_program_yearid":
                         var id = (System.Nullable<System.Guid>) value;
                         if(id == null){ continue; }
                         base.Id = id.Value;
@@ -38948,6 +40140,7 @@ namespace CCOF.Core.DataContext
 			public const string Business_Unit_OfM_Payment = "business_unit_ofm_payment";
 			public const string CcOf_Monthly_Enrollment_Report = "ccof_monthly_enrollment_report";
 			public const string CcOf_Monthly_Enrollment_ReportName = "ccof_monthly_enrollment_reportname";
+			public const string CcOf_OfM_Payment_CcOf_Program_Year_CcOf_Program_Year = "ccof_ofm_payment_ccof_program_year_ccof_program_year";
 			public const string CcOf_Program_Year = "ccof_program_year";
 			public const string CcOf_Program_YearName = "ccof_program_yearname";
 			public const string CreatedBy = "createdby";
@@ -40404,6 +41597,25 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// N:1 ccof_ofm_payment_ccof_program_year_ccof_program_year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_program_year")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_ofm_payment_ccof_program_year_ccof_program_year")]
+		public CCOF.Core.DataContext.CcOf_Program_Year CcOf_OfM_Payment_CcOf_Program_Year_CcOf_Program_Year
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_ofm_payment_ccof_program_year_ccof_program_year", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.CcOf_Program_Year>("ccof_ofm_payment_ccof_program_year_ccof_program_year", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// N:1 lk_ofm_payment_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
@@ -41713,6 +42925,10 @@ namespace CCOF.Core.DataContext
 			public const string Lk_CcOf_Change_Request_CreatedOnBehalfBy = "Lk_CcOf_Change_Request_CreatedOnBehalfBy";
 			public const string Lk_CcOf_Change_Request_ModifiedBy = "Lk_CcOf_Change_Request_ModifiedBy";
 			public const string Lk_CcOf_Change_Request_ModifiedOnBehalfBy = "Lk_CcOf_Change_Request_ModifiedOnBehalfBy";
+			public const string Lk_CcOf_Program_Year_CreatedBy = "Lk_CcOf_Program_Year_CreatedBy";
+			public const string Lk_CcOf_Program_Year_CreatedOnBehalfBy = "Lk_CcOf_Program_Year_CreatedOnBehalfBy";
+			public const string Lk_CcOf_Program_Year_ModifiedBy = "Lk_CcOf_Program_Year_ModifiedBy";
+			public const string Lk_CcOf_Program_Year_ModifiedOnBehalfBy = "Lk_CcOf_Program_Year_ModifiedOnBehalfBy";
 			public const string Lk_Contact_CreatedOnBehalfBy = "Lk_Contact_CreatedOnBehalfBy";
 			public const string Lk_Contact_ModifiedOnBehalfBy = "Lk_Contact_ModifiedOnBehalfBy";
 			public const string Lk_ContactBase_CreatedBy = "Lk_ContactBase_CreatedBy";
@@ -41833,6 +43049,7 @@ namespace CCOF.Core.DataContext
 			public const string User_CcOf_Adjudication_CcFri_Facility = "User_CcOf_Adjudication_CcFri_Facility";
 			public const string User_CcOf_Application = "User_CcOf_Application";
 			public const string User_CcOf_Change_Request = "User_CcOf_Change_Request";
+			public const string User_CcOf_Program_Year = "User_CcOf_Program_Year";
 			public const string User_Email = "User_Email";
 			public const string User_OfM_Payment = "User_OfM_Payment";
 			public const string User_OfM_Payment_File_Exchange = "User_OfM_Payment_File_Exchange";
@@ -46456,6 +47673,78 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// 1:N lk_ccof_program_year_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_createdby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Program_Year> Lk_CcOf_Program_Year_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_ccof_program_year_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Program_Year> Lk_CcOf_Program_Year_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_ccof_program_year_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_modifiedby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Program_Year> Lk_CcOf_Program_Year_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_ccof_program_year_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ccof_program_year_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Program_Year> Lk_CcOf_Program_Year_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("lk_ccof_program_year_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N lk_contact_createdonbehalfby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_contact_createdonbehalfby")]
@@ -46992,6 +48281,24 @@ namespace CCOF.Core.DataContext
 			set
 			{
 				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Change_Request>("user_ccof_change_request", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N user_ccof_program_year
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_ccof_program_year")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Program_Year> User_CcOf_Program_Year
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("user_ccof_program_year", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Program_Year>("user_ccof_program_year", null, value);
 			}
 		}
 		

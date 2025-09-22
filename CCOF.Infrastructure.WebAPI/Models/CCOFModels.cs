@@ -327,4 +327,17 @@ namespace CCOF.Infrastructure.WebAPI.Models
 
     }
 
+    public class D365PaymentLine : OfM_Payment
+    {
+        public new string ofm_invoice_number { get; set; } = string.Empty;
+        public new D365ProgramYear? ofm_program_year { get; set; }
+        public new string ofm_supplierid { get; set; } = string.Empty;
+        public new string ofm_siteid { get; set; } = string.Empty;
+        public new decimal? ofm_amount { get; set; }
+    }
+
+    public class D365ProgramYear : CcOf_Program_Year
+    {
+        public new string ofm_financial_year { get; set; } = string.Empty;
+    }
 }

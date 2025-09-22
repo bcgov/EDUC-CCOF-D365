@@ -196,7 +196,9 @@ public record BCCASApi
     public required string transactionType { get; set; }
     public required string batchType { get; set; }
     public required string delimiter { get; set; }
- 
+    public required InvoiceHeader InvoiceHeader { get; set; }
+    public required InvoiceLines InvoiceLines { get; set; }
+
 }
 
 

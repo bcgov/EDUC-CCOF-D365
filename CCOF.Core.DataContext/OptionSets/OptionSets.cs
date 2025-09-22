@@ -3183,6 +3183,50 @@ namespace CCOF.Core.DataContext
 		SupportingDocument = 100000003,
 	}
 	
+	/// <summary>
+	/// Status of the Program Year
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Program_Year_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Program Year
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Program_Year_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Current", 0, "#0000ff")]
+		Current = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Far Future", 3, "#0000ff")]
+		FarFuture = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Future", 1, "#0000ff")]
+		Future = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Historical", 2, "#0000ff")]
+		Historical = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 4, "#0000ff")]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_ProgramPrioritization
 	{

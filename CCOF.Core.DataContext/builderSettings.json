@@ -129,6 +129,7 @@
     "ccof_adjudication_ccfri_facility",
     "ccof_application",
     "ccof_change_request",
+    "ccof_program_year",
     "contact",
     "email",
     "ofm_payment",

@@ -117,6 +117,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Program_Year"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Program_Year> CcOf_Program_YearSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Program_Year>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.Contact"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.Contact> ContactSet

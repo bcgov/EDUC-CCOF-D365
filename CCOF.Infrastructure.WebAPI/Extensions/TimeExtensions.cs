@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using CCOF.Core.DataContext;
 using CCOF.Infrastructure.WebAPI.Models;
 using System.Runtime.InteropServices;
 
@@ -279,6 +279,16 @@ public static class TimeExtensions
         return futureDate;
     }
 
-   
-   
+    public static Guid MatchFiscalYear(this DateTime currentDate, List<D365ProgramYear> fiscalYears)
+    {
+        CcOf_Program_Year? matchingFiscalYear = fiscalYears.FirstOrDefault(fiscalYear => currentDate >= ((DateTime)fiscalYear.CcOf_Start_Date).ToLocalPST() && currentDate <= ((DateTime)fiscalYear.CcOf_End_Date).ToLocalPST());
+
+        if (matchingFiscalYear == null)
+        {
+            return Guid.Empty;
+        }
+
+        return matchingFiscalYear!.CcOf_Program_YearId!.Value;
+    }
+
 }

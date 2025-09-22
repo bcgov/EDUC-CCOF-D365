@@ -36,6 +36,7 @@ ccof_adjudication|
 ccof_adjudication_ccfri_facility|
 ccof_application|
 ccof_change_request|
+ccof_program_year|
 contact|
 email|
 ofm_payment|
@@ -155,7 +156,7 @@ VoiceMail</TokenCapitalizationOverrides>
   <Namespace>CCOF.Core.DataContext</Namespace>
   <ServiceContextName>DataverseContext</ServiceContextName>
   <SuppressGeneratedCodeAttribute>true</SuppressGeneratedCodeAttribute>
-  <SettingsVersion>2.2024.5.16</SettingsVersion>
+  <SettingsVersion>2.2025.8.26</SettingsVersion>
   <UpdateBuilderSettingsJson>true</UpdateBuilderSettingsJson>
   <Version>2.2025.8.26</Version>
 </Config>

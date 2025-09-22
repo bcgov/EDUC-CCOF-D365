@@ -1,5 +1,4 @@
-﻿
-using HandlebarsDotNet;
+﻿using HandlebarsDotNet;
 using Microsoft.Extensions.Options;
 using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Messages;
@@ -8,19 +7,8 @@ using CCOF.Infrastructure.WebAPI.Services.AppUsers;
 using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 using System.Text.Json.Nodes;
 using System.Text;
-//using ECC.Core.DataContext;
 using System.Text.Json;
-using System.Net;
 using System.Text.RegularExpressions;
-using CCOF.Core.DataContext;
-using CCOF.Infrastructure.WebAPI.Extensions;
-using CCOF.Infrastructure.WebAPI.Messages;
-using CCOF.Infrastructure.WebAPI.Models;
-using CCOF.Infrastructure.WebAPI.Services.AppUsers;
-using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
-using CCOF.Infrastructure.WebAPI.Services.Processes;
-using System;
-using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using CCOF.Core.DataContext;
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments;
 
@@ -140,7 +128,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     <attribute name="ofm_revised_effective_date" />
                         <order attribute="ofm_name" descending="false" />
                          <filter type="and">
-                        <condition attribute="statuscode" operator="eq" value="{(int)ofm_payment_StatusCode.ApprovedforPayment}" />
+                    <condition attribute="owningbusinessunitname" operator="like" value="%CCOF%" />
+                        <condition attribute="statuscode" operator="eq" value="{(int)OfM_Payment_StatusCode.ApprovedforPayment}" />
                         <condition attribute="ofm_supplierid" operator="not-null" />
                         <condition attribute="ofm_siteid" operator="not-null" />
                         <condition attribute="ofm_payment_method" operator="not-null" />
@@ -169,35 +158,35 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     """
             ;
             var requestUri = $"""
-                         ofm_payments?$select=ofm_paymentid,ofm_name,createdon,ofm_amount,ofm_description,ofm_effective_date,_ofm_fiscal_year_value,ofm_revised_invoice_received_date,ofm_revised_invoice_date,ofm_revised_effective_date,_ofm_funding_value,ofm_invoice_line_number,_owningbusinessunit_value,ofm_payment_type,ofm_remittance_message,statuscode,ofm_invoice_number,_ofm_application_value,ofm_siteid,ofm_payment_method,ofm_supplierid,ofm_invoice_received_date,ofm_invoice_date&$expand=ofm_fiscal_year($select=ofm_financial_year),ofm_application($select=ofm_application),ofm_facility($select=accountnumber,name),ofm_funding($select=ofm_cohort)&$filter=(statuscode eq {(int)ofm_payment_StatusCode.ApprovedforPayment} and ofm_supplierid ne null and ofm_siteid ne null and ofm_payment_method ne null and ofm_amount ne null and (ofm_invoice_date eq '{localDateOnlyPST}' or ofm_revised_invoice_date eq '{localDateOnlyPST}')) and (ofm_application/ofm_applicationid ne null)and (ofm_funding/ofm_fundingid ne null)&$orderby=ofm_name asc
+                         ofm_payments?$select=ofm_paymentid,ofm_name,createdon,ofm_amount,ofm_description,ofm_effective_date,_ofm_fiscal_year_value,ofm_revised_invoice_received_date,ofm_revised_invoice_date,ofm_revised_effective_date,_ofm_funding_value,ofm_invoice_line_number,_owningbusinessunit_value,ofm_payment_type,ofm_remittance_message,statuscode,ofm_invoice_number,_ofm_application_value,ofm_siteid,ofm_payment_method,ofm_supplierid,ofm_invoice_received_date,ofm_invoice_date&$expand=ofm_fiscal_year($select=ofm_financial_year),ofm_application($select=ofm_application),ofm_facility($select=accountnumber,name),ofm_funding($select=ofm_cohort)&$filter=(contains(owningbusinessunitname, 'CCOF') and statuscode eq {(int)OfM_Payment_StatusCode.ApprovedforPayment} and ofm_supplierid ne null and ofm_siteid ne null and ofm_payment_method ne null and ofm_amount ne null and (ofm_invoice_date eq '{localDateOnlyPST}' or ofm_revised_invoice_date eq '{localDateOnlyPST}')) and (ofm_application/ofm_applicationid ne null)and (ofm_funding/ofm_fundingid ne null)&$orderby=ofm_name asc
                          """;
 
             return requestUri;
         }
     }
 
-    public string RequestACKCodeUri
-    {
-        get
-        {
-            // For reference only
-            var fetchXml = $"""
-                    <fetch>
-                      <entity name="ofm_ack_codes">
-                        <attribute name="ofm_ack_number" />
-                        <attribute name="ofm_cohort" />
-                        <attribute name="ofm_payment_type" />
-                      </entity>
-                    </fetch>
-                    """;
+    //public string RequestACKCodeUri
+    //{
+    //    get
+    //    {
+    //        // For reference only
+    //        var fetchXml = $"""
+    //                <fetch>
+    //                  <entity name="ofm_ack_codes">
+    //                    <attribute name="ofm_ack_number" />
+    //                    <attribute name="ofm_cohort" />
+    //                    <attribute name="ofm_payment_type" />
+    //                  </entity>
+    //                </fetch>
+    //                """;
 
-            var requestUri = $"""
-                         ofm_ack_codeses?$select=ofm_ack_number,ofm_cohort,ofm_payment_type
-                         """;
+    //        var requestUri = $"""
+    //                     ofm_ack_codeses?$select=ofm_ack_number,ofm_cohort,ofm_payment_type
+    //                     """;
 
-            return requestUri;
-        }
-    }
+    //        return requestUri;
+    //    }
+    //}
 
     public async Task<ProcessData> GetDataAsync()
     {
@@ -311,7 +300,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         var paymentData = await GetPaymentLineData();
         serializedPaymentData = JsonSerializer.Deserialize<List<D365PaymentLine>>(paymentData.Data.ToString());
         var grouppayment = serializedPaymentData?.GroupBy(p => p.ofm_invoice_number).ToList();
-        var fiscalyear = serializedPaymentData?.FirstOrDefault()?.ofm_fiscal_year.ofm_financial_year;
+        var fiscalyear = serializedPaymentData?.FirstOrDefault()?.ofm_program_year.ofm_financial_year;
 
         #endregion
 
@@ -319,16 +308,16 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         var fiscalYearsData = await GetAllFiscalYearsDataAsync();
 
-        List<D365FiscalYear> fiscalYears = [.. JsonSerializer.Deserialize<List<D365FiscalYear>>(fiscalYearsData.Data)];
+        List<D365ProgramYear> fiscalYears = [.. JsonSerializer.Deserialize<List<D365ProgramYear>>(fiscalYearsData.Data)];
         _currentFiscalYearId = DateTime.UtcNow.ToLocalPST().Date.MatchFiscalYear(fiscalYears).ToString();
         string oracleBatchName;
         var latestPaymentFileExchangeData = await GetDataAsync();
-        var serializedPFXData = JsonSerializer.Deserialize<List<ofm_payment_file_exchange>>(latestPaymentFileExchangeData.Data.ToString());
+        var serializedPFXData = JsonSerializer.Deserialize<List<OfM_Payment_File_Exchange>>(latestPaymentFileExchangeData.Data.ToString());
 
-        if (serializedPFXData is not null && serializedPFXData.Count != 0 && serializedPFXData[0].ofm_batch_number != null)
+        if (serializedPFXData is not null && serializedPFXData.Count != 0 && serializedPFXData[0].OfM_Batch_Number != null)
         {
-            _oracleBatchNumber = Convert.ToInt32(serializedPFXData[0].ofm_oracle_batch_name) + 1;
-            _cgiBatchNumber = (Convert.ToInt32(serializedPFXData[0].ofm_batch_number)).ToString("D9").Substring(0, 9);
+            _oracleBatchNumber = Convert.ToInt32(serializedPFXData[0].OfM_Oracle_Batch_Name) + 1;
+            _cgiBatchNumber = (Convert.ToInt32(serializedPFXData[0].OfM_Batch_Number)).ToString("D9").Substring(0, 9);
             oracleBatchName = _BCCASApi.clientCode + fiscalyear?.Substring(2) + "CCOF" + (_oracleBatchNumber).ToString("D5");
         }
         else
@@ -341,7 +330,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         #region Step 0.3: Get ACK Codes
 
-        IEnumerable<ofm_ack_codes> ackCode = await LoadACKCodeAsync();
+        //IEnumerable<ofm_ack_codes> ackCode = await LoadACKCodeAsync();
 
         #endregion
 
@@ -356,26 +345,26 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         // add invoice header for each organization and invoice lines for each facility
         foreach (var headeritem in grouppayment)
         {
-            var pay_method = (ecc_payment_method)headeritem.First().ofm_payment_method;
-            var paymentType = (ecc_payment_type)headeritem.First().ofm_payment_type; //from payment line
-            var cohort = headeritem?.First().ofm_funding?.ofm_cohort; //from funding
-            string ackNumber = string.Empty;
-            var ackCodeList = ackCode?.Where(ack => ack.ofm_payment_type == paymentType).ToList();
-            if (ackCodeList.Any() && ackCodeList.Count > 1)
-            {
-                ackNumber = ackCodeList.Where(code => code.ofm_cohort == cohort).Select(code => code.ofm_ack_number).FirstOrDefault();
-            }
-            else
-            {
-                ackNumber = ackCodeList.Select(code => code.ofm_ack_number).FirstOrDefault();
-            }
+            var pay_method = (ECc_Payment_Method)headeritem.First().OfM_Payment_Method;
+            var paymentType = (ECc_Payment_Type)headeritem.First().OfM_Payment_Type; //from payment line
+            //var cohort = headeritem?.First().ofm_funding?.ofm_cohort; //from funding
+            //string ackNumber = string.Empty;
+            //var ackCodeList = ackCode?.Where(ack => ack.ofm_payment_type == paymentType).ToList();
+            //if (ackCodeList.Any() && ackCodeList.Count > 1)
+            //{
+            //    ackNumber = ackCodeList.Where(code => code.ofm_cohort == cohort).Select(code => code.ofm_ack_number).FirstOrDefault();
+            //}
+            //else
+            //{
+            //    ackNumber = ackCodeList.Select(code => code.ofm_ack_number).FirstOrDefault();
+            //}
             double invoiceamount = 0.00;
             List<InvoiceLines> invoiceLines = [];
 
             foreach (var lineitem in headeritem.Select((item, i) => (item, i)))
             {
                 invoiceamount = invoiceamount + Convert.ToDouble(lineitem.item.ofm_amount);//line amount should come from funding
-                var paytype = lineitem.item.ofm_payment_typename;
+                var paytype = lineitem.item.OfM_Payment_TypeName;
                 invoiceLines.Add(new InvoiceLines
                 {
                     feederNumber = _BCCASApi.feederNumber,// Static value:3540
@@ -389,10 +378,10 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     committmentLine = _BCCASApi.InvoiceLines.committmentLine,//Static value:0000
                     lineAmount = (lineitem.item.ofm_amount < 0 ? "-" : "") + Math.Abs(lineitem.item.ofm_amount.Value).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture).PadLeft(line.FieldLength("lineAmount") - (lineitem.item.ofm_amount < 0 ? 1 : 0), '0'),// come from split funding amount per facility
                     lineCode = (lineitem.item.ofm_amount > 0 ? "D" : "C"),//if it is positive then line code is Debit otherwise credit
-                    //distributionACK = _BCCASApi.InvoiceLines.distributionACK.PadRight(line.FieldLength("distributionACK")),// using test data shared by CAS,should be changed for prod
-                    distributionACK = ackNumber.PadRight(line.FieldLength("distributionACK")), //fetching from ACK Codes from dataverse based on payment type and cohort
-                    lineDescription = (lineitem.item.ofm_payment_type).ToString().PadRight(line.FieldLength("lineDescription")), // Pouplate extra info from facility/funding amount
-                    effectiveDate = lineitem.item.ofm_revised_effective_date?.ToString("yyyyMMdd") ?? lineitem.item.ofm_effective_date?.ToString("yyyyMMdd"),//same as invoice date
+                    distributionACK = _BCCASApi.InvoiceLines.distributionACK.PadRight(line.FieldLength("distributionACK")),// using test data shared by CAS,should be changed for prod
+                    //distributionACK = ackNumber.PadRight(line.FieldLength("distributionACK")), //fetching from ACK Codes from dataverse based on payment type and cohort
+                    lineDescription = (lineitem.item.OfM_Payment_Type).ToString().PadRight(line.FieldLength("lineDescription")), // Pouplate extra info from facility/funding amount
+                    effectiveDate = lineitem.item.OfM_Revised_Effective_Date?.ToString("yyyyMMdd") ?? lineitem.item.OfM_Effective_Date?.ToString("yyyyMMdd"),//same as invoice date
                     quantity = _BCCASApi.InvoiceLines.quantity,//Static Value:0000000.00 not used by feeder
                     unitPrice = _BCCASApi.InvoiceLines.unitPrice,//Static Value:000000000000.00 not used by feeder
                     optionalData = string.Empty.PadRight(line.FieldLength("optionalData")),// PO ship to asset tracking values are set to blank as it is optional
@@ -413,7 +402,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 supplierSiteNumber = headeritem.First().ofm_siteid.PadLeft(header.FieldLength("supplierSiteNumber"), '0'),// Populate from Organization Supplier info
                 invoiceNumber = headeritem.First().ofm_invoice_number.PadRight(header.FieldLength("invoiceNumber")),// Autogenerated and unique for supplier transaction
                 PONumber = string.Empty.PadRight(header.FieldLength("PONumber")),// sending blank as not used by feeder
-                invoiceDate = headeritem.First().ofm_revised_invoice_date?.ToString("yyyyMMdd") ?? headeritem.First().ofm_invoice_date?.ToString("yyyyMMdd"), // set to current date
+                invoiceDate = headeritem.First().OfM_Revised_Invoice_Date?.ToString("yyyyMMdd") ?? headeritem.First().OfM_Invoice_Date?.ToString("yyyyMMdd"), // set to current date
                 invoiceType = invoiceamount < 0 ? "CM" : "ST",// static to ST (standard invoice)
                 payGroupLookup = string.Concat("GEN ", pay_method, " N"),//GEN CHQ N if using cheque or GEN EFT N if direct deposit
                 remittanceCode = _BCCASApi.InvoiceHeader.remittanceCode.PadRight(header.FieldLength("remittanceCode")), // for payment stub it is 00 always.
@@ -421,11 +410,11 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 CAD = _BCCASApi.InvoiceHeader.CAD,// static value :CAD
                 termsName = _BCCASApi.InvoiceHeader.termsName.PadRight(header.FieldLength("termsName")),//setting it to immediate for successful testing, this needs to be dynamic going forward.
                 goodsDate = string.Empty.PadRight(header.FieldLength("goodsDate")),//optional field so set to null
-                invoiceRecDate = headeritem.First().ofm_revised_invoice_received_date?.ToString("yyyyMMdd") ?? headeritem.First().ofm_invoice_received_date?.ToString("yyyyMMdd"),// 5 days from invoice date
+                invoiceRecDate = headeritem.First().OfM_Revised_Invoice_Received_Date?.ToString("yyyyMMdd") ?? headeritem.First().OfM_Invoice_Received_Date?.ToString("yyyyMMdd"),// 5 days from invoice date
                 oracleBatchName = (_BCCASApi.clientCode + fiscalyear?.Substring(2) + "OFM" + (_oracleBatchNumber).ToString("D5")).PadRight(header.FieldLength("oracleBatchName")),//6225OFM00001 incremented by 1 for each header
                 SIN = string.Empty.PadRight(header.FieldLength("SIN")), //optional field set to blank
                 payflag = _BCCASApi.InvoiceHeader.payflag,// Static value: Y (separate chq for each line)
-                description = Regex.Replace(headeritem.First()?.ofm_facility?.name, @"[^\w $\-]", "").PadRight(header.FieldLength("description")).Substring(0, header.FieldLength("description")),// can be used to pass extra info
+                description = Regex.Replace(headeritem.First()?.OfM_Facility?.Name, @"[^\w $\-]", "").PadRight(header.FieldLength("description")).Substring(0, header.FieldLength("description")),// can be used to pass extra info
                 flow = string.Empty.PadRight(header.FieldLength("flow")),// can be used to pass extra info
                 invoiceLines = invoiceLines
             }); ;
@@ -455,7 +444,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
                 foreach (var paydata in serializedPaymentData.Where(paydata => paydata.ofm_invoice_number == x.invoiceLines.First().invoiceNumber.TrimEnd()))
                 {
-                    paydata.ofm_batch_number = _cgiBatchNumber;
+                    paydata.OfM_Batch_Number = _cgiBatchNumber;
                     paylinesToUpdate.Add(paydata);
                 }
             });
@@ -504,11 +493,11 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         payments.ForEach(pay =>
         {
             var payToUpdate = new JsonObject {
-                  { "statuscode", Convert.ToInt16(ofm_payment_StatusCode.ProcessingPayment) },
-                   {"ofm_batch_number",pay.ofm_batch_number }
+                  { "statuscode", Convert.ToInt16(OfM_Payment_StatusCode.ProcessingPayment) },
+                   {"ofm_batch_number",pay.OfM_Batch_Number }
              };
 
-            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(ofm_payment.EntityLogicalCollectionName, pay.ofm_paymentid), payToUpdate));
+            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(OfM_Payment.EntityLogicalCollectionName, pay.OfM_PaymentId), payToUpdate));
         });
 
         var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePayRequests, null);
@@ -535,7 +524,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             ["ofm_fiscal_year@odata.bind"] = $"/ofm_fiscal_years({_currentFiscalYearId})"
         };
 
-        var pfeCreateResponse = await d365WebApiService.SendCreateRequestAsync(appUserService.AZSystemAppUser, ofm_payment_file_exchange.EntitySetName, requestBody.ToString());
+        var pfeCreateResponse = await d365WebApiService.SendCreateRequestAsync(appUserService.AZSystemAppUser, OfM_Payment_File_Exchange.EntitySetName, requestBody.ToString());
 
         if (!pfeCreateResponse.IsSuccessStatusCode)
         {
@@ -547,13 +536,13 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         var pfeRecord = await pfeCreateResponse.Content.ReadFromJsonAsync<JsonObject>();
 
-        if (pfeRecord is not null && pfeRecord.ContainsKey(ofm_payment_file_exchange.Fields.ofm_payment_file_exchangeid))
+        if (pfeRecord is not null && pfeRecord.ContainsKey(OfM_Payment_File_Exchange.Fields.OfM_Payment_File_ExchangeId))
         {
             if (inboxFileName.Length > 0)
             {
                 // Update the new Payment File Exchange record with the new document
-                HttpResponseMessage pfeUpdateResponse = await _d365webapiservice.SendDocumentRequestAsync(_appUserService.AZPortalAppUser, ofm_payment_file_exchange.EntitySetName,
-                                                                                                    new Guid(pfeRecord[ofm_payment_file_exchange.Fields.ofm_payment_file_exchangeid].ToString()),
+                HttpResponseMessage pfeUpdateResponse = await _d365webapiservice.SendDocumentRequestAsync(_appUserService.AZPortalAppUser, OfM_Payment_File_Exchange.EntitySetName,
+                                                                                                    new Guid(pfeRecord[OfM_Payment_File_Exchange.Fields.OfM_Payment_File_ExchangeId].ToString()),
                                                                                                     Encoding.ASCII.GetBytes(result.TrimEnd()),
                                                                                                     inboxFileName);
 
@@ -568,11 +557,11 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         }
         return await Task.FromResult(true);
     }
-    private async Task<IEnumerable<ofm_ack_codes>> LoadACKCodeAsync()
-    {
-        var localdata = await _dataService.FetchDataAsync(RequestACKCodeUri, "ACK_Codes");
-        var deserializedData = localdata.Data.Deserialize<List<ofm_ack_codes>>(Setup.s_writeOptionsForLogs);
+    //private async Task<IEnumerable<ofm_ack_codes>> LoadACKCodeAsync()
+    //{
+    //    var localdata = await _dataService.FetchDataAsync(RequestACKCodeUri, "ACK_Codes");
+    //    var deserializedData = localdata.Data.Deserialize<List<ofm_ack_codes>>(Setup.s_writeOptionsForLogs);
 
-        return await Task.FromResult(deserializedData!); ;
-    }
+    //    return await Task.FromResult(deserializedData!); ;
+    //}
 }
