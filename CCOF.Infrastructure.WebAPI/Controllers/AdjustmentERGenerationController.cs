@@ -269,12 +269,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         // Generate Adjustment Enrolment Report
         [HttpPost]
         [ActionName("GenerateAdjusementER")]
-        public ActionResult<string> GenerateAdjusementER([FromBody] dynamic value)
+       //  public ActionResult<string> GenerateAdjusementER([FromBody] dynamic value)
+        public ActionResult<string> GenerateAdjusementER([FromBody] AdjustmentERRequest request) 
         {
             var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
             var startTime = _timeProvider.GetTimestamp();
-            ERGuid = value.ToString().Trim();
+            // ERGuid = value.ToString().Trim();
+            ERGuid = request.ERGuid;
             _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Starting GenerateAdjusementER for Enrolment Report ID: {ERGuid}", ERGuid.Replace("\r", "").Replace("\n", ""));
             HttpResponseMessage response = null;
             // get Previous ER
