@@ -326,5 +326,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string programyear { get; set; }
 
     }
+    public class AdjustmentERRequest
+    {
+        public string ERGuid { get; set; }
+    }
 
 }
