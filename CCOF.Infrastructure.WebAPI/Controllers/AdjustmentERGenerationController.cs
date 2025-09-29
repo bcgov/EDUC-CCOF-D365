@@ -30,6 +30,44 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
+        public string ApprovedClosureDayRequestUri
+        {  // 100000001 Complete_Approved
+            get
+            {
+                var fetchXml = $"""
+                    <fetch>
+                      <entity name="ccof_application_ccfri_closure">
+                        <attribute name="ccof_program_year" />
+                        <attribute name="ccof_age_affected_groups" />
+                        <attribute name="ccof_closure_status" />
+                        <attribute name="ccof_closure_type" />
+                        <attribute name="ccof_comment" />
+                        <attribute name="ccof_emergency_closure_type" />
+                        <attribute name="ccof_enddate" />
+                        <attribute name="ccof_is_full_closure" />
+                        <attribute name="ccof_name" />
+                        <attribute name="ccof_organizationfacility" />
+                        <attribute name="ccof_startdate" />
+                        <attribute name="ccof_totaldays" />
+                        <attribute name="ccof_totalworkdays" />
+                        <attribute name="statecode" />
+                        <attribute name="statuscode" />
+                        <attribute name="ccof_facilityinfo" />
+                        <attribute name="ccof_paidclosure" />
+                        <attribute name="ccof_pastercorrected" />
+                        <attribute name="ccof_payment_eligibility" />
+                        <filter>
+                          <condition attribute="ccof_closure_status" operator="eq" value="100000001" />  
+                          <condition attribute="ccof_program_year" operator="eq" value="{programYearGuid}" />
+                          <condition attribute="statecode" operator="eq" value="0" />
+                        </filter>
+                      </entity>
+                    </fetch>
+                    """;
+                var requestUri = $"ccof_application_ccfri_closures?fetchXml=" + WebUtility.UrlEncode(fetchXml);
+                return requestUri.CleanCRLF();
+            }
+        }
         public string FeeFloorExemptRequestUri
         {
             get
@@ -364,17 +402,49 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             int? reportVersion = ERforVersionNumber["value"]?.FirstOrDefault()?["ccof_reportversion"]?.Value<int?>();
             var dailyEnrollmentArray = PreviousER["ccof_dailyenrollment_monthlyenrollmentreport"] as JArray;
             var dailyEnrollmentSelected = new JsonArray();
+            response = _d365webapiservice.SendRetrieveRequestAsync(ApprovedClosureDayRequestUri, true);
+            var approvedClosureDays = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
+            JArray? approvedClosureDaysArray = approvedClosureDays["value"] as JArray;
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Raw Approved Closures JSON: " + approvedClosureDaysArray?.ToString() ?? "[]");
+
             if (dailyEnrollmentArray != null)
             {
                 foreach (var item in dailyEnrollmentArray)
                 {
-                    // need to get latest Closure days info in future.
                     var itemObj = item as JObject;
                     if (itemObj == null) continue;
                     var selectedObject = new JsonObject();
+                    // check Approved Closure Days and Type
+                    int dayOfMonth = itemObj["ccof_day"].Value<int>();
+                    selectedObject["ccof_day"] = JsonValue.Create(dayOfMonth);
+                    DateTime currentDayEnrollmentDate = new DateTime(int.Parse(year), month, dayOfMonth);
+                    // Check if this day falls within any approved closure period
+                    int? closurePaymentEligibility = null;
+                    if (approvedClosureDaysArray != null) 
+                    {
+                        foreach (JObject closure in approvedClosureDaysArray) 
+                        {
+                            if (closure["ccof_startdate"] != null && closure["ccof_enddate"] != null && closure["ccof_payment_eligibility"] != null)
+                            {
+                                DateTime startDate = closure["ccof_startdate"].Value<DateTime>().Date;
+                                DateTime endDate = closure["ccof_enddate"].Value<DateTime>().Date;
+                                int paymentEligibility = closure["ccof_payment_eligibility"].Value<int>();
+                                if (currentDayEnrollmentDate >= startDate && currentDayEnrollmentDate <= endDate)
+                                {
+                                    closurePaymentEligibility = paymentEligibility;
+                                    _logger.LogInformation($"Daily enrollment day {currentDayEnrollmentDate.ToShortDateString()} is within closure {startDate.ToShortDateString()} - {endDate.ToShortDateString()}. Setting payment eligibility to {paymentEligibility}");
+                                    break; 
+                                }
+                            }
+                        }
+                    }
+                    // Set ccof_paymenteligibility if a closure match was found
+                    if (closurePaymentEligibility.HasValue)
+                    {
+                        selectedObject["ccof_paymenteligibility"] = JsonValue.Create(closurePaymentEligibility.Value);
+                    }
                     if (itemObj["ccof_day"] != null) selectedObject["ccof_day"] = JsonValue.Create(itemObj["ccof_day"].Value<int?>());
                     if (itemObj["ccof_daytype"] != null) selectedObject["ccof_daytype"] = JsonValue.Create(itemObj["ccof_daytype"].Value<int?>());
-                    if (itemObj["ccof_isclosureday"] != null) selectedObject["ccof_isclosureday"] = JsonValue.Create(itemObj["ccof_isclosureday"].Value<bool?>());
                     if (itemObj["ccof_less0to18"] != null) selectedObject["ccof_less0to18"] = JsonValue.Create(itemObj["ccof_less0to18"].Value<decimal?>());
                     if (itemObj["ccof_over0to18"] != null) selectedObject["ccof_over0to18"] = JsonValue.Create(itemObj["ccof_over0to18"].Value<decimal?>());
                     if (itemObj["ccof_less18to36"] != null) selectedObject["ccof_less18to36"] = JsonValue.Create(itemObj["ccof_less18to36"].Value<decimal?>());

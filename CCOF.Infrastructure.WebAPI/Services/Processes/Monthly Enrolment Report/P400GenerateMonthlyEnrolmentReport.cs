@@ -11,6 +11,7 @@ using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using System.Text.Json;
 using System.Xml.Linq;
 using Polly.Caching;
+using Newtonsoft.Json.Linq;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
@@ -45,10 +46,48 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         }
 
         #region Data Queries
+        public string ApprovedClosureDayRequestUri
+        {
+            get
+            {  // Fetch xml is only for reference as we need get more than 5000 records
+                var fetchXml = $$"""
+                        <fetch>
+                          <entity name="ccof_application_ccfri_closure">
+                            <attribute name="ccof_program_year" />
+                            <attribute name="ccof_age_affected_groups" />
+                            <attribute name="ccof_closure_status" />
+                            <attribute name="ccof_closure_type" />
+                            <attribute name="ccof_comment" />
+                            <attribute name="ccof_emergency_closure_type" />
+                            <attribute name="ccof_enddate" />
+                            <attribute name="ccof_is_full_closure" />
+                            <attribute name="ccof_name" />
+                            <attribute name="ccof_organizationfacility" />
+                            <attribute name="ccof_startdate" />
+                            <attribute name="ccof_totaldays" />
+                            <attribute name="ccof_totalworkdays" />
+                            <attribute name="statecode" />
+                            <attribute name="statuscode" />
+                            <attribute name="ccof_facilityinfo" />
+                            <attribute name="ccof_paidclosure" />
+                            <attribute name="ccof_pastercorrected" />
+                            <attribute name="ccof_payment_eligibility" />
+                            <filter>
+                              <condition attribute="ccof_closure_status" operator="eq" value="100000001" />  
+                              <condition attribute="ccof_program_year" operator="eq" value="{{_processParams.InitialEnrolmentReport.ProgramYearId}}" />
+                              <condition attribute="statecode" operator="eq" value="0" />
+                            </filter>
+                          </entity>
+                        </fetch>
+                        """;
+                var requestUri = $"ccof_application_ccfri_closures?$select=_ccof_program_year_value,ccof_age_affected_groups,ccof_closure_status,ccof_closure_type,ccof_comment,ccof_emergency_closure_type,ccof_enddate,ccof_is_full_closure,ccof_name,_ccof_organizationfacility_value,ccof_startdate,ccof_totaldays,ccof_totalworkdays,statecode,statuscode,_ccof_facilityinfo_value,ccof_paidclosure,ccof_pastercorrected,ccof_payment_eligibility&$filter=(ccof_closure_status eq 100000001 and _ccof_program_year_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + " and statecode eq 0)";
+                return requestUri.CleanCRLF();
+            }
+        }
         public string FeeFloorExemptRequestUri
         {
             get
-            {
+            {  // Fetch xml is only for reference as we need get more than 5000 records
                 var fetchXml = $$"""
                         <fetch>
                           <entity name="ccof_feefloorexempt">
@@ -448,7 +487,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         {
             var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
-            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") +" Starting Process P"+ ProcessId+" to Create Draft Monthly Enrolment Reports");
+            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Starting Process P" + ProcessId + " to Create Draft Monthly Enrolment Reports");
             try
             {
                 var startTime = _timeProvider.GetTimestamp();
@@ -464,7 +503,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 List<JsonNode> rate = await FetchAllRecordsFromCRMAsync(RateRequestUri);
                 //Retrive all statuary days
                 List<JsonNode> statutoryDay = await FetchAllRecordsFromCRMAsync(StatutoryDayRequestUri);
-                List<JsonNode> dailyEnrolment = GenerateDailyEnrolment(int.Parse(_processParams.InitialEnrolmentReport.Year), _processParams.InitialEnrolmentReport.Month ?? 1, JsonSerializer.Serialize(statutoryDay));
                 // Retrive all Monthly Business days
                 List<JsonNode> monthlyBusinessDay = await FetchAllRecordsFromCRMAsync(MonthlyBusinessDayRequestUri);
                 if (monthlyBusinessDay.Count > 0)
@@ -480,13 +518,16 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 List<JsonNode> orgInfo = await FetchAllRecordsFromCRMAsync(OrgRequestUri);
                 List<JsonNode> facilityLicence = await FetchAllRecordsFromCRMAsync(FacilityLicenceRequestUri);
                 List<JsonNode> feeFloorExemptArray = await FetchAllRecordsFromCRMAsync(FeeFloorExemptRequestUri);
+                List<JsonNode> allApprovedClosureDays = await FetchAllRecordsFromCRMAsync(ApprovedClosureDayRequestUri);
+                // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Raw Approved Closures JSON: " + JsonSerializer.Serialize(allApprovedClosureDays) ?? "[]");
+                List<JsonNode> dailyEnrolment = GenerateDailyEnrolment(int.Parse(_processParams.InitialEnrolmentReport.Year), _processParams.InitialEnrolmentReport.Month ?? 1, JsonSerializer.Serialize(statutoryDay));
 
                 // Batch processing
                 //int batchSize = 1000;
                 // int batchSize = 100;
                 // int batchSize = 50;
                 int batchSize = 25;
-                _logger.LogInformation("Creating Draft Monthly Enrolment Reports for " + _processParams.InitialEnrolmentReport.FacilityGuid.Count() +" Facilities");
+                _logger.LogInformation("Creating Draft Monthly Enrolment Reports for " + _processParams.InitialEnrolmentReport.FacilityGuid.Count() + " Facilities");
 
                 for (int i = 0; i < _processParams.InitialEnrolmentReport.FacilityGuid.Count(); i += batchSize)
                 {
@@ -494,7 +535,46 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     var batch = _processParams.InitialEnrolmentReport.FacilityGuid.Skip(i).Take(batchSize).ToList();
                     foreach (var record in batch)
                     {
-                        int providerType = 100000000;  // Group
+                        // Identity Closure Days
+                        var approvedClosureDaysArray = allApprovedClosureDays.Where(node => node?["_ccof_facilityinfo_value"]?.GetValue<string>() == record).ToArray();
+                        var dailyEnrollmentSelected = new List<JsonObject>();
+                        var dailyEnrollmentArray = dailyEnrolment;
+                        foreach (var item in dailyEnrollmentArray)
+                        {
+                            var itemObj = item as JsonObject;
+                            if (itemObj == null) continue;
+                            var selectedObject = new JsonObject();
+                            int dayOfMonth = itemObj["ccof_day"].GetValue<int>();
+                            if (itemObj["ccof_day"] != null) selectedObject["ccof_day"] = JsonValue.Create(itemObj["ccof_day"]?.GetValue<int?>());
+                            if (itemObj["ccof_daytype"] != null) selectedObject["ccof_daytype"] = JsonValue.Create(itemObj["ccof_daytype"]?.GetValue<int?>());
+                            DateTime currentDayEnrollmentDate = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, dayOfMonth);
+                            // Check if this day falls within any approved closure period
+                            int? closurePaymentEligibility = null;
+                            if (approvedClosureDaysArray != null)
+                            {
+                                foreach (JsonObject closure in approvedClosureDaysArray)
+                                {
+                                    if (closure["ccof_startdate"] != null && closure["ccof_enddate"] != null && closure["ccof_payment_eligibility"] != null)
+                                    {
+                                        DateTime startDate = closure["ccof_startdate"].GetValue<DateTime>().Date;
+                                        DateTime endDate = closure["ccof_enddate"].GetValue<DateTime>().Date;
+                                        int paymentEligibility = closure["ccof_payment_eligibility"].GetValue<int>();
+                                        if (currentDayEnrollmentDate >= startDate && currentDayEnrollmentDate <= endDate)
+                                        {
+                                            closurePaymentEligibility = paymentEligibility;
+                                            // _logger.LogInformation($"Daily enrollment day {currentDayEnrollmentDate.ToShortDateString()} is within closure {startDate.ToShortDateString()} - {endDate.ToShortDateString()}. Setting payment eligibility to {paymentEligibility}");
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            // Set ccof_paymenteligibility if a closure match was found
+                            if (closurePaymentEligibility.HasValue)
+                            {
+                                selectedObject["ccof_paymenteligibility"] = JsonValue.Create(closurePaymentEligibility.Value);
+                            }
+                            dailyEnrollmentSelected.Add(selectedObject);
+                        }
                         // Fee Floor Exempt
                         Boolean feeFloorExempt = false;
                         var FeeFloorExemptObject = feeFloorExemptArray.FirstOrDefault(node => node?["_ccof_facility_value"]?.GetValue<string>() == record);
@@ -505,6 +585,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                             .Split(',')
                                             .Select(v => int.Parse(v.Trim()))
                                             .Contains(fiscalMonth);
+                        // Identity ProviderType
+                        int providerType = 100000000;  // Group
                         var org = orgInfo.FirstOrDefault(node => node?["accountid"]?.GetValue<string>() == record);
                         if (org != null)
                         {
@@ -633,8 +715,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                 ["ccof_dailyccfrirateoverooscg"] = dailyCCFRIRate["ccof_dailyccfrirateoverooscg"]?.DeepClone(),
                                 ["ccof_dailyccfriratelesspre"] = dailyCCFRIRate["ccof_dailyccfriratelesspre"]?.DeepClone(),
                             },
-                            ["ccof_dailyenrollment_monthlyenrollmentreport"] = new JsonArray(dailyEnrolment.Select(node => node.DeepClone()).ToArray())
-                        };
+                            // ["ccof_dailyenrollment_monthlyenrollmentreport"] = new JsonArray(dailyEnrolment.Select(node => node.DeepClone()).ToArray())
+                            ["ccof_dailyenrollment_monthlyenrollmentreport"] =new JsonArray(dailyEnrollmentSelected.ToArray())
+                    };
                         createEnrolmentReportRequests.Add(new CreateRequest(entitySetName, EnrolmentReportToCreate));
                     }
                     _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Creating Draft ERs index:{index}", i);
