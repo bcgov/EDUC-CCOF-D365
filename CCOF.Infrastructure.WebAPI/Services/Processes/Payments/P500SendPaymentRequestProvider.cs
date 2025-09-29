@@ -139,9 +139,9 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                           <condition attribute="ofm_revised_invoice_date" operator="eq" value="{localDateOnlyPST}" />
                         </filter>
                           </filter>
-                            <link-entity name="ofm_fiscal_year" from="ofm_fiscal_yearid" to="ofm_fiscal_year" visible="false" link-type="outer" alias="ofm_fiscal_year">
-                          <attribute name="ofm_financial_year" />                      
-                        </link-entity>
+                           <link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_program_year" alias="py">
+                      <attribute name="ccof_program_yearid" />
+                    </link-entity>
                         <link-entity name="ofm_application" from="ofm_applicationid" to="ofm_application" link-type="inner" alias="ofm_application">
                           <attribute name="ofm_application" />
                         </link-entity>

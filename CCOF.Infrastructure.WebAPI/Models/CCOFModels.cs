@@ -334,10 +334,14 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public new string ofm_supplierid { get; set; } = string.Empty;
         public new string ofm_siteid { get; set; } = string.Empty;
         public new decimal? ofm_amount { get; set; }
+        public new int? ofm_payment_method { get; set; }
+        public string _ofm_regardingid_value { get; set; } = string.Empty; // ToDo: a workaround for polymorphic lookup
     }
 
     public class D365ProgramYear : CcOf_Program_Year
     {
-        public new string ofm_financial_year { get; set; } = string.Empty;
+        public new string ccof_program_yearid { get; set; } = string.Empty;
     }
+
+  
 }
