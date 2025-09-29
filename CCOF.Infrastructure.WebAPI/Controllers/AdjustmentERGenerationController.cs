@@ -98,6 +98,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 var fetchXml = $"""
                     <fetch>
                       <entity name="ccof_monthlyenrollmentreport">
+                     <attribute name="ccof_is_full_month_closure" />
                         <filter type="and">
                           <condition attribute="ccof_monthlyenrollmentreportid" operator="eq" value="57e08f64-8569-f011-bec2-6045bdf991c2" />
                         </filter>
@@ -463,6 +464,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             {
                 ["ccof_year"] = PreviousER["ccof_year"]?.ToString(),
                 ["ccof_month"] = PreviousER["ccof_month"]?.Value<int?>(),
+                ["ccof_is_full_month_closure"] = PreviousER["ccof_is_full_month_closure"]?.Value<bool?>(),
                 ["ccof_reporttype"] = 100000001, // Adjustment
                 ["ccof_reportversion"] = reportVersion + 1,
                 ["ccof_feefloorexempt"] = feeFloorExempt,
