@@ -76,43 +76,108 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                         }
                     }
 
+                    // Fetch user roles
+                    var userId = context.InitiatingUserId;
+                    var fetchXmlUserRoles = $@"
+                                            <fetch>
+                                              <entity name='systemuser'>
+                                                <attribute name='fullname' />
+                                                <filter>
+                                                  <condition attribute='systemuserid' operator='eq' value='{userId}' />
+                                                </filter>
+                                                <link-entity name='systemuserroles' from='systemuserid' to='systemuserid' link-type='outer'>
+                                                  <link-entity name='role' from='roleid' to='roleid' alias='r1'>
+                                                    <attribute name='name' />
+                                                    <attribute name='roleid' />
+                                                  </link-entity>
+                                                </link-entity>
+                                              </entity>
+                                            </fetch>";
+
+                    var fetchXmlTeamRoles = $@"
+                                            <fetch>
+                                              <entity name='systemuser'>
+                                                <attribute name='fullname' />
+                                                <filter>
+                                                  <condition attribute='systemuserid' operator='eq' value='{userId}' />
+                                                </filter>
+                                                <link-entity name='teammembership' from='systemuserid' to='systemuserid' link-type='outer'>
+                                                  <link-entity name='team' from='teamid' to='teamid'>
+                                                    <link-entity name='teamroles' from='teamid' to='teamid'>
+                                                      <link-entity name='role' from='roleid' to='roleid' alias='r2'>
+                                                        <attribute name='name' />
+                                                        <attribute name='roleid' />
+                                                      </link-entity>
+                                                    </link-entity>
+                                                  </link-entity>
+                                                </link-entity>
+                                              </entity>
+                                            </fetch>";
+
+                    var roles1 = service.RetrieveMultiple(new FetchExpression(fetchXmlUserRoles));       // systemUserRoles
+                    var roles2 = service.RetrieveMultiple(new FetchExpression(fetchXmlTeamRoles));       // teamRoles
+
+                    // Status transition - backward operation
+
                     if (draftedStatuses.Contains(newStatus))
                     {
-                        // Fetch user roles
-                        var userId = context.InitiatingUserId;
-                        var fetchXml = $@"
-            <fetch>
-              <entity name='systemuserroles'>
-                <attribute name='roleid' />
-                <filter>
-                  <condition attribute='systemuserid' operator='eq' value='{userId}' />
-                </filter>
-                <link-entity name='role' from='roleid' to='roleid' alias='r'>
-                  <attribute name='name' />
-                </link-entity>
-              </entity>
-            </fetch>";
-
-                        var roles = service.RetrieveMultiple(new FetchExpression(fetchXml));
-
                         var allowedRoles = new List<string> { "System Administrator", "CCOF - Admin" };
-                        bool isAuthorized = roles.Entities.Any(role =>
+                        bool isAuthorized1 = roles1.Entities.Any(role =>
                         {
-                            var roleName = (string)((AliasedValue)role["r.name"]).Value;
+                            var roleName = (string)((AliasedValue)role["r1.name"]).Value;
+                            return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
+                        });
+                        bool isAuthorized2 = roles2.Entities.Any(role =>
+                        {
+                            var roleName = (string)((AliasedValue)role["r2.name"]).Value;
                             return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
                         });
 
-                        if (!isAuthorized)
+                        if (isAuthorized1 == false && isAuthorized2 == false)
                         {
                             throw new InvalidPluginExecutionException("You do not have permission to change the funding status. Only Administrators can perform this action.");
                         }
                     }
 
-                    if (newStatus == 1)
+                    // Status transition - forward operation
+
+                    if (newStatus == 101510001)          // 101510001 - "Approved"
                     {
-                        if (preStatus != 101510001)
+                        if (preStatus != 101510004)      // 101510004 - "Drafted - with Ministry"
                         {
-                            throw new InvalidPluginExecutionException("Every FA needs to goes through ‘Approved’ status and then become ‘Active’");
+                            throw new InvalidPluginExecutionException("Every FA needs to go through ‘Drafted - with Ministry’ status and then becomes ‘Approved’");
+                        }
+                        var allowedRoles = new List<string> { "System Administrator",
+                                                              "CCOF - Admin",
+                                                              "CCOF - Leadership",
+                                                              "CCOF - Super Awesome Mods Squad",															  
+                                                              "CCOF - Mod QC",
+                                                              "CCOF - QC",
+                                                              "CCOF - Sr. Adjudicator",
+                                                              "CCOF - Adjudicator"                      
+                                                            };
+                        bool isAuthorized1 = roles1.Entities.Any(role =>
+                        {
+                            var roleName = (string)((AliasedValue)role["r1.name"]).Value;
+                            return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
+                        });
+                        bool isAuthorized2 = roles2.Entities.Any(role =>
+                        {
+                            var roleName = (string)((AliasedValue)role["r2.name"]).Value;
+                            return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
+                        });
+
+                        if (isAuthorized1 == false && isAuthorized2 == false)
+                        {
+                            throw new InvalidPluginExecutionException("You do not have permission to change the funding status. Only Adjudicator and higher can perform this action.");
+                        }
+                    }
+
+                    if (newStatus == 1)                  // 1 - "Active"
+                    {
+                        if (preStatus != 101510001)      // 101510001 - "Approved"
+                        {
+                            throw new InvalidPluginExecutionException("Every FA needs to go through ‘Approved’ status and then becomes ‘Active’");
                         }
                         var fundingAgreement = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_organization"));
                         var allFundingAgreements = new QueryExpression(entity.LogicalName)
@@ -133,6 +198,13 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                         {
                             throw new InvalidPluginExecutionException("Only one funding agreement record can be active for a given organization. Please deactivate the existing record before activating another.");
                         }
+                    }
+
+                    if (entity.LogicalName == "ccof_funding_agreement")
+                    {
+                        EntityReference currentUserLookup = new EntityReference("systemuser", userId);
+                        entity["ccof_ministry_ea_adjudicator_name"] = currentUserLookup;
+                        entity["ccof_date_signed_ministry"] = DateTime.UtcNow;
                     }
 
                     tracingService.Trace("End Restrict funding status plugin");

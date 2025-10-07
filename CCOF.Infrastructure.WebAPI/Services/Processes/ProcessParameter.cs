@@ -39,7 +39,12 @@ public record ProcessParameter
 
     [property: JsonPropertyName("dataImportId")]
     public Guid? DataImportId { get; set; }
-
+    [property: JsonPropertyName("enrolmentReportid")]
+    public Guid? EnrolmentReportid { get; set; }
+    [property: JsonPropertyName("organization")]
+    public OrganizationParameter? Organization { get; set; }
+    [property:JsonPropertyName("programApproved")]
+    public int? programapproved { get; set; }
 
     #region Inner Parameter Record Objects
 
@@ -49,6 +54,36 @@ public record ProcessParameter
         public string? paymentfileId { get; set; }
     }
 
-   
     #endregion
-}
+    #region Initial CCOF Enrolment Report 
+    [property: JsonPropertyName("initialEnrolmentReport")]
+    public InitialEnrolmentReportParameter? InitialEnrolmentReport { get; set; }
+    public record InitialEnrolmentReportParameter
+    {
+        [property: JsonPropertyName("year")]
+        public string? Year { get; set; }
+
+        [property: JsonPropertyName("month")]
+        public int? Month { get; set; }
+
+        [property: JsonPropertyName("programYearId")]
+        public string? ProgramYearId { get; set; }
+
+        [property: JsonPropertyName("facilityGuid")]
+        public string[]? FacilityGuid { get; set; }
+    }
+    #endregion
+    public record OrganizationParameter
+    {
+        [property: JsonPropertyName("organizationId")]
+        public Guid? organizationId { get; set; }
+        [property: JsonPropertyName("facilityId")]
+        public Guid? facilityId { get; set; }
+
+        [property: JsonPropertyName("legalName")]
+        public string? legalName { get; set; }
+
+        [property: JsonPropertyName("incorporationNumber")]
+        public string? incorporationNumber { get; set; }
+    }
+ }

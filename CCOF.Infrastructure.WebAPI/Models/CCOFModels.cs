@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using CCOF.Core.DataContext;
+using Newtonsoft.Json;
 
 namespace CCOF.Infrastructure.WebAPI.Models
 {
@@ -9,6 +10,11 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? ccof_username { get; set; }
 
         public string? ccof_userid { get; set; }
+
+        public int? statecode { get; set; }
+
+        public string? contactid { get; set; }
+
         [JsonPropertyName("Organization.accountid")]
         public string? organization_accountid { get; set; }
         [JsonPropertyName("Organization.accountnumber")]
@@ -30,14 +36,19 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Facility[]? facilities { get; set; }
 
         public Application? application { get; set; }
-        [JsonPropertyName("Portalrole.ofm_portal_roleid")]
-        public string? portalrole_id { get; set; }
+        public PortalRole? PortalRole { get; set; }
+
     }
-    public class FiscalUserProfile
+   
+        public class FiscalUserProfile
     {
         public string? ccof_username { get; set; }
 
         public string? ccof_userid { get; set; }
+
+        public int? statecode { get; set; }
+
+        public string? contactid { get; set; }
 
         [JsonPropertyName("Organization.accountid")]
 
@@ -65,8 +76,14 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Facility[]? facilities { get; set; }
 
         public Application[]? application { get; set; }
-        [JsonPropertyName("Portalrole.ofm_portal_roleid")]
-        public string? portalrole_id { get; set; }
+        public PortalRole? PortalRole { get; set; }
+
+    }
+
+    public class PortalRole
+    {
+        public string? ofm_portal_roleid { get; set; }
+        public string? ofm_portal_role_number { get; set; }
     }
 
     public class Facility
@@ -309,4 +326,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string programyear { get; set; }
 
     }
+    public class AdjustmentERRequest
+    {
+        public string ERGuid { get; set; }
+    }
+
 }

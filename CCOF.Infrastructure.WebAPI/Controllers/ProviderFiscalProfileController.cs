@@ -33,6 +33,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
     <attribute name=""contactid"" />
     <attribute name=""ccof_userid"" />
     <attribute name=""ccof_username"" />
+    <attribute name=""statecode"" />
     <filter type=""or"">
       <condition attribute=""ccof_userid"" operator=""eq"" value=""{userId}"" />
       <condition attribute=""ccof_username"" operator=""eq"" value=""{userName}"" />
@@ -73,10 +74,11 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         </link-entity>
       </link-entity>
     </link-entity>
-<link-entity name=""ofm_portal_role"" from=""ofm_portal_roleid"" to=""ofm_portal_role_id"" alias=""Portalrole"" link-type=""outer"">
+<link-entity name=""ofm_portal_role"" from=""ofm_portal_roleid"" to=""ccof_ccof_portal_id"" alias=""PortalRole"" link-type=""outer"">
+      <attribute name=""ofm_portal_roleid"" />
       <attribute name=""ofm_portal_role_number"" />
- <attribute name=""ofm_portal_roleid"" />
-    </link-entity>
+   
+ </link-entity>
   </entity>
 </fetch>";
             var message = $"contacts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
@@ -152,7 +154,19 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
             // A simple way to remove unwanted attributes
             var userProfileString = JsonConvert.SerializeObject(dynUserProfile);
             FiscalUserProfile userProfile = System.Text.Json.JsonSerializer.Deserialize<FiscalUserProfile>(userProfileString);
+            
 
+            var portalRoleId = dynUserProfile.Value<string>("PortalRole.ofm_portal_roleid");
+            var portalRoleNumber = dynUserProfile.Value<string>("PortalRole.ofm_portal_role_number");
+
+            if (!string.IsNullOrEmpty(portalRoleId) || !string.IsNullOrEmpty(portalRoleNumber))
+            {
+                userProfile.PortalRole = new PortalRole
+                {
+                    ofm_portal_roleid = portalRoleId,
+                    ofm_portal_role_number = portalRoleNumber
+                };
+            }
             return userProfile;
         }
 
