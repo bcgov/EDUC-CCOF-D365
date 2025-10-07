@@ -622,8 +622,7 @@
                 // Preschool
                 preschool: "ccof_lesspre",
                 daytype: "ccof_daytype",
-                updatedColumns: "ccof_columnsareupdated",
-                paymentEligibility: "ccof_paymenteligibility"
+                updatedColumns: "ccof_columnsareupdated"
             };
             dailyenrollmentrecords.forEach(record => {
                 const row = document.createElement("tr");
@@ -640,16 +639,6 @@
                 dayCell.setAttribute("scope", "row");
                 dayCell.classList.add("day-col");
                 dayCell.innerText = dayNumber;
-                const paymentEligibility = record[fields.paymentEligibility];
-                let flag = '';
-                if (paymentEligibility === 100000000) {
-                    flag = ' CCFRI';
-                } else if (paymentEligibility === 100000001) {
-                    flag = ' CCOF+CCFRI';
-                } else if (paymentEligibility === 100000002) {
-                    flag = ' CCOF';
-                }
-                dayCell.innerText += flag;
                 row.appendChild(dayCell);
                 if (var_selectedColumns.includes(100000000)) {  //  100000000  0-18 column
                     row.appendChild(createCell(record[fields.mos0_18_less4], "100000000", updatedColumnValuesForRow));  // 100000000 0-18 Month 4 hours or less
@@ -1084,28 +1073,29 @@
             firstCell.classList.add("day-col");
             firstCell.innerText = "CCFRI Provider Payment Rate";
             row.appendChild(firstCell);
+            var providerPaymentRate = var_enrollmentRecord["ccof_ccfriproviderpaymentrate"] || {};
             if (var_selectedColumns.includes(100000000)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_less0to18"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_over0to18"]));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_less0to18"] || ""));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_over0to18"] || ""));
             }
             if (var_selectedColumns.includes(100000001)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_less18to36"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_over18to36"]));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_less18to36"] || ""));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_over18to36"] || ""));
             }
             if (var_selectedColumns.includes(100000002)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_less3yk"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_over3yk"]));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_less3yk"] || ""));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_over3yk"] || ""));
             }
             if (var_selectedColumns.includes(100000003)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_lessoosck"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_overoosck"]));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_lessoosck"] || ""));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_overoosck"] || ""));
             }
             if (var_selectedColumns.includes(100000004)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_lessooscg"]));
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_overooscg"]));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_lessooscg"] || ""));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_overooscg"] || ""));
             }
             if (var_selectedColumns.includes(100000005)) {
-                row.appendChild(createCellforRest(var_enrollmentRecord["ccof_ccfriproviderpaymentrate"]["ccof_lesspre"]));
+                row.appendChild(createCellforRest(providerPaymentRate["ccof_lesspre"] || ""));
             }
             tableBody.appendChild(row);
             // CCFRI Provider $ (CCFRI Amount)
