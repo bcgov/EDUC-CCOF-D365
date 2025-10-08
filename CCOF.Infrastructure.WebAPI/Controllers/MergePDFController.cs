@@ -93,7 +93,7 @@ public class PdfController : ControllerBase
                         gfx.DrawString(header.HeaderText,
                             new XFont("OpenSans", 10, header.IsBold == true? XFontStyleEx.Bold: XFontStyleEx.Regular),
                             XBrushes.Black,
-                            new XRect(20, 10, page.Width - 40, 40),
+                            new XRect(20, 20, page.Width - 40, 40),
                             alignment);
                     }
 
@@ -101,10 +101,10 @@ public class PdfController : ControllerBase
                 // Footer
                 if (request.InsertPageNumbers == true)                   
                     gfx.DrawString($"Page {i + 1} of {outputDocument.PageCount}",
-                        new XFont("OpenSans", 12, XFontStyleEx.Bold),
+                        new XFont("OpenSans", 10, XFontStyleEx.Regular),
                         XBrushes.Black,
                         new XRect(20, page.Height - 40, page.Width - 40, 20),
-                        XStringFormats.Center);
+                        XStringFormats.BottomCenter);
             }
             using var outputStream = new MemoryStream();
             outputDocument.Save(outputStream);
