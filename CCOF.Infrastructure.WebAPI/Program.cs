@@ -16,6 +16,7 @@ using CCOF.Infrastructure.WebAPI.Services.Documents;
 using CCOF.Infrastructure.WebAPI.Services.Batches;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Hellang.Middleware.ProblemDetails;
+using PdfSharp.Fonts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,7 +76,8 @@ builder.Services.Configure<NotificationSettings>(builder.Configuration.GetSectio
 builder.Services.Configure<ProcessSettings>(builder.Configuration.GetSection(nameof(ProcessSettings)));
 builder.Services.Configure<ExternalServices>(builder.Configuration.GetSection(nameof(ExternalServices)));
 //======== <<<
-
+//Merge PDF Font Handling
+GlobalFontSettings.FontResolver = new CustomFontResolver();
 
 var app = builder.Build();
 
