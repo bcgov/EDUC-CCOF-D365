@@ -51,6 +51,15 @@
     <Folder Include="Services\Documents\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Fonts\OpenSans-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\OpenSans-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Import Project="..\CCOF.Core.DataContext\CCOF.Core.DataContext.projitems" Label="Shared" />
 
 </Project>
