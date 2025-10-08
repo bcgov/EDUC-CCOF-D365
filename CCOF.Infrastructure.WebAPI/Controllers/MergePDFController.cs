@@ -1,19 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
+using System.Reflection.PortableExecutable;
 using System.Text;
 
 namespace CCOF.Infrastructure.WebAPI.Controllers;
 public class PdfMergeRequest
 {
+    [JsonProperty("file1Base64")]
     public string File1Base64 { get; set; } = string.Empty;
+    [JsonProperty("file2Base64")]
     public string File2Base64 { get; set; } = string.Empty;
-    public bool InsertPageNumbers { get; set; } = false;
-    public string HeaderText { get; set; } = string.Empty;
+    [JsonProperty("insertPageNumbers")]
+    public bool? InsertPageNumbers { get; set; } = false;
+    [JsonProperty("headers")]
+    public PdfHeader[] Headers { get; set; }
 }
-
+public class PdfHeader
+{
+    [JsonProperty("headerText")]
+    public string HeaderText { get; set; } = string.Empty;
+    [JsonProperty("alignment")]
+    public string Alignment { get; set; } = string.Empty;
+    [JsonProperty("isBold")]
+    public bool? IsBold { get; set; } = false;
+    
+}
 [ApiController]
 [Route("api/[controller]")]
 public class PdfController : ControllerBase
@@ -53,14 +68,38 @@ public class PdfController : ControllerBase
                 var page = outputDocument.Pages[i];
                 var gfx = XGraphics.FromPdfPage(page, XGraphicsPdfPageOptions.Append);
                 // Header
-                if (!string.IsNullOrWhiteSpace(request.HeaderText))
-                    gfx.DrawString(request.HeaderText,
-                    new XFont("OpenSans", 12, XFontStyleEx.Bold),
-                    XBrushes.Black,
-                    new XRect(20, 20, page.Width - 40, 20),
-                    XStringFormats.TopRight);
+                if (request.Headers.Any())
+                {
+                    double headerTopMargin = 20;
+                    double headerLineHeight = 12;
+
+                    for (int j = 0; j < request.Headers.Length; j++)
+                    {
+                        var header = request.Headers[j];
+                        XStringFormat alignment = header.Alignment.ToLower() switch
+                        {
+                            "topcenter" => XStringFormats.TopCenter,
+                            "topright" => XStringFormats.TopRight,
+                            "topleft" => XStringFormats.TopLeft,
+                            "left" => XStringFormats.CenterLeft,
+                            "bottomcenter" => XStringFormats.BottomCenter,
+                            "bottomright" => XStringFormats.BottomRight,
+                            "bottomleft" => XStringFormats.BottomLeft,
+                            "right" => XStringFormats.CenterRight,
+                            _ => XStringFormats.Center
+                        };
+                        
+
+                        gfx.DrawString(header.HeaderText,
+                            new XFont("OpenSans", 10, header.IsBold == true? XFontStyleEx.Bold: XFontStyleEx.Regular),
+                            XBrushes.Black,
+                            new XRect(20, 10, page.Width - 40, 40),
+                            alignment);
+                    }
+
+                }
                 // Footer
-                if (request.InsertPageNumbers)                   
+                if (request.InsertPageNumbers == true)                   
                     gfx.DrawString($"Page {i + 1} of {outputDocument.PageCount}",
                         new XFont("OpenSans", 12, XFontStyleEx.Bold),
                         XBrushes.Black,
