@@ -11,6 +11,8 @@ public class CustomFontResolver : IFontResolver
         // Load font data once
         _fontData["OpenSans#Regular"] = File.ReadAllBytes("Fonts/OpenSans-Regular.ttf");
         _fontData["OpenSans#Bold"] = File.ReadAllBytes("Fonts/OpenSans-Bold.ttf");
+        _fontData["Calibri#Regular"] = File.ReadAllBytes("Fonts/Calibri-Regular.ttf");
+        _fontData["Calibri#Bold"] = File.ReadAllBytes("Fonts/Calibri-Bold.ttf");
     }
 
     public byte[] GetFont(string faceName)
@@ -30,7 +32,13 @@ public class CustomFontResolver : IFontResolver
             else
                 return new FontResolverInfo("OpenSans#Regular");
         }
-
+        if (familyName.Equals("Calibri", StringComparison.OrdinalIgnoreCase))
+        {
+            if (isBold)
+                return new FontResolverInfo("Calibri#Bold");
+            else
+                return new FontResolverInfo("Calibri#Regular");
+        }
         // Fallback to default
         return PlatformFontResolver.ResolveTypeface(familyName, isBold, isItalic);
     }
