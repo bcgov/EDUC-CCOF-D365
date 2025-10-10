@@ -47,11 +47,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Fonts\" />
     <Folder Include="Services\Documents\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Fonts\Calibri-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\Calibri-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Fonts\OpenSans-Bold.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
