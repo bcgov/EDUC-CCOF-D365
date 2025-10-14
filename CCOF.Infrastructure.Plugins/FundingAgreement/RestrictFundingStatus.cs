@@ -203,8 +203,13 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                     if (entity.LogicalName == "ccof_funding_agreement")
                     {
                         EntityReference currentUserLookup = new EntityReference("systemuser", userId);
-                        entity["ccof_ministry_ea_adjudicator_name"] = currentUserLookup;
-                        entity["ccof_date_signed_ministry"] = DateTime.UtcNow;
+                        entity["ccof_fa_status_updated_by"] = currentUserLookup;
+                        entity["ccof_fa_status_updated_on"] = DateTime.UtcNow;
+                        if (newStatus == 101510003)      // 101510003 - "Drafted – Provider Action Required"
+                        {
+                            entity["ccof_sent_for_signature_by"] = currentUserLookup;
+                            entity["ccof_sent_for_signature_date"] = DateTime.UtcNow;
+                        }
                     }
 
                     tracingService.Trace("End Restrict funding status plugin");
