@@ -46,6 +46,26 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         }
 
         #region Data Queries
+        public string CCFRIFacilityRequestUri
+        {  // Fetch xml is only for reference as we need get more than 5000 records
+            get
+            {
+                var fetchXml = $"""
+                    <fetch>
+                      <entity name="ccof_adjudication_ccfri_facility">
+                        <attribute name="ccof_ccfripaymenteligibilitystartdate" />
+                        <attribute name="ccof_name" />
+                        <attribute name="ccof_facility" />
+                        <filter>
+                          <condition attribute="ccof_programyear" operator="eq" value="{_processParams.InitialEnrolmentReport.ProgramYearId}" />
+                        </filter>
+                      </entity>
+                    </fetch>
+                    """;
+                var requestUri = $"ccof_adjudication_ccfri_facilities?$select=ccof_ccfripaymenteligibilitystartdate,ccof_name,_ccof_facility_value&$filter=(_ccof_programyear_value eq " +_processParams.InitialEnrolmentReport.ProgramYearId+")";
+                return requestUri.CleanCRLF();
+            }
+        }
         public string ApprovedClosureDayRequestUri
         {
             get
@@ -514,11 +534,13 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     throw new InvalidOperationException($"Business days is missing.");
                 }
                 // Retrive all Approved Parent Fee for all Facilities
-                List<JsonNode> ApprovedParentFee = await FetchAllRecordsFromCRMAsync(ApprovedParentFeeRequestUri);
+                List<JsonNode> allFacilityApprovedParentFees = await FetchAllRecordsFromCRMAsync(ApprovedParentFeeRequestUri);
                 List<JsonNode> orgInfo = await FetchAllRecordsFromCRMAsync(OrgRequestUri);
                 List<JsonNode> facilityLicence = await FetchAllRecordsFromCRMAsync(FacilityLicenceRequestUri);
                 List<JsonNode> feeFloorExemptArray = await FetchAllRecordsFromCRMAsync(FeeFloorExemptRequestUri);
                 List<JsonNode> allApprovedClosureDays = await FetchAllRecordsFromCRMAsync(ApprovedClosureDayRequestUri);
+                List<JsonNode> allCCFRIFacilityArray = await FetchAllRecordsFromCRMAsync(CCFRIFacilityRequestUri);
+
                 // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Raw Approved Closures JSON: " + JsonSerializer.Serialize(allApprovedClosureDays) ?? "[]");
                 List<JsonNode> dailyEnrolment = GenerateDailyEnrolment(int.Parse(_processParams.InitialEnrolmentReport.Year), _processParams.InitialEnrolmentReport.Month ?? 1, JsonSerializer.Serialize(statutoryDay));
 
@@ -609,29 +631,66 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         bool IHMALicenceExist = facilityLicence.Any(node => node?["_ccof_facility_value"]?.GetValue<string>() == record);
                         var ccofBaseRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                                                node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000)); // 100000001 IHMA Base Funding;  100000000 Base Funding
-                        var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
-                                                               node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
+                        //var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                        //                                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
                         var ccfriMax = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                                                    node?["ccof_ratetype"]?.GetValue<int>() == 100000004 &&
                                                                    node?["ccof_businessday"]?.GetValue<int>() == businessDay); //100000004 CCFRI Max;
                         var ccfriMin = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                                                    node?["ccof_ratetype"]?.GetValue<int>() == 100000005 &&
                                                                    node?["ccof_businessday"]?.GetValue<int>() == businessDay); // 100000005 CCFRI Min
-                        //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
-                        //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
-                        var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
-                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
-                        var approvedParentfee18to36 = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2 &&
-                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
-                        var approvedParentfee3YK = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 3 &&
-                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
-                        var approvedParentfeeOOSCK = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 4 &&
-                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
-                        var approvedParentfeeOOSCG = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 5 &&
-                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
-                        var approvedParentfeePre = ApprovedParentFee.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6 &&
-                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
-                        var approvedParentFee = new JsonObject()
+
+                        JsonNode? approvedParentfee0to18 = null;
+                        JsonNode? approvedParentfee18to36 = null;
+                        JsonNode? approvedParentfee3YK = null;
+                        JsonNode? approvedParentfeeOOSCK = null;
+                        JsonNode? approvedParentfeeOOSCG = null;
+                        JsonNode? approvedParentfeePre = null;
+                        List<JsonNode> allApprovedParentFees = allFacilityApprovedParentFees.Where(node => node?["_ccof_facility_value"]?.GetValue<string>() == record).ToList();
+                        if (allApprovedParentFees != null && allApprovedParentFees.Count > 0)
+                        {
+                            var firstRecord = allApprovedParentFees[0].AsObject();
+                            int? type = firstRecord["ccof_type"]?.GetValue<int>();
+                            if (type == 1)
+                            {
+                                List<JsonNode> allCCFRIFacility = allCCFRIFacilityArray.Where(node => node?["_ccof_facility_value"]?.GetValue<string>() == record).ToList();
+                                if (allCCFRIFacility != null && allCCFRIFacility.Count > 0)
+                                {
+                                    var CCFRIFacility = allCCFRIFacility[0].AsObject();
+                                    _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is Fully Approval Parent fees with CCFRIFacilityGuid: " + CCFRIFacility["ccof_adjudication_ccfri_facilityid"]);
+                                    DateTime? eligibilityStartDate = CCFRIFacility["ccof_ccfripaymenteligibilitystartdate"]?.GetValue<DateTime?>();
+                                    var dateToCompare = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, 1);
+                                    if (eligibilityStartDate != null && dateToCompare.Date >= eligibilityStartDate.Value.Date)
+                                    {
+                                        //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
+                                        //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
+                                        approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
+                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
+                                        approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2 &&
+                                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                        approvedParentfee3YK = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 3 &&
+                                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                        approvedParentfeeOOSCK = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 4 &&
+                                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                        approvedParentfeeOOSCG = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 5 &&
+                                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                        approvedParentfeePre = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6 &&
+                                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                    }
+                                    // else — before eligibility start date, variables stay null
+                                }
+                                // else — facility record not found, skip
+                            }
+                            else
+                            {
+                                _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is temp Approval Parent fees:");
+
+                            }
+                            // else — not fully approved, skip
+                        }
+
+
+                        var approvedParentFeesForMonth = new JsonObject()
                         {
                             ["ccof_approvedparentfee0to18"] = (approvedParentfee0to18 == null || approvedParentfee0to18[MonthLogicalName] == null ||
                                                                     approvedParentfee0to18[MonthLogicalName].GetValue<decimal>() == 0)
@@ -670,7 +729,28 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                                     approvedParentfeePre[MonthLogicalName].GetValue<decimal>() == 0)
                                                                     ? null : approvedParentfeePre["ccof_frequency"].GetValue<int>()
                         };
-                        var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFee, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, businessDay, providerType);
+                        string? providerPaymentRateBind = null;
+                        bool allFeesEmptyOrZero =
+                            (approvedParentFeesForMonth["ccof_approvedparentfee0to18"] == null || approvedParentFeesForMonth["ccof_approvedparentfee0to18"].GetValue<decimal>() == 0) &&
+                            (approvedParentFeesForMonth["ccof_approvedparentfee18to36"] == null || approvedParentFeesForMonth["ccof_approvedparentfee18to36"].GetValue<decimal>() == 0) &&
+                            (approvedParentFeesForMonth["ccof_approvedparentfee3yk"] == null || approvedParentFeesForMonth["ccof_approvedparentfee3yk"].GetValue<decimal>() == 0) &&
+                            (approvedParentFeesForMonth["ccof_approvedparentfeeoosck"] == null || approvedParentFeesForMonth["ccof_approvedparentfeeoosck"].GetValue<decimal>() == 0) &&
+                            (approvedParentFeesForMonth["ccof_approvedparentfeeooscg"] == null || approvedParentFeesForMonth["ccof_approvedparentfeeooscg"].GetValue<decimal>() == 0) &&
+                            (approvedParentFeesForMonth["ccof_approvedparentfeepre"] == null || approvedParentFeesForMonth["ccof_approvedparentfeepre"].GetValue<decimal>() == 0);
+                        if (!allFeesEmptyOrZero)
+                        {
+                            var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                                                                   node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
+                            if (ccfriProviderPaymentRate != null && ccfriProviderPaymentRate["ccof_rateid"] != null)
+                            {
+                                providerPaymentRateBind = $"/ccof_rates({ccfriProviderPaymentRate["ccof_rateid"]?.GetValue<string>()})";
+                            }
+                        }
+                        else
+                        {
+                            providerPaymentRateBind = null;
+                        }
+                        var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFeesForMonth, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, businessDay, providerType);
                         var EnrolmentReportToCreate = new JsonObject()
                         {
                             ["ccof_year"] = _processParams.InitialEnrolmentReport.Year,
@@ -684,24 +764,25 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             // ["ccof_organization@odata.bind"] = (org == null) ? null : $"/accounts(" + org["org.accountid"]?.GetValue<string>() + ")",
                             ["ccof_programyear@odata.bind"] = $"/ccof_program_years(" + _processParams.InitialEnrolmentReport.ProgramYearId + ")",
                             ["ccof_ccofbaserate@odata.bind"] = ccofBaseRate?["ccof_rateid"]?.GetValue<string>() is string baseRateId ? $"/ccof_rates({baseRateId})" : null,
-                            ["ccof_ccfriproviderpaymentrate@odata.bind"] = ccfriProviderPaymentRate?["ccof_rateid"]?.GetValue<string>() is string providerRateId ? $"/ccof_rates({providerRateId})" : null,
+                            ["ccof_ccfriproviderpaymentrate@odata.bind"] = providerPaymentRateBind,
+                            // ["ccof_ccfriproviderpaymentrate@odata.bind"] = ccfriProviderPaymentRate?["ccof_rateid"]?.GetValue<string>() is string providerRateId ? $"/ccof_rates({providerRateId})" : null,
                             ["ccof_ccfridailyratemax@odata.bind"] = ccfriMax?["ccof_rateid"]?.GetValue<string>() is string CCFRIMaxRateId ? $"/ccof_rates({CCFRIMaxRateId})" : null,
                             ["ccof_ccfridailyratemin@odata.bind"] = ccfriMin?["ccof_rateid"]?.GetValue<string>() is string CCFRIMinRateId ? $"/ccof_rates({CCFRIMinRateId})" : null,
                             ["ccof_reportextension"] = new JsonObject()
                             {
                                 // Approved Parent Fee
-                                ["ccof_approvedparentfee0to18"] = approvedParentFee["ccof_approvedparentfee0to18"]?.DeepClone(),
-                                ["ccof_approvedparentfee18to36"] = approvedParentFee["ccof_approvedparentfee18to36"]?.DeepClone(),
-                                ["ccof_approvedparentfee3yk"] = approvedParentFee["ccof_approvedparentfee3yk"]?.DeepClone(),
-                                ["ccof_approvedparentfeeoosck"] = approvedParentFee["ccof_approvedparentfeeoosck"]?.DeepClone(),
-                                ["ccof_approvedparentfeeooscg"] = approvedParentFee["ccof_approvedparentfeeooscg"]?.DeepClone(),
-                                ["ccof_approvedparentfeepre"] = approvedParentFee["ccof_approvedparentfeepre"]?.DeepClone(),
-                                ["ccof_approvedparentfeefrequency0to18"] = approvedParentFee["ccof_approvedparentfeefrequency0to18"]?.DeepClone(),
-                                ["ccof_approvedparentfeefrequency18to36"] = approvedParentFee["ccof_approvedparentfeefrequency18to36"]?.DeepClone(),
-                                ["ccof_approvedparentfeefrequency3yk"] = approvedParentFee["ccof_approvedparentfeefrequency3yk"]?.DeepClone(),
-                                ["ccof_approvedparentfeefrequencyoosck"] = approvedParentFee["ccof_approvedparentfeefrequencyoosck"]?.DeepClone(),
-                                ["ccof_approvedparentfeefrequencyooscg"] = approvedParentFee["ccof_approvedparentfeefrequencyooscg"]?.DeepClone(),
-                                ["ccof_approvedparentfeefrequencypre"] = approvedParentFee["ccof_approvedparentfeefrequencypre"]?.DeepClone(),
+                                ["ccof_approvedparentfee0to18"] = approvedParentFeesForMonth["ccof_approvedparentfee0to18"]?.DeepClone(),
+                                ["ccof_approvedparentfee18to36"] = approvedParentFeesForMonth["ccof_approvedparentfee18to36"]?.DeepClone(),
+                                ["ccof_approvedparentfee3yk"] = approvedParentFeesForMonth["ccof_approvedparentfee3yk"]?.DeepClone(),
+                                ["ccof_approvedparentfeeoosck"] = approvedParentFeesForMonth["ccof_approvedparentfeeoosck"]?.DeepClone(),
+                                ["ccof_approvedparentfeeooscg"] = approvedParentFeesForMonth["ccof_approvedparentfeeooscg"]?.DeepClone(),
+                                ["ccof_approvedparentfeepre"] = approvedParentFeesForMonth["ccof_approvedparentfeepre"]?.DeepClone(),
+                                ["ccof_approvedparentfeefrequency0to18"] = approvedParentFeesForMonth["ccof_approvedparentfeefrequency0to18"]?.DeepClone(),
+                                ["ccof_approvedparentfeefrequency18to36"] = approvedParentFeesForMonth["ccof_approvedparentfeefrequency18to36"]?.DeepClone(),
+                                ["ccof_approvedparentfeefrequency3yk"] = approvedParentFeesForMonth["ccof_approvedparentfeefrequency3yk"]?.DeepClone(),
+                                ["ccof_approvedparentfeefrequencyoosck"] = approvedParentFeesForMonth["ccof_approvedparentfeefrequencyoosck"]?.DeepClone(),
+                                ["ccof_approvedparentfeefrequencyooscg"] = approvedParentFeesForMonth["ccof_approvedparentfeefrequencyooscg"]?.DeepClone(),
+                                ["ccof_approvedparentfeefrequencypre"] = approvedParentFeesForMonth["ccof_approvedparentfeefrequencypre"]?.DeepClone(),
                                 // daily CCFRI Rate
                                 ["ccof_dailyccfrirateless0to18"] = dailyCCFRIRate["ccof_dailyccfrirateless0to18"]?.DeepClone(),
                                 ["ccof_dailyccfrirateover0to18"] = dailyCCFRIRate["ccof_dailyccfrirateover0to18"]?.DeepClone(),
