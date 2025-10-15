@@ -210,6 +210,11 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                             entity["ccof_sent_for_signature_by"] = currentUserLookup;
                             entity["ccof_sent_for_signature_date"] = DateTime.UtcNow;
                         }
+                        if (newStatus == 101510001)      // 101510001 - "Approved"
+                        {
+                            entity["ccof_ministry_ea_adjudicator_name"] = currentUserLookup;
+                            entity["ccof_date_signed_ministry"] = DateTime.UtcNow;
+                        }
                     }
 
                     tracingService.Trace("End Restrict funding status plugin");
