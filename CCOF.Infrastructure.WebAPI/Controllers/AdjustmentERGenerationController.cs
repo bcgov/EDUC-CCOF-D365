@@ -9,6 +9,7 @@ using System.Net;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CCOF.Infrastructure.WebAPI.Controllers
 {
@@ -378,15 +379,18 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         }
         // Generate Adjustment Enrolment Report
         [HttpPost]
-        [ActionName("GenerateAdjusementER")]
+        [ActionName("GenerateAdjustmentER")]
        //  public ActionResult<string> GenerateAdjusementER([FromBody] dynamic value)
         public ActionResult<string> GenerateAdjusementER([FromBody] AdjustmentERRequest request) 
         {
             var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
             var startTime = _timeProvider.GetTimestamp();
-            // ERGuid = value.ToString().Trim();
             ERGuid = request.ERGuid;
+            string targetEntityLogicalName = request.targetEntityLogicalName;
+            string targetEntitySetName = request.targetEntitySetName;
+            string targetRecordGuid = request.targetRecordGuid;
+            string lookupFieldSchemaName = "ccof_adjustment_created_by";  
             _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Starting GenerateAdjusementER for Enrolment Report ID: {ERGuid}", ERGuid.Replace("\r", "").Replace("\n", ""));
             HttpResponseMessage response = null;
             // get Previous ER
@@ -616,6 +620,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ["ccof_ccfriproviderpaymentrate@odata.bind"] = providerPaymentRateBind,
                 ["ccof_ccfridailyratemax@odata.bind"] = PreviousER["_ccof_ccfridailyratemax_value"]== null ? null:$"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemax_value"].ToString() + ")",
                 ["ccof_ccfridailyratemin@odata.bind"] = PreviousER["_ccof_ccfridailyratemin_value"]== null ? null:$"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemin_value"].ToString() + ")",
+                [$"{lookupFieldSchemaName}_{targetEntityLogicalName}@odata.bind"] = (string.IsNullOrEmpty(targetEntityLogicalName) || string.IsNullOrEmpty(targetEntitySetName) || string.IsNullOrEmpty(targetRecordGuid)) ? null : $"/{targetEntitySetName}({targetRecordGuid})",
                 #region main fields need to copied to Adjustment ER
                 // Total Enrolled
                 ["ccof_totalenrolled0to18"] = PreviousER["ccof_totalenrolled0to18"]?.Value<int?>(),
