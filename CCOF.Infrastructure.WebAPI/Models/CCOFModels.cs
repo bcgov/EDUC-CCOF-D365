@@ -329,6 +329,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
     public class AdjustmentERRequest
     {
         public string ERGuid { get; set; }
+        public string targetEntityLogicalName { get; set; }
+        public string targetEntitySetName { get; set; }
+        public string targetRecordGuid { get; set; }
     }
 
 }
