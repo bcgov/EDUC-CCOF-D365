@@ -1,5 +1,7 @@
 ﻿"use strict";
 
+// module/global cache
+var CreateMODButton = { noDrafted: false, ready: false };
 var CCOF = CCOF || {};
 CCOF.Funding = CCOF.Funding || {};
 CCOF.Funding.Ribbon = CCOF.Funding.Ribbon || {};
@@ -11,7 +13,7 @@ CCOF.Funding.Ribbon = {
     CreateMOD: function (primaryControl, recordId) {
         debugger;
         var formContext = primaryControl;
-        var applicationID = formContext.getAttribute("ccof_facility").getValue();
+        //var applicationID = formContext.getAttribute("ccof_facility").getValue();
         var pageInput = {
             pageType: "custom",
             name: "ccof_ccoffundingmod_8f814",
@@ -69,14 +71,13 @@ CCOF.Funding.Ribbon = {
                 }
             );
     },
+
     showHideCreateMOD: function (primaryControl) {
         debugger;
         var formContext = primaryControl;
         var statusReason = formContext.getAttribute("statuscode").getValue();
-        var organizationId = formContext.getAttribute("ccof_organization").getValue();
 
         var visible = false;
-        var noDrafted = false;
         var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
 
         userRoles.forEach(function hasRole(item, index) {
@@ -84,22 +85,29 @@ CCOF.Funding.Ribbon = {
                 visible = true;
             }
         });
-        Xrm.WebApi.retrieveMultipleRecords('ccof_funding_agreements', "?$select=statecode,ccof_funding_agreementid,ccof_name,createdon,_ccof_programyear_value,_ccof_organization_value,ccof_contractstatus,ccof_version&$filter=(statecode eq 0 and _ccof_organization_value eq " + organizationId +
-            " and Microsoft.Dynamics.CRM.In(PropertyName='statuscode',PropertyValues=['101510002','101510003','101510004']))&$orderby=_ccof_programyear_value desc,ccof_version desc").then(
-                function success(result) {
-                    debugger;
-                    var fundingAgreements = result.entities[0].value;
-                    if (fundingAgreements == null) { noDrafted = true; }
-                }
 
-            )
+        //ACTIVE or APPROVED
+        var showButton = (statusReason === 1 || statusReason === 101510001)
+        if (!CreateMODButton.ready) return false; // default while loading
+        return showButton && visible && CreateMODButton.noDrafted;
+    },
 
-        var showButton = false;
-        //ACTIVE
-        if (statusReason == 1) {
-            showButton = true;
-        }
+    initCreateMODButton: function (executionContext) {
+        debugger;
+        var formContext = executionContext.getFormContext();
+        var organizationId = formContext.getAttribute("ccof_organization").getValue()[0].id.replace('{', '').replace('}', '');
+        var programYearId = formContext.getAttribute("ccof_programyear").getValue()[0].id.replace('{', '').replace('}', '');
+        var query = `?$select=ccof_funding_agreementid&$filter=_ccof_programyear_value eq ${programYearId} and _ccof_organization_value eq ${organizationId} and Microsoft.Dynamics.CRM.In(PropertyName='statuscode',PropertyValues=['101510002','101510003','101510004'])&$orderby=_ccof_programyear_value desc,ccof_version desc`;
 
-        return showButton && visible && noDrafted;
+        Xrm.WebApi.retrieveMultipleRecords("ccof_funding_agreement", query).then(function (res) {
+            CreateMODButton.noDrafted = (res.entities.length === 0);
+            CreateMODButton.ready = true;
+            formContext.ui.refreshRibbon();  // re-evaluate enable/display rules
+        }).catch(function (err) {
+            console.error("FA fetch failed:", err);
+            CreateMODButton.noDrafted = false;
+            CreateMODButton.ready = true;
+            formContext.ui.refreshRibbon();
+        });
     }
 }
