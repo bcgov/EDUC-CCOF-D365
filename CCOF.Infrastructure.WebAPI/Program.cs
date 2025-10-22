@@ -89,7 +89,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseRouting();
 
-
+app.UseApiKey();
 
 app.UseAuthorization();
 
@@ -99,11 +99,11 @@ app.UseEndpoints(endpoints =>
     endpoints.RegisterBatchProcessesEndpoints();
 });
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/processes"),
- appBuilder => appBuilder.UseMiddleware<ApiKeyMiddleware>());
+//app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/processes"),
+// appBuilder => appBuilder.UseMiddleware<ApiKeyMiddleware>());
+//app.UseMiddleware<ApiKeyMiddleware>();
 
-
-app.UseApiKey();
+//app.UseApiKey();
 app.UseProblemDetails();
 
 app.MapFallback(() => Results.Redirect("/swagger"));
