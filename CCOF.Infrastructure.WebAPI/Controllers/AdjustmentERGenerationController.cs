@@ -443,7 +443,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             {
                 var firstRecord = allApprovedParentFees[0].AsObject();
                 int? type = firstRecord["ccof_type"]?.GetValue<int>();
-                if (type == 1)
+                if (type == 1) // Fully Approval
                 {
                     response = _d365webapiservice.SendRetrieveRequestAsync(CCFRIFacilityRequestUri);
                     JObject CCFRIFacilityJsonObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
@@ -464,11 +464,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             approvedParentfeeOOSCG = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 5);
                             approvedParentfeePre = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6);
                         }
-                        // else — before eligibility start date, variables stay null
                     }
-                    // else — facility record not found, skip
                 }
-                else
+                else // Temp Approval
                 {
                     approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1);
                     approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2);
@@ -726,11 +724,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 },
                 ["ccof_dailyenrollment_monthlyenrollmentreport"] = dailyEnrollmentSelected
             };
-            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER: EnrolmentReportToCreate json string.");
-            // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER: EnrolmentReportToCreate json string " + EnrolmentReportToCreate.ToJsonString());
-            var createResponse = await _d365webapiservice.SendCreateRequestAsync(targetEntityLogicalName == "contact" ? _appUserService.AZPortalAppUser : _appUserService.AZSystemAppUser, "ccof_monthlyenrollmentreports", EnrolmentReportToCreate.ToJsonString());
+            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER: EnrolmentReportToCreate json string " + EnrolmentReportToCreate.ToJsonString());
+            response = await _d365webapiservice.SendCreateRequestAsync(targetEntityLogicalName == "contact" ? _appUserService.AZPortalAppUser : _appUserService.AZSystemAppUser, "ccof_monthlyenrollmentreports", EnrolmentReportToCreate.ToJsonString());
             // response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_monthlyenrollmentreports?$expand=ccof_reportextension,ccof_dailyenrollment_monthlyenrollmentreport", EnrolmentReportToCreate.ToJsonString());
-            var content = createResponse.Content.ReadAsStringAsync().Result.ToString();
+            var content = response.Content.ReadAsStringAsync().Result.ToString();
             JObject returnRecord = new JObject();
             returnRecord = JObject.Parse(content);
             returnRecord = new JObject
@@ -740,7 +737,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var endtime = _timeProvider.GetTimestamp();
             var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
             pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
-            if (createResponse.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Successfully created adjustment ER with ID: " + returnRecord["ccof_monthlyenrollmentreportid"]?.ToString() + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
 
@@ -750,11 +747,11 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             {
                 _logger.LogWarning(pstTime.ToString("yyyy-MM-dd HH:mm:ss") +
                         " Failed to create adjustment ER. Status: {StatusCode}, Reason: {ReasonPhrase}, Content: {Content}. Total processing time: {Duration} seconds.",
-                        createResponse.StatusCode,
-                        createResponse.Content.ToString(),
+                        response.StatusCode,
+                        response.Content.ToString(),
                         content,
                         Math.Round(timediff, 2));
-                return StatusCode((int)createResponse.StatusCode, $"Failed to Retrieve records: {content.ToString()}");
+                return StatusCode((int)response.StatusCode, $"Failed to Retrieve records: {content.ToString()}");
             }
         }
     }
