@@ -1,15 +1,17 @@
 ﻿using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Services.AppUsers;
 using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
-using System.Text.Json.Nodes;
-using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 namespace CCOF.Infrastructure.WebAPI.Controllers
 {
@@ -25,11 +27,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         string year = string.Empty;
         private readonly ILogger<AdjustmentERGenerationController> _logger;
         private readonly TimeProvider _timeProvider;
-        public AdjustmentERGenerationController(ID365WebApiService d365webapiservice, ILogger<AdjustmentERGenerationController> logger, TimeProvider timeProvider)
+        private readonly ID365AppUserService _appUserService;
+
+        public AdjustmentERGenerationController(ID365WebApiService d365webapiservice, ID365AppUserService appUserService, ILogger<AdjustmentERGenerationController> logger, TimeProvider timeProvider)
         {
             _d365webapiservice = d365webapiservice ?? throw new ArgumentNullException(nameof(d365webapiservice));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
+            _appUserService = appUserService;
         }
         public string FacilityLicenceRequestUri
         {
@@ -82,7 +87,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             }
         }
         public string CCFRIFacilityRequestUri
-        {  
+        {
             get
             {
                 var fetchXml = $"""
@@ -243,6 +248,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                               <condition attribute="statuscode" operator="eq" value="1" />
                               <condition attribute="ccof_programyear" operator="eq" value="{{programYearGuid}}" />
                               <condition attribute="ccof_facility" operator="eq" value="{{facilityGuid}}" />
+                              <condition attribute="ccof_availability" operator="in">
+                                <value>100000001</value>
+                                <value>100000002</value>
+                                </condition>
                             </filter>
                             <link-entity name="ccof_childcare_category" from="ccof_childcare_categoryid" to="ccof_childcarecategory" link-type="inner" alias="childcareCategory">
                               <attribute name="ccof_childcarecategorynumber" />
@@ -256,7 +265,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 var requestUri = $"ccof_parent_feeses?$select=ccof_apr,ccof_aug,ccof_availability,_ccof_childcarecategory_value,ccof_dec,_ccof_facility_value,ccof_feb,ccof_frequency,ccof_jan,ccof_jul," +
                     $"ccof_jun,ccof_mar,ccof_may,ccof_name,ccof_nov,ccof_oct,_ccof_programyear_value,ccof_sep,ccof_type,statecode,statuscode&$expand=ccof_ChildcareCategory($select=ccof_childcarecategorynumber,ccof_name)" +
                     $"&$filter=(statecode eq 0 and statuscode eq 1 and _ccof_programyear_value eq " + programYearGuid + " and _ccof_facility_value eq "
-                    + facilityGuid + ") and (ccof_ChildcareCategory/ccof_childcare_categoryid ne null)";
+                    + facilityGuid + " and Microsoft.Dynamics.CRM.In(PropertyName='ccof_availability',PropertyValues=['100000001','100000002'])) and (ccof_ChildcareCategory/ccof_childcare_categoryid ne null)";
                 return requestUri.CleanCRLF();
             }
         }
@@ -380,8 +389,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         // Generate Adjustment Enrolment Report
         [HttpPost]
         [ActionName("GenerateAdjustmentER")]
-       //  public ActionResult<string> GenerateAdjusementER([FromBody] dynamic value)
-        public ActionResult<string> GenerateAdjusementER([FromBody] AdjustmentERRequest request) 
+        //  public ActionResult<string> GenerateAdjusementER([FromBody] dynamic value)
+        public async Task<ActionResult<string>> GenerateAdjusementER([FromBody] AdjustmentERRequest request)
         {
             var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
@@ -390,7 +399,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             string targetEntityLogicalName = request.targetEntityLogicalName;
             string targetEntitySetName = request.targetEntitySetName;
             string targetRecordGuid = request.targetRecordGuid;
-            string lookupFieldSchemaName = "ccof_adjustment_created_by";  
+            string lookupFieldSchemaName = "ccof_adjustment_created_by";
             _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Starting GenerateAdjusementER for Enrolment Report ID: {ERGuid}", ERGuid.Replace("\r", "").Replace("\n", ""));
             HttpResponseMessage response = null;
             // get Previous ER
@@ -434,13 +443,13 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             {
                 var firstRecord = allApprovedParentFees[0].AsObject();
                 int? type = firstRecord["ccof_type"]?.GetValue<int>();
-                if (type == 1)
+                if (type == 1) // Fully Approval
                 {
                     response = _d365webapiservice.SendRetrieveRequestAsync(CCFRIFacilityRequestUri);
                     JObject CCFRIFacilityJsonObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
                     JArray? CCFRIFacilityArray = (JArray)CCFRIFacilityJsonObject["value"];
                     List<JsonNode> allCCFRIFacility = CCFRIFacilityArray.Select(j => JsonNode.Parse(j.ToString())).ToList();
-                    if (allCCFRIFacility!=null && allCCFRIFacility.Count>0)
+                    if (allCCFRIFacility != null && allCCFRIFacility.Count > 0)
                     {
                         var CCFRIFacility = allCCFRIFacility[0].AsObject();
                         _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is Fully Approval Parent fees with CCFRIFacilityGuid: " + CCFRIFacility["ccof_adjudication_ccfri_facilityid"]);
@@ -455,14 +464,17 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             approvedParentfeeOOSCG = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 5);
                             approvedParentfeePre = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6);
                         }
-                        // else — before eligibility start date, variables stay null
                     }
-                    // else — facility record not found, skip
                 }
-                else
+                else // Temp Approval
                 {
+                    approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1);
+                    approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2);
+                    approvedParentfee3YK = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 3);
+                    approvedParentfeeOOSCK = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 4);
+                    approvedParentfeeOOSCG = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 5);
+                    approvedParentfeePre = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6);
                     _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is temp Approval Parent fees:");
-
                 }
                 // else — not fully approved, skip
             }
@@ -547,7 +559,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             response = _d365webapiservice.SendRetrieveRequestAsync(ApprovedClosureDayRequestUri, true);
             var approvedClosureDays = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
             JArray? approvedClosureDaysArray = approvedClosureDays["value"] as JArray;
-            _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Raw Approved Closures JSON: " + approvedClosureDaysArray?.ToString() ?? "[]");
+            // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Raw Approved Closures JSON: " + approvedClosureDaysArray?.ToString() ?? "[]");
 
             if (dailyEnrollmentArray != null)
             {
@@ -562,9 +574,9 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     DateTime currentDayEnrollmentDate = new DateTime(int.Parse(year), month, dayOfMonth);
                     // Check if this day falls within any approved closure period
                     int? closurePaymentEligibility = null;
-                    if (approvedClosureDaysArray != null) 
+                    if (approvedClosureDaysArray != null)
                     {
-                        foreach (JObject closure in approvedClosureDaysArray) 
+                        foreach (JObject closure in approvedClosureDaysArray)
                         {
                             if (closure["ccof_startdate"] != null && closure["ccof_enddate"] != null && closure["ccof_payment_eligibility"] != null)
                             {
@@ -574,8 +586,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                                 if (currentDayEnrollmentDate >= startDate && currentDayEnrollmentDate <= endDate)
                                 {
                                     closurePaymentEligibility = paymentEligibility;
-                                   //  _logger.LogInformation($"Daily enrollment day {currentDayEnrollmentDate.ToShortDateString()} is within closure {startDate.ToShortDateString()} - {endDate.ToShortDateString()}. Setting payment eligibility to {paymentEligibility}");
-                                    break; 
+                                    //  _logger.LogInformation($"Daily enrollment day {currentDayEnrollmentDate.ToShortDateString()} is within closure {startDate.ToShortDateString()} - {endDate.ToShortDateString()}. Setting payment eligibility to {paymentEligibility}");
+                                    break;
                                 }
                             }
                         }
@@ -618,8 +630,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ["ccof_programyear@odata.bind"] = $"/ccof_program_years(" + PreviousER["_ccof_programyear_value"].ToString() + ")",
                 ["ccof_ccofbaserate@odata.bind"] = PreviousER["_ccof_ccofbaserate_value"] == null ? null : $"/ccof_rates({PreviousER["_ccof_ccofbaserate_value"].ToString()})",
                 ["ccof_ccfriproviderpaymentrate@odata.bind"] = providerPaymentRateBind,
-                ["ccof_ccfridailyratemax@odata.bind"] = PreviousER["_ccof_ccfridailyratemax_value"]== null ? null:$"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemax_value"].ToString() + ")",
-                ["ccof_ccfridailyratemin@odata.bind"] = PreviousER["_ccof_ccfridailyratemin_value"]== null ? null:$"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemin_value"].ToString() + ")",
+                ["ccof_ccfridailyratemax@odata.bind"] = PreviousER["_ccof_ccfridailyratemax_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemax_value"].ToString() + ")",
+                ["ccof_ccfridailyratemin@odata.bind"] = PreviousER["_ccof_ccfridailyratemin_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemin_value"].ToString() + ")",
                 [$"{lookupFieldSchemaName}_{targetEntityLogicalName}@odata.bind"] = (string.IsNullOrEmpty(targetEntityLogicalName) || string.IsNullOrEmpty(targetEntitySetName) || string.IsNullOrEmpty(targetRecordGuid)) ? null : $"/{targetEntitySetName}({targetRecordGuid})",
                 #region main fields need to copied to Adjustment ER
                 // Total Enrolled
@@ -713,7 +725,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ["ccof_dailyenrollment_monthlyenrollmentreport"] = dailyEnrollmentSelected
             };
             _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER: EnrolmentReportToCreate json string " + EnrolmentReportToCreate.ToJsonString());
-            response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_monthlyenrollmentreports?$expand=ccof_reportextension,ccof_dailyenrollment_monthlyenrollmentreport", EnrolmentReportToCreate.ToJsonString());
+            response = await _d365webapiservice.SendCreateRequestAsync(targetEntityLogicalName == "contact" ? _appUserService.AZPortalAppUser : _appUserService.AZSystemAppUser, "ccof_monthlyenrollmentreports", EnrolmentReportToCreate.ToJsonString());
+            // response = _d365webapiservice.SendCreateRequestAsyncRtn("ccof_monthlyenrollmentreports?$expand=ccof_reportextension,ccof_dailyenrollment_monthlyenrollmentreport", EnrolmentReportToCreate.ToJsonString());
             var content = response.Content.ReadAsStringAsync().Result.ToString();
             JObject returnRecord = new JObject();
             returnRecord = JObject.Parse(content);
@@ -724,7 +737,6 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var endtime = _timeProvider.GetTimestamp();
             var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
             pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
-
             if (response.IsSuccessStatusCode)
             {
                 _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Successfully created adjustment ER with ID: " + returnRecord["ccof_monthlyenrollmentreportid"]?.ToString() + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
@@ -736,10 +748,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 _logger.LogWarning(pstTime.ToString("yyyy-MM-dd HH:mm:ss") +
                         " Failed to create adjustment ER. Status: {StatusCode}, Reason: {ReasonPhrase}, Content: {Content}. Total processing time: {Duration} seconds.",
                         response.StatusCode,
-                        response.ReasonPhrase,
+                        response.Content.ToString(),
                         content,
                         Math.Round(timediff, 2));
-                return StatusCode((int)response.StatusCode, $"Failed to Retrieve records: {response.ReasonPhrase}");
+                return StatusCode((int)response.StatusCode, $"Failed to Retrieve records: {content.ToString()}");
             }
         }
     }
