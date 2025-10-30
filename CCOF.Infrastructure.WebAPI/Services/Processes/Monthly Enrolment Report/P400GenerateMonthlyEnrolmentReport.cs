@@ -62,7 +62,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                       </entity>
                     </fetch>
                     """;
-                var requestUri = $"ccof_adjudication_ccfri_facilities?$select=ccof_ccfripaymenteligibilitystartdate,ccof_name,_ccof_facility_value&$filter=(_ccof_programyear_value eq " +_processParams.InitialEnrolmentReport.ProgramYearId+")";
+                var requestUri = $"ccof_adjudication_ccfri_facilities?$select=ccof_ccfripaymenteligibilitystartdate,ccof_name,_ccof_facility_value&$filter=(_ccof_programyear_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + ")";
                 return requestUri.CleanCRLF();
             }
         }
@@ -217,6 +217,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                               <condition attribute="statecode" operator="eq" value="0" />
                               <condition attribute="statuscode" operator="eq" value="1" />
                               <condition attribute="ccof_programyear" operator="eq" value="fdc2fce3-d1a2-ef11-8a6a-000d3af474a4" />
+                              <condition attribute="ccof_availability" operator="in">
+                                <value>100000001</value>
+                                <value>100000002</value>
+                              </condition>
                             </filter>
                             <link-entity name="ccof_childcare_category" from="ccof_childcare_categoryid" to="ccof_childcarecategory" link-type="inner" alias="childcareCategory">
                               <attribute name="ccof_childcarecategorynumber" />
@@ -226,10 +230,14 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                           </entity>
                         </fetch>
                         """;
+                //var requestUri = $"ccof_parent_feeses?$select=ccof_apr,ccof_aug,ccof_availability,_ccof_childcarecategory_value,ccof_dec,_ccof_facility_value,ccof_feb,ccof_frequency," +
+                //    $"ccof_jan,ccof_jul,ccof_jun,ccof_mar,ccof_may,ccof_name,ccof_nov,ccof_oct,_ccof_programyear_value,ccof_sep,ccof_type,statecode,statuscode" +
+                //    $"&$expand=ccof_ChildcareCategory($select=ccof_childcarecategorynumber,ccof_name)&$filter=(statecode eq 0 and statuscode eq 1 " +
+                //    $"and _ccof_programyear_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + ") and (ccof_ChildcareCategory/ccof_childcare_categoryid ne null)";
                 var requestUri = $"ccof_parent_feeses?$select=ccof_apr,ccof_aug,ccof_availability,_ccof_childcarecategory_value,ccof_dec,_ccof_facility_value,ccof_feb,ccof_frequency," +
-                    $"ccof_jan,ccof_jul,ccof_jun,ccof_mar,ccof_may,ccof_name,ccof_nov,ccof_oct,_ccof_programyear_value,ccof_sep,ccof_type,statecode,statuscode" +
-                    $"&$expand=ccof_ChildcareCategory($select=ccof_childcarecategorynumber,ccof_name)&$filter=(statecode eq 0 and statuscode eq 1 " +
-                    $"and _ccof_programyear_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + ") and (ccof_ChildcareCategory/ccof_childcare_categoryid ne null)";
+                   $"ccof_jan,ccof_jul,ccof_jun,ccof_mar,ccof_may,ccof_name,ccof_nov,ccof_oct,_ccof_programyear_value,ccof_sep,ccof_type,statecode,statuscode" +
+                   $"&$expand=ccof_ChildcareCategory($select=ccof_childcarecategorynumber,ccof_name)&$filter=(statecode eq 0 and statuscode eq 1 " +
+                   $"and _ccof_programyear_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + " and Microsoft.Dynamics.CRM.In(PropertyName='ccof_availability',PropertyValues=['100000001','100000002'])) and (ccof_ChildcareCategory/ccof_childcare_categoryid ne null)";
                 return requestUri.CleanCRLF();
             }
         }
@@ -651,7 +659,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         {
                             var firstRecord = allApprovedParentFees[0].AsObject();
                             int? type = firstRecord["ccof_type"]?.GetValue<int>();
-                            if (type == 1)
+                            if (type == 1) // Fully Approval
                             {
                                 List<JsonNode> allCCFRIFacility = allCCFRIFacilityArray.Where(node => node?["_ccof_facility_value"]?.GetValue<string>() == record).ToList();
                                 if (allCCFRIFacility != null && allCCFRIFacility.Count > 0)
@@ -665,7 +673,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                         //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
                                         //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
                                         approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
-                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
+                                                                node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
                                         approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2 &&
                                                                 node?["_ccof_facility_value"]?.GetValue<string>() == record);
                                         approvedParentfee3YK = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 3 &&
@@ -677,16 +685,25 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                         approvedParentfeePre = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6 &&
                                                                 node?["_ccof_facility_value"]?.GetValue<string>() == record);
                                     }
-                                    // else — before eligibility start date, variables stay null
                                 }
-                                // else — facility record not found, skip
                             }
-                            else
+                            else // Temp Approval
                             {
+                                approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
+                                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
+                                approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2 &&
+                                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                approvedParentfee3YK = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 3 &&
+                                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                approvedParentfeeOOSCK = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 4 &&
+                                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                approvedParentfeeOOSCG = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 5 &&
+                                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);
+                                approvedParentfeePre = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6 &&
+                                                        node?["_ccof_facility_value"]?.GetValue<string>() == record);
                                 _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is temp Approval Parent fees:");
 
                             }
-                            // else — not fully approved, skip
                         }
 
 
@@ -797,8 +814,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                 ["ccof_dailyccfriratelesspre"] = dailyCCFRIRate["ccof_dailyccfriratelesspre"]?.DeepClone(),
                             },
                             // ["ccof_dailyenrollment_monthlyenrollmentreport"] = new JsonArray(dailyEnrolment.Select(node => node.DeepClone()).ToArray())
-                            ["ccof_dailyenrollment_monthlyenrollmentreport"] =new JsonArray(dailyEnrollmentSelected.ToArray())
-                    };
+                            ["ccof_dailyenrollment_monthlyenrollmentreport"] = new JsonArray(dailyEnrollmentSelected.ToArray())
+                        };
                         createEnrolmentReportRequests.Add(new CreateRequest(entitySetName, EnrolmentReportToCreate));
                     }
                     _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Creating Draft ERs index:{index}", i);
