@@ -518,6 +518,23 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                                                         ? null : approvedParentfeePre["ccof_frequency"].GetValue<int>()
             };
             _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER approvedParentFee json string: " + approvedParentFeesForMonth.ToJsonString());
+            string? ccofBaseRateBind = null;
+            response = _d365webapiservice.SendRetrieveRequestAsync(RateRequestUri);
+            JObject rateJsonObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+            JArray? rateArray = (JArray)rateJsonObject["value"];
+            List<JsonNode> rate = rateArray.Select(j => JsonNode.Parse(j.ToString())).ToList();
+            response = _d365webapiservice.SendRetrieveRequestAsync(FacilityLicenceRequestUri);
+            JObject FacilityLicenseJsonObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+            JArray? FacilityLicenseArray = (JArray)FacilityLicenseJsonObject["value"];
+            List<JsonNode> facilityLicence = FacilityLicenseArray.Select(j => JsonNode.Parse(j.ToString())).ToList();
+            bool IHMALicenceExist = facilityLicence != null && facilityLicence.Count > 0;
+            var ccofBaseRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000)); // 100000001 IHMA Base Funding;  100000000 Base Funding
+            if (ccofBaseRate != null && ccofBaseRate["ccof_rateid"] != null)
+            {
+                ccofBaseRateBind = $"/ccof_rates({ccofBaseRate["ccof_rateid"]?.GetValue<string>()})";
+            }
+
             string? providerPaymentRateBind = null;
             bool allFeesEmptyOrZero =
                 (approvedParentFeesForMonth["ccof_approvedparentfee0to18"] == null || approvedParentFeesForMonth["ccof_approvedparentfee0to18"].GetValue<decimal>() == 0) &&
@@ -528,15 +545,6 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 (approvedParentFeesForMonth["ccof_approvedparentfeepre"] == null || approvedParentFeesForMonth["ccof_approvedparentfeepre"].GetValue<decimal>() == 0);
             if (!allFeesEmptyOrZero)
             {
-                response = _d365webapiservice.SendRetrieveRequestAsync(RateRequestUri);
-                JObject rateJsonObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-                JArray? rateArray = (JArray)rateJsonObject["value"];
-                List<JsonNode> rate = rateArray.Select(j => JsonNode.Parse(j.ToString())).ToList();
-                response = _d365webapiservice.SendRetrieveRequestAsync(FacilityLicenceRequestUri);
-                JObject FacilityLicenseJsonObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-                JArray? FacilityLicenseArray = (JArray)FacilityLicenseJsonObject["value"];
-                List<JsonNode> facilityLicence = FacilityLicenseArray.Select(j => JsonNode.Parse(j.ToString())).ToList();
-                bool IHMALicenceExist = facilityLicence != null && facilityLicence.Count > 0;
                 var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                        node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
                 if (ccfriProviderPaymentRate != null && ccfriProviderPaymentRate["ccof_rateid"] != null)
@@ -628,7 +636,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ["ccof_facility@odata.bind"] = $"/accounts(" + PreviousER["_ccof_facility_value"]?.ToString() + ")",
                 ["ccof_organization@odata.bind"] = $"/accounts(" + PreviousER["_ccof_organization_value"]?.ToString() + ")",
                 ["ccof_programyear@odata.bind"] = $"/ccof_program_years(" + PreviousER["_ccof_programyear_value"].ToString() + ")",
-                ["ccof_ccofbaserate@odata.bind"] = PreviousER["_ccof_ccofbaserate_value"] == null ? null : $"/ccof_rates({PreviousER["_ccof_ccofbaserate_value"].ToString()})",
+                //["ccof_ccofbaserate@odata.bind"] = PreviousER["_ccof_ccofbaserate_value"] == null ? null : $"/ccof_rates({PreviousER["_ccof_ccofbaserate_value"].ToString()})",
+                ["ccof_ccofbaserate@odata.bind"] = ccofBaseRateBind,
                 ["ccof_ccfriproviderpaymentrate@odata.bind"] = providerPaymentRateBind,
                 ["ccof_ccfridailyratemax@odata.bind"] = PreviousER["_ccof_ccfridailyratemax_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemax_value"].ToString() + ")",
                 ["ccof_ccfridailyratemin@odata.bind"] = PreviousER["_ccof_ccfridailyratemin_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemin_value"].ToString() + ")",
