@@ -549,7 +549,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 List<JsonNode> allApprovedClosureDays = await FetchAllRecordsFromCRMAsync(ApprovedClosureDayRequestUri);
                 List<JsonNode> allCCFRIFacilityArray = await FetchAllRecordsFromCRMAsync(CCFRIFacilityRequestUri);
 
-                // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Raw Approved Closures JSON: " + JsonSerializer.Serialize(allApprovedClosureDays) ?? "[]");
+                // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: Draft ER Creation: Approved Closures JSON: " + JsonSerializer.Serialize(allApprovedClosureDays) ?? "[]");
                 List<JsonNode> dailyEnrolment = GenerateDailyEnrolment(int.Parse(_processParams.InitialEnrolmentReport.Year), _processParams.InitialEnrolmentReport.Month ?? 1, JsonSerializer.Serialize(statutoryDay));
 
                 // Batch processing
@@ -665,7 +665,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                 if (allCCFRIFacility != null && allCCFRIFacility.Count > 0)
                                 {
                                     var CCFRIFacility = allCCFRIFacility[0].AsObject();
-                                    _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is Fully Approval Parent fees with CCFRIFacilityGuid: " + CCFRIFacility["ccof_adjudication_ccfri_facilityid"]);
+                                    // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: Draft ER Creation:  This is Fully Approval Parent fees with CCFRIFacilityGuid: " + CCFRIFacility["ccof_adjudication_ccfri_facilityid"]);
                                     DateTime? eligibilityStartDate = CCFRIFacility["ccof_ccfripaymenteligibilitystartdate"]?.GetValue<DateTime?>();
                                     var dateToCompare = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, 1);
                                     if (eligibilityStartDate != null && dateToCompare.Date >= eligibilityStartDate.Value.Date)
@@ -701,7 +701,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                         node?["_ccof_facility_value"]?.GetValue<string>() == record);
                                 approvedParentfeePre = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 6 &&
                                                         node?["_ccof_facility_value"]?.GetValue<string>() == record);
-                                _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is temp Approval Parent fees:");
+                                // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: Draft ER Creation: This is temp Approval Parent fees:");
 
                             }
                         }
