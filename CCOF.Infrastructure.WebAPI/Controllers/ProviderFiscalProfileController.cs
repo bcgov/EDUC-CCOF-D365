@@ -74,7 +74,6 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         </link-entity>
       </link-entity>
     </link-entity>
-
   </entity>
 </fetch>";
             var message = $"contacts?fetchXml=" + WebUtility.UrlEncode(fetchXml);
