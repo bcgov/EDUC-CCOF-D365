@@ -54,6 +54,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     <fetch>
                       <entity name="ccof_adjudication_ccfri_facility">
                         <attribute name="ccof_ccfripaymenteligibilitystartdate" />
+                        <attribute name="ccof_midyearoptoutlastmonthoffunding" />
                         <attribute name="ccof_name" />
                         <attribute name="ccof_facility" />
                         <filter>
@@ -62,7 +63,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                       </entity>
                     </fetch>
                     """;
-                var requestUri = $"ccof_adjudication_ccfri_facilities?$select=ccof_ccfripaymenteligibilitystartdate,ccof_name,_ccof_facility_value&$filter=(_ccof_programyear_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + ")";
+                var requestUri = $"ccof_adjudication_ccfri_facilities?$select=ccof_ccfripaymenteligibilitystartdate,ccof_midyearoptoutlastmonthoffunding,ccof_name,_ccof_facility_value&$filter=(_ccof_programyear_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + ")";
                 return requestUri.CleanCRLF();
             }
         }
@@ -667,11 +668,28 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                     var CCFRIFacility = allCCFRIFacility[0].AsObject();
                                     // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: Draft ER Creation:  This is Fully Approval Parent fees with CCFRIFacilityGuid: " + CCFRIFacility["ccof_adjudication_ccfri_facilityid"]);
                                     DateTime? eligibilityStartDate = CCFRIFacility["ccof_ccfripaymenteligibilitystartdate"]?.GetValue<DateTime?>();
-                                    var dateToCompare = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, 1);
-                                    if (eligibilityStartDate != null && dateToCompare.Date >= eligibilityStartDate.Value.Date)
+                                    DateTime? midyearOptOutLastMonthDate = CCFRIFacility["ccof_midyearoptoutlastmonthoffunding"]?.GetValue<DateTime?>();
+                                    if (eligibilityStartDate == null)
                                     {
-                                        //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
-                                        //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
+                                        if ((int)_processParams.InitialEnrolmentReport.Month >= 4)
+                                            eligibilityStartDate = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), 4, 1);
+                                        else
+                                            eligibilityStartDate = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year) - 1, 4, 1);
+                                    }
+
+                                    if (midyearOptOutLastMonthDate == null)
+                                    {
+                                        if ((int)_processParams.InitialEnrolmentReport.Month >= 4)
+                                            midyearOptOutLastMonthDate = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year) + 1, 3, 1);
+                                        else
+                                            midyearOptOutLastMonthDate = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), 3, 1);
+                                    }
+                                    var dateToCompare = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, 1);
+
+                                    if (dateToCompare.Date >= eligibilityStartDate.Value.Date && dateToCompare.Date <= midyearOptOutLastMonthDate)
+                                        {
+                                            //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
+                                            //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
                                         approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
                                                                 node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
                                         approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2 &&
