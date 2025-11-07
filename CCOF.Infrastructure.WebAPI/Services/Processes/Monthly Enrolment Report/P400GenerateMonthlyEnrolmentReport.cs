@@ -12,6 +12,8 @@ using System.Text.Json;
 using System.Xml.Linq;
 using Polly.Caching;
 using Newtonsoft.Json.Linq;
+using Polly;
+using Polly.Retry;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
@@ -687,9 +689,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                     var dateToCompare = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, 1);
 
                                     if (dateToCompare.Date >= eligibilityStartDate.Value.Date && dateToCompare.Date <= midyearOptOutLastMonthDate)
-                                        {
-                                            //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
-                                            //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
+                                    {
+                                        //var approvedParentfee0to18 = ApprovedParentFee.FirstOrDefault(node => node?["childcareCategory.ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
+                                        //                        node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for Fetchxml query
                                         approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1 &&
                                                                 node?["_ccof_facility_value"]?.GetValue<string>() == record);  // for odata query
                                         approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2 &&
@@ -837,7 +839,21 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         createEnrolmentReportRequests.Add(new CreateRequest(entitySetName, EnrolmentReportToCreate));
                     }
                     _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Creating Draft ERs index:{index}", i);
-                    var ERBatchResult = await _d365webapiservice.SendBatchMessageAsync(_appUserService.AZSystemAppUser, createEnrolmentReportRequests, null);
+                    AsyncRetryPolicy retryPolicy = Policy
+                        .Handle<TaskCanceledException>(ex => ex.InnerException is TimeoutException)
+                        .Or<HttpRequestException>()
+                        .WaitAndRetryAsync(
+                            retryCount: 5,
+                            sleepDurationProvider: attempt => TimeSpan.FromSeconds(2 * attempt),
+                            onRetry: (exception, timespan, attempt, context) =>
+                            {
+                                Console.WriteLine($"Draft ER Creation Retry {attempt} after {timespan.TotalSeconds}s due to: {exception.Message}");
+                            });
+
+                    var ERBatchResult = await retryPolicy.ExecuteAsync(() =>
+                        _d365webapiservice.SendBatchMessageAsync(_appUserService.AZSystemAppUser, createEnrolmentReportRequests, null)
+                    );
+                    // var ERBatchResult = await _d365webapiservice.SendBatchMessageAsync(_appUserService.AZSystemAppUser, createEnrolmentReportRequests, null);
                     if (ERBatchResult.Errors.Any())
                     {
                         var errorInfos = ProcessResult.Failure(ProcessId, ERBatchResult.Errors, ERBatchResult.TotalProcessed, ERBatchResult.TotalRecords);
@@ -849,7 +865,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 var endtime = _timeProvider.GetTimestamp();
                 var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
                 _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
-                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Create ER Batch process records is Complete");
+                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Draft ERs Creation Batch process is Complete");
                 return ProcessResult.Completed(ProcessId).SimpleProcessResult;
             }
             catch (Exception ex)
