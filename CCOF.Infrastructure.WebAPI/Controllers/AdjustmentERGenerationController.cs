@@ -94,6 +94,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     <fetch>
                       <entity name="ccof_adjudication_ccfri_facility">
                         <attribute name="ccof_ccfripaymenteligibilitystartdate" />
+                        <attribute name="ccof_midyearoptoutlastmonthoffunding" />
                         <attribute name="ccof_name" />
                         <attribute name="ccof_facility" />
                         <filter>
@@ -454,8 +455,24 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         var CCFRIFacility = allCCFRIFacility[0].AsObject();
                         _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER  This is Fully Approval Parent fees with CCFRIFacilityGuid: " + CCFRIFacility["ccof_adjudication_ccfri_facilityid"]);
                         DateTime? eligibilityStartDate = CCFRIFacility["ccof_ccfripaymenteligibilitystartdate"]?.GetValue<DateTime?>();
+                        DateTime? midyearOptOutLastMonthDate = CCFRIFacility["ccof_midyearoptoutlastmonthoffunding"]?.GetValue<DateTime?>();
+                        if (eligibilityStartDate == null)
+                        {
+                            if (month >= 4)
+                                eligibilityStartDate = new DateTime(int.Parse(year), 4, 1);
+                            else
+                                eligibilityStartDate = new DateTime(int.Parse(year) - 1, 4, 1);
+                        }
+
+                        if (midyearOptOutLastMonthDate == null)
+                        {
+                            if (month >= 4)
+                                midyearOptOutLastMonthDate = new DateTime(int.Parse(year) + 1, 3, 1);
+                            else
+                                midyearOptOutLastMonthDate = new DateTime(int.Parse(year), 3, 1);
+                        }
                         var dateToCompare = new DateTime(int.Parse(year), month, 1);
-                        if (eligibilityStartDate != null && dateToCompare.Date >= eligibilityStartDate.Value.Date)
+                        if (dateToCompare.Date >= eligibilityStartDate.Value.Date&& dateToCompare.Date<= midyearOptOutLastMonthDate)
                         {
                             approvedParentfee0to18 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 1);
                             approvedParentfee18to36 = allApprovedParentFees.FirstOrDefault(node => node?["ccof_ChildcareCategory"]?["ccof_childcarecategorynumber"]?.GetValue<int>() == 2);
