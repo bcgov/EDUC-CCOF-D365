@@ -40,7 +40,7 @@ namespace CCOF.Infrastructure.Plugins.Licence
                 };
                 if (isUpdate)
                 {
-                    var colset = new ColumnSet("ccof_facility", "ccof_start_date", "ccof_end_date");
+                    var colset = new ColumnSet("ccof_facility", "ccof_record_start_date", "ccof_record_end_date");
                     current = service.Retrieve("ccof_license", recordId, colset);
                     qe.Criteria.AddCondition("ccof_license" + "id", ConditionOperator.NotEqual, recordId);
                 }
@@ -60,19 +60,23 @@ namespace CCOF.Infrastructure.Plugins.Licence
                         throw new InvalidPluginExecutionException("This facility already has an active licence version. End date the active version before proceeding.");
                     }
                 }
-                if (target.Contains("ccof_start_date") || target.Contains("ccof_end_date"))
+                if (target.Contains("ccof_record_start_date") || target.Contains("ccof_record_end_date"))
                 {
-                    DateTime? start = GetDate(target, "ccof_start_date") ?? GetDate(current, "ccof_start_date");
-                    DateTime? end = GetDate(target, "ccof_end_date") ?? GetDate(current, "ccof_end_date");
+                    DateTime? start = GetDate(target, "ccof_record_start_date") ?? GetDate(current, "ccof_record_start_date");
+                    DateTime? end = GetDate(target, "ccof_record_end_date") ?? GetDate(current, "ccof_record_end_date");
                     var endNotBeforeThisStartOrNull = new FilterExpression(LogicalOperator.Or);
-                    endNotBeforeThisStartOrNull.AddCondition("ccof_end_date", ConditionOperator.OnOrAfter, start.Value);
-                    endNotBeforeThisStartOrNull.AddCondition("ccof_end_date", ConditionOperator.Null);
+                    endNotBeforeThisStartOrNull.AddCondition("ccof_record_end_date", ConditionOperator.OnOrAfter, start.Value);
+                    endNotBeforeThisStartOrNull.AddCondition("ccof_record_end_date", ConditionOperator.Null);
 
                     qe.Criteria.AddFilter(endNotBeforeThisStartOrNull);
 
                     if (end.HasValue)
                     {
-                        qe.Criteria.AddCondition("ccof_start_date", ConditionOperator.OnOrBefore, end.Value);
+                        qe.Criteria.AddCondition("ccof_record_start_date", ConditionOperator.OnOrBefore, end.Value);
+                    }
+                    else
+                    {
+                        qe.Criteria.AddCondition("ccof_record_start_date", ConditionOperator.OnOrBefore, start.Value);
                     }
                     var licenceRecord = service.RetrieveMultiple(qe).Entities;
                     var anyOverlap = licenceRecord.Any();
