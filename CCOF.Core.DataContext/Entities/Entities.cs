@@ -115,6 +115,7 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_Adjudication_CcFri_Facility_Facility = "CcOf_Adjudication_CcFri_Facility_Facility";
 			public const string CcOf_Adjudication_Organization = "CcOf_Adjudication_Organization";
 			public const string CcOf_ApprovedUntil = "ccof_approveduntil";
+			public const string CcOf_Base_Funding_Number = "ccof_base_funding_number";
 			public const string CcOf_BcCorporateRegistryName = "ccof_bccorporateregistryname";
 			public const string CcOf_Bypass_GoodStanding_Check = "ccof_bypass_goodstanding_check";
 			public const string CcOf_Bypass_GoodStanding_Check_Reason = "ccof_bypass_goodstanding_check_reason";
@@ -127,9 +128,16 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_DoingBusinessAs = "ccof_doingbusinessas";
 			public const string CcOf_Duration = "ccof_duration";
 			public const string CcOf_Duration_Trigger_Flow = "ccof_duration_trigger_flow";
+			public const string CcOf_ECE_Rate = "ccof_ece_rate";
+			public const string CcOf_ECE_Rate_Base = "ccof_ece_rate_base";
+			public const string CcOf_ECE_Sb_Rate = "ccof_ece_sb_rate";
+			public const string CcOf_ECE_Sb_Rate_Base = "ccof_ece_sb_rate_base";
 			public const string CcOf_EverReceivedFundingUnderTheCcOfProgram = "ccof_everreceivedfundingundertheccofprogram";
 			public const string CcOf_EverReceivedFundingUnderTheCcOfProgramName = "ccof_everreceivedfundingundertheccofprogramname";
+			public const string CcOf_Facility_Previous_Address = "ccof_facility_previous_address";
 			public const string CcOf_FacilityEndDate = "ccof_facilityenddate";
+			public const string CcOf_FacilityHoursOfOperationFrom = "ccof_facilityhoursofoperationfrom";
+			public const string CcOf_FacilityHoursOfOperationTo = "ccof_facilityhoursofoperationto";
 			public const string CcOf_FacilityLicenceNumber = "ccof_facilitylicencenumber";
 			public const string CcOf_FacilityReceived_CcOf_Funding = "ccof_facilityreceived_ccof_funding";
 			public const string CcOf_FacilityStartDate = "ccof_facilitystartdate";
@@ -137,6 +145,7 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_FacilityStatusName = "ccof_facilitystatusname";
 			public const string CcOf_FormComplete = "ccof_formcomplete";
 			public const string CcOf_FormCompleteName = "ccof_formcompletename";
+			public const string CcOf_Funding_Version = "ccof_funding_version";
 			public const string CcOf_FundingAgreementNumber = "ccof_fundingagreementnumber";
 			public const string CcOf_Good_Standing_Indicator_CcOf = "ccof_good_standing_indicator_ccof";
 			public const string CcOf_Good_Standing_Status = "ccof_good_standing_status";
@@ -160,9 +169,11 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_ManagerDisabled = "ccof_managerdisabled";
 			public const string CcOf_ManagerDisabledName = "ccof_managerdisabledname";
 			public const string CcOf_MaximumCapacity = "ccof_maximumcapacity";
+			public const string CcOf_Mod_Submitted_On = "ccof_mod_submitted_on";
 			public const string CcOf_NumberOfFacilities = "ccof_numberoffacilities";
 			public const string CcOf_NumberOfFacilities_Date = "ccof_numberoffacilities_date";
 			public const string CcOf_NumberOfFacilities_State = "ccof_numberoffacilities_state";
+			public const string CcOf_Org_Prev_Address = "ccof_org_prev_address";
 			public const string CcOf_OrganizationId = "ccof_organizationid";
 			public const string CcOf_OrganizationLegalName = "ccof_organizationlegalname";
 			public const string CcOf_OrganizationName = "ccof_organizationname";
@@ -184,6 +195,8 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_Position = "ccof_position";
 			public const string CcOf_PrimaryBusinessBcEId = "ccof_primarybusinessbceid";
 			public const string CcOf_ProviderName = "ccof_providername";
+			public const string CcOf_Rate = "ccof_rate";
+			public const string CcOf_Sb_Rate = "ccof_sb_rate";
 			public const string CcOf_Trigger_Monthly_Check = "ccof_trigger_monthly_check";
 			public const string CcOf_Trigger_Monthly_CheckName = "ccof_trigger_monthly_checkname";
 			public const string CcOf_TypeOfOrganization = "ccof_typeoforganization";
@@ -440,7 +453,8 @@ namespace CCOF.Core.DataContext
 			public const string OfM_Is_Public_Sector = "ofm_is_public_sector";
 			public const string OfM_Is_Public_SectorName = "ofm_is_public_sectorname";
 			public const string OfM_ManualReviewComments = "ofm_manualreviewcomments";
-			public const string OfM_MLa_District = "ofm_mla_district";
+			public const string OfM_MLa_DistrictId = "ofm_mla_districtid";
+			public const string OfM_MLa_DistrictIdName = "ofm_mla_districtidname";
 			public const string OfM_Non_Profit_For_Over_Four_Years = "ofm_non_profit_for_over_four_years";
 			public const string OfM_Non_Profit_For_Over_Four_YearsName = "ofm_non_profit_for_over_four_yearsname";
 			public const string OfM_Now_Calculated_Field = "ofm_now_calculated_field";
@@ -1954,6 +1968,21 @@ namespace CCOF.Core.DataContext
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_base_funding_number")]
+		public string CcOf_Base_Funding_Number
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_base_funding_number");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_base_funding_number", value);
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_bccorporateregistryname")]
 		public string CcOf_BcCorporateRegistryName
 		{
@@ -2103,6 +2132,62 @@ namespace CCOF.Core.DataContext
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ece_rate")]
+		public Microsoft.Xrm.Sdk.Money CcOf_ECE_Rate
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("ccof_ece_rate");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_ece_rate", value);
+			}
+		}
+		
+		/// <summary>
+		/// Value of the Rate in base currency.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ece_rate_base")]
+		public Microsoft.Xrm.Sdk.Money CcOf_ECE_Rate_Base
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("ccof_ece_rate_base");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ece_sb_rate")]
+		public Microsoft.Xrm.Sdk.Money CcOf_ECE_Sb_Rate
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("ccof_ece_sb_rate");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_ece_sb_rate", value);
+			}
+		}
+		
+		/// <summary>
+		/// Value of the ECE SB Rate in base currency.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ece_sb_rate_base")]
+		public Microsoft.Xrm.Sdk.Money CcOf_ECE_Sb_Rate_Base
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("ccof_ece_sb_rate_base");
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_everreceivedfundingundertheccofprogram")]
 		public virtual CcOf_EverReceivedFundingUnderTheCcOfPrOg? CcOf_EverReceivedFundingUnderTheCcOfProgram
 		{
@@ -2135,6 +2220,21 @@ namespace CCOF.Core.DataContext
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_facility_previous_address")]
+		public string CcOf_Facility_Previous_Address
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_facility_previous_address");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_facility_previous_address", value);
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_facilityenddate")]
 		public System.Nullable<System.DateTime> CcOf_FacilityEndDate
 		{
@@ -2147,6 +2247,36 @@ namespace CCOF.Core.DataContext
 			set
 			{
 				this.SetAttributeValue("ccof_facilityenddate", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_facilityhoursofoperationfrom")]
+		public string CcOf_FacilityHoursOfOperationFrom
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_facilityhoursofoperationfrom");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_facilityhoursofoperationfrom", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_facilityhoursofoperationto")]
+		public string CcOf_FacilityHoursOfOperationTo
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_facilityhoursofoperationto");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_facilityhoursofoperationto", value);
 			}
 		}
 		
@@ -2256,6 +2386,21 @@ namespace CCOF.Core.DataContext
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_funding_version")]
+		public System.Nullable<int> CcOf_Funding_Version
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("ccof_funding_version");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_funding_version", value);
 			}
 		}
 		
@@ -2628,6 +2773,21 @@ namespace CCOF.Core.DataContext
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_mod_submitted_on")]
+		public System.Nullable<System.DateTime> CcOf_Mod_Submitted_On
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_mod_submitted_on");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_mod_submitted_on", value);
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_numberoffacilities")]
 		public System.Nullable<int> CcOf_NumberOfFacilities
 		{
@@ -2661,6 +2821,21 @@ namespace CCOF.Core.DataContext
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<int>>("ccof_numberoffacilities_state");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_org_prev_address")]
+		public string CcOf_Org_Prev_Address
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_org_prev_address");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_org_prev_address", value);
 			}
 		}
 		
@@ -2969,6 +3144,36 @@ namespace CCOF.Core.DataContext
 			set
 			{
 				this.SetAttributeValue("ccof_providername", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_rate")]
+		public System.Nullable<decimal> CcOf_Rate
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<decimal>>("ccof_rate");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_rate", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_sb_rate")]
+		public System.Nullable<decimal> CcOf_Sb_Rate
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<decimal>>("ccof_sb_rate");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_sb_rate", value);
 			}
 		}
 		
@@ -4449,6 +4654,7 @@ namespace CCOF.Core.DataContext
 		}
 		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_preferredresource")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public Microsoft.Xrm.Sdk.EntityReference Msdyn_PreferredResource
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -7158,18 +7364,35 @@ namespace CCOF.Core.DataContext
 		/// <summary>
 		/// What MLA district a facility resides in
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_mla_district")]
-		public string OfM_MLa_District
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_mla_districtid")]
+		public Microsoft.Xrm.Sdk.EntityReference OfM_MLa_DistrictId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<string>("ofm_mla_district");
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ofm_mla_districtid");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("ofm_mla_district", value);
+				this.SetAttributeValue("ofm_mla_districtid", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_mla_districtidname")]
+		public string OfM_MLa_DistrictIdName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ofm_mla_districtid"))
+				{
+					return this.FormattedValues["ofm_mla_districtid"];
+				}
+				else
+				{
+					return default(string);
+				}
 			}
 		}
 		
@@ -8792,6 +9015,7 @@ namespace CCOF.Core.DataContext
 		/// Shows the ID of the stage.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -9124,6 +9348,7 @@ namespace CCOF.Core.DataContext
 		/// For internal use only.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -9769,7 +9994,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -10546,7 +10771,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -12059,6 +12284,7 @@ namespace CCOF.Core.DataContext
 		/// Unique identifier of the Stage.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -12218,6 +12444,7 @@ namespace CCOF.Core.DataContext
 		/// For internal use only.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -12468,7 +12695,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -12565,6 +12792,7 @@ namespace CCOF.Core.DataContext
 			public const string Business_Unit_CcOf_Change_Request = "Business_Unit_CcOf_Change_Request";
 			public const string Business_Unit_Contacts = "Business_Unit_Contacts";
 			public const string Business_Unit_Email_Activities = "Business_Unit_Email_Activities";
+			public const string Business_Unit_OfM_Data_Import = "Business_Unit_OfM_Data_Import";
 			public const string Business_Unit_OfM_Payment = "Business_Unit_OfM_Payment";
 			public const string ReferencingBusiness_Unit_Parent_Business_Unit = "business_unit_parent_business_unit";
 			public const string Business_Unit_System_Users = "Business_Unit_System_Users";
@@ -14051,6 +14279,7 @@ namespace CCOF.Core.DataContext
 		/// Unique identifier for Warehouse associated with Business Unit.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_warehouse")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public Microsoft.Xrm.Sdk.EntityReference Msdyn_Warehouse
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -14501,6 +14730,24 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// 1:N business_unit_ofm_data_import
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("business_unit_ofm_data_import")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.OfM_Data_Import> Business_Unit_OfM_Data_Import
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("business_unit_ofm_data_import", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("business_unit_ofm_data_import", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N business_unit_ofm_payment
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("business_unit_ofm_payment")]
@@ -14652,7 +14899,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -16194,6 +16441,7 @@ namespace CCOF.Core.DataContext
 		/// Contains the id of the stage where the entity is located.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -16300,6 +16548,7 @@ namespace CCOF.Core.DataContext
 		/// A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -16531,7 +16780,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -16578,6 +16827,7 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_AcCupNotes = "ccof_accupnotes";
 			public const string CcOf_AdJ_CcFri_Facility_Organization = "ccof_adj_ccfri_facility_Organization";
 			public const string CcOf_Adjudication_CcFri_Facility_Facility = "ccof_adjudication_ccfri_facility_Facility";
+			public const string CcOf_Adjudication_CcFri_Facility_MidyearOptOutUpdatedBy_SystemUser = "ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser";
 			public const string ReferencingCcOf_Adjudication_CcFri_Facility_Previous = "ccof_adjudication_ccfri_facility_Previous";
 			public const string CcOf_Adjudication_CcFri_Facility_UpdatedBy_AFs_Confirmed_SystemUser = "ccof_adjudication_ccfri_facility_updatedby_afs_confirmed_systemuser";
 			public const string CcOf_Adjudication_CcFri_FacilityId = "ccof_adjudication_ccfri_facilityid";
@@ -16756,6 +17006,13 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_MeFICap24Month = "ccof_meficap24month";
 			public const string CcOf_MeFICap24MonthName = "ccof_meficap24monthname";
 			public const string CcOf_MeFICapName = "ccof_meficapname";
+			public const string CcOf_MidyearOptOutlastMonthOfFunding = "ccof_midyearoptoutlastmonthoffunding";
+			public const string CcOf_MidyearOptOutStartMonth = "ccof_midyearoptoutstartmonth";
+			public const string CcOf_MidyearOptOutStartYear = "ccof_midyearoptoutstartyear";
+			public const string CcOf_MidyearOptOutUpdatedBy = "ccof_midyearoptoutupdatedby";
+			public const string CcOf_MidyearOptOutUpdatedByName = "ccof_midyearoptoutupdatedbyname";
+			public const string CcOf_MidyearOptOutUpdatedByYomiName = "ccof_midyearoptoutupdatedbyyominame";
+			public const string CcOf_MidyearOptOutUpdatedOn = "ccof_midyearoptoutupdatedon";
 			public const string CcOf_Month_Of_First_Fee_Increase = "ccof_month_of_first_fee_increase";
 			public const string CcOf_Month_Of_First_Fee_IncreaseName = "ccof_month_of_first_fee_increasename";
 			public const string CcOf_MonthAdjudicatorNotes = "ccof_monthadjudicatornotes";
@@ -19768,6 +20025,115 @@ namespace CCOF.Core.DataContext
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutlastmonthoffunding")]
+		public System.Nullable<System.DateTime> CcOf_MidyearOptOutlastMonthOfFunding
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_midyearoptoutlastmonthoffunding");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_midyearoptoutlastmonthoffunding", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutstartmonth")]
+		public string CcOf_MidyearOptOutStartMonth
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_midyearoptoutstartmonth");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_midyearoptoutstartmonth", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutstartyear")]
+		public string CcOf_MidyearOptOutStartYear
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_midyearoptoutstartyear");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_midyearoptoutstartyear", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutupdatedby")]
+		public Microsoft.Xrm.Sdk.EntityReference CcOf_MidyearOptOutUpdatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ccof_midyearoptoutupdatedby");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_midyearoptoutupdatedby", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutupdatedbyname")]
+		public string CcOf_MidyearOptOutUpdatedByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ccof_midyearoptoutupdatedby"))
+				{
+					return this.FormattedValues["ccof_midyearoptoutupdatedby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutupdatedbyyominame")]
+		public string CcOf_MidyearOptOutUpdatedByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ccof_midyearoptoutupdatedby"))
+				{
+					return this.FormattedValues["ccof_midyearoptoutupdatedby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutupdatedon")]
+		public System.Nullable<System.DateTime> CcOf_MidyearOptOutUpdatedOn
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("ccof_midyearoptoutupdatedon");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_midyearoptoutupdatedon", value);
 			}
 		}
 		
@@ -22856,6 +23222,7 @@ namespace CCOF.Core.DataContext
 		/// Contains the id of the stage where the entity is located.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -22997,6 +23364,7 @@ namespace CCOF.Core.DataContext
 		/// A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -23114,6 +23482,25 @@ namespace CCOF.Core.DataContext
 			set
 			{
 				this.SetRelatedEntity<CCOF.Core.DataContext.Account>("ccof_adjudication_ccfri_facility_Facility", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_midyearoptoutupdatedby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser")]
+		public CCOF.Core.DataContext.SystemUser CcOf_Adjudication_CcFri_Facility_MidyearOptOutUpdatedBy_SystemUser
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.SystemUser>("ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser", null, value);
 			}
 		}
 		
@@ -23784,7 +24171,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -25790,7 +26177,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -25882,6 +26269,10 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_ModificationAgreementActivated = "ccof_modificationagreementactivated";
 			public const string CcOf_ModificationAgreementActivatedName = "ccof_modificationagreementactivatedname";
 			public const string CcOf_Name = "ccof_name";
+			public const string CcOf_New_City_Town = "ccof_new_city_town";
+			public const string CcOf_New_Organization_Address_Name = "ccof_new_organization_address_name";
+			public const string CcOf_New_Postal_Code = "ccof_new_postal_code";
+			public const string CcOf_New_Province = "ccof_new_province";
 			public const string CcOf_Organization = "ccof_organization";
 			public const string CcOf_Organization_Contact_Name = "ccof_organization_contact_name";
 			public const string CcOf_Organization_Id = "ccof_organization_id";
@@ -26751,6 +27142,66 @@ namespace CCOF.Core.DataContext
 			set
 			{
 				this.SetAttributeValue("ccof_name", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_new_city_town")]
+		public string CcOf_New_City_Town
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_new_city_town");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_new_city_town", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_new_organization_address_name")]
+		public string CcOf_New_Organization_Address_Name
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_new_organization_address_name");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_new_organization_address_name", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_new_postal_code")]
+		public string CcOf_New_Postal_Code
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_new_postal_code");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_new_postal_code", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_new_province")]
+		public string CcOf_New_Province
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_new_province");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_new_province", value);
 			}
 		}
 		
@@ -27854,7 +28305,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -28038,10 +28489,13 @@ namespace CCOF.Core.DataContext
 			public const string BusinessCard = "businesscard";
 			public const string BusinessCardAttributes = "businesscardattributes";
 			public const string Callback = "callback";
+			public const string CcOf_CcOf_Portal_Id = "ccof_ccof_portal_id";
+			public const string CcOf_CcOf_Portal_IdName = "ccof_ccof_portal_idname";
 			public const string CcOf_Is_Signing_Authority = "ccof_is_signing_authority";
 			public const string CcOf_Is_Signing_AuthorityName = "ccof_is_signing_authorityname";
 			public const string CcOf_Role = "ccof_role";
 			public const string CcOf_RoleName = "ccof_rolename";
+			public const string CcOf_Source_Id = "ccof_source_id";
 			public const string CcOf_UserId = "ccof_userid";
 			public const string CcOf_Username = "ccof_username";
 			public const string ChildrensNames = "childrensnames";
@@ -30272,6 +30726,7 @@ namespace CCOF.Core.DataContext
 		/// User’s preferred portal LCID
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("adx_preferredlcid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<int> AdX_PreferredLcId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -30693,6 +31148,41 @@ namespace CCOF.Core.DataContext
 			}
 		}
 		
+		/// <summary>
+		/// Unique identifier for Portal Role associated with Contact.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ccof_portal_id")]
+		public Microsoft.Xrm.Sdk.EntityReference CcOf_CcOf_Portal_Id
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ccof_ccof_portal_id");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_ccof_portal_id", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_ccof_portal_idname")]
+		public string CcOf_CcOf_Portal_IdName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ccof_ccof_portal_id"))
+				{
+					return this.FormattedValues["ccof_ccof_portal_id"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_is_signing_authority")]
 		public System.Nullable<bool> CcOf_Is_Signing_Authority
 		{
@@ -30754,6 +31244,21 @@ namespace CCOF.Core.DataContext
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_source_id")]
+		public string CcOf_Source_Id
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ccof_source_id");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_source_id", value);
 			}
 		}
 		
@@ -33911,6 +34416,7 @@ namespace CCOF.Core.DataContext
 		/// Shows the ID of the stage.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -34208,6 +34714,7 @@ namespace CCOF.Core.DataContext
 		/// For internal use only.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -34721,7 +35228,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -34791,6 +35298,8 @@ namespace CCOF.Core.DataContext
 			public const string CcOf_Email_Change_Request = "ccof_Email_change_request";
 			public const string CcOf_EmailType = "ccof_emailtype";
 			public const string CcOf_EmailTypeName = "ccof_emailtypename";
+			public const string CcOf_MonthlyEnrolmentReport = "ccof_monthlyenrolmentreport";
+			public const string CcOf_MonthlyEnrolmentReportName = "ccof_monthlyenrolmentreportname";
 			public const string CcOf_Program_Year = "ccof_program_year";
 			public const string CcOf_Regarding_Closures = "ccof_regarding_closures";
 			public const string CcOf_Regarding_ClosuresName = "ccof_regarding_closuresname";
@@ -34918,6 +35427,7 @@ namespace CCOF.Core.DataContext
 			public const string PriorityCode = "prioritycode";
 			public const string PriorityCodename = "prioritycodename";
 			public const string ProcessId = "processid";
+			public const string PurviewRights = "purviewrights";
 			public const string ReadReceiptRequested = "readreceiptrequested";
 			public const string ReadReceiptRequestedName = "readreceiptrequestedname";
 			public const string ReceivingMailboxId = "receivingmailboxid";
@@ -35390,6 +35900,38 @@ namespace CCOF.Core.DataContext
 				if (this.FormattedValues.Contains("ccof_emailtype"))
 				{
 					return this.FormattedValues["ccof_emailtype"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_monthlyenrolmentreport")]
+		public Microsoft.Xrm.Sdk.EntityReference CcOf_MonthlyEnrolmentReport
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ccof_monthlyenrolmentreport");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_monthlyenrolmentreport", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_monthlyenrolmentreportname")]
+		public string CcOf_MonthlyEnrolmentReportName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ccof_monthlyenrolmentreport"))
+				{
+					return this.FormattedValues["ccof_monthlyenrolmentreport"];
 				}
 				else
 				{
@@ -37350,6 +37892,24 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Purview Rights
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("purviewrights")]
+		public string PurviewRights
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("purviewrights");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("purviewrights", value);
+			}
+		}
+		
+		/// <summary>
 		/// Indicates that a read receipt is requested.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("readreceiptrequested")]
@@ -37897,6 +38457,7 @@ namespace CCOF.Core.DataContext
 		/// Shows the ID of the stage.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -38197,6 +38758,7 @@ namespace CCOF.Core.DataContext
 		/// For internal use only.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -38616,7 +39178,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -38629,6 +39191,883 @@ namespace CCOF.Core.DataContext
                         Attributes["activityid"] = base.Id;
                         break;
                     case "activityid":
+                        var id = (System.Nullable<System.Guid>) value;
+                        if(id == null){ continue; }
+                        base.Id = id.Value;
+                        Attributes[name] = base.Id;
+                        break;
+                    case "formattedvalues":
+                        // Add Support for FormattedValues
+                        FormattedValues.AddRange((Microsoft.Xrm.Sdk.FormattedValueCollection)value);
+                        break;
+                    default:
+                        Attributes[name] = value;
+                        break;
+                }
+            }
+		}
+	}
+	
+	/// <summary>
+	/// Data Import Record
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("ofm_data_import")]
+	public partial class OfM_Data_Import : Microsoft.Xrm.Sdk.Entity
+	{
+		
+		/// <summary>
+		/// Available fields, a the time of codegen, for the ofm_data_import entity
+		/// </summary>
+		public partial class Fields
+		{
+			public const string Business_Unit_OfM_Data_Import = "business_unit_ofm_data_import";
+			public const string CreatedBy = "createdby";
+			public const string CreatedByName = "createdbyname";
+			public const string CreatedByYomiName = "createdbyyominame";
+			public const string CreatedOn = "createdon";
+			public const string CreatedOnBehalfBy = "createdonbehalfby";
+			public const string CreatedOnBehalfByName = "createdonbehalfbyname";
+			public const string CreatedOnBehalfByYomiName = "createdonbehalfbyyominame";
+			public const string ImportSequenceNumber = "importsequencenumber";
+			public const string Lk_OfM_Data_Import_CreatedBy = "lk_ofm_data_import_createdby";
+			public const string Lk_OfM_Data_Import_CreatedOnBehalfBy = "lk_ofm_data_import_createdonbehalfby";
+			public const string Lk_OfM_Data_Import_ModifiedBy = "lk_ofm_data_import_modifiedby";
+			public const string Lk_OfM_Data_Import_ModifiedOnBehalfBy = "lk_ofm_data_import_modifiedonbehalfby";
+			public const string ModifiedBy = "modifiedby";
+			public const string ModifiedByName = "modifiedbyname";
+			public const string ModifiedByYomiName = "modifiedbyyominame";
+			public const string ModifiedOn = "modifiedon";
+			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string ModifiedOnBehalfByName = "modifiedonbehalfbyname";
+			public const string ModifiedOnBehalfByYomiName = "modifiedonbehalfbyyominame";
+			public const string OfM_Data_File = "ofm_data_file";
+			public const string OfM_Data_File_Name = "ofm_data_file_name";
+			public const string OfM_Data_ImportId = "ofm_data_importid";
+			public const string Id = "ofm_data_importid";
+			public const string OfM_Import_Type = "ofm_import_type";
+			public const string OfM_Import_TypeName = "ofm_import_typename";
+			public const string OfM_Message = "ofm_message";
+			public const string OfM_Name = "ofm_name";
+			public const string OverriddenCreatedOn = "overriddencreatedon";
+			public const string OwnerId = "ownerid";
+			public const string OwnerIdName = "owneridname";
+			public const string OwnerIdYomiName = "owneridyominame";
+			public const string OwningBusinessUnit = "owningbusinessunit";
+			public const string OwningBusinessUnitName = "owningbusinessunitname";
+			public const string OwningTeam = "owningteam";
+			public const string OwningUser = "owninguser";
+			public const string StateCode = "statecode";
+			public const string StateCodename = "statecodename";
+			public const string StatusCode = "statuscode";
+			public const string StatusCodename = "statuscodename";
+			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
+			public const string User_OfM_Data_Import = "user_ofm_data_import";
+			public const string UtcConversionTimeZoneCode = "utcconversiontimezonecode";
+			public const string VersionNumber = "versionnumber";
+		}
+		
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public OfM_Data_Import(System.Guid id) : 
+				base(EntityLogicalName, id)
+		{
+		}
+		
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public OfM_Data_Import(string keyName, object keyValue) : 
+				base(EntityLogicalName, keyName, keyValue)
+		{
+		}
+		
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public OfM_Data_Import(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
+				base(EntityLogicalName, keyAttributes)
+		{
+		}
+		
+		/// <summary>
+		/// Default Constructor.
+		/// </summary>
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public OfM_Data_Import() : 
+				base(EntityLogicalName)
+		{
+		}
+		
+		public const string PrimaryIdAttribute = "ofm_data_importid";
+		
+		public const string PrimaryNameAttribute = "ofm_name";
+		
+		public const string EntitySchemaName = "ofm_data_import";
+		
+		public const string EntityLogicalName = "ofm_data_import";
+		
+		public const string EntityLogicalCollectionName = "ofm_data_imports";
+		
+		public const string EntitySetName = "ofm_data_imports";
+		
+		/// <summary>
+		/// Unique identifier of the user who created the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
+		public Microsoft.Xrm.Sdk.EntityReference CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdby");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyname")]
+		public string CreatedByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdby"))
+				{
+					return this.FormattedValues["createdby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdbyyominame")]
+		public string CreatedByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdby"))
+				{
+					return this.FormattedValues["createdby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Date and time when the record was created.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdon")]
+		public System.Nullable<System.DateTime> CreatedOn
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("createdon");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier of the delegate user who created the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
+		public Microsoft.Xrm.Sdk.EntityReference CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("createdonbehalfby");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("createdonbehalfby", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyname")]
+		public string CreatedOnBehalfByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdonbehalfby"))
+				{
+					return this.FormattedValues["createdonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfbyyominame")]
+		public string CreatedOnBehalfByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("createdonbehalfby"))
+				{
+					return this.FormattedValues["createdonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Sequence number of the import that created this record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("importsequencenumber")]
+		public System.Nullable<int> ImportSequenceNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("importsequencenumber");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("importsequencenumber", value);
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier of the user who modified the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
+		public Microsoft.Xrm.Sdk.EntityReference ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedby");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyname")]
+		public string ModifiedByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedby"))
+				{
+					return this.FormattedValues["modifiedby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedbyyominame")]
+		public string ModifiedByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedby"))
+				{
+					return this.FormattedValues["modifiedby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Date and time when the record was modified.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedon")]
+		public System.Nullable<System.DateTime> ModifiedOn
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("modifiedon");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier of the delegate user who modified the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
+		public Microsoft.Xrm.Sdk.EntityReference ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("modifiedonbehalfby");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("modifiedonbehalfby", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyname")]
+		public string ModifiedOnBehalfByName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedonbehalfby"))
+				{
+					return this.FormattedValues["modifiedonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfbyyominame")]
+		public string ModifiedOnBehalfByYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("modifiedonbehalfby"))
+				{
+					return this.FormattedValues["modifiedonbehalfby"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Data File
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_data_file")]
+		public object OfM_Data_File
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<object>("ofm_data_file");
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_data_file_name")]
+		public string OfM_Data_File_Name
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ofm_data_file"))
+				{
+					return this.FormattedValues["ofm_data_file"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for entity instances
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_data_importid")]
+		public System.Nullable<System.Guid> OfM_Data_ImportId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.Guid>>("ofm_data_importid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ofm_data_importid", value);
+				if (value.HasValue)
+				{
+					base.Id = value.Value;
+				}
+				else
+				{
+					base.Id = System.Guid.Empty;
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_data_importid")]
+		public override System.Guid Id
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return base.Id;
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.OfM_Data_ImportId = value;
+			}
+		}
+		
+		/// <summary>
+		/// Import Type
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_import_type")]
+		public virtual ECc_Data_Import_Type? OfM_Import_Type
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((ECc_Data_Import_Type?)(EntityOptionSetEnum.GetEnum(this, "ofm_import_type")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ofm_import_type", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_import_typename")]
+		public string OfM_Import_TypeName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ofm_import_type"))
+				{
+					return this.FormattedValues["ofm_import_type"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_message")]
+		public string OfM_Message
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ofm_message");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ofm_message", value);
+			}
+		}
+		
+		/// <summary>
+		/// Data Import record
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ofm_name")]
+		public string OfM_Name
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("ofm_name");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ofm_name", value);
+			}
+		}
+		
+		/// <summary>
+		/// Date and time that the record was migrated.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("overriddencreatedon")]
+		public System.Nullable<System.DateTime> OverriddenCreatedOn
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("overriddencreatedon");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("overriddencreatedon", value);
+			}
+		}
+		
+		/// <summary>
+		/// Owner Id
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownerid")]
+		public Microsoft.Xrm.Sdk.EntityReference OwnerId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ownerid");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ownerid", value);
+			}
+		}
+		
+		/// <summary>
+		/// Name of the owner
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridname")]
+		public string OwnerIdName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ownerid"))
+				{
+					return this.FormattedValues["ownerid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Yomi name of the owner
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owneridyominame")]
+		public string OwnerIdYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ownerid"))
+				{
+					return this.FormattedValues["ownerid"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the business unit that owns the record
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningBusinessUnit
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningbusinessunit");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("owningbusinessunit", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunitname")]
+		public string OwningBusinessUnitName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("owningbusinessunit"))
+				{
+					return this.FormattedValues["owningbusinessunit"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the team that owns the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningteam")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningTeam
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owningteam");
+			}
+		}
+		
+		/// <summary>
+		/// Unique identifier for the user that owns the record.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
+		public Microsoft.Xrm.Sdk.EntityReference OwningUser
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("owninguser");
+			}
+		}
+		
+		/// <summary>
+		/// Status of the Data Import
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
+		public virtual OfM_Data_Import_StateCode? StateCode
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((OfM_Data_Import_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("statecode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecodename")]
+		public string StateCodename
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("statecode"))
+				{
+					return this.FormattedValues["statecode"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Reason for the status of the Data Import
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
+		public virtual OfM_Data_Import_StatusCode? StatusCode
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((OfM_Data_Import_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("statuscode", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscodename")]
+		public string StatusCodename
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("statuscode"))
+				{
+					return this.FormattedValues["statuscode"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// For internal use only.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("timezoneruleversionnumber")]
+		public System.Nullable<int> TimeZoneRuleVersionNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("timezoneruleversionnumber");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("timezoneruleversionnumber", value);
+			}
+		}
+		
+		/// <summary>
+		/// Time zone code that was in use when the record was created.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("utcconversiontimezonecode")]
+		public System.Nullable<int> UtcConversionTimeZoneCode
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("utcconversiontimezonecode");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("utcconversiontimezonecode", value);
+			}
+		}
+		
+		/// <summary>
+		/// Version Number
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("versionnumber")]
+		public System.Nullable<long> VersionNumber
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// N:1 business_unit_ofm_data_import
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owningbusinessunit")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("business_unit_ofm_data_import")]
+		public CCOF.Core.DataContext.BusinessUnit Business_Unit_OfM_Data_Import
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.BusinessUnit>("business_unit_ofm_data_import", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.BusinessUnit>("business_unit_ofm_data_import", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ofm_data_import_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_createdby")]
+		public CCOF.Core.DataContext.SystemUser Lk_OfM_Data_Import_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ofm_data_import_createdby", null);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ofm_data_import_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_createdonbehalfby")]
+		public CCOF.Core.DataContext.SystemUser Lk_OfM_Data_Import_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ofm_data_import_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ofm_data_import_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ofm_data_import_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_modifiedby")]
+		public CCOF.Core.DataContext.SystemUser Lk_OfM_Data_Import_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ofm_data_import_modifiedby", null);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_ofm_data_import_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_modifiedonbehalfby")]
+		public CCOF.Core.DataContext.SystemUser Lk_OfM_Data_Import_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ofm_data_import_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<CCOF.Core.DataContext.SystemUser>("lk_ofm_data_import_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 user_ofm_data_import
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_ofm_data_import")]
+		public CCOF.Core.DataContext.SystemUser User_OfM_Data_Import
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<CCOF.Core.DataContext.SystemUser>("user_ofm_data_import", null);
+			}
+		}
+		
+		/// <summary>
+		/// Constructor for populating via LINQ queries given a LINQ anonymous type
+		/// <param name="anonymousType">LINQ anonymous type.</param>
+		/// </summary>
+		[System.Diagnostics.DebuggerNonUserCode()]
+		public OfM_Data_Import(object anonymousType) : 
+				this()
+		{
+            foreach (var p in anonymousType.GetType().GetProperties())
+            {
+                var value = p.GetValue(anonymousType, null);
+                var name = p.Name.ToLower();
+            
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                {
+                    value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
+                    name = name.Remove(name.Length - "enum".Length);
+                }
+            
+                switch (name)
+                {
+                    case "id":
+                        base.Id = (System.Guid)value;
+                        Attributes["ofm_data_importid"] = base.Id;
+                        break;
+                    case "ofm_data_importid":
                         var id = (System.Nullable<System.Guid>) value;
                         if(id == null){ continue; }
                         base.Id = id.Value;
@@ -38660,6 +40099,10 @@ namespace CCOF.Core.DataContext
 		public partial class Fields
 		{
 			public const string Business_Unit_OfM_Payment = "business_unit_ofm_payment";
+			public const string CcOf_Monthly_Enrollment_Report = "ccof_monthly_enrollment_report";
+			public const string CcOf_Monthly_Enrollment_ReportName = "ccof_monthly_enrollment_reportname";
+			public const string CcOf_Program_Year = "ccof_program_year";
+			public const string CcOf_Program_YearName = "ccof_program_yearname";
 			public const string CreatedBy = "createdby";
 			public const string CreatedByName = "createdbyname";
 			public const string CreatedByYomiName = "createdbyyominame";
@@ -38785,6 +40228,70 @@ namespace CCOF.Core.DataContext
 		public const string EntityLogicalCollectionName = "ofm_payments";
 		
 		public const string EntitySetName = "ofm_payments";
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_monthly_enrollment_report")]
+		public Microsoft.Xrm.Sdk.EntityReference CcOf_Monthly_Enrollment_Report
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ccof_monthly_enrollment_report");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_monthly_enrollment_report", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_monthly_enrollment_reportname")]
+		public string CcOf_Monthly_Enrollment_ReportName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ccof_monthly_enrollment_report"))
+				{
+					return this.FormattedValues["ccof_monthly_enrollment_report"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_program_year")]
+		public Microsoft.Xrm.Sdk.EntityReference CcOf_Program_Year
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ccof_program_year");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("ccof_program_year", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ccof_program_yearname")]
+		public string CcOf_Program_YearName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("ccof_program_year"))
+				{
+					return this.FormattedValues["ccof_program_year"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
 		
 		/// <summary>
 		/// Unique identifier of the user who created the record.
@@ -40180,7 +41687,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);
@@ -40285,6 +41792,7 @@ namespace CCOF.Core.DataContext
 			public const string CalendarId = "calendarid";
 			public const string CalType = "caltype";
 			public const string CalTypeName = "caltypename";
+			public const string CcOf_Adjudication_CcFri_Facility_MidyearOptOutUpdatedBy_SystemUser = "CcOf_Adjudication_CcFri_Facility_MidyearOptOutUpdatedBy_SystemUser";
 			public const string CcOf_Adjudication_CcFri_Facility_UpdatedBy_AFs_Confirmed_SystemUser = "CcOf_Adjudication_CcFri_Facility_UpdatedBy_AFs_Confirmed_SystemUser";
 			public const string CcOf_CcFri_Facility_UpdatedBYaFCQcRecommended = "CcOf_CcFri_Facility_UpdatedBYaFCQcRecommended";
 			public const string CcOf_CcOf_Adjudication_CcFri_Facility_AFC_UpCc = "CcOf_CcOf_Adjudication_CcFri_Facility_AFC_UpCc";
@@ -40397,6 +41905,10 @@ namespace CCOF.Core.DataContext
 			public const string Lk_Email_CreatedOnBehalfBy = "Lk_Email_CreatedOnBehalfBy";
 			public const string Lk_Email_ModifiedBy = "Lk_Email_ModifiedBy";
 			public const string Lk_Email_ModifiedOnBehalfBy = "Lk_Email_ModifiedOnBehalfBy";
+			public const string Lk_OfM_Data_Import_CreatedBy = "Lk_OfM_Data_Import_CreatedBy";
+			public const string Lk_OfM_Data_Import_CreatedOnBehalfBy = "Lk_OfM_Data_Import_CreatedOnBehalfBy";
+			public const string Lk_OfM_Data_Import_ModifiedBy = "Lk_OfM_Data_Import_ModifiedBy";
+			public const string Lk_OfM_Data_Import_ModifiedOnBehalfBy = "Lk_OfM_Data_Import_ModifiedOnBehalfBy";
 			public const string Lk_OfM_Payment_CreatedBy = "Lk_OfM_Payment_CreatedBy";
 			public const string Lk_OfM_Payment_CreatedOnBehalfBy = "Lk_OfM_Payment_CreatedOnBehalfBy";
 			public const string Lk_OfM_Payment_ModifiedBy = "Lk_OfM_Payment_ModifiedBy";
@@ -40417,6 +41929,7 @@ namespace CCOF.Core.DataContext
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string ModifiedOnBehalfByName = "modifiedonbehalfbyname";
 			public const string ModifiedOnBehalfByYomiName = "modifiedonbehalfbyyominame";
+			public const string Msdyn_ActiveConversationLimit = "msdyn_activeconversationlimit";
 			public const string Msdyn_AgentType = "msdyn_agentType";
 			public const string Msdyn_AgentTypeName = "msdyn_agenttypename";
 			public const string Msdyn_BotApplicationId = "msdyn_botapplicationid";
@@ -40432,8 +41945,14 @@ namespace CCOF.Core.DataContext
 			public const string Msdyn_GdPrOptOut = "msdyn_gdproptout";
 			public const string Msdyn_GdPrOptOutName = "msdyn_gdproptoutname";
 			public const string Msdyn_GridWrapperControlField = "msdyn_gridwrappercontrolfield";
+			public const string Msdyn_IsChatIntentEnabled = "msdyn_ischatintentenabled";
+			public const string Msdyn_IsChatIntentEnabledName = "msdyn_ischatintentenabledname";
 			public const string Msdyn_IsExpertEnabledForSwarm = "msdyn_isexpertenabledforswarm";
 			public const string Msdyn_IsExpertEnabledForSwarmName = "msdyn_isexpertenabledforswarmname";
+			public const string Msdyn_IsMultichannelIntentEnabled = "msdyn_ismultichannelintentenabled";
+			public const string Msdyn_IsMultichannelIntentEnabledName = "msdyn_ismultichannelintentenabledname";
+			public const string Msdyn_IsVoiceIntentEnabled = "msdyn_isvoiceintentenabled";
+			public const string Msdyn_IsVoiceIntentEnabledName = "msdyn_isvoiceintentenabledname";
 			public const string Msdyn_OwningEnvironmentId = "msdyn_owningenvironmentid";
 			public const string Msdyn_UserType = "msdyn_usertype";
 			public const string Msdyn_UserTypeName = "msdyn_usertypename";
@@ -40501,6 +42020,7 @@ namespace CCOF.Core.DataContext
 			public const string User_CcOf_Application = "User_CcOf_Application";
 			public const string User_CcOf_Change_Request = "User_CcOf_Change_Request";
 			public const string User_Email = "User_Email";
+			public const string User_OfM_Data_Import = "User_OfM_Data_Import";
 			public const string User_OfM_Payment = "User_OfM_Payment";
 			public const string ReferencingUser_Parent_User = "user_parent_user";
 			public const string UserLicenseType = "userlicensetype";
@@ -42603,6 +44123,24 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Limit the number of returning conversations for a user in async messaging channel only
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_activeconversationlimit")]
+		public System.Nullable<int> Msdyn_ActiveConversationLimit
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<int>>("msdyn_activeconversationlimit");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("msdyn_activeconversationlimit", value);
+			}
+		}
+		
+		/// <summary>
 		/// Type of user - Application user or Bot application user
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_agentType")]
@@ -42869,6 +44407,41 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Indicates whether chat intent is enabled for the user.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_ischatintentenabled")]
+		public System.Nullable<bool> Msdyn_IsChatIntentEnabled
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("msdyn_ischatintentenabled");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("msdyn_ischatintentenabled", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_ischatintentenabledname")]
+		public string Msdyn_IsChatIntentEnabledName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("msdyn_ischatintentenabled"))
+				{
+					return this.FormattedValues["msdyn_ischatintentenabled"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
 		/// Check if swarm is enabled for the experts.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_isexpertenabledforswarm")]
@@ -42895,6 +44468,76 @@ namespace CCOF.Core.DataContext
 				if (this.FormattedValues.Contains("msdyn_isexpertenabledforswarm"))
 				{
 					return this.FormattedValues["msdyn_isexpertenabledforswarm"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Indicates whether multichannel intent is enabled for the user.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_ismultichannelintentenabled")]
+		public System.Nullable<bool> Msdyn_IsMultichannelIntentEnabled
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("msdyn_ismultichannelintentenabled");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("msdyn_ismultichannelintentenabled", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_ismultichannelintentenabledname")]
+		public string Msdyn_IsMultichannelIntentEnabledName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("msdyn_ismultichannelintentenabled"))
+				{
+					return this.FormattedValues["msdyn_ismultichannelintentenabled"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Indicates whether voice intent is enabled for the user.
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_isvoiceintentenabled")]
+		public System.Nullable<bool> Msdyn_IsVoiceIntentEnabled
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("msdyn_isvoiceintentenabled");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("msdyn_isvoiceintentenabled", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("msdyn_isvoiceintentenabledname")]
+		public string Msdyn_IsVoiceIntentEnabledName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("msdyn_isvoiceintentenabled"))
+				{
+					return this.FormattedValues["msdyn_isvoiceintentenabled"];
 				}
 				else
 				{
@@ -43584,6 +45227,7 @@ namespace CCOF.Core.DataContext
 		/// Shows the ID of the stage.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public System.Nullable<System.Guid> StageId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -43784,6 +45428,7 @@ namespace CCOF.Core.DataContext
 		/// For internal use only.
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("traversedpath")]
+		[System.Obsolete("This attribute is deprecated.")]
 		public string TraversedPath
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -43978,6 +45623,24 @@ namespace CCOF.Core.DataContext
 			set
 			{
 				this.SetAttributeValue("yomimiddlename", value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility> CcOf_Adjudication_CcFri_Facility_MidyearOptOutUpdatedBy_SystemUser
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility>("ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility>("ccof_adjudication_ccfri_facility_midyearoptoutupdatedby_systemuser", null, value);
 			}
 		}
 		
@@ -45176,6 +46839,78 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// 1:N lk_ofm_data_import_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_createdby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.OfM_Data_Import> Lk_OfM_Data_Import_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_ofm_data_import_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.OfM_Data_Import> Lk_OfM_Data_Import_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_ofm_data_import_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_modifiedby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.OfM_Data_Import> Lk_OfM_Data_Import_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_ofm_data_import_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_data_import_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.OfM_Data_Import> Lk_OfM_Data_Import_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("lk_ofm_data_import_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N lk_ofm_payment_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_ofm_payment_createdby")]
@@ -45518,6 +47253,24 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// 1:N user_ofm_data_import
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_ofm_data_import")]
+		public System.Collections.Generic.IEnumerable<CCOF.Core.DataContext.OfM_Data_Import> User_OfM_Data_Import
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("user_ofm_data_import", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<CCOF.Core.DataContext.OfM_Data_Import>("user_ofm_data_import", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N user_ofm_payment
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_ofm_payment")]
@@ -45670,7 +47423,7 @@ namespace CCOF.Core.DataContext
                 var value = p.GetValue(anonymousType, null);
                 var name = p.Name.ToLower();
             
-                if (name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
+                if (value != null && name.EndsWith("enum") && value.GetType().BaseType == typeof(System.Enum))
                 {
                     value = new Microsoft.Xrm.Sdk.OptionSetValue((int) value);
                     name = name.Remove(name.Length - "enum".Length);

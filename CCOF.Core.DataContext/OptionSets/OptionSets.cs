@@ -1203,6 +1203,53 @@ namespace CCOF.Core.DataContext
 		Prod = 0,
 	}
 	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum BackEndToolType
+	{
+		
+		/// <summary>
+		/// ConnectorAction
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ConnectorAction", 1, null, "ConnectorAction")]
+		ConnectorAction = 1,
+		
+		/// <summary>
+		/// DataverseCustomAPI
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("DataverseCustomAPI", 0, null, "DataverseCustomAPI")]
+		DataverseCustomAPI = 0,
+		
+		/// <summary>
+		/// Graph
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Graph", 2, null, "Graph")]
+		Graph = 2,
+		
+		/// <summary>
+		/// RemoteAPI
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("RemoteAPI", 4, null, "RemoteAPI")]
+		RemoteAPI = 4,
+		
+		/// <summary>
+		/// RemoteMCP
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("RemoteMCP", 3, null, "RemoteMCP")]
+		RemoteMCP = 3,
+		
+		/// <summary>
+		/// SdkMessagePair
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("SdkMessagePair", 5, null, "SdkMessagePair")]
+		SdkMessagePair = 5,
+	}
+	
 	/// <summary>
 	/// Type of the characteristic, e.g. skill, certification.
 	/// </summary>
@@ -1958,6 +2005,10 @@ namespace CCOF.Core.DataContext
 		ECEWEApproval = 100000014,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ER Reject", 16)]
+		ERReject = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Full Approval", 1)]
 		FullApproval = 100000001,
 		
@@ -2041,6 +2092,27 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Stage 3 (AFC)", 7, "#0000ff")]
 		Stage3AFC = 100000007,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcOfERVariation
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCFRI Approved Parent Fee", 2)]
+		CCFRIApprovedParentFee = 101510002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Closure", 1)]
+		Closure = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Fee Floor Exempt", 0)]
+		FeeFloorExempt = 101510000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Licence", 3)]
+		Licence = 101510003,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -2302,6 +2374,35 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ChildCareCategoriesExtended
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("0-18 Months", 0)]
+		_018Months = 101510000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("18-36 Months", 1)]
+		_1836Months = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("3 Years to Kindergarten", 2)]
+		_3YearstoKindergarten = 101510002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Grade 1 to Age 12", 4)]
+		Grade1toAge12 = 101510004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Kindergarten Before and After", 3)]
+		KindergartenBeforeandAfter = 101510003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Preschool", 5)]
+		Preschool = 101510005,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_ClosureAdjudicatorRecommendation
 	{
 		
@@ -2479,8 +2580,86 @@ namespace CCOF.Core.DataContext
 		Adjustment = 100000001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Original", 0)]
-		Original = 100000000,
+		[OptionSetMetadataAttribute("Baseline", 0)]
+		Baseline = 100000000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ERExternalStatus
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved", 4)]
+		Approved = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Draft", 0)]
+		Draft = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Expired", 6)]
+		Expired = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Paid", 5)]
+		Paid = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Rejected", 3)]
+		Rejected = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 1)]
+		Submitted = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("With Ministry", 2)]
+		WithMinistry = 3,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ERInternalStatus
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved for payment", 6)]
+		Approvedforpayment = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Created", 0)]
+		Created = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Expired", 9)]
+		Expired = 10,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Incomplete", 1)]
+		Incomplete = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Paid", 7)]
+		Paid = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Processing Error", 8)]
+		ProcessingError = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Rejected", 4)]
+		Rejected = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Review", 3)]
+		Review = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 2)]
+		Submitted = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Verified", 5)]
+		Verified = 6,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -3149,6 +3328,47 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RejectReason
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Claiming in a new category before new amended licence is active", 5)]
+		Claiminginanewcategorybeforenewamendedlicenceisactive = 101510005,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Claiming on weekend when hours of operation do not support it", 0)]
+		Claimingonweekendwhenhoursofoperationdonotsupportit = 101510000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CP requests for rejection", 7)]
+		CPrequestsforrejection = 101510007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Maximum weeks exceeded", 4)]
+		Maximumweeksexceeded = 101510004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("MOD rejections (programs request)", 6)]
+		MODrejectionsprogramsrequest = 101510006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Not licensed for care category", 2)]
+		Notlicensedforcarecategory = 101510002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Other", 8)]
+		Other = 101510008,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Overclaiming in a certain age category", 1)]
+		Overclaiminginacertainagecategory = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitting too early", 3)]
+		Submittingtooearly = 101510003,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_RenewalPrioritization
 	{
 		
@@ -3163,6 +3383,27 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Priority Group 3", 2)]
 		PriorityGroup3 = 100000002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Review_Status
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reject", 2)]
+		Reject = 101510002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Review", 3)]
+		Review = 101510003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Undo Verify", 1)]
+		UndoVerify = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Verify", 0)]
+		Verify = 101510000,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -4891,19 +5132,27 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Not Recommended", 3)]
+		[OptionSetMetadataAttribute("Not Recommended", 5)]
 		NotRecommended = 4,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Recommended", 0)]
-		Recommended = 1,
+		[OptionSetMetadataAttribute("Recommended Back Up EE", 3)]
+		RecommendedBackUpEE = 6,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Recommended Back Up", 1)]
-		RecommendedBackUp = 2,
+		[OptionSetMetadataAttribute("Recommended Back Up OFM", 2)]
+		RecommendedBackUpOFM = 2,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Unactioned", 2)]
+		[OptionSetMetadataAttribute("Recommended EE", 1)]
+		RecommendedEE = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Recommended OFM", 0)]
+		RecommendedOFM = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Unactioned", 4)]
 		Unactioned = 3,
 	}
 	
@@ -5491,6 +5740,22 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Base", 0)]
 		Base = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCFRI", 7)]
+		CCFRI = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCFRI PROVIDER PAYMENT", 9)]
+		CCFRIPROVIDERPAYMENT = 10,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCOF", 6)]
+		CCOF = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ECEWE", 8)]
+		ECEWE = 9,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Indigenous Programming", 1)]
@@ -6557,6 +6822,46 @@ namespace CCOF.Core.DataContext
 		FY2038 = 2038,
 	}
 	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum HttpMethod
+	{
+		
+		/// <summary>
+		/// DELETE Method
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("DELETE", 4, null, "DELETE Method")]
+		DELETE = 4,
+		
+		/// <summary>
+		/// GET Method
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("GET", 0, null, "GET Method")]
+		GET = 0,
+		
+		/// <summary>
+		/// PATCH Method
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PATCH", 3, null, "PATCH Method")]
+		PATCH = 3,
+		
+		/// <summary>
+		/// POST Method
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("POST", 1, null, "POST Method")]
+		POST = 1,
+		
+		/// <summary>
+		/// PUT Method
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PUT", 2, null, "PUT Method")]
+		PUT = 2,
+	}
+	
 	/// <summary>
 	/// Information that specifies the source of the case information, such as Web, telephone, or email.
 	/// </summary>
@@ -6848,6 +7153,10 @@ namespace CCOF.Core.DataContext
 		BookingTimestamp = 10618,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Bot Variable", 205)]
+		BotVariable = 12114,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Case", 133)]
 		Case = 112,
 		
@@ -6860,6 +7169,10 @@ namespace CCOF.Core.DataContext
 		CFSIoTAlertProcessFlow = 10692,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Channel Profile", 165)]
+		ChannelProfile = 11928,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Competitor", 56)]
 		Competitor = 123,
 		
@@ -6870,6 +7183,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Competitor Product", 49)]
 		CompetitorProduct = 1006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Competitor Research Agent Trigger", 155)]
+		CompetitorResearchAgentTrigger = 11895,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Connection", 33)]
@@ -6890,6 +7207,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Copilot knowledge interaction", 124)]
 		Copilotknowledgeinteraction = 11678,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CRM Activity Mapping", 203)]
+		CRMActivityMapping = 12073,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Currency", 62)]
@@ -6930,6 +7251,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Entity Attachment", 125)]
 		EntityAttachment = 11120,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Evaluation Global Config", 166)]
+		EvaluationGlobalConfig = 11938,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Field Service Price List Item", 87)]
@@ -7008,6 +7333,10 @@ namespace CCOF.Core.DataContext
 		InspectionTemplateVersion = 10592,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Interim Update Knowledge Article", 202)]
+		InterimUpdateKnowledgeArticle = 12066,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Invoice", 58)]
 		Invoice = 1090,
 		
@@ -7076,6 +7405,10 @@ namespace CCOF.Core.DataContext
 		KnowledgeArticleAttachment = 10104,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Knowledge Article Custom Entity", 204)]
+		KnowledgeArticleCustomEntity = 12098,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Knowledge Article Image", 11)]
 		KnowledgeArticleImage = 10100,
 		
@@ -7124,12 +7457,32 @@ namespace CCOF.Core.DataContext
 		MobileSource = 11237,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("msdyn_broadcastmessagebulkactionapiprivilege", 190)]
+		msdyn_broadcastmessagebulkactionapiprivilege = 11981,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("msdyn_bulkassigntoqueueapiprivilege", 191)]
+		msdyn_bulkassigntoqueueapiprivilege = 11982,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("msdyn_bulkforcecloseapiprivilege", 192)]
+		msdyn_bulkforcecloseapiprivilege = 11983,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("msdyn_globalrulesetconfiguration", 189)]
+		msdyn_globalrulesetconfiguration = 11980,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("msdyn_historicalcaseharvestbatch", 126)]
 		msdyn_historicalcaseharvestbatch = 11682,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("msdyn_historicalcaseharvestrun", 127)]
 		msdyn_historicalcaseharvestrun = 11683,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("msdyn_notifyagentbulkactionapiprivilege", 201)]
+		msdyn_notifyagentbulkactionapiprivilege = 11998,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Note", 0)]
@@ -7150,6 +7503,18 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Opportunity Line", 73)]
 		OpportunityLine = 1083,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opportunity Ranker Mapping", 177)]
+		OpportunityRankerMapping = 11961,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opportunity Research Indicator", 178)]
+		OpportunityResearchIndicator = 11963,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opportunity Research User Interactions", 179)]
+		OpportunityResearchUserInteractions = 11965,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Opportunity Sales Process", 55)]
@@ -7182,6 +7547,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Outreach Trigger Agent", 148)]
 		OutreachTriggerAgent = 11856,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PA Flow Run Tracker", 167)]
+		PAFlowRunTracker = 11946,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Phone Call", 117)]
@@ -7284,6 +7653,130 @@ namespace CCOF.Core.DataContext
 		QuoteLine = 1085,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("RCS Watermark", 180)]
+		RCSWatermark = 11966,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 0e9640da2e", 187)]
+		Reserveentity0e9640da2e = 11973,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 0f2bb84937", 170)]
+		Reserveentity0f2bb84937 = 11952,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 1a74ecebdb", 200)]
+		Reserveentity1a74ecebdb = 11992,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 1ec6337544", 172)]
+		Reserveentity1ec6337544 = 11954,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 20c6410dac", 174)]
+		Reserveentity20c6410dac = 11956,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 22c61786f1", 159)]
+		Reserveentity22c61786f1 = 11921,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 237531a79c", 181)]
+		Reserveentity237531a79c = 11967,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 2757ea2448", 160)]
+		Reserveentity2757ea2448 = 11922,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 281b40eca1", 184)]
+		Reserveentity281b40eca1 = 11970,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 3140ef0671", 182)]
+		Reserveentity3140ef0671 = 11968,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 4d2e092ca2", 175)]
+		Reserveentity4d2e092ca2 = 11957,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 5491da7204", 169)]
+		Reserveentity5491da7204 = 11951,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 5de2333262", 186)]
+		Reserveentity5de2333262 = 11972,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 655662e22b", 199)]
+		Reserveentity655662e22b = 11991,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 6a2391ca28", 164)]
+		Reserveentity6a2391ca28 = 11926,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 7272def107", 163)]
+		Reserveentity7272def107 = 11925,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 74664a1f6c", 195)]
+		Reserveentity74664a1f6c = 11987,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 9064fa1bb9", 185)]
+		Reserveentity9064fa1bb9 = 11971,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 91b7085e9b", 173)]
+		Reserveentity91b7085e9b = 11955,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 9a17e7b2d2", 196)]
+		Reserveentity9a17e7b2d2 = 11988,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity 9c4baaba42", 158)]
+		Reserveentity9c4baaba42 = 11920,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity bc34be7e33", 161)]
+		Reserveentitybc34be7e33 = 11923,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity be8f7e55d2", 194)]
+		Reserveentitybe8f7e55d2 = 11986,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity c3a1346be7", 162)]
+		Reserveentityc3a1346be7 = 11924,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity cbf0fcfae7", 197)]
+		Reserveentitycbf0fcfae7 = 11989,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity d16dc52ce2", 171)]
+		Reserveentityd16dc52ce2 = 11953,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity dfbc3b02fb", 183)]
+		Reserveentitydfbc3b02fb = 11969,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity e24ba47057", 168)]
+		Reserveentitye24ba47057 = 11950,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity e81b881d0d", 198)]
+		Reserveentitye81b881d0d = 11990,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Reserve entity fa730efbd7", 193)]
+		Reserveentityfa730efbd7 = 11985,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Resolution", 101)]
 		Resolution = 10688,
 		
@@ -7300,12 +7793,28 @@ namespace CCOF.Core.DataContext
 		ServiceTaskType = 10666,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Shorturl", 188)]
+		Shorturl = 11978,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("SLA KPI Instance", 9)]
 		SLAKPIInstance = 9752,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Stakeholder Research Output", 151)]
 		StakeholderResearchOutput = 11876,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Summary Synthesizer Agent Trigger", 176)]
+		SummarySynthesizerAgentTrigger = 11960,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Target Customer Profile Prefill Agent Result", 156)]
+		TargetCustomerProfilePrefillAgentResult = 11897,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("TargetCustomerProfilePrefillAgentTrigger", 157)]
+		TargetCustomerProfilePrefillAgentTrigger = 11916,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Task", 8)]
@@ -7405,28 +7914,28 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("EmailFollowup", 2)]
-		EmailFollowup = 100000002,
+		[OptionSetMetadataAttribute("Propose a knowledge article", 0)]
+		Proposeaknowledgearticle = 100000000,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("GatherIntentDetails", 4)]
-		GatherIntentDetails = 100000004,
+		[OptionSetMetadataAttribute("Reply to customer", 3)]
+		Replytocustomer_100000003 = 100000003,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("KnowledgeArticleDraftReview", 0)]
-		KnowledgeArticleDraftReview = 100000000,
+		[OptionSetMetadataAttribute("Reply to customer", 4)]
+		Replytocustomer_100000004 = 100000004,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ReplyToCustomer", 3)]
-		ReplyToCustomer = 100000003,
+		[OptionSetMetadataAttribute("Resolve case", 1)]
+		Resolvecase = 100000001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ResolveCase", 1)]
-		ResolveCase = 100000001,
+		[OptionSetMetadataAttribute("Send next follow-up", 2)]
+		Sendnextfollowup = 100000002,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("SuggestResolution", 5)]
-		SuggestResolution = 100000005,
+		[OptionSetMetadataAttribute("Suggest a resolution", 5)]
+		Suggestaresolution = 100000005,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -7444,6 +7953,19 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Unadjustable", 2)]
 		Unadjustable = 192350002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_AgentActivityType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Case Processing History", 1)]
+		CaseProcessingHistory = 419550001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Conversation End", 0)]
+		ConversationEnd = 419550000,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -7652,6 +8174,19 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_AgentType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Case Processing Agent", 1)]
+		CaseProcessingAgent = 419550001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Customer Engagement Agent", 0)]
+		CustomerEngagementAgent = 419550000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum Msdyn_AgreementBookingStatus
 	{
 		
@@ -7714,12 +8249,49 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Case Processing Agent", 2)]
+		CaseProcessingAgent = 192350003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Customer Engagement Agent", 3)]
+		CustomerEngagementAgent = 192350004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Quality Evaluation Agent", 1)]
 		QualityEvaluationAgent = 192350002,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Resolution Discovery Agent", 0)]
 		ResolutionDiscoveryAgent = 192350001,
+	}
+	
+	/// <summary>
+	/// AI Model Task Type
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_AIModelTaskType
+	{
+		
+		/// <summary>
+		/// Classification
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Classification", 2, "#0000ff", "Classification")]
+		Classification = 100000002,
+		
+		/// <summary>
+		/// None
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("None", 0, "#0000aa", "None")]
+		None = 100000000,
+		
+		/// <summary>
+		/// QueryBoosting
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("QueryBoosting", 1, "#0000cc", "QueryBoosting")]
+		QueryBoosting = 100000001,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -8220,12 +8792,24 @@ namespace CCOF.Core.DataContext
 		binary = 192350003,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("boolean", 7)]
+		boolean = 192350007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("html", 1)]
 		html = 192350001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("image", 4)]
 		image = 192350004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("number", 6)]
+		number = 192350006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("optionlist", 8)]
+		optionlist = 192350008,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("plaintext", 0)]
@@ -8773,6 +9357,35 @@ namespace CCOF.Core.DataContext
 		Deleted = 192350001,
 	}
 	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_ConversationMode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Live Chat", 0)]
+		LiveChat = 192350000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Persistent Chat", 1)]
+		PersistentChat = 192350001,
+	}
+	
+	/// <summary>
+	/// Copilot Term Type
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_CopilotTermType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Glossary", 0)]
+		Glossary = 419550000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Synonym", 1)]
+		Synonym = 419550001,
+	}
+	
 	/// <summary>
 	/// Indicates type of crew member
 	/// </summary>
@@ -9021,6 +9634,38 @@ namespace CCOF.Core.DataContext
 		WorkOrder = 192350002,
 	}
 	
+	/// <summary>
+	/// Direct Callback Duplicate Action
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_DirectCallbackAction
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Play message and disconnect the call", 0, "#0000ff")]
+		Playmessageanddisconnectthecall = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Play message but don\'t end the call", 1, "#0000ff")]
+		Playmessagebutdontendthecall = 2,
+	}
+	
+	/// <summary>
+	/// Direct Callback Queue Setting
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_DirectCallbackQueueSetting
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("All queues in this workstream", 1, "#0000ff")]
+		Allqueuesinthisworkstream = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Specific queue only", 0, "#0000ff")]
+		Specificqueueonly = 1,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum Msdyn_DistanceUnit
 	{
@@ -9102,6 +9747,69 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Work Order Services", 1, "#0000ff")]
 		WorkOrderServices = 690970001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_EvaluationCreateType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("BulkEvaluation", 2)]
+		BulkEvaluation = 192350002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("OnDemand", 0)]
+		OnDemand = 192350000,
+		
+		/// <summary>
+		/// Option to indicate evaluation creation on trigger.
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("OnTrigger", 3, null, "Option to indicate evaluation creation on trigger.")]
+		OnTrigger = 192350003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("RealTime", 1)]
+		RealTime = 192350001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_EvaluationMethod
+	{
+		
+		/// <summary>
+		/// AI completes evaluation
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AI agent", 1, null, "AI completes evaluation")]
+		AIagent = 700610001,
+		
+		/// <summary>
+		/// person reviews the AI evaluation
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AI assisted", 0, null, "person reviews the AI evaluation")]
+		AIassisted = 700610000,
+		
+		/// <summary>
+		/// evaluation by a person
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Manual", 2, null, "evaluation by a person")]
+		Manual = 700610002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_EvaluationRecordType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Case", 0)]
+		Case = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Conversation", 1)]
+		Conversation = 1,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -9543,15 +10251,23 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("AcceptSuggestion", 10)]
+		[OptionSetMetadataAttribute("AcceptSuggestion", 11)]
 		AcceptSuggestion = 100230312,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ArticleProposed", 8)]
+		[OptionSetMetadataAttribute("ArticleProposed", 9)]
 		ArticleProposed = 100230310,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ChooseDifferentTemplate", 16)]
+		[OptionSetMetadataAttribute("Available", 8)]
+		Available = 100230309,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CheckSources", 25)]
+		CheckSources = 100230326,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ChooseDifferentTemplate", 17)]
 		ChooseDifferentTemplate = 100230318,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -9559,7 +10275,7 @@ namespace CCOF.Core.DataContext
 		Copy = 100230304,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Discard", 15)]
+		[OptionSetMetadataAttribute("Discard", 16)]
 		Discard = 100230317,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -9567,7 +10283,19 @@ namespace CCOF.Core.DataContext
 		EditAndSend = 100230307,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ExpandTile", 12)]
+		[OptionSetMetadataAttribute("EmailDrafted", 20)]
+		EmailDrafted = 100230321,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("EmailSent", 19)]
+		EmailSent = 100230320,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Escalate", 23)]
+		Escalate = 100230324,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ExpandTile", 13)]
 		ExpandTile = 100230314,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -9575,7 +10303,7 @@ namespace CCOF.Core.DataContext
 		Generated = 100230305,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("KeepIt", 14)]
+		[OptionSetMetadataAttribute("KeepIt", 15)]
 		KeepIt = 100230316,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -9583,19 +10311,35 @@ namespace CCOF.Core.DataContext
 		ManualCopy = 100230308,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("MarkAsReviewed", 9)]
+		[OptionSetMetadataAttribute("MarkAsReviewed", 10)]
 		MarkAsReviewed = 100230311,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("RequestSolution", 13)]
+		[OptionSetMetadataAttribute("RecordUpdated", 21)]
+		RecordUpdated = 100230322,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("RequestSolution", 14)]
 		RequestSolution = 100230315,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ResolveCase", 22)]
+		ResolveCase = 100230323,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("SendToCustomer", 5)]
 		SendToCustomer = 100230306,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("TemplateSelection", 17)]
+		[OptionSetMetadataAttribute("TemplateInstantiation", 26)]
+		TemplateInstantiation = 100230327,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("TemplateRecommended", 24)]
+		TemplateRecommended = 100230325,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("TemplateSelection", 18)]
 		TemplateSelection = 100230319,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -9611,7 +10355,7 @@ namespace CCOF.Core.DataContext
 		ThumbsUp = 100230301,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ViewHistory", 11)]
+		[OptionSetMetadataAttribute("ViewHistory", 12)]
 		ViewHistory = 100230313,
 	}
 	
@@ -10124,6 +10868,15 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_LoBCategory
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Default line of business", 0)]
+		Defaultlineofbusiness = 100000000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum Msdyn_McSBotStatus
 	{
 		
@@ -10624,6 +11377,13 @@ namespace CCOF.Core.DataContext
 		AgentEndConversation = 192350030,
 		
 		/// <summary>
+		/// AgentGroupTransfer
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AgentGroupTransfer", 47, "#0000ff", "AgentGroupTransfer")]
+		AgentGroupTransfer = 192350050,
+		
+		/// <summary>
 		/// AgentInviteRejected
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10795,7 +11555,7 @@ namespace CCOF.Core.DataContext
 		/// Default
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Default", 47, "#0000ff", "Default")]
+		[OptionSetMetadataAttribute("Default", 49, "#0000ff", "Default")]
 		Default = 192350000,
 		
 		/// <summary>
@@ -10825,6 +11585,13 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("ForceClose", 32, "#0000ff", "ForceClose")]
 		ForceClose = 192350033,
+		
+		/// <summary>
+		/// MonitorDisconnected
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("MonitorDisconnected", 48, "#0000ff", "MonitorDisconnected")]
+		MonitorDisconnected = 192350052,
 		
 		/// <summary>
 		/// OverflowAssignToQueue
@@ -11160,6 +11927,10 @@ namespace CCOF.Core.DataContext
 		Authentication = 192350007,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Cards", 9, "#0000ff")]
+		Cards = 192350011,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Custom JSON", 4, "#0000ff")]
 		CustomJSON = 192350004,
 		
@@ -11377,6 +12148,13 @@ namespace CCOF.Core.DataContext
 		[OptionSetMetadataAttribute("Consult request failed", 4, "#0000ff")]
 		Consultrequestfailed = 192350004,
 		
+		/// <summary>
+		/// Consult request failed due to system failure
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Consult request failed due to system failure", 73, "#0000ff", "Consult request failed due to system failure")]
+		Consultrequestfailedduetosystemfailure = 192350078,
+		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Consult request timed out", 9, "#0000ff")]
 		Consultrequesttimedout = 192350009,
@@ -11388,6 +12166,27 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Consult started", 3, "#0000ff")]
 		Consultstarted = 192350003,
+		
+		/// <summary>
+		/// Consult to queue or user group failed due to out of operating hours
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Consult to queue or user group failed due to out of operating hours", 74, "#0000ff", "Consult to queue or user group failed due to out of operating hours")]
+		Consulttoqueueorusergroupfailedduetooutofoperatinghours = 192350079,
+		
+		/// <summary>
+		/// Consult with queue or user group is cancelled
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Consult with queue or user group is cancelled", 71, "#0000ff", "Consult with queue or user group is cancelled")]
+		Consultwithqueueorusergroupiscancelled = 192350076,
+		
+		/// <summary>
+		/// Consult with queue or user group is initiated
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Consult with queue or user group is initiated", 70, "#0000ff", "Consult with queue or user group is initiated")]
+		Consultwithqueueorusergroupisinitiated = 192350075,
 		
 		/// <summary>
 		/// Couldn’t find the channel account in Omnichannel
@@ -11454,7 +12253,7 @@ namespace CCOF.Core.DataContext
 		/// Customer's message couldn't be sent: Service is down.
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Customer\'s message couldn\'t be sent: Service is down.", 70, "#0000ff", "Customer\'s message couldn\'t be sent: Service is down.")]
+		[OptionSetMetadataAttribute("Customer\'s message couldn\'t be sent: Service is down.", 75, "#0000ff", "Customer\'s message couldn\'t be sent: Service is down.")]
 		CustomersmessagecouldntbesentServiceisdown = 192370001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -11538,6 +12337,13 @@ namespace CCOF.Core.DataContext
 		MessageorattachmentfailedtosendProvidingerrordetailsincludingerrorcodereasonforfailuremessageidtimestampandtransactionid = 192350044,
 		
 		/// <summary>
+		/// No service representatives found for consult with queue or user group
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No service representatives found for consult with queue or user group", 72, "#0000ff", "No service representatives found for consult with queue or user group")]
+		Noservicerepresentativesfoundforconsultwithqueueorusergroup = 192350077,
+		
+		/// <summary>
 		/// Message displayed to customer when there is not enough data to show the average wait time when the feature has been enabled
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -11558,6 +12364,13 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Out of operating hour message to customer", 36, "#0000ff", "Out of operating hour message to customer")]
 		Outofoperatinghourmessagetocustomer = 192350036,
+		
+		/// <summary>
+		/// Message to customer for Survey start.
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Please wait a moment to give us feedback about your experience..", 76, "#0000ff", "Message to customer for Survey start.")]
+		Pleasewaitamomenttogiveusfeedbackaboutyourexperience = 192370002,
 		
 		/// <summary>
 		/// Recording and transcription paused.
@@ -11597,6 +12410,13 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Supervisor force closed the conversation", 67, "#0000ff", "Supervisor force closed the conversation")]
 		Supervisorforceclosedtheconversation = 192350072,
+		
+		/// <summary>
+		/// Message to customer for Survey timeout
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("This survey has timed out. To start a new conversation, reopen this chat window.", 77, "#0000ff", "Message to customer for Survey timeout")]
+		ThissurveyhastimedoutTostartanewconversationreopenthischatwindow = 192370003,
 		
 		/// <summary>
 		/// Transcription paused.
@@ -11752,6 +12572,100 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Grade D", 3, "#0000ff")]
 		GradeD = 3,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_OpportunityIndicator
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("High", 0)]
+		High = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Low", 2)]
+		Low = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Medium", 1)]
+		Medium = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("None", 3)]
+		None = 100000003,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_OpportunityMappingType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AI", 2)]
+		AI = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Auto", 0)]
+		Auto = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Manual", 1)]
+		Manual = 100000001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_OpportunityResearchTopicChoice
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Account Insights", 6)]
+		AccountInsights = 100000006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Competitor Insights", 9)]
+		CompetitorInsights = 100000009,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Deal Health", 3)]
+		DealHealth = 100000003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Deal Importance", 2)]
+		DealImportance = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Deal Overview", 0)]
+		DealOverview = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Deal Risk", 1)]
+		DealRisk = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Deal Summary", 11)]
+		DealSummary = 100000011,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Key Deal Insights", 7)]
+		KeyDealInsights = 100000007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Key Updates", 8)]
+		KeyUpdates = 100000008,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Needs and Pain Points", 4)]
+		NeedsandPainPoints = 100000004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Related Conversation Mapping", 10)]
+		RelatedConversationMapping = 100000010,
+		
+		/// <summary>
+		/// Stakeholder Insights
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Stakeholder Insights", 5, null, "Stakeholder Insights")]
+		StakeholderInsights = 100000005,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -12004,15 +12918,15 @@ namespace CCOF.Core.DataContext
 		arSA = 1025,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("bg-BG", 26, "#0000ff")]
+		[OptionSetMetadataAttribute("bg-BG", 34, "#0000ff")]
 		bgBG = 1026,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ca-ES", 27, "#0000ff")]
+		[OptionSetMetadataAttribute("ca-ES", 35, "#0000ff")]
 		caES = 1027,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("cs-CZ", 22, "#0000ff")]
+		[OptionSetMetadataAttribute("cs-CZ", 21, "#0000ff")]
 		csCZ = 1029,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -12024,7 +12938,7 @@ namespace CCOF.Core.DataContext
 		deDE = 1031,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("el-GR", 28, "#0000ff")]
+		[OptionSetMetadataAttribute("el-GR", 24, "#0000ff")]
 		elGR = 1032,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -12036,15 +12950,15 @@ namespace CCOF.Core.DataContext
 		esES = 3082,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("et-EE", 29, "#0000ff")]
+		[OptionSetMetadataAttribute("et-EE", 25, "#0000ff")]
 		etEE = 1061,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("eu-ES", 30, "#0000ff")]
+		[OptionSetMetadataAttribute("eu-ES", 40, "#0000ff")]
 		euES = 1069,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("fi-FI", 20, "#0000ff")]
+		[OptionSetMetadataAttribute("fi-FI", 19, "#0000ff")]
 		fiFI = 1035,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -12052,23 +12966,23 @@ namespace CCOF.Core.DataContext
 		frFR = 1036,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("gl-ES", 31, "#0000ff")]
+		[OptionSetMetadataAttribute("gl-ES", 26, "#0000ff")]
 		glES = 1110,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("he-IL", 23, "#0000ff")]
+		[OptionSetMetadataAttribute("he-IL", 22, "#0000ff")]
 		heIL = 1037,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("hi-IN", 32, "#0000ff")]
+		[OptionSetMetadataAttribute("hi-IN", 27, "#0000ff")]
 		hiIN = 1081,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("hr-HR", 33, "#0000ff")]
+		[OptionSetMetadataAttribute("hr-HR", 28, "#0000ff")]
 		hrHR = 1050,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("hu-HU", 34, "#0000ff")]
+		[OptionSetMetadataAttribute("hu-HU", 29, "#0000ff")]
 		huHU = 1038,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -12084,20 +12998,24 @@ namespace CCOF.Core.DataContext
 		jaJP = 1041,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("kk-KZ", 35, "#0000ff")]
+		[OptionSetMetadataAttribute("kk-KZ", 42, "#0000ff")]
 		kkKZ = 1087,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("ko-KR", 21, "#0000ff")]
+		[OptionSetMetadataAttribute("ko-KR", 20, "#0000ff")]
 		koKR = 1042,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("lt-LT", 36, "#0000ff")]
+		[OptionSetMetadataAttribute("lt-LT", 38, "#0000ff")]
 		ltLT = 1063,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("lv-LV", 37, "#0000ff")]
+		[OptionSetMetadataAttribute("lv-LV", 30, "#0000ff")]
 		lvLV = 1062,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ms-MY", 41, "#0000ff")]
+		msMY = 1086,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("nb-NO", 8, "#0000ff")]
@@ -12128,11 +13046,19 @@ namespace CCOF.Core.DataContext
 		ruRU = 1049,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("sk-SK", 38, "#0000ff")]
+		[OptionSetMetadataAttribute("sk-SK", 31, "#0000ff")]
 		skSK = 1051,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("sr-Latn-CS", 39, "#0000ff")]
+		[OptionSetMetadataAttribute("sl-SI", 37, "#0000ff")]
+		slSI = 1060,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("sr-Cyrl-CS", 43, "#0000ff")]
+		srCyrlCS = 3098,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("sr-Latn-CS", 32, "#0000ff")]
 		srLatnCS = 2074,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -12144,19 +13070,27 @@ namespace CCOF.Core.DataContext
 		thTH = 1054,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("tr-TR", 19, "#0000ff")]
+		[OptionSetMetadataAttribute("tr-TR", 44, "#0000ff")]
 		trTR = 1055,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("uk-UA", 33, "#0000ff")]
+		ukUA = 1058,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("vi-VN", 39, "#0000ff")]
+		viVN = 1066,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("zh-CN", 13, "#0000ff")]
 		zhCN = 2052,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("zh-HK", 25, "#0000ff")]
+		[OptionSetMetadataAttribute("zh-HK", 23, "#0000ff")]
 		zhHK = 3076,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("zh-TW", 24, "#0000ff")]
+		[OptionSetMetadataAttribute("zh-TW", 36, "#0000ff")]
 		zhTW = 1028,
 	}
 	
@@ -12528,6 +13462,58 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Received", 1)]
 		Received = 690970001,
+	}
+	
+	/// <summary>
+	/// The status of the quality agent.
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_QualityAgentStatus
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Completed", 2, "#bff2c1")]
+		Completed = 700610002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Error", 3, "#fab9b9")]
+		Error = 700610003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("In progress", 1, "#bad7f7")]
+		Inprogress = 700610001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Not applicable", 4)]
+		Notapplicable = 700610004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Pending", 0, "#f5ffb8")]
+		Pending = 700610000,
+	}
+	
+	/// <summary>
+	/// The answer type expected when answering the evaluation question.
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_QuestionType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Choose from list", 2)]
+		Choosefromlist = 700610002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Multiselect choice", 1)]
+		Multiselectchoice = 700610001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Text", 3)]
+		Text = 700610003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yes/No", 0)]
+		YesNo = 700610000,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -13009,6 +13995,10 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Error", 3)]
+		Error = 100000003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Negative", 1)]
 		Negative = 100000001,
 		
@@ -13026,6 +14016,14 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Agent", 3)]
+		Agent = 100000003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PreviousOwner", 2)]
+		PreviousOwner = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Seller", 0)]
 		Seller = 100000000,
 		
@@ -13039,8 +14037,40 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("DCA_ResearchAgent", 4, "#0000ff")]
+		DCA_ResearchAgent = 5,
+		
+		/// <summary>
+		/// DCA that handles the customer engagement.
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("DCA Engage agent", 7, "#6A1B9A", "DCA that handles the customer engagement.")]
+		DCAEngageagent = 8,
+		
+		/// <summary>
+		/// DCA that handles the outreach emails.
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("DCA Outreach agent", 6, "#6A1B9A", "DCA that handles the outreach emails.")]
+		DCAOutreachagent = 7,
+		
+		/// <summary>
+		/// Email validation agent
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email validation agent", 8, "#6A1B9A", "Email validation agent")]
+		Emailvalidationagent = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("EngageAgent", 2, "#0000ff")]
 		EngageAgent = 3,
+		
+		/// <summary>
+		/// Microagent that handles the Handover process for Sales Agent.
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Handover Microagent", 5, "#6A1B9A", "Microagent that handles the Handover process for Sales Agent.")]
+		HandoverMicroagent = 6,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("LeadReadinessAgent", 3, "#0000ff")]
@@ -13095,6 +14125,14 @@ namespace CCOF.Core.DataContext
 		AutonomousCaseCreateandUpdate = 100230218,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Case Closure", 23)]
+		CaseClosure = 100230324,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Case Follow Up", 22)]
+		CaseFollowUp = 100230323,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Case summary", 4)]
 		Casesummary = 100230205,
 		
@@ -13113,6 +14151,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Custom entity summary", 8)]
 		Customentitysummary = 100230209,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Enrich record", 20)]
+		Enrichrecord = 100230321,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Inline Copilot for email", 10)]
@@ -13151,6 +14193,10 @@ namespace CCOF.Core.DataContext
 		Resolutionnotes = 100230215,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Resolve case", 21)]
+		Resolvecase = 100230322,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Teams collaboration summary", 16)]
 		Teamscollaborationsummary = 100230217,
 		
@@ -13161,6 +14207,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Timeline next best actions", 11)]
 		Timelinenextbestactions = 100230212,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Workload", 24)]
+		Workload = 100230325,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Write an email", 2)]
@@ -13314,6 +14364,13 @@ namespace CCOF.Core.DataContext
 		Automatedtextmessage = 6,
 		
 		/// <summary>
+		/// Competitor
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Competitor", 15, "#0000ff", "Competitor")]
+		Competitor = 12,
+		
+		/// <summary>
 		/// Email Step
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -13333,6 +14390,13 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Engage", 14, "#0000ff", "Engage")]
 		Engage = 11,
+		
+		/// <summary>
+		/// Handover
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Handover", 17, "#0000ff", "Handover")]
+		Handover = 14,
 		
 		/// <summary>
 		/// LinkedIn action step
@@ -13368,6 +14432,13 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Simple Condition", 0, "#0000ff", "Simple Condition Step")]
 		SimpleCondition = 1,
+		
+		/// <summary>
+		/// Stakeholder
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Stakeholder", 16, "#0000ff", "Stakeholder")]
+		Stakeholder = 13,
 		
 		/// <summary>
 		/// Task Step
@@ -13814,6 +14885,38 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Default", 0, "#0000ff")]
 		Default = 1,
+	}
+	
+	/// <summary>
+	/// behaviour of the solution
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_SolutionBehaviour
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Global", 0)]
+		Global = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Intent", 1)]
+		Intent = 100000001,
+	}
+	
+	/// <summary>
+	/// type of solution for mapping
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum Msdyn_SolutionType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AIAction", 0)]
+		AIAction = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CustomAIAgent", 1)]
+		CustomAIAgent = 100000001,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -14417,15 +15520,15 @@ namespace CCOF.Core.DataContext
 		/// Represents records related to Sales Copilot
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Copilot for Sales", 0, null, "Represents records related to Sales Copilot")]
-		CopilotforSales = 10000,
+		[OptionSetMetadataAttribute("M365 Copilot Sales", 0, null, "Represents records related to Sales Copilot")]
+		M365CopilotSales = 10000,
 		
 		/// <summary>
 		/// Represents records related to Service Copilot
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Copilot for Service", 1, null, "Represents records related to Service Copilot")]
-		CopilotforService = 10001,
+		[OptionSetMetadataAttribute("M365 Copilot Service", 1, null, "Represents records related to Service Copilot")]
+		M365CopilotService = 10001,
 		
 		/// <summary>
 		/// Represents records that are shared across different Copilot types
@@ -14625,6 +15728,15 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsdynCrm_FileCategory
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Logo", 0, "#0000ff")]
+		Logo = 192350000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum MsdynCrm_FitType
 	{
 		
@@ -14669,6 +15781,260 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("_top", 3, "#0000ff")]
 		@__top = 164230003,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ChannelConsentResolutionOverrides
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Always resolve to consent given", 2, "#0000ff")]
+		Alwaysresolvetoconsentgiven = 238550002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Always resolve to consent not given", 3, "#0000ff")]
+		Alwaysresolvetoconsentnotgiven = 238550003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No override", 0, "#0000ff")]
+		Nooverride = 238550000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Use custom api to resolve", 1, "#0000ff")]
+		Usecustomapitoresolve = 238550001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Use Real-time journeys default implementation", 4, "#0000ff")]
+		UseRealtimejourneysdefaultimplementation = 238550004,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ConsentLevel
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Purpose", 0, "#0000ff")]
+		Purpose = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Topic", 1, "#0000ff")]
+		Topic = 534120001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ConsentLinkType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("External link", 2, "#0000ff")]
+		Externallink = 534120002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Preference center", 3, "#0000ff")]
+		Preferencecenter = 534120003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Preference page", 0, "#0000ff")]
+		Preferencepage = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Subscription center", 1, "#0000ff")]
+		Subscriptioncenter = 534120001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ConsentModel
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Non-Restrictive", 1, "#0000ff")]
+		NonRestrictive = 534120001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Restrictive", 0, "#0000ff")]
+		Restrictive = 534120000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ConsentSource
+	{
+		
+		/// <summary>
+		/// Email List unsubscribe
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email - list-unsubscribe", 7, "#0000ff", "Email List unsubscribe")]
+		Emaillistunsubscribe = 534120007,
+		
+		/// <summary>
+		/// Internal – Created manually or changed in the application
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Internal", 0, "#0000ff", "Internal – Created manually or changed in the application")]
+		Internal = 534120000,
+		
+		/// <summary>
+		/// Loaded – Loaded from 'Load' button or excel upload
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Loaded", 3, "#0000ff", "Loaded – Loaded from \'Load\' button or excel upload")]
+		Loaded = 534120003,
+		
+		/// <summary>
+		/// Preference Center - updated by customer
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Preference Center", 4, "#0000ff", "Preference Center - updated by customer")]
+		PreferenceCenter = 534120004,
+		
+		/// <summary>
+		/// Preference page - updated by customer
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Preference page", 1, "#0000ff", "Preference page - updated by customer")]
+		Preferencepage = 534120001,
+		
+		/// <summary>
+		/// Realtime Marketing Form - updated by customer
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Realtime Marketing Form", 5, "#0000ff", "Realtime Marketing Form - updated by customer")]
+		RealtimeMarketingForm = 534120005,
+		
+		/// <summary>
+		/// Subscription Center - updated by customer
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Subscription Center", 6, "#0000ff", "Subscription Center - updated by customer")]
+		SubscriptionCenter = 534120006,
+		
+		/// <summary>
+		/// Text message - updated by customer via text message
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Text message", 2, "#0000ff", "Text message - updated by customer via text message")]
+		Textmessage = 534120002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ConsentType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom", 2, "#0000ff")]
+		Custom = 534120002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email", 0, "#0000ff")]
+		Email = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Text Message", 1, "#0000ff")]
+		TextMessage = 534120001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ConsentTypeValue
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Marketing Communication", 0, "#0000ff")]
+		MarketingCommunication = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Tracking", 1, "#0000ff")]
+		Tracking = 534120001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ConsentValue
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Not Set", 0, "#0000ff")]
+		NotSet = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opted In", 1, "#0000ff")]
+		OptedIn = 534120001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opted Out", 2, "#0000ff")]
+		OptedOut = 534120002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ContactPointType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom", 2, "#0000ff")]
+		Custom = 534120002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email", 0, "#0000ff")]
+		Email = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Text Message", 1, "#0000ff")]
+		TextMessage = 534120001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Voice", 3, "#0000ff")]
+		Voice = 534120003,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_DoIJobStatus_OptionSet
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email Created", 1, "#0000ff")]
+		EmailCreated = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email Create Failed", 8, "#0000ff")]
+		EmailCreateFailed = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email Published", 2, "#0000ff")]
+		EmailPublished = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Email Publish Failed", 9, "#0000ff")]
+		EmailPublishFailed = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Failed", 7, "#0000ff")]
+		Failed = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Journey Created", 3, "#0000ff")]
+		JourneyCreated = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Journey Create Failed", 10, "#0000ff")]
+		JourneyCreateFailed = 10,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Journey Published", 5, "#0000ff")]
+		JourneyPublished = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Journey Publish Failed", 11, "#0000ff")]
+		JourneyPublishFailed = 11,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Journey Publishing Started", 4, "#0000ff")]
+		JourneyPublishingStarted = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Processing Completed", 6, "#0000ff")]
+		ProcessingCompleted = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Request Accepted", 0, "#0000ff")]
+		RequestAccepted = 0,
 	}
 	
 	/// <summary>
@@ -14848,6 +16214,27 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_ExternalConsentResolutionOptions
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Always resolve to consent given", 1, "#0000ff")]
+		Alwaysresolvetoconsentgiven = 238550002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Always resolve to consent not given", 2, "#0000ff")]
+		Alwaysresolvetoconsentnotgiven = 238550003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Use custom api to resolve", 0, "#0000ff")]
+		Usecustomapitoresolve = 238550001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Use Real-time journeys default implementation", 3, "#0000ff")]
+		UseRealtimejourneysdefaultimplementation = 238550004,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum MsDynMkt_Feature_State_Option_Set
 	{
 		
@@ -14861,6 +16248,19 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_Jurisdiction
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("GDPR/CCPA", 0, "#0000ff")]
+		GDPRCCPA = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Other", 1, "#0000ff")]
+		Other = 534120001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum MsDynMkt_MessageDesignation
 	{
 		
@@ -14871,6 +16271,19 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Transactional", 1, "#0000ff", "", "transactional")]
 		Transactional = 534120001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_OptInOut
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opted in", 0, "#0000ff")]
+		Optedin = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opted out", 1, "#0000ff")]
+		Optedout = 534120001,
 	}
 	
 	/// <summary>
@@ -15083,6 +16496,131 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_PurposeEnforcementModel
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Disabled", 2, "#0000ff")]
+		Disabled = 534120002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Non-Restrictive", 1, "#0000ff")]
+		NonRestrictive = 534120001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Restrictive", 0, "#0000ff")]
+		Restrictive = 534120000,
+	}
+	
+	/// <summary>
+	/// Out of the box (by default) Marketing automatically configures 3 Purpose Consents: 
+	///
+	///Commercial Communication 
+	///Transactional Communication 
+	///Tracking
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_PurposeType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Commercial Communication", 0, "#0000ff")]
+		CommercialCommunication = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Tracking", 2, "#0000ff")]
+		Tracking = 534120002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Transactional Communication", 1, "#0000ff")]
+		TransactionalCommunication = 534120001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_Reason
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No reasons", 0, "#0000ff")]
+		Noreasons = 534119999,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-in - Advertisement", 1, "#0000ff")]
+		OptinAdvertisement = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-in - Events", 3, "#0000ff")]
+		OptinEvents = 534120002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-in - Landing page", 2, "#0000ff")]
+		OptinLandingpage = 534120001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-out - Content was irrelevant", 4, "#0000ff")]
+		OptoutContentwasirrelevant = 534120003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-out - Didn’t recall signing up", 6, "#0000ff")]
+		OptoutDidntrecallsigningup = 534120005,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-out - One-click unsubscribe", 8, "#0000ff")]
+		OptoutOneclickunsubscribe = 534120007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-out - Privacy concerns", 7, "#0000ff")]
+		OptoutPrivacyconcerns = 534120006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-out - Received too frequently", 5, "#0000ff")]
+		OptoutReceivedtoofrequently = 534120004,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_Source
+	{
+		
+		/// <summary>
+		/// Internal – Created manually or changed in the application
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Internal", 0, "#0000ff", "Internal – Created manually or changed in the application")]
+		Internal = 534120000,
+		
+		/// <summary>
+		/// Preference page - updated by customer
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Preference page", 1, "#0000ff", "Preference page - updated by customer")]
+		Preferencepage = 534120001,
+		
+		/// <summary>
+		/// Text message - updated by customer via text message
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Text message", 2, "#0000ff", "Text message - updated by customer via text message")]
+		Textmessage = 534120002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum MsDynMkt_USecJOConsentSystemFormKT
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Migrating", 1, "#0000ff")]
+		Migrating = 534120001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No", 0, "#0000ff")]
+		No = 534120000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yes", 2, "#0000ff")]
+		Yes = 534120002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum MsFt_DataState
 	{
 		
@@ -15163,6 +16701,50 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Display", 0)]
 		Display = 1,
+	}
+	
+	/// <summary>
+	/// Status of the Data Import
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum OfM_Data_Import_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Data Import
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum OfM_Data_Import_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Completed", 3)]
+		Completed = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Pending", 0)]
+		Pending = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Processing", 2)]
+		Processing = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Processing Error", 4)]
+		ProcessingError = 5,
 	}
 	
 	/// <summary>
@@ -15863,6 +17445,10 @@ namespace CCOF.Core.DataContext
 		Redirect = 30,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Server Logic", 30, "#0000ff")]
+		ServerLogic = 35,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Shortcut", 27, "#0000ff")]
 		Shortcut = 32,
 		
@@ -16101,6 +17687,62 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Vietnamese - Vietnam", 44, "#0000ff")]
 		VietnameseVietnam = 1066,
+	}
+	
+	/// <summary>
+	/// Power Pages Site Type
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum PowerPageSiteType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Code Site", 1, "#0000ff")]
+		CodeSite = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Default", 0, "#0000ff")]
+		Default = 0,
+	}
+	
+	/// <summary>
+	/// Power Pages Source File Type
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum PowerPagesSourceFileType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CSS", 2, "#0000ff")]
+		CSS = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Html", 0, "#0000ff")]
+		Html = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Java script", 1, "#0000ff")]
+		Javascript = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("JSON", 5, "#0000ff")]
+		JSON = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("TSX", 3, "#0000ff")]
+		TSX = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Web Template", 7, "#0000ff")]
+		WebTemplate = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("XML", 4, "#0000ff")]
+		XML = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yml", 6, "#0000ff")]
+		Yml = 7,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -16934,6 +18576,18 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum ServerType
+	{
+		
+		/// <summary>
+		/// Server for Agent 365
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Agent365", 0, null, "Server for Agent 365")]
+		Agent365 = 0,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum ServiceAppointment_StartDate
 	{
 		
@@ -17148,7 +18802,7 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Case", 3)]
+		[OptionSetMetadataAttribute("Case", 1)]
 		Case = 112,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -17156,11 +18810,11 @@ namespace CCOF.Core.DataContext
 		Lead = 4,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Order", 1)]
+		[OptionSetMetadataAttribute("Order", 0)]
 		Order = 1088,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Quote", 0)]
+		[OptionSetMetadataAttribute("Quote", 3)]
 		Quote = 1084,
 	}
 	
@@ -17603,7 +19257,7 @@ namespace CCOF.Core.DataContext
 	/// Synapse Link profile type
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum SynapseLinkProFiletype
+	public enum SynapseLinkProfileType
 	{
 		
 		/// <summary>

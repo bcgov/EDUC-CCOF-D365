@@ -127,10 +127,10 @@ public static class Setup
             public const string CreateUpdateQuestionName = "Create/Update Question from Customer Voice to Reporting Custom Tables.";
         }
 
-        public static class DataImports
+        public static class ECER
         {
-            public const Int16 ProcessProviderCertificatesId = 700;
-            public const string ProcessProviderCertificatesName = "Process and update Provider Certificates";
+            public const Int16 ProcessECEREmployeeCertificatesId = 700;
+            public const string ProcessECEREmployeeCertificatesName = "Process and update Employee Certificates";
         }
     }
 

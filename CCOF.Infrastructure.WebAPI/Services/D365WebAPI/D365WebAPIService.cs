@@ -201,7 +201,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
             }
             else
             {
-                request = new(new D365EntityReference(entityNameSet, id), columnName: "ofm_file", data, fileName);
+                request = new(new D365EntityReference(entityNameSet, id), columnName: "ofm_data_file", data, fileName);
             }
             HttpClient client = await _authenticationService.GetHttpClientAsync(D365ServiceType.CRUD, spn);
 
