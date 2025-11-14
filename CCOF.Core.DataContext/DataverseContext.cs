@@ -139,6 +139,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_Data_Import"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_Data_Import> OfM_Data_ImportSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.OfM_Data_Import>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_Payment"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_Payment> OfM_PaymentSet
