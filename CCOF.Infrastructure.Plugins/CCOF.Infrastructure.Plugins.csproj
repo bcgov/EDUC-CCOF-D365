@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CCOF.Infrastructure.Plugins</RootNamespace>
     <AssemblyName>CCOF.Infrastructure.Plugins</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -125,6 +125,7 @@
     <Compile Include="AFS History\ApprovableFeeScheduleHistoryCreation.cs" />
     <Compile Include="App Status History\AppStatusHistory.cs" />
     <Compile Include="ECE-WE-Facility\ValidateECEWEFacilityApproval.cs" />
+    <Compile Include="ECEWE\GenerateMonthlyReportNumber.cs" />
     <Compile Include="FundingAgreement\RestrictFundingStatus.cs" />
     <Compile Include="FundingAgreement\CreateFundingMOD.cs" />
     <Compile Include="Licence\OnlyOneActiveLicence.cs" />
