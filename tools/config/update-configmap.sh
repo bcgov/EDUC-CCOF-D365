@@ -6,6 +6,7 @@ readonly OPENSHIFT_NAMESPACE=$3
 readonly DYNAMICS_AUTHENTICATION_SETTINGS=$4
 readonly D365_API_KEY_SCHEME=$5
 readonly BCCASApi=$6
+readonly ExternalServices=$7
 
 D365_CONFIGURATION=$(jq << JSON
 {
@@ -29,7 +30,8 @@ D365_CONFIGURATION=$(jq << JSON
     "MinsToCache": 60
   },
   "D365AuthSettings": $(cat "$DYNAMICS_AUTHENTICATION_SETTINGS"),
-  "BCCASApi": $(cat "$BCCASApi")
+  "BCCASApi": $(cat "$BCCASApi"),
+  "ExternalServices":$(cat "$ExternalServices")
 }
 
 JSON
