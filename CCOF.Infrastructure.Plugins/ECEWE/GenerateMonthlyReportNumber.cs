@@ -123,7 +123,7 @@ namespace CCOF.Infrastructure.Plugins.ECEWE
                     "</entity></fetch>";
                     tracingService.Trace("base ECE Fac fetch" + ecefac_fetch);
                     EntityCollection ecefac = service.RetrieveMultiple(new FetchExpression(ecefac_fetch));
-                    tracingService.Trace("base ECE Fac" + ecefac.Entities[0].Id);
+                    //tracingService.Trace("base ECE Fac" + ecefac.Entities[0].Id);
 
                     if (ecefac.Entities.Count > 0)
                     {
