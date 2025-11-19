@@ -767,6 +767,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                                     ? null : approvedParentfeePre["ccof_frequency"].GetValue<int>()
                         };
                         string? providerPaymentRateBind = null;
+                        bool ccfriCompleteApproved = false;
                         bool allFeesEmptyOrZero =
                             (approvedParentFeesForMonth["ccof_approvedparentfee0to18"] == null || approvedParentFeesForMonth["ccof_approvedparentfee0to18"].GetValue<decimal>() == 0) &&
                             (approvedParentFeesForMonth["ccof_approvedparentfee18to36"] == null || approvedParentFeesForMonth["ccof_approvedparentfee18to36"].GetValue<decimal>() == 0) &&
@@ -782,10 +783,12 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             {
                                 providerPaymentRateBind = $"/ccof_rates({ccfriProviderPaymentRate["ccof_rateid"]?.GetValue<string>()})";
                             }
+                            ccfriCompleteApproved = true;
                         }
                         else
                         {
                             providerPaymentRateBind = null;
+                            ccfriCompleteApproved = false;
                         }
                         var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFeesForMonth, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, businessDay, providerType);
                         var EnrolmentReportToCreate = new JsonObject()
@@ -805,6 +808,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             // ["ccof_ccfriproviderpaymentrate@odata.bind"] = ccfriProviderPaymentRate?["ccof_rateid"]?.GetValue<string>() is string providerRateId ? $"/ccof_rates({providerRateId})" : null,
                             ["ccof_ccfridailyratemax@odata.bind"] = ccfriMax?["ccof_rateid"]?.GetValue<string>() is string CCFRIMaxRateId ? $"/ccof_rates({CCFRIMaxRateId})" : null,
                             ["ccof_ccfridailyratemin@odata.bind"] = ccfriMin?["ccof_rateid"]?.GetValue<string>() is string CCFRIMinRateId ? $"/ccof_rates({CCFRIMinRateId})" : null,
+                            ["ccof_ccfricompleteapproved"] = ccfriCompleteApproved,
                             ["ccof_reportextension"] = new JsonObject()
                             {
                                 // Approved Parent Fee
