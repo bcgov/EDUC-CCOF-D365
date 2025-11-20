@@ -553,6 +553,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             }
 
             string? providerPaymentRateBind = null;
+            bool ccfriCompleteApproved = false;
             bool allFeesEmptyOrZero =
                 (approvedParentFeesForMonth["ccof_approvedparentfee0to18"] == null || approvedParentFeesForMonth["ccof_approvedparentfee0to18"].GetValue<decimal>() == 0) &&
                 (approvedParentFeesForMonth["ccof_approvedparentfee18to36"] == null || approvedParentFeesForMonth["ccof_approvedparentfee18to36"].GetValue<decimal>() == 0) &&
@@ -568,10 +569,12 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 {
                     providerPaymentRateBind = $"/ccof_rates({ccfriProviderPaymentRate["ccof_rateid"]?.GetValue<string>()})";
                 }
+                ccfriCompleteApproved = true;
             }
             else
             {
                 providerPaymentRateBind = null;
+                ccfriCompleteApproved= false;
             }
             // recalculate Daily CCFRI Rate
             var dailyCCFRIRate = CalculateDailyCCFRIRate(approvedParentFeesForMonth, (JsonObject)ccfriMax, (JsonObject)ccfriMin, feeFloorExempt, businessDay, providerType);
@@ -659,6 +662,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 ["ccof_ccfridailyratemax@odata.bind"] = PreviousER["_ccof_ccfridailyratemax_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemax_value"].ToString() + ")",
                 ["ccof_ccfridailyratemin@odata.bind"] = PreviousER["_ccof_ccfridailyratemin_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemin_value"].ToString() + ")",
                 [$"{lookupFieldSchemaName}_{targetEntityLogicalName}@odata.bind"] = (string.IsNullOrEmpty(targetEntityLogicalName) || string.IsNullOrEmpty(targetEntitySetName) || string.IsNullOrEmpty(targetRecordGuid)) ? null : $"/{targetEntitySetName}({targetRecordGuid})",
+                ["ccof_ccfricompleteapproved"]=ccfriCompleteApproved,
                 #region main fields need to copied to Adjustment ER
                 // Total Enrolled
                 ["ccof_totalenrolled0to18"] = PreviousER["ccof_totalenrolled0to18"]?.Value<int?>(),
