@@ -17,6 +17,7 @@ using CCOF.Infrastructure.WebAPI.Services.Batches;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Hellang.Middleware.ProblemDetails;
 using PdfSharp.Fonts;
+using CCOF.Infrastructure.WebAPI.Services.Processes.ECER;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,7 @@ builder.Services.AddScoped<ID365BatchProvider, BatchProvider>();
 
 builder.Services.AddScoped<ID365ProcessProvider, P505GeneratePaymentLinesProvider>();
 builder.Services.AddScoped<ID365ProcessProvider, P400GenerateMonthlyEnrolmentReport>();
+builder.Services.AddScoped<ID365ProcessProvider, P700ECEREmployeeCertificates>();
 
 builder.Services.AddD365HttpClient(builder.Configuration);
 builder.Services.AddMvcCore().AddApiExplorer();

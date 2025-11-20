@@ -110,7 +110,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             }
             else
                 return StatusCode((int)response.StatusCode,
-                    $"Failed to Retrieve records: {response.ReasonPhrase}");
+                    $"Failed to Retrieve records: {response.Content}");
         }
         private dynamic AggregateApplicationData(JToken token)
         {

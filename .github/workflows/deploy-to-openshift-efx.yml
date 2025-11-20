@@ -32,7 +32,7 @@ env:
   MIN_CPU: '50m'
   MAX_CPU: '100m'
   MIN_MEM: '200Mi'
-  MAX_MEM: '250Mi'
+  MAX_MEM: '800Mi'
 
   HAPROXY_IP_WHITELIST: ${{ secrets.HAPROXY_IP_WHITELIST }}
 
@@ -144,7 +144,13 @@ jobs:
 
           # Process update-configmap
           cat << JSON > /tmp/authentication_settings
-            ${{ secrets.DYNAMICS_AUTHENTICATION_SETTINGS }}
+             ${{ secrets.D365_AUTHENTICATION_SETTINGS }}
+          JSON
+          cat << JSON > /tmp/auth_schema_settings
+            ${{ secrets.D365_API_KEY_SCHEME }}
+          JSON
+           cat << JSON > /tmp/BCCASApi
+            ${{ secrets.BCCASApi }}
           JSON
 
           curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ env.BRANCH }}/tools/config/update-configmap.sh \
@@ -152,7 +158,9 @@ jobs:
               ${{ env.APP_ENVIRONMENT }} \
               ${{ env.APP_NAME }} \
               ${{ env.OPENSHIFT_NAMESPACE }} \
-              /tmp/authentication_settings
+              /tmp/authentication_settings \
+              /tmp/auth_schema_settings \
+             /tmp/BCCASApi \
 
           # Start rollout (if necessary) and follow it
           oc rollout restart deployment/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }} 2> /dev/null \

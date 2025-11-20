@@ -33,7 +33,7 @@ env:
   MIN_CPU: '50m'
   MAX_CPU: '100m'
   MIN_MEM: '200Mi'
-  MAX_MEM: '250Mi'
+  MAX_MEM: '800Mi'
 
   HAPROXY_IP_WHITELIST: ${{ secrets.HAPROXY_IP_WHITELIST }}
 
