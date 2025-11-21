@@ -15,6 +15,7 @@ using System;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using CCOF.Core.DataContext;
 using System.Drawing.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
@@ -27,6 +28,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         private ProcessParameter? _processParams;
         public Int16 ProcessId => Setup.Process.Payments.GeneratePaymentLinesId;
         public string ProcessName => Setup.Process.Payments.GeneratePaymentLinesName;
+        public string CodingLineType_FetchParameter;
         #region Data Queries
         public string BusinessClosuresRequestUri
         { // ofm_holiday_type" operator="eq" value="1"  Standard for CCOF. 2 for OFM
@@ -82,7 +84,12 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         <link-entity name="account" from="accountid" to="ccof_facility" link-type="inner" alias="facility">
                           <attribute name="name" />
                           <attribute name="accountnumber" />
-                    </link-entity>
+                        </link-entity>
+                        <link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_programyear" link-type="inner" alias="programYear">
+                          <attribute name="ccof_name" />
+                          <attribute name="ccof_programyearnumber" />
+                          <attribute name="statuscode" />
+                        </link-entity>
                         <filter>
                           <condition attribute="ccof_monthlyenrollmentreportid" operator="eq" value="{{_processParams.EnrolmentReportid.ToString()}}" />
                         </filter>
@@ -92,6 +99,38 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 var requestUri = $"""
                          ccof_monthlyenrollmentreports?fetchXml={WebUtility.UrlEncode(fetchXml)}
                          """;
+                return requestUri;
+            }
+        }
+        public string CodingLineTypeRequestUri
+        { 
+            get
+            {
+                var fetchXml = $$"""
+                    <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+                      <entity name="ccof_coding_line_type">
+                        <attribute name="ccof_coding_line_typeid" />
+                        <attribute name="ccof_name" />
+                        <attribute name="ccof_coding_line_type" />
+                        <attribute name="statuscode" />
+                        <attribute name="owningbusinessunit" />
+                        <attribute name="ownerid" />
+                        <attribute name="statecode" />
+                        <attribute name="createdon" />
+                        <attribute name="createdby" />
+                        <order attribute="createdon" descending="false" />
+                        <filter type="and">
+                          <condition attribute="statecode" operator="eq" value="0" />
+                          <condition attribute="ccof_coding_line_type" operator="like" value="%{{CodingLineType_FetchParameter}}%" />
+                        </filter>
+                      </entity>
+                    </fetch>
+                    """;
+
+                var requestUri = $"""
+                         ccof_coding_line_types?fetchXml={WebUtility.UrlEncode(fetchXml)}
+                         """;
+
                 return requestUri;
             }
         }
@@ -106,6 +145,36 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
                 _logger.LogError(CustomLogEvent.Process, "Failed to query Funding record information with the server error {responseBody}", responseBody.CleanLog());
+
+                return await Task.FromResult(new ProcessData(string.Empty));
+            }
+
+            var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+            JsonNode d365Result = string.Empty;
+            if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
+            {
+                if (currentValue?.AsArray().Count == 0)
+                {
+                    _logger.LogInformation(CustomLogEvent.Process, "No records found with query {requestUri}", BusinessClosuresRequestUri.CleanLog());
+                }
+                d365Result = currentValue!;
+            }
+
+            _logger.LogDebug(CustomLogEvent.Process, "Query Result {queryResult}", d365Result.ToString().CleanLog());
+
+            return await Task.FromResult(new ProcessData(d365Result));
+        }
+        public async Task<ProcessData> GetCodingLineTypeDataAsync()
+        {
+            _logger.LogDebug(CustomLogEvent.Process, nameof(GetCodingLineTypeDataAsync));
+
+            var response = await _d365WebApiService.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, CodingLineTypeRequestUri, false, 0, true);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                _logger.LogError(CustomLogEvent.Process, "Failed to query CodingLineType record information with the server error {responseBody}", responseBody.CleanLog());
 
                 return await Task.FromResult(new ProcessData(string.Empty));
             }
@@ -171,6 +240,29 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 10 => "CCFRI Provider",
                 _ => "Unknown"
             };
+            var multiKeyDict = new Dictionary<(string, int, string), string>()   // 1 - Current, 4 - Historical
+            {
+                { ("CCOF", 1, "positive"), "CE"},
+                { ("CCOF", 1, "negative"), "CR"},
+                { ("CCOF", 4, "positive"), "PE"},
+                { ("CCOF", 4, "negative"), "PR"},
+                { ("CCFRI", 1, "positive"), "CS"},
+                { ("CCFRI", 1, "negative"), "CY"},
+                { ("CCFRI", 4, "positive"), "PX"},
+                { ("CCFRI", 4, "negative"), "PY"},
+                { ("CCFRI Provider", 1, "positive"), "CA"},
+                { ("CCFRI Provider", 1, "negative"), "CB"},
+                { ("CCFRI Provider", 4, "positive"), "PA"},
+                { ("CCFRI Provider", 4, "negative"), "PB"}
+            };
+            int statuscodeFY = (int)enrolmentReport["programYear.statuscode"];    // 1 - Current, 4 - Historical
+            string totalAmountSign = totalAmount >= 0 ? "positive" : "negative";
+            CodingLineType_FetchParameter = multiKeyDict[(paymentTypeString, statuscodeFY, totalAmountSign)];
+            var codingLineTypeString = await GetCodingLineTypeDataAsync();
+            var codingLineTypeData = JsonSerializer.Deserialize<JsonArray>(codingLineTypeString.Data.ToString());
+            var codingLineTypeRecord = codingLineTypeData!.First();
+            //var codingLineTypeLabel = codingLineTypeRecord!["ccof_coding_line_type"];
+            var codingLineTypeId = codingLineTypeRecord!["ccof_coding_line_typeid"];
             var payload = new JsonObject()
                         {
                             { "ofm_invoice_line_number", invoiceLineNumber},
@@ -181,6 +273,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             { "ofm_invoice_received_date", invoiceReceivedDate.ToString("yyyy-MM-dd")},
                             { "ofm_effective_date", effectiveDate.ToString("yyyy-MM-dd")},
                             { "ccof_program_year@odata.bind",$"/ccof_program_years({enrolmentReport["_ccof_programyear_value"]})" },
+                            { "ccof_coding_line_type@odata.bind",$"/ccof_coding_line_types({codingLineTypeId})" },
                             { "statuscode",4  }, //Approved for Payment in PaymentLine table
                             { "ofm_facility@odata.bind", $"/accounts({enrolmentReport["_ccof_facility_value"]})" },
                             { "ofm_organization@odata.bind", $"/accounts({enrolmentReport["_ccof_organization_value"]})" },
