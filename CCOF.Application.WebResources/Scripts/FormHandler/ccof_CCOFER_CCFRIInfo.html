@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 20px;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        .report-container {
+            width: 100%;
+        }
+
+        .enrolment-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: auto;
+            font-size: 10px;
+            border-top: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+        }
+
+            .enrolment-table th,
+            .enrolment-table td {
+                padding: 2px 4px;
+                text-align: left;
+                vertical-align: middle;
+                box-sizing: border-box;
+                border-right: 1px solid #ddd;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .enrolment-table thead th,
+            .enrolment-table thead td {
+                background-color: #eef2f7;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+        #enrollment-table-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+       
+        .enrolment-table tbody th {
+            text-align: left;
+            background-color: #f7f9fc;
+            padding-left: 8px;
+        }
+
+          .enrolment-table .day-col {
+            text-align: left; 
+        }
+
+        .enrolment-table td span {
+            display: block;
+        }
+
+        .mtfi-container {
+            margin-top: 15px;
+        }
+        .mtfi-table thead tr {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .mtfi-table thead th,
+        .mtfi-table thead td {
+            text-align: left;
+        }
+
+        .mtfi-table tbody tr td {
+            background-color: inherit;
+            text-align: left;
+        }
+    </style>
+    <script src="/WebResources/ClientGlobalContext.js.aspx" type="text/javascript"></script>
+</head>
+
+<body onload="onLoad()">
+    <div class="report-container">
+        <table class="enrolment-table" id="enrolment-table">
+            <thead id="enrollment-table-header">
+            </thead>
+            <tbody id="enrolment-tbody">
+                <tr class="highlight_holiday">
+                    <th scope="row" class="day-col">CCFRI Facility ID</th>
+                    <td colspan="2"><span id="ccof_name"></span></td>
+                </tr>
+                <tr class="highlight_holiday">
+                    <th scope="row" class="day-col">CCFRI Status</th>
+                    <td colspan="2"><span id="statuscode"></span></td>
+                </tr>
+                <tr class="highlight_holiday">
+                    <th scope="row" class="day-col">CCFRI Payment Eligibility Start Date</th>
+                    <td colspan="2"><span id="ccof_ccfripaymenteligibilitystartdate"></span></td>
+                </tr>
+                <tr class="highlight_holiday">
+                    <th scope="row" class="day-col">Mid-year Opt-out Last month of funding</th>
+                    <td colspan="2"><span id="ccof_midyearoptoutlastmonthoffunding"></span></td>
+                </tr>
+                <tr class="highlight_holiday">
+                    <th scope="row" class="day-col">Temporary Approval Start Date</th>
+                    <td colspan="2"><span id="ccof_temporaryapprovalstartdate"></span></td>
+                </tr>
+                <tr class="highlight_holiday">
+                    <th scope="row" class="day-col">Temporary Approval Until this Date</th>
+                    <td colspan="2"><span id="ccof_temporaryapprovaluntil"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mtfi-container">
+        <table class="enrolment-table mtfi-table" style="border-top: none;">
+            <thead id="mtfi-table-header">
+                <tr>
+                    <th scope="col" class="day-col">MTFI</th>
+                    <td colspan="1" style="text-align: center;">Version</td>
+                    <td colspan="1" style="text-align: center;">Status</td>
+                </tr>
+            </thead>
+            <tbody id="mtfi-table-tbody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function onLoad() {
+            debugger;
+            const params = new URLSearchParams(window.location.search);
+            const recordId = params.get("id");
+            const entityName = params.get("typename");
+            console.log("Record ID:", recordId);
+            console.log("Entity:", entityName);
+            let programYear = window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue();
+            const programYearGuid = window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue()[0].id;
+            const facilityGuid = window.parent.Xrm.Page.getAttribute("ccof_facility").getValue()[0].id;
+            const CCFRIFacilityInfos = getSyncMultipleRecord("ccof_adjudication_ccfri_facilities?$filter=(statecode eq 0 and _ccof_programyear_value eq " + getCleanedGuid(programYearGuid) + " and _ccof_facility_value eq " + getCleanedGuid(facilityGuid) + ")");
+            if (CCFRIFacilityInfos && CCFRIFacilityInfos.length > 0) {
+                let CCFRIFacilityTdId = document.getElementById("ccof_name");
+                if (CCFRIFacilityTdId) {
+                    CCFRIFacilityTdId.textContent = CCFRIFacilityInfos[0]["ccof_name"];
+                    console.log(`Updated CCFRI Facility ID to: ${CCFRIFacilityInfos[0]["ccof_name"]}`);
+                }
+                CCFRIFacilityTdId = document.getElementById("statuscode");
+                if (CCFRIFacilityTdId) {
+                    CCFRIFacilityTdId.textContent = CCFRIFacilityInfos[0]["statuscode@OData.Community.Display.V1.FormattedValue"];
+                }
+                CCFRIFacilityTdId = document.getElementById("ccof_ccfripaymenteligibilitystartdate");
+                if (CCFRIFacilityTdId && CCFRIFacilityInfos[0]["ccof_ccfripaymenteligibilitystartdate"]) {
+                    CCFRIFacilityTdId.textContent = (new Date(CCFRIFacilityInfos[0]["ccof_ccfripaymenteligibilitystartdate"])).toLocaleDateString('en-US', { month: "short", year: "numeric" });
+                }
+                CCFRIFacilityTdId = document.getElementById("ccof_midyearoptoutlastmonthoffunding");
+                if (CCFRIFacilityTdId && CCFRIFacilityInfos[0]["ccof_midyearoptoutlastmonthoffunding"]) {
+                    CCFRIFacilityTdId.textContent = new Date(
+                        CCFRIFacilityInfos[0]["ccof_midyearoptoutlastmonthoffunding"]
+                    ).toLocaleDateString('en-US', { month: "short", year: "numeric" });
+                }
+                CCFRIFacilityTdId = document.getElementById("ccof_temporaryapprovalstartdate");
+                if (CCFRIFacilityTdId && CCFRIFacilityInfos[0]["ccof_temporaryapprovalstartdate"]) {
+                    CCFRIFacilityTdId.textContent = new Date(
+                        CCFRIFacilityInfos[0]["ccof_temporaryapprovalstartdate"]
+                    ).toLocaleDateString('en-US', { month: "short", year: "numeric" });
+                }
+                CCFRIFacilityTdId = document.getElementById("ccof_temporaryapprovaluntil");
+                if (CCFRIFacilityTdId && CCFRIFacilityInfos[0]["ccof_temporaryapprovaluntil"]) {
+                    CCFRIFacilityTdId.textContent = new Date(
+                        CCFRIFacilityInfos[0]["ccof_temporaryapprovaluntil"]
+                    ).toLocaleDateString('en-US', { month: "short", year: "numeric" });
+                }
+            }
+            const MTFIInfos = getSyncMultipleRecord("ccof_change_request_mtfis?$filter=(statecode eq 0 and _ccof_ccfri_facility_value eq " + CCFRIFacilityInfos[0]['ccof_adjudication_ccfri_facilityid'] + ")&$orderby=ccof_mtfi_sequence_number desc");
+            if (MTFIInfos && MTFIInfos.length > 0) {
+                const tableBody = document.getElementById("mtfi-table-tbody");
+                if (tableBody) {
+                    tableBody.innerHTML = '';
+                }
+                MTFIInfos.forEach(record => {
+                    const tr = document.createElement('tr');
+                    const mtfiId = record["ccof_name"];
+                    const version = record["ccof_mtfi_sequence_number"];
+                    const statusLabel = record["statuscode@OData.Community.Display.V1.FormattedValue"];
+                    let cell = document.createElement("td");
+                    cell.innerText = mtfiId;
+                    tr.appendChild(cell);
+                    cell = document.createElement("td");
+                    cell.innerText = version;
+                    tr.appendChild(cell);
+                    cell = document.createElement("td");
+                    tr.appendChild(cell);
+                    cell.innerText = statusLabel;
+                    tableBody.appendChild(tr);
+                });
+            }
+        }
+        function getCleanedGuid(id) {
+            return id.replace("{", "").replace("}", "");
+        }
+        function getSyncMultipleRecord(request) {
+            var result = null;
+            var req = new XMLHttpRequest();
+            req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + request, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        var results = JSON.parse(this.response);
+                        result = results.value;
+                    } else {
+                        Xrm.Utility.alertDialog(this.statusText);
+                    }
+                }
+            };
+            req.send();
+            return result;
+        }
+    </script>
+</body>
+</html>

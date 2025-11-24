@@ -1,4 +1,4 @@
-﻿
+﻿﻿﻿
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,37 +6,127 @@
     <script src="/WebResources/ccof_JQuery.min.js" type="text/javascript"></script>
 </head>
 
-<body onload="OnloadSetYearBasedonProgramYear()" style="margin-top: -1%;">
+<body onload="OnloadSetYearBasedonProgramYear()" style="margin-top: -15px;">
     <script type="text/javascript">
+        var previousMonth = null;
         function OnchangeSetFiscalYearBasedOnSelectedMonth() {
             debugger;
+            // Validation. Check CCFRI Facility Status. Existing MTFI in Process
+            const params = new URLSearchParams(window.location.search);
+            const recordId = params.get("id");
+            const entityName = params.get("typename");
+            console.log("Record ID:", recordId);
+            console.log("Entity:", entityName);
+
+            var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+            userRoles.forEach(function hasRole(item, index) {
+                if (item.name === "CCOF - Leadership" || item.name === "System Administrator") {
+                    isAuthorized = true;
+                }
+            });
+            if (!isAuthorized) {
+                let alertStrings = {
+                    confirmButtonLabel: "Ok", text: "You are not allowed to set Mid-year Opt-out Last month of funding. Please verify if you have proper security role.", title: "Set Mid-year Opt-out Last month of funding is prohibited"
+                };
+                let alertOptions = { height: 240, width: 640 };
+                Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+                    function (success) {
+                        console.log("Alert dialog closed");
+                        $("#month").val(previousMonth);
+                    },
+                    function (error) {
+                        console.log(error.message);
+                    }
+                );
+                return;
+            }
+            var isCCFRIFacilityApproved = false;
+            var CCFRIFacility = getSyncSingleRecord("ccof_adjudication_ccfri_facilities(" + recordId + ")?$select=ccof_name,statuscode,ccof_ccfripaymenteligibilitystartdate");
+            if (CCFRIFacility != null && CCFRIFacility["statuscode"] === 6) // Complete Approved
+            { isCCFRIFacilityApproved = true; }
+            if (!isCCFRIFacilityApproved) {
+                let alertStrings = { confirmButtonLabel: "Ok", text: "You are not allowed to set Mid-year Opt-out Last month of funding. CCFRI Facility Status is not Complete - Approved", title: "Set Mid-year Opt-out Last month of funding is prohibited" };
+                let alertOptions = { height: 240, width: 640 };
+                Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+                    function (success) {
+                        console.log("Alert dialog closed");
+                        $("#month").val(previousMonth);
+                    },
+                    function (error) {
+                        console.log(error.message);
+                    }
+                );
+                return;
+            }
+            var MTFI = getSyncMultipleRecord("ccof_change_request_mtfis?$select=ccof_name,statuscode&$filter=(statecode eq 0 and Microsoft.Dynamics.CRM.In(PropertyName='statuscode',PropertyValues=['1','2','3','4','5','14','13','10','11','9']) and _ccof_ccfri_facility_value eq " + recordId + ")");
+            //Incomplete,Submitted,With Adjudicator,Ready for QC,With QC,PCF - Awaiting Provider,NMF - Awaiting Provider,RFI - Awaiting Provider,AFC - Awaiting Provider,Phone Call - Awaiting Provider
+            var isExistingProcessingMTFI = false;
+            if (MTFI.length > 0) {
+                isExistingProcessingMTFI = true;
+            }
+            if (isExistingProcessingMTFI) {
+                let alertStrings = { confirmButtonLabel: "Ok", text: "You are not allowed to set Mid-year Opt-out Last month of funding. Please verify if existing processing MTFI.", title: "Set Mid-year Opt-out Last month of funding is prohibited" };
+                let alertOptions = { height: 240, width: 640 };
+                Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+                    function (success) {
+                        console.log("Alert dialog closed");
+                        $("#month").val(previousMonth);
+                    },
+                    function (error) {
+                        console.log(error.message);
+                    }
+                );
+                return;
+            }
             if (window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue() != null) {
                 var currentApplicationYear = window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue()[0].name;
                 var currentYear = currentApplicationYear.slice(0, 4);
                 var nextYear = parseInt(currentYear) + 1;
-                var year;
                 $(document).ready(function () {
                     if ($("#month").val() > 3) {
                         $("#year").val(currentYear);
-
                         window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartyear").setValue(currentYear);
                         window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartyear").setSubmitMode("always");
                     }
                     else if ($("#month").val() <= 3 && $("#month").val() != 0) {
                         $("#year").val(nextYear.toString());
-
                         window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartyear").setValue(nextYear.toString());
                         window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartyear").setSubmitMode("always");
                     }
+                    var month = $("#month").val();
+                    window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartmonth").setValue(month);
+                    window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartmonth").setSubmitMode("always");
+                    var OptoutCCFRIMonth = window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartmonth").getValue();
+                    var OptoutCCFRIYear = window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartyear").getValue();
+                    var Day = "01";
+                    if (OptoutCCFRIYear != null && OptoutCCFRIMonth != null) {
+                        var actualOptoutCCFRIDate = OptoutCCFRIMonth + "-" + Day + "-" + OptoutCCFRIYear;
+                        var isOptoutGreatereqEligibilityStartDate = false;
+                        if (CCFRIFacility["ccof_ccfripaymenteligibilitystartdate"] != null && new Date(actualOptoutCCFRIDate) >= new Date(CCFRIFacility["ccof_ccfripaymenteligibilitystartdate"])) {
+                            isOptoutGreatereqEligibilityStartDate = true;
+                        }
+                        if (!isOptoutGreatereqEligibilityStartDate) {
+                            let alertStrings = {
+                                confirmButtonLabel: "Ok", text: "You are not allowed to set Mid-year Opt-out Last month of funding. It should greater than or equal CCFRI Payment Eligibility Start Date.", title: "Set Mid-year Opt-out Last month of funding is prohibited"
+                            };
+                            let alertOptions = { height: 240, width: 640 };
+                            Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+                                function (success) {
+                                    console.log("Alert dialog closed");
+                                    $("#month").val(previousMonth);
+                                },
+                                function (error) {
+                                    console.log(error.message);
+                                }
+                            );
+                            return;
+                        }
+                        window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutlastmonthoffunding").setValue(new Date(actualOptoutCCFRIDate));
+                        window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutlastmonthoffunding").setSubmitMode("always");
+                    }
+                    previousMonth = $("#month").val();
                 });
-                var month = $("#month").val();
-
-                window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartmonth").setValue(month);
-                window.parent.Xrm.Page.getAttribute("ccof_midyearoptoutstartmonth").setSubmitMode("always");
-                // handle Tempoary Approval Automation flag  // Nov 27.2023
-                window.parent.Xrm.Page.getAttribute("ccof_isautotempapproved").setValue(false);
             }
-
         }
         function OnloadSetYearBasedonProgramYear() {
             debugger;
@@ -69,11 +159,62 @@
                     }
                     if (selectedMonth != null) {
                         $("#month").val(selectedMonth)
+                        previousMonth = selectedMonth;
                     }
 
                 });
             }
+        }
+        function getCleanedGuid(id) {
+            return id.replace("{", "").replace("}", "");
+        }
+        function getSyncSingleRecord(request) {
+            var results = null;
+            var req = new XMLHttpRequest();
+            req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + request, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        var result = JSON.parse(this.response);
+                        results = result;
+                    }
+                    else {
+                        Xrm.Utility.alertDialog(this.statusText);
+                    }
+                }
+            };
+            req.send();
+            return results;
+        }
 
+        function getSyncMultipleRecord(request) {
+            var result = null;
+            var req = new XMLHttpRequest();
+            req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + request, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        var results = JSON.parse(this.response);
+                        result = results.value;
+                    } else {
+                        Xrm.Utility.alertDialog(this.statusText);
+                    }
+                }
+            };
+            req.send();
+            return result;
         }
     </script>
 
