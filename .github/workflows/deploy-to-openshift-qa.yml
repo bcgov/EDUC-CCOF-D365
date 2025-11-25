@@ -154,7 +154,7 @@ jobs:
             ${{ secrets.BCCASApi }}
           JSON
           cat << JSON > /tmp/ExternalServices
-            ${{ secrets.ExternalServices }}
+            ${{ secrets.EXTERNALSERVICES }}
           JSON
           curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ env.BRANCH }}/tools/config/update-configmap.sh \
             | bash /dev/stdin \
