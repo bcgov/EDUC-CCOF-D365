@@ -25,8 +25,19 @@ public class CertificationDetail
 {
     public string? registrationnumber { get; set; }
     public string? certificatelevel { get; set; }
-    public DateTime? effectivedate { get; set; }
-    public DateTime? expirydate { get; set; }
+    public string effectivedate { get; set; }
+    public string expirydate { get; set; }
     public string? firstname { get; set; }
     public string? lastname { get; set; }
+    //public string Statuscode { get; set; }
+    public int statuscode { get; set; }
+}
+
+public enum Active
+{
+    Active = 1,
+    Expired = 621870001,
+    Reprinted = 621870002,
+    Cancelled = 621870003,
+    Suspended = 621870004
 }
