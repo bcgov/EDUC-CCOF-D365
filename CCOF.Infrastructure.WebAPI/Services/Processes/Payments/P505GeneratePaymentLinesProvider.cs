@@ -229,9 +229,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                                             ProcessParameter processParams,List<DateTime> holidaysList,
                                                             int invoiceLineNumber,int paymentType)
         {
-            DateTime invoiceDate = paymentDate.GetPreviousBusinessDay(holidaysList);
-            // DateTime invoiceReceivedDate = invoiceDate.AddBusinessDays(_BCCASApi.PayableInDays, holidaysList);
-            DateTime invoiceReceivedDate = invoiceDate.AddBusinessDays(5, holidaysList);
+            DateTime invoiceDate = paymentDate;
+            DateTime invoiceReceivedDate = invoiceDate;
             DateTime effectiveDate = invoiceDate;
             string paymentTypeString = paymentType switch
             {
