@@ -109,5 +109,34 @@ CCOF.Funding.Ribbon = {
             CreateMODButton.ready = true;
             formContext.ui.refreshRibbon();
         });
+    },
+    filterFATemplate: function (executionContext) {
+        
+        var formContext = executionContext.getFormContext();
+
+        formContext.getControl("ccof_fa_template_selected").addPreSearch(CCOF.Funding.Ribbon.addFATemplateFilter);
+    },
+    addFATemplateFilter: function (executionContext) {
+
+        var formContext = executionContext.getFormContext();
+
+        var orgID = formContext.getAttribute("ccof_organization_identifier")?.getValue();
+        var programYear = formContext.getAttribute("ccof_programyear")?.getValue();
+        var providerType = "";
+        const string = '^G';
+        const regexp = new RegExp(string);
+        if (regexp.test(orgID)) {
+
+            providerType = "100000000";
+        }
+        else {
+            providerType = "100000001";
+        }
+
+        var filter = `<filter type="and">
+            <condition attribute="ccof_providertype" operator="eq" value="${providerType}" />
+            <condition attribute="ccof_program_year" operator="eq" value="${programYear[0]?.id}" />
+        </filter >`;
+        formContext.getControl("ccof_fa_template_selected")?.addCustomFilter(filter, "ccof_funding_agreement_template");
     }
 }
