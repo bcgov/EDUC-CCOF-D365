@@ -16,6 +16,5 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)builderSettings.json" />
-    <Content Include="$(MSBuildThisFileDirectory)CCOFGeneratorSettings.Xml" />
   </ItemGroup>
 </Project>
