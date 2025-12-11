@@ -886,6 +886,10 @@ namespace CCOF.Core.DataContext
 		Letter = 4207,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Notes", 25)]
+		Notes = 12151,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Opportunity Close", 13)]
 		OpportunityClose = 4208,
 		
@@ -1549,6 +1553,32 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_CcFri_CcOf_AFCOccurred
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No", 1, "#0000ff")]
+		No = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yes", 0, "#0000ff")]
+		Yes = 100000000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_CcFri_CcOf_ReviewRequired
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No", 1, "#0000ff")]
+		No = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yes", 0, "#0000ff")]
+		Yes = 100000000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_Adjudication_CcFri_Facility_CcOf_Closure_Indicator
 	{
 		
@@ -1703,6 +1733,210 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("With QC", 3)]
 		WithQC = 5,
+	}
+	
+	/// <summary>
+	/// Status of the Adjudication CCFRI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_CcFri_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Adjudication CCFRI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_CcFri_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AFC - Awaiting Provider", 9, "#0000ff")]
+		AFCAwaitingProvider = 11,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Change Request Complete", 14, "#072ef2")]
+		ChangeRequestComplete = 15,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Approved", 4, "#0000ff")]
+		CompleteApproved = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Ineligible", 6, "#0000ff")]
+		CompleteIneligible = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Not Approved", 5, "#0000ff")]
+		CompleteNotApproved = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 13, "#0000ff")]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("NMF - Awaiting Provider", 10, "#0000ff")]
+		NMFAwaitingProvider = 12,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-Out", 12, "#0000ff")]
+		OptOut = 13,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PCF - Awaiting Provider", 7, "#0000ff")]
+		PCFAwaitingProvider = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Phone Call - Awaiting Provider", 11, "#0000ff")]
+		PhoneCallAwaitingProvider = 14,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Ready for QC", 2, "#0000ff")]
+		ReadyforQC = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("RFI- Awaiting Provider", 8, "#0000ff")]
+		RFIAwaitingProvider = 10,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 0, "#0000ff")]
+		Submitted = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("With Adjudicator", 1, "#0000ff")]
+		WithAdjudicator = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("With QC", 3, "#0000ff")]
+		WithQC = 5,
+	}
+	
+	/// <summary>
+	/// Status of the Adjudication ECEWE Facility
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_ECEWe_Facility_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Adjudication ECEWE Facility
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_ECEWe_Facility_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Change Request Complete", 8)]
+		ChangeRequestComplete = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Approved", 4)]
+		CompleteApproved = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Ineligible", 5)]
+		CompleteIneligible = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ECE-WE Awaiting Provider", 6)]
+		ECEWEAwaitingProvider = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 2)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-Out", 7)]
+		OptOut = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 0)]
+		Submitted = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Temp Approved", 3)]
+		TempApproved = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("With Adjudicator", 1)]
+		WithAdjudicator = 3,
+	}
+	
+	/// <summary>
+	/// Status of the Adjudication ECEWE
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_ECEWe_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Adjudication ECEWE
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Adjudication_ECEWe_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Change Request Complete", 7, "#0000ff")]
+		ChangeRequestComplete = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Approved", 3, "#0000ff")]
+		CompleteApproved = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Ineligible", 4, "#0000ff")]
+		CompleteIneligible = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ECE-WE Awaiting Provider", 5, "#0000ff")]
+		ECEWEAwaitingProvider = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 8, "#0000ff")]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-Out", 6, "#0000ff")]
+		OptOut = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 0, "#0000ff")]
+		Submitted = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Temp Approved", 2, "#0000ff")]
+		TempApproved = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("With Adjudicator", 1, "#0000ff")]
+		WithAdjudicator = 3,
 	}
 	
 	/// <summary>
@@ -1865,6 +2099,177 @@ namespace CCOF.Core.DataContext
 		OFM = 2,
 	}
 	
+	/// <summary>
+	/// Status of the Application Base Funding
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_BaseFunding_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application Base Funding
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_BaseFunding_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Action Required", 4)]
+		ActionRequired = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 2)]
+		Active = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Cancelled", 5)]
+		Cancelled = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 3)]
+		Inactive_Active = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive_Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 0)]
+		Submitted = 1,
+	}
+	
+	/// <summary>
+	/// Status of the Application CCFRI Childcare Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_CcFri_ChildCareCategory_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application CCFRI Childcare Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_CcFri_ChildCareCategory_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_CcFri_Closure_CcOf_Approved_As
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCFRI", 1)]
+		CCFRI = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Emergency Closure", 0)]
+		EmergencyClosure = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("N/A", 2)]
+		NA = 100000002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_CcFri_Closure_CcOf_Closure_Type
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Emergency Closures", 1)]
+		EmergencyClosures = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Planned Closures", 0)]
+		PlannedClosures = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Unexpected Closures", 2)]
+		UnexpectedClosures = 100000002,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_CcFri_Closure_CcOf_Payment_Eligibility
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCOF Base Funding", 2, "#0000ff")]
+		CCOFBaseFunding = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CCOF Base Funding and the Child Care Fee Reduction Initiative", 1, "#0000ff")]
+		CCOFBaseFundingandtheChildCareFeeReductionInitiative = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("INELIGIBLE", 3, "#0000ff")]
+		INELIGIBLE = 100000003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PENDING", 4, "#0000ff")]
+		PENDING = 100000004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("the Child Care Fee Reduction Initiative", 0, "#0000ff")]
+		theChildCareFeeReductionInitiative = 100000000,
+	}
+	
+	/// <summary>
+	/// Status of the Application CCFRI Closure
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_CcFri_Closure_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application CCFRI Closure
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_CcFri_Closure_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_Application_CcOf_Union_Agreement_Reached
 	{
@@ -1876,6 +2281,74 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Yes", 0)]
 		Yes = 100000000,
+	}
+	
+	/// <summary>
+	/// Status of the Application Deadline
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_Deadline_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application Deadline
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_Deadline_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Application Facility Document
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_Facility_Document_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application Facility Document
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Application_Facility_Document_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("New", 2)]
+		New = 3,
 	}
 	
 	/// <summary>
@@ -1918,6 +2391,293 @@ namespace CCOF.Core.DataContext
 		Withdrawn = 4,
 	}
 	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationCcFri_CcOf_AFs_Status_MTfI
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("I accept", 0)]
+		Iaccept = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("I need to upload supporting documents", 1)]
+		Ineedtouploadsupportingdocuments = 2,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationCcFri_CcOf_ChargeFeeCcFri
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No", 1, "#0000ff")]
+		No = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yes", 0, "#0000ff")]
+		Yes = 100000000,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationCcFri_CcOf_FeeCorrectCcFri
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("No", 1, "#0000ff")]
+		No = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Yes", 0, "#0000ff")]
+		Yes = 100000000,
+	}
+	
+	/// <summary>
+	/// Status of the Application CCFRI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationCcFri_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application CCFRI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationCcFri_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Action Required", 5)]
+		ActionRequired = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved", 2)]
+		Approved = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Ineligible", 4)]
+		Ineligible = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("MTFI Action Required", 10)]
+		MTFIActionRequired = 13,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("MTFI Approved", 9)]
+		MTFIApproved = 10,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("MTFI Requested", 8)]
+		MTFIRequested = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("New", 7)]
+		New = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Not Approved", 3)]
+		NotApproved = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-Out", 6)]
+		OptOut = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 0)]
+		Submitted = 1,
+	}
+	
+	/// <summary>
+	/// Status of the Application ECE-WE
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationECEWe_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application ECE-WE
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationECEWe_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Action Required", 4)]
+		ActionRequired = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved", 2)]
+		Approved = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Ineligible", 3)]
+		Ineligible = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("New", 6)]
+		New = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Opt-Out", 5)]
+		OptOut = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 0)]
+		Submitted = 1,
+	}
+	
+	/// <summary>
+	/// Status of the Application Status history
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationStatusHistory_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application Status history
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationStatusHistory_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Application Summary
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationSummary_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Application Summary
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApplicationSummary_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Approvable Fee Schedule History
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApProvable_Fee_Schedule_History_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Approvable Fee Schedule History
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApProvable_Fee_Schedule_History_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Approvable Fee Schedule
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApProvable_Fee_Schedule_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Approvable Fee Schedule
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ApProvable_Fee_Schedule_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	/// <summary>
 	/// Indicates the type of approval for approved parent fees
 	/// </summary>
@@ -1951,6 +2711,70 @@ namespace CCOF.Core.DataContext
 		Internal = 100000000,
 	}
 	
+	/// <summary>
+	/// Status of the Audit Log
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_AuditLog_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Audit Log
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_AuditLog_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the BCeID Organization
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_BcEId_Organization_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the BCeID Organization
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_BcEId_Organization_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_CapIndicator
 	{
@@ -1966,6 +2790,501 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Hitting NMF", 1)]
 		HittingNMF = 100000001,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Email
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Email_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Email
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Email_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Auto-Approved", 3)]
+		AutoApproved = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Drafted", 1)]
+		Drafted = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 2)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Ready", 0)]
+		Ready = 1,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Allowable Amount MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Allowable_Amount_MTfI_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Allowable Amount MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Allowable_Amount_MTfI_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Allowable Amount
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Allowable_Amount_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Allowable Amount
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Allowable_Amount_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_24_Month_CcOf_StatutoryBenefits
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.56% - Jan 2023", 0)]
+		_1956Jan2023 = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.70% - Jan 2024", 1, "#0000ff")]
+		_1970Jan2024 = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.95% - Apr 2024", 3, "#0000ff")]
+		_1995Apr2024 = 100000003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("20.02%", 2)]
+		_2002 = 100000001,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility DCSWS 24 Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_24_Month_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility DCSWS 24 Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_24_Month_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_CcOf_StatutoryBenefits
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.56% - Jan 2023", 0)]
+		_1956Jan2023 = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.70% - Jan 2024", 1, "#0000ff")]
+		_1970Jan2024 = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.90% - Jan 2026", 5, "#0000ff")]
+		_1990Jan2026 = 100000005,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.92% - Jan 2025", 4, "#0000ff")]
+		_1992Jan2025 = 100000004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.95% - Apr 2024", 3, "#0000ff")]
+		_1995Apr2024 = 100000003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("20.02%", 2)]
+		_2002 = 100000001,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_MTfI_CcOf_StatutoryBenefits
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.56% - Jan 2023", 0)]
+		_1956Jan2023 = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.70% - Jan 2024", 1, "#0000ff")]
+		_1970Jan2024 = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("19.95% - Apr 2024", 3, "#0000ff")]
+		_1995Apr2024 = 100000003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("20.02%", 2)]
+		_2002 = 100000001,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility DCSW MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_MTfI_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility DCSW MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_MTfI_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility DCSW
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility DCSW
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_DCSw_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Exceptional Circumstance 24 Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_EC_24Month_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Exceptional Circumstance 24 Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_EC_24Month_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Exceptional Circumstance MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_EX_Circumstance_MTfI_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Exceptional Circumstance MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_EX_Circumstance_MTfI_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Exceptional Circumstance
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Exceptional_Circumstance_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Exceptional Circumstance
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Exceptional_Circumstance_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Fee Increase MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Fee_Increase_MTfI_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Fee Increase MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Fee_Increase_MTfI_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Parent Fee
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Parent_Fee_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Parent Fee
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Parent_Fee_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Priority Service Expansion MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Priority_ServiceExp_MTfI_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Priority Service Expansion MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_Priority_ServiceExp_MTfI_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Priority Service Expansion 
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_PriorityServiceExpansion_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Priority Service Expansion 
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFri_Facility_PriorityServiceExpansion_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -2039,6 +3358,115 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Temporary Approval", 2)]
 		TemporaryApproval = 100000002,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Allowable Amount 24 Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFriFacilityAllowableAmount_24Month_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Allowable Amount 24 Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFriFacilityAllowableAmount_24Month_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFriFacilityFeeIncrease24Month_CcOf_FeeIncreaseType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("MTFI", 1)]
+		MTFI = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Regular", 0)]
+		Regular = 100000000,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Fee Increase 24Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFriFacilityFeeIncrease24Month_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Fee Increase 24Month
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFriFacilityFeeIncrease24Month_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the CCFRI Facility Priority Service Expansion 
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFriFacilityPriorityServiceExpansion24_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the CCFRI Facility Priority Service Expansion 
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_CcFriFacilityPriorityServiceExpansion24_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -2140,6 +3568,78 @@ namespace CCOF.Core.DataContext
 		Submitted = 1,
 	}
 	
+	/// <summary>
+	/// Status of the Change Action Closure
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Action_Closure_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Change Action Closure
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Action_Closure_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("CANCELLED", 2)]
+		CANCELLED = 100000006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("COMPLETE", 3)]
+		COMPLETE = 100000008,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 0)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("SUBMITTED", 1)]
+		SUBMITTED = 100000001,
+	}
+	
+	/// <summary>
+	/// Status of the Change Action
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Action_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Change Action
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Action_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_Change_Request_CcOf_Union_Agreement_Reached
 	{
@@ -2151,6 +3651,186 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Yes", 0)]
 		Yes = 100000000,
+	}
+	
+	/// <summary>
+	/// Status of the Change Request Facility Address
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_Facility_Address_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Change Request Facility Address
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_Facility_Address_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Change Request Facility Name
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_Facility_Name_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Change Request Facility Name
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_Facility_Name_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Change Action MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_MTfI_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Change Action MTFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_MTfI_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AFC - Awaiting Provider", 8)]
+		AFCAwaitingProvider = 11,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Cancelled", 13)]
+		Cancelled = 12,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Approved", 10)]
+		CompleteApproved = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Ineligible", 12)]
+		CompleteIneligible = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Complete - Not Approved", 11)]
+		CompleteNotApproved = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 14)]
+		Inactive = 100000002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Incomplete", 0)]
+		Incomplete = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("NMF - Awaiting Provider", 6)]
+		NMFAwaitingProvider = 13,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PCF - Awaiting Provider", 5)]
+		PCFAwaitingProvider = 14,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Phone Call - Awaiting Provider", 9)]
+		PhoneCallAwaitingProvider = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Ready for QC", 3)]
+		ReadyforQC = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("RFI - Awaiting Provider", 7)]
+		RFIAwaitingProvider = 10,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Submitted", 1)]
+		Submitted = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("With Adjudicator", 2)]
+		WithAdjudicator = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("With QC", 4)]
+		WithQC = 5,
+	}
+	
+	/// <summary>
+	/// Status of the Change Request New Facility
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_New_Facility_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Change Request New Facility
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_New_Facility_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	/// <summary>
@@ -2219,6 +3899,38 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("With QC", 5)]
 		WithQC = 11,
+	}
+	
+	/// <summary>
+	/// Status of the Change Request Summary
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_Summary_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Change Request Summary
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Change_Request_Summary_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -2344,6 +4056,46 @@ namespace CCOF.Core.DataContext
 		UpdateDirectDepositInformation = 100000012,
 	}
 	
+	/// <summary>
+	/// Status of the Childcare Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ChildCare_Category_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Childcare Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ChildCare_Category_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Future", 3)]
+		Future = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 2)]
+		Inactive_Active = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive_Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_ChildCareCategories
 	{
@@ -2465,6 +4217,38 @@ namespace CCOF.Core.DataContext
 		WITHDRAWN = 100000005,
 	}
 	
+	/// <summary>
+	/// Status of the Configuration
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Configuration_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Configuration
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Configuration_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_ContactType
 	{
@@ -2503,6 +4287,38 @@ namespace CCOF.Core.DataContext
 		CONTRACTTERMINATED = 100000003,
 	}
 	
+	/// <summary>
+	/// Status of the Daily Enrollment
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_DailyEnrollment_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Daily Enrollment
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_DailyEnrollment_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_DayType
 	{
@@ -2533,6 +4349,38 @@ namespace CCOF.Core.DataContext
 		WearenotamemberoftheCSSEA = 100000000,
 	}
 	
+	/// <summary>
+	/// Status of the ECE Wage
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ECE_Wage_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the ECE Wage
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ECE_Wage_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_ECEWeDecision
 	{
@@ -2548,6 +4396,38 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Opt-Out", 1)]
 		OptOut = 100000001,
+	}
+	
+	/// <summary>
+	/// Status of the Email Reminder
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Email_Reminder_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Email Reminder
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Email_Reminder_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -2700,6 +4580,70 @@ namespace CCOF.Core.DataContext
 		Yesasafacility = 100000002,
 	}
 	
+	/// <summary>
+	/// Status of the Facility Licenses
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Facility_Licenses_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Facility Licenses
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Facility_Licenses_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Facility Region
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Facility_Region_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Facility Region
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Facility_Region_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_FacilityStatus
 	{
@@ -2760,6 +4704,206 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Unionized", 0)]
 		Unionized = 100000001,
+	}
+	
+	/// <summary>
+	/// Status of the Fee Benchmark SDA
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Benchmark_SdA_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Fee Benchmark SDA
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Benchmark_SdA_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Fee Benchmark
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Benchmark_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Fee Benchmark
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Benchmark_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Fee Region Lookup
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Region_Lookup_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Fee Region Lookup
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Region_Lookup_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Fee Region
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Region_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Fee Region
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Region_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Future", 2)]
+		Future = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Historical", 3)]
+		Historical = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Fee Update Schedule
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Update_Schedule_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Fee Update Schedule
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Fee_Update_Schedule_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Fee Floor Exempt
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_FeeFloorExempt_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Fee Floor Exempt
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_FeeFloorExempt_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -2842,6 +4986,111 @@ namespace CCOF.Core.DataContext
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Funding_Agreement_CcOf_External_Portal_Status
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 2)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved", 7)]
+		Approved = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Cancelled", 3)]
+		Cancelled = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Drafted – Provider Action Required", 0)]
+		DraftedProviderActionRequired = 101510003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Drafted - with Ministry", 1)]
+		DraftedwithMinistry = 101510004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Expired", 6)]
+		Expired = 101510008,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Replaced", 5)]
+		Replaced = 101510007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Terminated", 4)]
+		Terminated = 101510006,
+	}
+	
+	/// <summary>
+	/// Status of the Funding Agreement
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Funding_Agreement_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Funding Agreement
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Funding_Agreement_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 6, "#0000ff")]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved", 5, "#0000ff")]
+		Approved = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Cancelled", 7, "#0000ff")]
+		Cancelled = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Drafted", 0, "#0000ff")]
+		Drafted = 101510002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Drafted – Provider Action Required", 2, "#0000ff")]
+		DraftedProviderActionRequired = 101510003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Drafted - with Ministry", 3, "#0000ff")]
+		DraftedwithMinistry = 101510004,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Expired", 10, "#0000ff")]
+		Expired = 101510008,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Parked", 1, "#0000ff")]
+		Parked = 101510009,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Replaced", 9, "#0000ff")]
+		Replaced = 101510007,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Suspended", 4, "#0000ff")]
+		Suspended = 101510005,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Terminated", 8, "#0000ff")]
+		Terminated = 101510006,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_FundingModel
 	{
 		
@@ -2893,6 +5142,118 @@ namespace CCOF.Core.DataContext
 		VancouverCoastalHealth = 100000004,
 	}
 	
+	/// <summary>
+	/// Status of the License Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_License_Category_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the License Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_License_Category_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the License Childcare Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_License_ChildCare_Category_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the License Childcare Category
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_License_ChildCare_Category_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the License
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_License_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the License
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_License_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 3)]
+		Active = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved", 0)]
+		Approved = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Cancelled", 5)]
+		Cancelled = 101510003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Draft", 2)]
+		Draft = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Replaced", 4)]
+		Replaced = 101510002,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_LicenseCategories
 	{
@@ -2934,6 +5295,70 @@ namespace CCOF.Core.DataContext
 		SchoolAgedcareonSchoolGrounds = 100000008,
 	}
 	
+	/// <summary>
+	/// Status of the Median Fee SDA
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Median_Fee_SdA_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Median Fee SDA
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Median_Fee_SdA_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Median Fee
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Median_Fee_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Median Fee
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Median_Fee_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_MessageType
 	{
@@ -2957,51 +5382,115 @@ namespace CCOF.Core.DataContext
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("April", 0, "#0000ff")]
-		April = 1,
+		April = 4,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("August", 4, "#0000ff")]
-		August = 5,
+		August = 8,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("December", 8, "#0000ff")]
-		December = 9,
+		December = 12,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("February", 10, "#0000ff")]
-		February = 11,
+		February = 2,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("January", 9, "#0000ff")]
-		January = 10,
+		January = 1,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("July", 3, "#0000ff")]
-		July = 4,
+		July = 7,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("June", 2, "#0000ff")]
-		June = 3,
+		June = 6,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("March", 11, "#0000ff")]
-		March = 12,
+		March = 3,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("May", 1, "#0000ff")]
-		May = 2,
+		May = 5,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("November", 7, "#0000ff")]
-		November = 8,
+		November = 11,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("October", 6, "#0000ff")]
-		October = 7,
+		October = 10,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("September", 5, "#0000ff")]
-		September = 6,
+		September = 9,
+	}
+	
+	/// <summary>
+	/// Status of the Monthly Business Day
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_MonthlyBusinessDay_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Monthly Business Day
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_MonthlyBusinessDay_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Monthly Enrollment Report
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_MonthlyEnrollmentReport_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Monthly Enrollment Report
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_MonthlyEnrollmentReport_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -3189,6 +5678,74 @@ namespace CCOF.Core.DataContext
 		NotApproved = 100000003,
 	}
 	
+	/// <summary>
+	/// Status of the Organization-Contact
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Organization_Contact_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Organization-Contact
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Organization_Contact_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Parent_Fees
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Parent_Fees_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Parent_Fees
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Parent_Fees_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0, "#0000ff")]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Expired", 1, "#0000ff")]
+		Expired = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 2, "#0000ff")]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_PaymentEligibility
 	{
@@ -3255,8 +5812,56 @@ namespace CCOF.Core.DataContext
 		LicenseUpload = 100000002,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Renewal", 10)]
+		Renewal = 100000010,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Supporting Document", 3)]
 		SupportingDocument = 100000003,
+	}
+	
+	/// <summary>
+	/// Status of the Program Year
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Program_Year_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Program Year
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Program_Year_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Current", 0, "#0000ff")]
+		Current = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Far Future", 3, "#0000ff")]
+		FarFuture = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Future", 1, "#0000ff")]
+		Future = 3,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Historical", 2, "#0000ff")]
+		Historical = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 4, "#0000ff")]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -3298,6 +5903,38 @@ namespace CCOF.Core.DataContext
 		Group = 100000000,
 	}
 	
+	/// <summary>
+	/// Status of the Rate
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Rate_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Rate
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Rate_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_RateType
 	{
@@ -3325,6 +5962,70 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("IHMA Provider Payment", 3)]
 		IHMAProviderPayment = 100000003,
+	}
+	
+	/// <summary>
+	/// Status of the Reason Pending Option
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ReasonPendingOption_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Reason Pending Option
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_ReasonPendingOption_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the Region Fee Schedule
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Region_Fee_Schedule_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Region Fee Schedule
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Region_Fee_Schedule_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -3406,6 +6107,262 @@ namespace CCOF.Core.DataContext
 		Verify = 101510000,
 	}
 	
+	/// <summary>
+	/// Status of the RFI-PFI DCS WI Detail
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_DCS_Wi_Detail_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI-PFI DCS WI Detail
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_DCS_Wi_Detail_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the RFI-PFI Fee History Detail
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_Fee_History_Detail_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI-PFI Fee History Detail
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_Fee_History_Detail_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the RFI PFI NMF
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_NMf_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI PFI NMF
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_NMf_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the RFI-PFI Other Funding
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_Other_Funding_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI-PFI Other Funding
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfI_PFI_Other_Funding_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the RFI-PFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFI_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI-PFI
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFI_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the RFI-PFI Expense Info
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFIExpenseInfo_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI-PFI Expense Info
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFIExpenseInfo_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the RFI-PFI Service Expansion Detail
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFIServiceExpansionDetail_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI-PFI Service Expansion Detail
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFIServiceExpansionDetail_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
+	/// Status of the RFI-PFI Service Expansion Indigenous Community
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFIServiceExpansionIndigenousCommunity_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the RFI-PFI Service Expansion Indigenous Community
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_RfIpFIServiceExpansionIndigenousCommunity_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_SelectTheApplicableSector
 	{
@@ -3425,6 +6382,38 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Some or all of our facilities are unionized", 3, "#4908fc")]
 		Someorallofourfacilitiesareunionized = 100000003,
+	}
+	
+	/// <summary>
+	/// Status of the Service Delivery Details
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Service_Delivery_Details_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Service Delivery Details
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Service_Delivery_Details_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -3538,6 +6527,74 @@ namespace CCOF.Core.DataContext
 		WithQC = 5,
 	}
 	
+	/// <summary>
+	/// Status of the System Recommendation
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_System_Recommendation_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the System Recommendation
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_System_Recommendation_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Pending", 2)]
+		Pending = 3,
+	}
+	
+	/// <summary>
+	/// Status of the System Message
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_SystemMessage_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the System Message
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_SystemMessage_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum CcOf_SystemRecommendationType
 	{
@@ -3599,6 +6656,38 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Sole Proprietorship", 5, "#0000ff")]
 		SoleProprietorship = 100000005,
+	}
+	
+	/// <summary>
+	/// Status of the Unlock History
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Unlock_History_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Unlock History
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Unlock_History_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -4980,6 +8069,10 @@ namespace CCOF.Core.DataContext
 		InviteRedemption = 11263,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Notes", 16)]
+		Notes = 12151,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Phone Call", 0)]
 		PhoneCall = 4210,
 		
@@ -5746,12 +8839,16 @@ namespace CCOF.Core.DataContext
 		CCFRI = 8,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("CCFRI PROVIDER PAYMENT", 9)]
-		CCFRIPROVIDERPAYMENT = 10,
+		[OptionSetMetadataAttribute("CCFRI Provider Payment", 9)]
+		CCFRIProviderPayment = 10,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("CCOF", 6)]
 		CCOF = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ECESB", 10)]
+		ECESB = 11,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("ECEWE", 8)]
@@ -7097,6 +10194,10 @@ namespace CCOF.Core.DataContext
 		AccountResearchResult = 11851,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Account Research Summary Trigger", 206)]
+		AccountResearchSummaryTrigger = 12132,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Activity File Attachment", 10)]
 		ActivityFileAttachment = 10092,
 		
@@ -7217,12 +10318,28 @@ namespace CCOF.Core.DataContext
 		Currency = 9105,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom Account Insights Result", 207)]
+		CustomAccountInsightsResult = 12133,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Customer Asset", 85)]
 		CustomerAsset = 10163,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Customer Asset Category", 86)]
 		CustomerAssetCategory = 10167,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Customization Agent Trigger", 208)]
+		CustomizationAgentTrigger = 12134,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom OOB Research Result", 209)]
+		CustomOOBResearchResult = 12135,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Default OOB Account Research Result", 210)]
+		DefaultOOBAccountResearchResult = 12136,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Disposition Code Category", 152)]
@@ -7255,6 +10372,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Evaluation Global Config", 166)]
 		EvaluationGlobalConfig = 11938,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Evaluation Notification Configuration", 213)]
+		EvaluationNotificationConfiguration = 12149,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Field Service Price List Item", 87)]
@@ -7657,6 +10778,10 @@ namespace CCOF.Core.DataContext
 		RCSWatermark = 11966,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Related Conversation Trigger Table", 212)]
+		RelatedConversationTriggerTable = 12139,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Reserve entity 0e9640da2e", 187)]
 		Reserveentity0e9640da2e = 11973,
 		
@@ -7783,6 +10908,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("SalesAgentUsage", 150)]
 		SalesAgentUsage = 11859,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Sales Company Resolver Lead Trigger", 211)]
+		SalesCompanyResolverLeadTrigger = 12137,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Scheduling Parameter", 63)]
@@ -10251,6 +13380,10 @@ namespace CCOF.Core.DataContext
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("AboutThisSuggestion", 27)]
+		AboutThisSuggestion = 100230328,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("AcceptSuggestion", 11)]
 		AcceptSuggestion = 100230312,
 		
@@ -12268,6 +15401,13 @@ namespace CCOF.Core.DataContext
 		Endconversationduetooverflow = 192350055,
 		
 		/// <summary>
+		/// Message to customer for estimated wait time notification.
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Estimated wait time notification.", 78, "#0000ff", "Message to customer for estimated wait time notification.")]
+		Estimatedwaittimenotification = 192370004,
+		
+		/// <summary>
 		/// Greeting Message for Async Channels and Voice
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -12621,8 +15761,20 @@ namespace CCOF.Core.DataContext
 		AccountInsights = 100000006,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Chain Of Thoughts", 12)]
+		ChainOfThoughts = 100000012,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Competitor Insights", 9)]
 		CompetitorInsights = 100000009,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom OOB Account Research", 13)]
+		CustomOOBAccountResearch = 100000013,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom Research Insight", 14)]
+		CustomResearchInsight = 100000014,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Deal Health", 3)]
@@ -12666,6 +15818,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Stakeholder Insights", 5, null, "Stakeholder Insights")]
 		StakeholderInsights = 100000005,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Summerized Account Research", 15)]
+		SummerizedAccountResearch = 100000015,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -16690,6 +19846,38 @@ namespace CCOF.Core.DataContext
 		MicrosoftWord = 2,
 	}
 	
+	/// <summary>
+	/// Status of the ACK Codes
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum OfM_AcK_Codes_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the ACK Codes
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum OfM_AcK_Codes_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum OfM_BusinessRuleType
 	{
@@ -16898,6 +20086,38 @@ namespace CCOF.Core.DataContext
 	}
 	
 	/// <summary>
+	/// Status of the Payment File Exchange
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum OfM_Payment_File_Exchange_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Payment File Exchange
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum OfM_Payment_File_Exchange_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
+	}
+	
+	/// <summary>
 	/// Status of the Payment
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -16929,8 +20149,12 @@ namespace CCOF.Core.DataContext
 		AwaitingApproval = 3,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Cancelled", 6)]
+		[OptionSetMetadataAttribute("Cancelled", 7)]
 		Cancelled = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("HOLD", 6)]
+		HOLD = 101510001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Paid", 1)]
@@ -16949,7 +20173,7 @@ namespace CCOF.Core.DataContext
 		ProcessingPayment = 5,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("QR Approved", 7)]
+		[OptionSetMetadataAttribute("QR Approved", 8)]
 		QRApproved = 8,
 	}
 	
@@ -18865,8 +22089,8 @@ namespace CCOF.Core.DataContext
 		/// Facebook item.
 		/// </summary>
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Facebook", 15, "", "Facebook item.")]
-		Facebook = 1,
+		[OptionSetMetadataAttribute("Facility Update", 15, "", "Facebook item.")]
+		FacilityUpdate = 1,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Google\'s Business Messages", 12, "#0000ff")]
@@ -18895,6 +22119,13 @@ namespace CCOF.Core.DataContext
 		[OptionSetMetadataAttribute("Other", 17, "", "Other default")]
 		Other = 0,
 		
+		/// <summary>
+		/// Twitter.
+		/// </summary>
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("PCF", 16, "", "Twitter.")]
+		PCF = 2,
+		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Skype", 8, "#0000ff")]
 		Skype = 13,
@@ -18906,13 +22137,6 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Telegram", 7, "#0000ff")]
 		Telegram = 12,
-		
-		/// <summary>
-		/// Twitter.
-		/// </summary>
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Twitter", 16, "", "Twitter.")]
-		Twitter = 2,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Wechat", 14, "#0000ff")]
@@ -19865,6 +23089,54 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Tiles View", 0, "#0000ff", "Tiles View")]
 		TilesView = 1,
+	}
+	
+	/// <summary>
+	/// Used Transaction Currency entity
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum TransactionCurrency_CurrencyType
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom", 1)]
+		Custom = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("System", 0)]
+		System = 0,
+	}
+	
+	/// <summary>
+	/// Status of the transaction currency.
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum TransactionCurrency_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the transaction currency.
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum TransactionCurrency_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 2,
 	}
 	
 	/// <summary>
