@@ -28,4 +28,5 @@ public interface ID365WebApiService
     Task<D365ServiceException> ParseError(HttpResponseMessage response);
     Task<HttpResponseMessage> GetRecordTemplateForClone(AZAppUser spn, Guid recordId, string targetEntityName, string targetEntityNameSet);
     Task<BatchResult> SendBatchMessageAsync(AZAppUser spn, List<HttpRequestMessage> requestMessages, Guid? callerObjectId);
+    Task<HttpResponseMessage> SendPostRequestAsync(AZAppUser spn, Guid newEmailId);
 }
