@@ -17,12 +17,16 @@ AdjECEWEFacility.ECEWEFac.Form = {
 
             case 2: // update                           
                 this.getTypeOfForm();
+                this.showBanner(executionContext);
                 break;
             case 3: //readonly
+                this.showBanner(executionContext);
                 break;
             case 4: //disable
+                this.showBanner(executionContext);
                 break;
             case 6: //bulkedit
+                this.showBanner(executionContext);
                 break;
         }
     },
@@ -54,6 +58,31 @@ AdjECEWEFacility.ECEWEFac.Form = {
             //formContext.getAttribute("ccof_optinstartmonth").setValue(monthDOB);
         }
         else { }
+    },
+
+    showBanner: function (exeContext) {
+        debugger;
+        var formContext = exeContext.getFormContext();
+        var ccfriFacilityId = formContext.getAttribute("ccof_adjudicationccfrifacility").getValue();
+        if (ccfriFacilityId != null) {
+            var Id = ccfriFacilityId[0].id;
+            Xrm.WebApi.retrieveRecord("ccof_adjudication_ccfri_facility", Id, "?$select=statuscode").then(
+                function success(result) {
+                    console.log(result);
+                    // Columns
+                    var statuscode = result["statuscode"]; // Status
+                    if (statuscode == 7 || statuscode == 8) //Complete-Not Approved or Complete-Ineligible
+                    {
+                        formContext.ui.tabs.get("Summary").sections.get("CCFRIInfo").setVisible(true);
+                    }
+                    else
+                        formContext.ui.tabs.get("Summary").sections.get("CCFRIInfo").setVisible(false);
+                },
+                function (error) {
+                    console.log(error.message);
+                }
+            );
+        }
     }
 };
 
