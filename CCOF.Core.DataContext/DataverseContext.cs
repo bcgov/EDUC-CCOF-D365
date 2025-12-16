@@ -711,6 +711,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Invoice"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Invoice> CcOf_InvoiceSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Invoice>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_License"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_License> CcOf_LicenseSet

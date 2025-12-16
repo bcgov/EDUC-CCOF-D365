@@ -3,27 +3,32 @@ using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services.AppUsers;
 using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Net;
-using CCOF.Infrastructure.WebAPI.Models;
-using Microsoft.Extensions.Options;
-using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
-using Microsoft.Crm.Sdk.Messages;
-using System;
 using CCOF.Infrastructure.WebAPI.Services.Processes;
 
-namespace OFM.Infrastructure.WebAPI.Services.Processes.Fundings;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Extensions.Options;
+using CCOF.Infrastructure.WebAPI.Extensions;
+using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Services.AppUsers;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
+using System;
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
+
+namespace CCOF.Infrastructure.WebAPI.Services.Processes;
 
 public interface IEmailRepository
 {
     Task<IEnumerable<D365CommunicationType>> LoadCommunicationTypeAsync();
-    Task<Guid?> CreateAndUpdateEmail(string subject, string emailDescription, List<Guid> toRecipient, Guid? senderId, string communicationType, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, Int16 processId,string regarding="");
+    Task<Guid?> CreateAndUpdateEmail(string subject, string emailDescription, List<Guid> toRecipient, Guid? senderId, string communicationType, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, Int16 processId, string regarding = "");
     Task<ProcessData> GetTemplateDataAsync(int templateNumber);
     Task<Guid?> CreateAndSendEmail(string subject, string emailDescription, JsonArray emailparties, string communicationType, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, Int16 processId, string regarding = "");
-        string StripHTML(string source);
-    //Task<JsonObject> CreateEmail( Guid? senderId, string communicationType, Int16 processId, ID365WebApiService d365WebApiService);
- }
+    string StripHTML(string source);
+    
+}
 
 public class EmailRepository(ID365AppUserService appUserService, ID365WebApiService service, ID365DataService dataService, ILoggerFactory loggerFactory, IOptionsSnapshot<NotificationSettings> notificationSettings) : IEmailRepository
 {
@@ -223,7 +228,7 @@ public class EmailRepository(ID365AppUserService appUserService, ID365WebApiServ
                 var payload = new JsonObject {
                         { "ofm_sent_on", DateTime.UtcNow },
                         { "statuscode", (int) Email_StatusCode.Completed },
-                       /* { "statecode", (int) email_statecode.Completed }*/};
+                        { "statecode", (int) Email_StateCode.Completed }};
 
                 var requestBody1 = JsonSerializer.Serialize(payload);
 
@@ -341,5 +346,5 @@ public class EmailRepository(ID365AppUserService appUserService, ID365WebApiServ
             return source;
         }
     }
-
+    #endregion
 }

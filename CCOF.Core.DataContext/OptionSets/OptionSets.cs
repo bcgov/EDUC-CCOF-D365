@@ -5143,6 +5143,54 @@ namespace CCOF.Core.DataContext
 	}
 	
 	/// <summary>
+	/// Status of the Invoice
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Invoice_StateCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Active", 0)]
+		Active = 0,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 1)]
+		Inactive = 1,
+	}
+	
+	/// <summary>
+	/// Reason for the status of the Invoice
+	/// </summary>
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Invoice_StatusCode
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Approved", 1)]
+		Approved = 101510001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("HOLD", 5)]
+		HOLD = 101510005,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Inactive", 0)]
+		Inactive = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Paid", 2)]
+		Paid = 101510002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Processing Error", 3)]
+		ProcessingError = 101510003,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Processing Payment", 4)]
+		ProcessingPayment = 101510004,
+	}
+	
+	/// <summary>
 	/// Status of the License Category
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]

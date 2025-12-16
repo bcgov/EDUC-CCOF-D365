@@ -146,10 +146,10 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public DateTime? ccof_intakeperiodend { get; set; }
     }
 
-    public class Ack_Codes : ofm_ack_codes
+    public class Ack_Codes : OfM_AcK_Codes
     {
         public Guid? _ofm_cohortid_value { get; set; }
-
+       
     }
     public class Ccof_Application_Basefunding_Application
     {
@@ -402,6 +402,33 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [Required(ErrorMessage = "Payment type is required.")]
         public new int? ofm_payment_type { get; set; }
     }
+
+    public class CcofInvoice : CcOf_Invoice
+    {
+        public string? CcofBatchNumber { get; set; }
+        public DateTime? CcofEffectiveDate { get; set; }
+        public decimal? CcofGrandTotal { get; set; }
+        public DateTime? CcofInvoiceDate { get; set; }
+        public string? CcofInvoiceNumber { get; set; }
+        public DateTime? CcofInvoiceReceivedDate { get; set; }
+        public Guid? CcofInvoiceId { get; set; }
+        public string? CcofName { get; set; }
+        public string? CcofOrganization { get; set; }
+        public Guid? CcofOrganizationId { get; set; }
+        public string? CcofPaymentType { get; set; }
+        public string? CcofPaymentMethod { get; set; }
+        public string? CcofRemittanceMessage { get; set; }
+        public DateTime? CcofRevisedEffectiveDate { get; set; }
+        public DateTime? CcofRevisedInvoiceDate { get; set; }
+        public DateTime? CcofRevisedInvoiceReceivedDate { get; set; }
+        public string? CcofSiteNumber { get; set; }
+        public string? CcofSupplierNumber { get; set; }
+
+        public int? StateCode { get; set; }
+        public int? StatusCode { get; set; }
+    }
+
+
 
     public record D365CommunicationType
     {

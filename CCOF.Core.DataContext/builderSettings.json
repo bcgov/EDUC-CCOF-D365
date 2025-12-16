@@ -4,7 +4,6 @@
   "codeWriterFilterService": "DLaB.ModelBuilderExtensions.CodeWriterFilterService,DLaB.ModelBuilderExtensions",
   "codeWriterMessageFilterService": "DLaB.ModelBuilderExtensions.CodeWriterMessageFilterService,DLaB.ModelBuilderExtensions",
   "dLaB.ModelBuilder": {
-    "xrmToolBoxPluginPath": "C:\\Users\\pallvi.grover\\AppData\\Roaming\\MscrmTools\\XrmToolBox\\Plugins",
     "addDebuggerNonUserCode": true,
     "addNewFilesToProject": true,
     "addOptionSetMetadataAttribute": true,
@@ -184,6 +183,7 @@
     "ccof_fee_update_schedule",
     "ccof_feefloorexempt",
     "ccof_funding_agreement",
+    "ccof_invoice",
     "ccof_license",
     "ccof_license_category",
     "ccof_license_childcare_category",
