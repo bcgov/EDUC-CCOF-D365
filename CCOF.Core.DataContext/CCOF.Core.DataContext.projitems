@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)builderSettings.json" />
+    <Content Include="$(MSBuildThisFileDirectory)generatorSettings.xml" />
   </ItemGroup>
 </Project>

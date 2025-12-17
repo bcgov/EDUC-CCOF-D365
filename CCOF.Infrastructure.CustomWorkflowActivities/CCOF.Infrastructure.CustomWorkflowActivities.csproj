@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ECE-WEAdjudication\CCFRIFields.cs" />
     <Compile Include="Closures\DeactivateExistingClosure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
