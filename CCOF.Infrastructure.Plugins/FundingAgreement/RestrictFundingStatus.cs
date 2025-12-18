@@ -37,11 +37,16 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                     if (!entity.Attributes.Contains("statuscode")) return;
 
                     var newStatus = ((OptionSetValue)entity["statuscode"]).Value;
+                    var fundingAgreementApproval = service.Retrieve(entity.LogicalName, entity.Id, new ColumnSet("ccof_approve_without_signatures"));
+                    bool? approvedWithoutSign = fundingAgreementApproval.Attributes.Contains("ccof_approve_without_signatures") ? fundingAgreementApproval.GetAttributeValue<bool?>("ccof_approve_without_signatures") : false;
+                    // Drafted statuses' option set values
+                    //var draftedStatuses = new List<int> { 101510002, 101510003, 101510004 }; // Replace with real values
 
                     var draftedStatuses = new List<int>();
                     var preStatus = 0;
                     if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
                     {
+                        
                         preStatus = preImage.Contains("statuscode") ? ((OptionSetValue)preImage["statuscode"]).Value : -1;
                         if (preStatus != -1)
                         {
@@ -141,7 +146,7 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
 
                     if (newStatus == 101510001)          // 101510001 - "Approved"
                     {
-                        if (preStatus != 101510004)      // 101510004 - "Drafted - with Ministry"
+                        if (preStatus != 101510004 && approvedWithoutSign == false)      // 101510004 - "Drafted - with Ministry"
                         {
                             throw new InvalidPluginExecutionException("Every FA needs to go through ‘Drafted - with Ministry’ status and then becomes ‘Approved’");
                         }
