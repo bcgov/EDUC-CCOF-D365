@@ -7,7 +7,7 @@
   <CodeWriterMessageFilterService>DLaB.ModelBuilderExtensions.CodeWriterMessageFilterService,DLaB.ModelBuilderExtensions</CodeWriterMessageFilterService>
   <EmitEntityETC>false</EmitEntityETC>
   <EmitVirtualAttributes>true</EmitVirtualAttributes>
-  <EntityTypesFolder>Entities</EntityTypesFolder>
+  <EntityTypesFolder>Entities\Entities.cs</EntityTypesFolder>
   <ExtensionConfig>
     <ActionPrefixesWhitelist />
     <ActionsWhitelist>analyze</ActionsWhitelist>
@@ -15,7 +15,7 @@
     <AddDebuggerNonUserCode>true</AddDebuggerNonUserCode>
     <AddNewFilesToProject>true</AddNewFilesToProject>
     <AddOptionSetMetadataAttribute>true</AddOptionSetMetadataAttribute>
-    <AdjustCasingForEnumOptions>true</AdjustCasingForEnumOptions>
+    <AdjustCasingForEnumOptions>false</AdjustCasingForEnumOptions>
     <AttributeBlacklist />
     <BuilderSettingsJsonRelativePath>builderSettings.json</BuilderSettingsJsonRelativePath>
     <CamelCaseClassNames>true</CamelCaseClassNames>
@@ -24,14 +24,15 @@
     <CamelCaseNamesDictionaryRelativePath>DLaB.EarlyBoundGeneratorV2\DLaB.Dictionary.txt</CamelCaseNamesDictionaryRelativePath>
     <CleanupCrmSvcUtilLocalOptionSets>false</CleanupCrmSvcUtilLocalOptionSets>
     <CreateOneFilePerAction>true</CreateOneFilePerAction>
-    <CreateOneFilePerEntity>true</CreateOneFilePerEntity>
-    <CreateOneFilePerOptionSet>true</CreateOneFilePerOptionSet>
+    <CreateOneFilePerEntity>false</CreateOneFilePerEntity>
+    <CreateOneFilePerOptionSet>false</CreateOneFilePerOptionSet>
     <DeleteFilesFromOutputFolders>false</DeleteFilesFromOutputFolders>
     <EntitiesToSkip />
     <EntitiesWhitelist>account|
 activityparty|
 activitypointer|
 businessunit|
+ccof_adjudication|
 ccof_adjudication_ccfri|
 ccof_adjudication_ccfri_facility|
 ccof_adjudication_ecewe|
@@ -117,7 +118,10 @@ ccof_systemmessage|
 ccof_unlock_history|
 contact|
 email|
+ofm_ack_codes|
+ofm_data_import|
 ofm_payment|
+ofm_payment_file_exchange|
 systemuser|
 transactioncurrency</EntitiesWhitelist>
     <EntityAttributeSpecifiedNames />
@@ -131,7 +135,7 @@ transactioncurrency</EntitiesWhitelist>
     <GenerateConstructorsSansLogicalName>true</GenerateConstructorsSansLogicalName>
     <GenerateEntityRelationships>true</GenerateEntityRelationships>
     <GenerateEnumProperties>true</GenerateEnumProperties>
-    <GenerateGlobalOptionSets>false</GenerateGlobalOptionSets>
+    <GenerateGlobalOptionSets>true</GenerateGlobalOptionSets>
     <GenerateINotifyPattern>false</GenerateINotifyPattern>
     <GenerateOptionSetMetadataAttribute>true</GenerateOptionSetMetadataAttribute>
     <GenerateTypesAsInternal>false</GenerateTypesAsInternal>
@@ -144,9 +148,34 @@ transactioncurrency</EntitiesWhitelist>
     <LocalOptionSetFormat>{0}_{1}</LocalOptionSetFormat>
     <MakeReferenceTypesNullable>false</MakeReferenceTypesNullable>
     <ModelBuilderLogLevel>2</ModelBuilderLogLevel>
+    <ObsoleteDeprecated>true</ObsoleteDeprecated>
+    <ObsoleteTokens>*(Deprecated)*</ObsoleteTokens>
     <OptionSetLanguageCodeOverride
       xsi:nil="true" />
     <OptionSetNames />
+    <OptionNameOverrides>0th:0th|
+1st:1st|
+2nd:2nd|
+3rd:3rd|
+4th:4th|
+5th:5th|
+6th:6th|
+7th:7th|
+8th:8th|
+9th:9th|
+conversationindex:ConversationIndex|
+customcorrelation:CustomCorrelation|
+fedex:FedEx|
+groupme:GroupMe|
+linkedin:LinkedIn|
+nontransient:NonTransient|
+notset:NotSet|
+reminderexpired:ReminderExpired|
+reminderinvalid:ReminderInvalid|
+reminderset:ReminderSet|
+smartmatching:SmartMatching|
+trackingtoken:TrackingToken|
+xheader:XHeader</OptionNameOverrides>
     <ProjectNameForEarlyBoundFiles />
     <PropertyEnumMappings />
     <ReadSerializedMetadata>false</ReadSerializedMetadata>
@@ -199,17 +228,17 @@ VoiceMail</TokenCapitalizationOverrides>
     <UseTfsToCheckoutFiles>false</UseTfsToCheckoutFiles>
     <WaitForAttachedDebugger>false</WaitForAttachedDebugger>
   </ExtensionConfig>
-  <GenerateMessages>true</GenerateMessages>
+  <GenerateMessages>false</GenerateMessages>
   <IncludeCommandLine>false</IncludeCommandLine>
   <MessageTypesFolder>Messages</MessageTypesFolder>
   <MetadataProviderService>DLaB.ModelBuilderExtensions.MetadataProviderService,DLaB.ModelBuilderExtensions</MetadataProviderService>
   <MetadataQueryProviderService>DLaB.ModelBuilderExtensions.MetadataQueryProviderService,DLaB.ModelBuilderExtensions</MetadataQueryProviderService>
   <NamingService>DLaB.ModelBuilderExtensions.NamingService,DLaB.ModelBuilderExtensions</NamingService>
-  <OptionSetsTypesFolder>OptionSets</OptionSetsTypesFolder>
-  <Namespace>DataverseModel</Namespace>
+  <OptionSetsTypesFolder>OptionSets\OptionSets.cs</OptionSetsTypesFolder>
+  <Namespace>CCOF.Core.DataContext</Namespace>
   <ServiceContextName>DataverseContext</ServiceContextName>
   <SuppressGeneratedCodeAttribute>true</SuppressGeneratedCodeAttribute>
   <SettingsVersion>2.2025.4.20</SettingsVersion>
   <UpdateBuilderSettingsJson>true</UpdateBuilderSettingsJson>
-  <Version>2.2025.4.20</Version>
+  <Version>2.2025.8.26</Version>
 </Config>

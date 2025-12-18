@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace CCOF.Infrastructure.Plugins.FundingAgreement
@@ -45,6 +41,7 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                     bool? approvedWithoutSign = fundingAgreementApproval.Attributes.Contains("ccof_approve_without_signatures") ? fundingAgreementApproval.GetAttributeValue<bool?>("ccof_approve_without_signatures") : false;
                     // Drafted statuses' option set values
                     //var draftedStatuses = new List<int> { 101510002, 101510003, 101510004 }; // Replace with real values
+
                     var draftedStatuses = new List<int>();
                     var preStatus = 0;
                     if (context.PreEntityImages.Contains("PreImage") && context.PreEntityImages["PreImage"] is Entity preImage)
@@ -53,27 +50,31 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                         preStatus = preImage.Contains("statuscode") ? ((OptionSetValue)preImage["statuscode"]).Value : -1;
                         if (preStatus != -1)
                         {
-                            if (preStatus == 101510003 || preStatus == 101510005)
+                            if (preStatus == 101510003 || preStatus == 101510005) //Drafted – Provider Action Required or Suspended
                             {
-                                draftedStatuses.Add(101510002);
+                                draftedStatuses.Add(101510002); //Drafted
+                                draftedStatuses.Add(101510009); //Parked
                             }
-                            else if (preStatus == 101510004)
+                            else if (preStatus == 101510004) //Drafted – With Ministry
                             {
-                                draftedStatuses.Add(101510002);
-                                draftedStatuses.Add(101510003);
+                                draftedStatuses.Add(101510002); //Drafted
+                                draftedStatuses.Add(101510003); //Drafted – Provider Action Required
+                                draftedStatuses.Add(101510009); //Parked
                             }
-                            else if (preStatus == 101510001)
+                            else if (preStatus == 101510001) //Approved
                             {
-                                draftedStatuses.Add(101510002);
-                                draftedStatuses.Add(101510003);
-                                draftedStatuses.Add(101510004);
+                                draftedStatuses.Add(101510002); //Drafted
+                                draftedStatuses.Add(101510003); //Drafted – Provider Action Required
+                                draftedStatuses.Add(101510004); //Drafted – With Ministry
+                                draftedStatuses.Add(101510009); //Parked
                             }
-                            else if (preStatus == 1)
+                            else if (preStatus == 1) //Active
                             {
-                                draftedStatuses.Add(101510002);
-                                draftedStatuses.Add(101510003);
-                                draftedStatuses.Add(101510004);
-                                draftedStatuses.Add(101510001);
+                                draftedStatuses.Add(101510002); //Drafted
+                                draftedStatuses.Add(101510003); //Drafted – Provider Action Required
+                                draftedStatuses.Add(101510004); //Drafted – With Ministry
+                                draftedStatuses.Add(101510001); //Approved
+                                draftedStatuses.Add(101510009); //Parked
                             }
                         }
                     }
@@ -135,7 +136,7 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                             return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
                         });
 
-                        if (isAuthorized1 == false && isAuthorized2 == false)
+                        if (!isAuthorized1 && !isAuthorized2)
                         {
                             throw new InvalidPluginExecutionException("You do not have permission to change the funding status. Only Administrators can perform this action.");
                         }
@@ -169,7 +170,7 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                             return allowedRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
                         });
 
-                        if (isAuthorized1 == false && isAuthorized2 == false)
+                        if (!isAuthorized1 && !isAuthorized2)
                         {
                             throw new InvalidPluginExecutionException("You do not have permission to change the funding status. Only Adjudicator and higher can perform this action.");
                         }
@@ -185,14 +186,14 @@ namespace CCOF.Infrastructure.Plugins.FundingAgreement
                         var allFundingAgreements = new QueryExpression(entity.LogicalName)
                         {
                             Criteria =
-                        {
-                            Conditions =
                             {
-                                new ConditionExpression("ccof_organization",ConditionOperator.Equal,((EntityReference)fundingAgreement["ccof_organization"]).Id),
-                                new ConditionExpression("statuscode",ConditionOperator.Equal,1),
-                                new ConditionExpression("ccof_funding_agreementid",ConditionOperator.NotEqual,entity.Id)
+                                Conditions =
+                                {
+                                    new ConditionExpression("ccof_organization",ConditionOperator.Equal,((EntityReference)fundingAgreement["ccof_organization"]).Id),
+                                    new ConditionExpression("statuscode",ConditionOperator.Equal,1),
+                                    new ConditionExpression("ccof_funding_agreementid",ConditionOperator.NotEqual,entity.Id)
+                                }
                             }
-                        }
                         };
 
                         var existingActiveFDRs = service.RetrieveMultiple(allFundingAgreements);

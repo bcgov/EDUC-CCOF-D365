@@ -84,6 +84,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Adjudication_CcFri"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Adjudication_CcFri> CcOf_Adjudication_CcFriSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Adjudication_CcFri>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility> CcOf_Adjudication_CcFri_FacilitySet
@@ -91,6 +102,28 @@ namespace CCOF.Core.DataContext
 			get
 			{
 				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Adjudication_CcFri_Facility>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Adjudication_ECEWe"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Adjudication_ECEWe> CcOf_Adjudication_ECEWeSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Adjudication_ECEWe>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Adjudication_ECEWe_Facility"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Adjudication_ECEWe_Facility> CcOf_Adjudication_ECEWe_FacilitySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Adjudication_ECEWe_Facility>();
 			}
 		}
 		
@@ -106,6 +139,347 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Application_BaseFunding"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Application_BaseFunding> CcOf_Application_BaseFundingSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Application_BaseFunding>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Application_CcFri_ChildCareCategory"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Application_CcFri_ChildCareCategory> CcOf_Application_CcFri_ChildCareCategorySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Application_CcFri_ChildCareCategory>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Application_CcFri_Closure"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Application_CcFri_Closure> CcOf_Application_CcFri_ClosureSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Application_CcFri_Closure>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Application_Deadline"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Application_Deadline> CcOf_Application_DeadlineSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Application_Deadline>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Application_Facility_Document"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Application_Facility_Document> CcOf_Application_Facility_DocumentSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Application_Facility_Document>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ApplicationCcFri"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ApplicationCcFri> CcOf_ApplicationCcFriSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ApplicationCcFri>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ApplicationECEWe"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ApplicationECEWe> CcOf_ApplicationECEWeSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ApplicationECEWe>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ApplicationStatusHistory"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ApplicationStatusHistory> CcOf_ApplicationStatusHistorySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ApplicationStatusHistory>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ApplicationSummary"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ApplicationSummary> CcOf_ApplicationSummarySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ApplicationSummary>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ApProvable_Fee_Schedule"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ApProvable_Fee_Schedule> CcOf_ApProvable_Fee_ScheduleSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ApProvable_Fee_Schedule>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ApProvable_Fee_Schedule_History"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ApProvable_Fee_Schedule_History> CcOf_ApProvable_Fee_Schedule_HistorySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ApProvable_Fee_Schedule_History>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_AuditLog"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_AuditLog> CcOf_AuditLogSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_AuditLog>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_BcEId_Organization"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_BcEId_Organization> CcOf_BcEId_OrganizationSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_BcEId_Organization>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Email"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Email> CcOf_CcFri_EmailSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Email>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_Allowable_Amount"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_Allowable_Amount> CcOf_CcFri_Facility_Allowable_AmountSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_Allowable_Amount>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_Allowable_Amount_MTfI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_Allowable_Amount_MTfI> CcOf_CcFri_Facility_Allowable_Amount_MTfISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_Allowable_Amount_MTfI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw> CcOf_CcFri_Facility_DCSwSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw_24_Month"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw_24_Month> CcOf_CcFri_Facility_DCSw_24_MonthSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw_24_Month>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw_MTfI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw_MTfI> CcOf_CcFri_Facility_DCSw_MTfISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_DCSw_MTfI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_EC_24Month"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_EC_24Month> CcOf_CcFri_Facility_EC_24MonthSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_EC_24Month>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_EX_Circumstance_MTfI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_EX_Circumstance_MTfI> CcOf_CcFri_Facility_EX_Circumstance_MTfISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_EX_Circumstance_MTfI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_Exceptional_Circumstance"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_Exceptional_Circumstance> CcOf_CcFri_Facility_Exceptional_CircumstanceSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_Exceptional_Circumstance>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_Fee_Increase_MTfI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_Fee_Increase_MTfI> CcOf_CcFri_Facility_Fee_Increase_MTfISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_Fee_Increase_MTfI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_Parent_Fee"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_Parent_Fee> CcOf_CcFri_Facility_Parent_FeeSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_Parent_Fee>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_Priority_ServiceExp_MTfI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_Priority_ServiceExp_MTfI> CcOf_CcFri_Facility_Priority_ServiceExp_MTfISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_Priority_ServiceExp_MTfI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFri_Facility_PriorityServiceExpansion"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFri_Facility_PriorityServiceExpansion> CcOf_CcFri_Facility_PriorityServiceExpansionSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFri_Facility_PriorityServiceExpansion>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFriFacilityAllowableAmount_24Month"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFriFacilityAllowableAmount_24Month> CcOf_CcFriFacilityAllowableAmount_24MonthSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFriFacilityAllowableAmount_24Month>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFriFacilityFeeIncrease24Month"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFriFacilityFeeIncrease24Month> CcOf_CcFriFacilityFeeIncrease24MonthSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFriFacilityFeeIncrease24Month>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_CcFriFacilityPriorityServiceExpansion24"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_CcFriFacilityPriorityServiceExpansion24> CcOf_CcFriFacilityPriorityServiceExpansion24Set
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_CcFriFacilityPriorityServiceExpansion24>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Action"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Action> CcOf_Change_ActionSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Action>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Action_Closure"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Action_Closure> CcOf_Change_Action_ClosureSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Action_Closure>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Request"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Request> CcOf_Change_RequestSet
@@ -113,6 +487,512 @@ namespace CCOF.Core.DataContext
 			get
 			{
 				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Request>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Request_Facility_Address"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Request_Facility_Address> CcOf_Change_Request_Facility_AddressSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Request_Facility_Address>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Request_Facility_Name"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Request_Facility_Name> CcOf_Change_Request_Facility_NameSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Request_Facility_Name>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Request_MTfI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Request_MTfI> CcOf_Change_Request_MTfISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Request_MTfI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Request_MTfI_CcOf_RfIpFI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Request_MTfI_CcOf_RfIpFI> CcOf_Change_Request_MTfI_CcOf_RfIpFISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Request_MTfI_CcOf_RfIpFI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Request_New_Facility"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Request_New_Facility> CcOf_Change_Request_New_FacilitySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Request_New_Facility>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Change_Request_Summary"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Change_Request_Summary> CcOf_Change_Request_SummarySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Change_Request_Summary>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ChildCare_Category"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ChildCare_Category> CcOf_ChildCare_CategorySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ChildCare_Category>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Configuration"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Configuration> CcOf_ConfigurationSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Configuration>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_DailyEnrollment"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_DailyEnrollment> CcOf_DailyEnrollmentSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_DailyEnrollment>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ECE_Wage"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ECE_Wage> CcOf_ECE_WageSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ECE_Wage>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Email_Reminder"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Email_Reminder> CcOf_Email_ReminderSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Email_Reminder>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Facility_Licenses"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Facility_Licenses> CcOf_Facility_LicensesSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Facility_Licenses>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Facility_Region"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Facility_Region> CcOf_Facility_RegionSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Facility_Region>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Fee_Benchmark"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Fee_Benchmark> CcOf_Fee_BenchmarkSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Fee_Benchmark>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Fee_Benchmark_SdA"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Fee_Benchmark_SdA> CcOf_Fee_Benchmark_SdASet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Fee_Benchmark_SdA>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Fee_Region"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Fee_Region> CcOf_Fee_RegionSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Fee_Region>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Fee_Region_Lookup"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Fee_Region_Lookup> CcOf_Fee_Region_LookupSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Fee_Region_Lookup>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Fee_Update_Schedule"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Fee_Update_Schedule> CcOf_Fee_Update_ScheduleSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Fee_Update_Schedule>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_FeeFloorExempt"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_FeeFloorExempt> CcOf_FeeFloorExemptSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_FeeFloorExempt>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Funding_Agreement"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Funding_Agreement> CcOf_Funding_AgreementSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Funding_Agreement>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_License"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_License> CcOf_LicenseSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_License>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_License_Category"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_License_Category> CcOf_License_CategorySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_License_Category>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_License_ChildCare_Category"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_License_ChildCare_Category> CcOf_License_ChildCare_CategorySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_License_ChildCare_Category>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Median_Fee"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Median_Fee> CcOf_Median_FeeSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Median_Fee>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Median_Fee_SdA"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Median_Fee_SdA> CcOf_Median_Fee_SdASet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Median_Fee_SdA>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_MonthlyBusinessDay"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_MonthlyBusinessDay> CcOf_MonthlyBusinessDaySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_MonthlyBusinessDay>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_MonthlyEnrollmentReport"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_MonthlyEnrollmentReport> CcOf_MonthlyEnrollmentReportSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_MonthlyEnrollmentReport>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Organization_Contact"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Organization_Contact> CcOf_Organization_ContactSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Organization_Contact>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Parent_Fees"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Parent_Fees> CcOf_Parent_FeesSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Parent_Fees>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Program_Year"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Program_Year> CcOf_Program_YearSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Program_Year>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Rate"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Rate> CcOf_RateSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Rate>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_ReasonPendingOption"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_ReasonPendingOption> CcOf_ReasonPendingOptionSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_ReasonPendingOption>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Region_Fee_Schedule"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Region_Fee_Schedule> CcOf_Region_Fee_ScheduleSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Region_Fee_Schedule>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfI_PFI_DCS_Wi_Detail"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfI_PFI_DCS_Wi_Detail> CcOf_RfI_PFI_DCS_Wi_DetailSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfI_PFI_DCS_Wi_Detail>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfI_PFI_Fee_History_Detail"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfI_PFI_Fee_History_Detail> CcOf_RfI_PFI_Fee_History_DetailSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfI_PFI_Fee_History_Detail>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfI_PFI_NMf"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfI_PFI_NMf> CcOf_RfI_PFI_NMfSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfI_PFI_NMf>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfI_PFI_NMf_Change_Request_MTfI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfI_PFI_NMf_Change_Request_MTfI> CcOf_RfI_PFI_NMf_Change_Request_MTfISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfI_PFI_NMf_Change_Request_MTfI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfI_PFI_Other_Funding"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfI_PFI_Other_Funding> CcOf_RfI_PFI_Other_FundingSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfI_PFI_Other_Funding>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfIpFI"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfIpFI> CcOf_RfIpFISet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfIpFI>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfIpFIExpenseInfo"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfIpFIExpenseInfo> CcOf_RfIpFIExpenseInfoSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfIpFIExpenseInfo>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfIpFIServiceExpansionDetail"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfIpFIServiceExpansionDetail> CcOf_RfIpFIServiceExpansionDetailSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfIpFIServiceExpansionDetail>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_RfIpFIServiceExpansionIndigenousCommunity"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_RfIpFIServiceExpansionIndigenousCommunity> CcOf_RfIpFIServiceExpansionIndigenousCommunitySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_RfIpFIServiceExpansionIndigenousCommunity>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Service_Delivery_Details"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Service_Delivery_Details> CcOf_Service_Delivery_DetailsSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Service_Delivery_Details>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_System_Recommendation"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_System_Recommendation> CcOf_System_RecommendationSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_System_Recommendation>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_SystemMessage"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_SystemMessage> CcOf_SystemMessageSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_SystemMessage>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.CcOf_Unlock_History"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.CcOf_Unlock_History> CcOf_Unlock_HistorySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.CcOf_Unlock_History>();
 			}
 		}
 		
@@ -139,6 +1019,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_AcK_Codes"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_AcK_Codes> OfM_AcK_CodesSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.OfM_AcK_Codes>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_Data_Import"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_Data_Import> OfM_Data_ImportSet
@@ -161,6 +1052,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_Payment_File_Exchange"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_Payment_File_Exchange> OfM_Payment_File_ExchangeSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.OfM_Payment_File_Exchange>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.SystemUser"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.SystemUser> SystemUserSet
@@ -168,6 +1070,17 @@ namespace CCOF.Core.DataContext
 			get
 			{
 				return this.CreateQuery<CCOF.Core.DataContext.SystemUser>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.TransactionCurrency"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.TransactionCurrency> TransactionCurrencySet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.TransactionCurrency>();
 			}
 		}
 	}

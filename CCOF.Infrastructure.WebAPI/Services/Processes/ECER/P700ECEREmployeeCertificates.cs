@@ -32,7 +32,56 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
         {
             _logger.LogDebug(CustomLogEvent.Process, "Calling GetData of {nameof}", nameof(P700ECEREmployeeCertificates));
 
+            if (_data is null)
+            {
+                var response = await _d365webapiservice.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, RequestUri, isProcess: true);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    _logger.LogError(CustomLogEvent.Process, "Failed to query the requests with the server error {responseBody}", responseBody);
+
+                    return await Task.FromResult(new ProcessData(string.Empty));
+                }
+
+                var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+                JsonNode d365Result = string.Empty;
+                if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
+                {
+
+                    d365Result = currentValue!;
+                }
+
+                _data = new ProcessData(d365Result);
+
+                _logger.LogDebug(CustomLogEvent.Process, "Query Result {_data}", _data.Data.ToJsonString());
+            }
             return await Task.FromResult(_data);
+        }
+
+        public string RequestUri
+        {
+            get
+            {
+                // fetch xml doesn't support binary data type
+                var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
+                        <fetch>
+                          <entity name=""ofm_data_import"">
+                            <attribute name=""createdon"" />
+                            <attribute name=""ofm_data_file"" />
+                            <attribute name=""ofm_data_importid"" />
+                            <attribute name=""ofm_import_type"" />
+                            <attribute name=""ofm_message"" />
+                            <filter>
+                              <condition attribute=""ofm_data_importid"" operator=""eq"" value=""{dataImportID}"" />
+                            </filter>
+                          </entity>
+                        </fetch>";
+                var requestUri = $"""                                
+                                ofm_data_imports({dataImportID})/ofm_data_file
+                                """;
+                return requestUri;
+            }
         }
 
         private string DataImportActiveRequestUri
@@ -54,6 +103,34 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                             """;
 
                 return requestUri.CleanCRLF();
+            }
+        }
+
+        public string EmployeeCertificateRequestUri
+        {
+            get
+            {
+                // 5000 records limits every query
+                var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
+                <fetch>
+                  <entity name=""ofm_employee_certificate"">
+                    <attribute name=""ofm_expiry_date"" />
+                    <attribute name=""ofm_certificate_number"" />
+                    <attribute name=""ofm_effective_date"" />
+                    <attribute name=""ofm_first_name"" />
+                    <attribute name=""ofm_is_active"" />
+                    <attribute name=""ofm_last_name"" />
+                    <attribute name=""ofm_middle_name"" />
+                    <filter>
+                      <condition attribute=""statecode"" operator=""eq"" value=""0"" />
+                    </filter>
+                    <order attribute=""ofm_certificate_number"" />
+                  </entity>
+                </fetch>";
+                var requestUri = $"""                                
+                                ofm_employee_certificates?$select=statuscode,ofm_certificate_level,ofm_expiry_date,ofm_certificate_number,ofm_effective_date,ofm_first_name,ofm_is_active,ofm_last_name,ofm_middle_name&$orderby=ofm_certificate_number asc&$filter=(statecode eq 0)
+                                """;
+                return requestUri;
             }
         }
 
@@ -112,7 +189,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
             string deactiveMessages = string.Empty;
             bool upsertSucessfully = false;
             bool deactiveSucessfully = false;
-            
+            List<CertificationDetail> certificates;
+
             try
             {
                 #region Connect with ECER API 
@@ -155,26 +233,84 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     var downloadUrl = string.Concat(_ECERSettings.ECERURL, "/download/", firstFileId);// $"https://dev-ecer-api.apps.silver.devops.gov.bc.ca/api/certifications/file/download/{firstFileId}";
                     HttpResponseMessage downloadResponse = await client.GetAsync(downloadUrl);
                     downloadResponse.EnsureSuccessStatusCode();
+                    #endregion
 
                     string downloadContent = await downloadResponse.Content.ReadAsStringAsync();
                     bool savePFEResult = await SaveImportFile(appUserService, d365WebApiService, downloadContent);
-                    List<CertificationDetail> certificationDetails = JsonConvert.DeserializeObject<List<CertificationDetail>>(downloadContent);
-                    var upsertECERequests = new List<HttpRequestMessage>() { };
-                    foreach (var record in certificationDetails)
+
+                    certificates = System.Text.Json.JsonSerializer.Deserialize<List<CertificationDetail>>(downloadContent);
+                }
+                if (certificates.Count == 0)// no records
+                {
+                    var ECECertStatement = $"ofm_data_imports({dataImportID})";
+                    var payload = new JsonObject {
+                            { "ofm_message", "ECER API did not return any records"},
+                            { "statuscode", 5},
+                            { "statecode", 0 }
+                        };
+                    var requestBody = System.Text.Json.JsonSerializer.Serialize(payload);
+                    var patchResponse = await d365WebApiService.SendPatchRequestAsync(_appUserService.AZSystemAppUser, ECECertStatement, requestBody);
+                    if (!patchResponse.IsSuccessStatusCode)
                     {
+                        var responseBody = await patchResponse.Content.ReadAsStringAsync();
+                        _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody.CleanLog());
+                        return ProcessResult.Failure(ProcessId, new String[] { responseBody }, 0, 0).SimpleProcessResult;
+                    }
+                    return ProcessResult.Failure(ProcessId, new String[] { "ECER API did not return any records" }, 0, 0).SimpleProcessResult;
+                }
+
+                var filteredRecords = certificates.Where(r => !string.IsNullOrWhiteSpace(r.registrationnumber) &&
+                !string.IsNullOrWhiteSpace(r.certificatelevel) && !string.IsNullOrWhiteSpace(r.effectivedate)).ToList();
+                // get all ECE certification from CRM
+                List<JsonNode> oldECECertData = await FetchAllRecordsFromCRMAsync(EmployeeCertificateRequestUri);
+
+                var crmRecordsDict = oldECECertData
+                    .Select(n => n!.AsObject())
+                    .ToDictionary(
+                        obj => (Reg: obj["ofm_certificate_number"]!.GetValue<string>(),
+                                Level: obj["ofm_certificate_level"]!.GetValue<string>(),
+                                EffDate: obj["ofm_effective_date"]!.GetValue<string>())
+                    );
+                List<CertificationDetail> differenceCsvRecords = new List<CertificationDetail>();
+                foreach (var certificate in filteredRecords)
+                {
+                    var key = (Reg: certificate.registrationnumber, Level: certificate.certificatelevel.Replace(",", " "), EffDate: certificate.effectivedate);
+                    if (crmRecordsDict.TryGetValue(key, out var crmRecord))
+                    {
+                        if ((int)crmRecord["statuscode"] != certificate.statuscode
+                            || crmRecord["ofm_expiry_date"]?.ToString() != certificate.expirydate
+                            || crmRecord["ofm_effective_date"]?.ToString() != certificate.effectivedate
+                            || crmRecord["ofm_first_name"]?.ToString() != certificate.firstname
+                            || crmRecord["ofm_last_name"]?.ToString() != certificate.lastname)
+                        {
+                            differenceCsvRecords.Add(certificate);
+                        }
+                        oldECECertData.Remove(crmRecord);
+                        crmRecordsDict.Remove(key);
+                    }
+                    else
+                    {
+                        differenceCsvRecords.Add(certificate);
+                    }
+                }
+                // Batch processing
+                int batchSize = 1000;
+                for (int i = 0; i < differenceCsvRecords.Count; i += batchSize)
+                {
+                    var upsertECERequests = new List<HttpRequestMessage>();
+                    var batch = differenceCsvRecords.Skip(i).Take(batchSize).ToList();
+                    foreach (var record in batch)
+                    {
+                        var statecode = Enum.IsDefined(typeof(Active), record?.statuscode) ? 0 : 1;
                         var ECECert = new JsonObject
                         {
                             { "ofm_first_name", record?.firstname},
                             { "ofm_last_name", record?.lastname},
-                            { "ofm_effective_date", record?.effectivedate?.ToString("yyyy-MM-dd")},
-                            { "ofm_expiry_date", record?.expirydate?.ToString("yyyy-MM-dd")},
-                            { "statecode", 0 }
+                            { "ofm_expiry_date", record?.expirydate?.ToString()},
+                            { "statuscode", record?.statuscode },
+                            { "statecode",  statecode}
                         };
-
-                        if (!String.IsNullOrEmpty(record?.certificatelevel) && !String.IsNullOrEmpty(record.registrationnumber))
-                        {
-                            upsertECERequests.Add(new UpsertRequest(new D365EntityReference("ofm_employee_certificates(ofm_certificate_number='" + record?.registrationnumber + "',ofm_certificate_level='" + record?.certificatelevel?.Replace(",", " ").ToString() + "')"), ECECert));
-                        }
+                        upsertECERequests.Add(new UpsertRequest(new D365EntityReference("ofm_employee_certificates(ofm_certificate_number='" + record?.registrationnumber + "',ofm_certificate_level='" + record?.certificatelevel?.Replace(",", " ").ToString() + "',ofm_effective_date=" + record?.effectivedate + ")"), ECECert));
                     }
                     var upsertECECertResults = await d365WebApiService.SendBatchMessageAsync(_appUserService.AZSystemAppUser, upsertECERequests, null);
                     if (upsertECECertResults.Errors.Any())
@@ -185,78 +321,116 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                         upsertMessages += "Batch Upsert errors: " + JsonValue.Create(errorInfos) + "\n\r";
                     }
 
-                    if (string.IsNullOrEmpty(upsertMessages))
-                    {
-                        upsertSucessfully = true;
-                    }
-                    else
-                    {
-                        dataImportMessages += dataImportMessages + "Upsert records Failed \r\n";
-                    }
+                    _logger.LogDebug(CustomLogEvent.Process, "Upsert Batch process record index:{index}", i);
+                }
 
-                    if (upsertSucessfully)
-                    {
-                        var localtime = _timeProvider.GetLocalNow();
-                        TimeZoneInfo PSTZone = GetPSTTimeZoneInfo("Pacific Standard Time", "America/Los_Angeles");
-                        var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
-                        var endtime = _timeProvider.GetTimestamp();
-                        var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-                        dataImportMessages = pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n";
+                if (string.IsNullOrEmpty(upsertMessages))
+                {
+                    upsertSucessfully = true;
+                }
+                else
+                {
+                    dataImportMessages += dataImportMessages + "Upsert records Failed \r\n";
+                }
 
-                        var ECECertStatement = $"ofm_data_imports({dataImportID})";
-                        var payload = new JsonObject {
-                            { "ofm_message", dataImportMessages},
-                            { "statuscode", 4},
-                            { "statecode", 0 }
+                // deal with missing record in CRM and deactive them
+                for (int i = 0; i < oldECECertData.Count; i += batchSize)
+                {
+                    var updateMissingECERequests = new List<HttpRequestMessage>() { };
+                    var batch = oldECECertData.Skip(i).Take(batchSize).ToList();
+                    foreach (var record in batch)
+                    {
+                        var ECECert = new JsonObject
+                        {
+                            { "statecode", 1 },
+                            { "statuscode", 2 }
                         };
-                        var requestBody = System.Text.Json.JsonSerializer.Serialize(payload);
-                        var patchResponse = await d365WebApiService.SendPatchRequestAsync(appUserService.AZSystemAppUser, ECECertStatement, requestBody);
+                        updateMissingECERequests.Add(new D365UpdateRequest(new D365EntityReference("ofm_employee_certificates", (Guid)record["ofm_employee_certificateid"]), ECECert));
+
+                    }
+                    var upsertMissingECECertResults = await d365WebApiService.SendBatchMessageAsync(_appUserService.AZSystemAppUser, updateMissingECERequests, null);
+                    if (upsertMissingECECertResults.Errors.Any())
+                    {
+                        var errorInfos = ProcessResult.Failure(ProcessId, upsertMissingECECertResults.Errors, upsertMissingECECertResults.TotalProcessed, upsertMissingECECertResults.TotalRecords);
+
+                        _logger.LogError(CustomLogEvent.Process, "Failed to Upsert ECE Certification: {error}", JsonValue.Create(errorInfos)!.ToString());
+                        deactiveMessages += "Batch Upsert errors: " + JsonValue.Create(errorInfos) + "\n\r";
+                    }
+                    _logger.LogDebug(CustomLogEvent.Process, "Batch Deactive CRM records not existing in CSV file index:{index}", i);
+                }
+
+                if (string.IsNullOrEmpty(deactiveMessages))
+                {
+                    deactiveSucessfully = true;
+                }
+                else
+                {
+                    dataImportMessages += dataImportMessages + "Deactive records do not existing in csv file Failed\r\n";
+                }
+
+                // update Data Import  message field
+                if (upsertSucessfully && deactiveSucessfully)
+                {
+                    var localtime = _timeProvider.GetLocalNow();
+                    TimeZoneInfo PSTZone = GetPSTTimeZoneInfo("Pacific Standard Time", "America/Los_Angeles");
+                    var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
+                    var endtime = _timeProvider.GetTimestamp();
+                    var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
+                    dataImportMessages = pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time : " + Math.Round(timediff, 2) + " seconds.\r\n" + "Upsert " + differenceCsvRecords.Count + " record(s) sucessfully\r\n" + "Deactivated " + oldECECertData.Count + " records not existing in API sucessfully\r\n";
+
+                    var ECECertStatement = $"ofm_data_imports({dataImportID})";
+                    var payload = new JsonObject {
+                        { "ofm_message", dataImportMessages},
+                        { "statuscode", 4},
+                        { "statecode", 0 }
+                    };
+                    var requestBody = System.Text.Json.JsonSerializer.Serialize(payload);
+                    var patchResponse = await d365WebApiService.SendPatchRequestAsync(appUserService.AZSystemAppUser, ECECertStatement, requestBody);
+                    if (!patchResponse.IsSuccessStatusCode)
+                    {
+                        var responseBody = await patchResponse.Content.ReadAsStringAsync();
+                        _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody.CleanLog());
+                        return ProcessResult.Failure(ProcessId, new String[] { responseBody }, 0, 0).SimpleProcessResult;
+                    }
+                    // Deactive Previous Data Imports 
+                    List<JsonNode> allActiveDataImports = await FetchAllRecordsFromCRMAsync(DataImportActiveRequestUri);
+                    allActiveDataImports = allActiveDataImports.Where(item => !item["ofm_data_importid"].ToString().Equals(dataImportID.ToString())).ToList();
+                    foreach (var dataImport in allActiveDataImports)
+                    {
+                        var deactiveDataImport = $"ofm_data_imports({dataImport["ofm_data_importid"].ToString()})";
+                        payload = new JsonObject {
+                            { "statecode", 1 }
+                        };
+                        requestBody = System.Text.Json.JsonSerializer.Serialize(payload);
+                        patchResponse = await d365WebApiService.SendPatchRequestAsync(appUserService.AZSystemAppUser, deactiveDataImport, requestBody);
                         if (!patchResponse.IsSuccessStatusCode)
                         {
                             var responseBody = await patchResponse.Content.ReadAsStringAsync();
                             _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody.CleanLog());
                             return ProcessResult.Failure(ProcessId, new String[] { responseBody }, 0, 0).SimpleProcessResult;
                         }
-                        // Deactive Previous Data Imports 
-                        List<JsonNode> allActiveDataImports = await FetchAllRecordsFromCRMAsync(DataImportActiveRequestUri);
-                        allActiveDataImports = allActiveDataImports.Where(item => !item["ofm_data_importid"].ToString().Equals(dataImportID.ToString())).ToList();
-                        foreach (var dataImport in allActiveDataImports)
-                        {
-                            var deactiveDataImport = $"ofm_data_imports({dataImport["ofm_data_importid"].ToString()})";
-                            payload = new JsonObject {
-                                { "statecode", 1 }
-                            };
-                            requestBody = System.Text.Json.JsonSerializer.Serialize(payload);
-                            patchResponse = await d365WebApiService.SendPatchRequestAsync(appUserService.AZSystemAppUser, deactiveDataImport, requestBody);
-                            if (!patchResponse.IsSuccessStatusCode)
-                            {
-                                var responseBody = await patchResponse.Content.ReadAsStringAsync();
-                                _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody.CleanLog());
-                                return ProcessResult.Failure(ProcessId, new String[] { responseBody }, 0, 0).SimpleProcessResult;
-                            }
-                        }
                     }
-                    else
-                    {
-                        var ECECertStatement = $"ofm_data_imports({_processParams.DataImportId})";
-                        var payload = new JsonObject {
+                    Console.WriteLine("End Upsert Data Import ");
+
+                    return ProcessResult.Completed(ProcessId).SimpleProcessResult;
+                }
+                else
+                {
+                    var ECECertStatement = $"ofm_data_imports({dataImportID})";
+                    var payload = new JsonObject {
                         { "ofm_message", dataImportMessages},
                         { "statuscode", 5},
                         { "statecode", 0 }
                     };
-                        var requestBody = System.Text.Json.JsonSerializer.Serialize(payload);
-                        var patchResponse = await d365WebApiService.SendPatchRequestAsync(appUserService.AZSystemAppUser, ECECertStatement, requestBody);
-                        if (!patchResponse.IsSuccessStatusCode)
-                        {
-                            var responseBody = await patchResponse.Content.ReadAsStringAsync();
-                            _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody.CleanLog());
-                            return ProcessResult.Failure(ProcessId, new String[] { responseBody }, 0, 0).SimpleProcessResult;
-                        }
-                        return ProcessResult.Failure(ProcessId, new String[] { "Upsert action failed" }, 0, 0).SimpleProcessResult;
+                    var requestBody = System.Text.Json.JsonSerializer.Serialize(payload);
+                    var patchResponse = await d365WebApiService.SendPatchRequestAsync(appUserService.AZSystemAppUser, ECECertStatement, requestBody);
+                    if (!patchResponse.IsSuccessStatusCode)
+                    {
+                        var responseBody = await patchResponse.Content.ReadAsStringAsync();
+                        _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody.CleanLog());
+                        return ProcessResult.Failure(ProcessId, new String[] { responseBody }, 0, 0).SimpleProcessResult;
                     }
-                    #endregion
-
-                    return ProcessResult.Completed(ProcessId).SimpleProcessResult;
+                    return ProcessResult.Failure(ProcessId, new String[] { "Upsert action failed" }, 0, 0).SimpleProcessResult;
                 }
             }
             catch (Exception ex)
@@ -293,7 +467,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                 dataImportID = new Guid(pfeRecord[OfM_Data_Import.Fields.OfM_Data_ImportId].ToString());
                 if (importfileName.Length > 0)
                 {
-                    // Update the new Payment File Exchange record with the new document
+                    // Update the new Data Import record with the new document
                     HttpResponseMessage pfeUpdateResponse = await _d365webapiservice.SendDocumentRequestAsync(_appUserService.AZPortalAppUser, OfM_Data_Import.EntitySetName,
                                                                                                         new Guid(pfeRecord[OfM_Data_Import.Fields.OfM_Data_ImportId].ToString()),
                                                                                                         Encoding.ASCII.GetBytes(result.TrimEnd()),
