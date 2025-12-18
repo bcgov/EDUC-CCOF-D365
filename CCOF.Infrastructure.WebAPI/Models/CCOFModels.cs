@@ -122,6 +122,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_unlock_ecewe { get; set; }
         public int? ccof_unlock_licenseupload { get; set; }
         public int? ccof_unlock_supportingdocument { get; set; }
+        public int? ccof_unlock_renewal { get; set; }
         public int? ccof_unlock_declaration { get; set; }
         public bool? ccof_licensecomplete { get; set; }
         public bool? ccof_ecewe_eligibility_complete { get; set; }
