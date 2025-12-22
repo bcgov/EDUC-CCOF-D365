@@ -81,6 +81,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         <attribute name="statuscode" />
                         <attribute name="ccof_ccfri_approved_date" />
                         <attribute name="ccof_ccof_approved_date" />
+                        <attribute name="ccof_reporttype" />
                         <link-entity name="account" from="accountid" to="ccof_facility" link-type="inner" alias="facility">
                           <attribute name="name" />
                           <attribute name="accountnumber" />
@@ -89,6 +90,12 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                           <attribute name="ccof_name" />
                           <attribute name="ccof_programyearnumber" />
                           <attribute name="statuscode" />
+                        </link-entity>
+                        <link-entity name="ccof_monthlyenrolmentreportextension" from="ccof_monthlyenrolmentreportextensionid" to="ccof_reportextension" link-type="inner" alias="reportext">
+                          <attribute name="ccof_diffgrandtotalbase" />
+                          <attribute name="ccof_diffgrandtotalccfri" />
+                          <attribute name="ccof_diffgrandtotalccfriprovider" />
+                          <attribute name="ccof_name" />
                         </link-entity>
                         <filter>
                           <condition attribute="ccof_monthlyenrollmentreportid" operator="eq" value="{{_processParams.EnrolmentReportid.ToString()}}" />
@@ -103,7 +110,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             }
         }
         public string CodingLineTypeRequestUri
-        { 
+        {
             get
             {
                 var fetchXml = $$"""
@@ -225,9 +232,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
             return await Task.FromResult(new ProcessData(d365Result));
         }
-        private async Task<JsonObject> CreateSinglePayment(JsonNode enrolmentReport,DateTime paymentDate,decimal? totalAmount,
-                                                            ProcessParameter processParams,List<DateTime> holidaysList,
-                                                            int invoiceLineNumber,int paymentType)
+        private async Task<JsonObject> CreateSinglePayment(JsonNode enrolmentReport, DateTime paymentDate, decimal? totalAmount,
+                                                            ProcessParameter processParams, List<DateTime> holidaysList,
+                                                            int invoiceLineNumber, int paymentType)
         {
             DateTime invoiceDate = paymentDate;
             DateTime invoiceReceivedDate = invoiceDate;
@@ -295,7 +302,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         {
             var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
-            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": Begin to generate PaymentLine Process for ER: "+processParams.EnrolmentReportid);
+            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": Begin to generate PaymentLine Process for ER: " + processParams.EnrolmentReportid);
             try
             {
                 _processParams = processParams;
@@ -311,16 +318,29 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 var businessClosuresData = await GetBusinessClosuresDataAsync();
                 var closures = JsonSerializer.Deserialize<JsonArray>(businessClosuresData.Data.ToString());
                 List<DateTime> holidaysList = closures!.Select(closure => (DateTime)closure["ofm_date_observed"]).ToList();
+                decimal grandTotalBase=0, grandTotalCCFRI=0, grandTotalCCFRIProvider = 0;
+                grandTotalBase =
+                    (int)enrolmentReport["ccof_reporttype"] == 100000000
+                        ? ((decimal?)enrolmentReport["ccof_grandtotalbase"] ?? 0)
+                        : ((decimal?)enrolmentReport["reportext.ccof_diffgrandtotalbase"] ?? 0);
+                grandTotalCCFRI =
+                    (int)enrolmentReport["ccof_reporttype"] == 100000000
+                        ? ((decimal?)enrolmentReport["ccof_grandtotalccfri"] ?? 0)
+                        : ((decimal?)enrolmentReport["reportext.ccof_diffgrandtotalccfri"] ?? 0);
+                grandTotalCCFRIProvider =
+                    (int)enrolmentReport["ccof_reporttype"] == 100000000
+                        ? ((decimal?)enrolmentReport["ccof_grandtotalccfriprovider"] ?? 0)
+                        : ((decimal?)enrolmentReport["reportext.ccof_diffgrandtotalccfriprovider"] ?? 0);
                 switch ((int)processParams.programapproved)
                 {
                     case 1:  // CCOF was approved in ER
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccof_approved_date"], 
-                            ((decimal?)enrolmentReport["ccof_grandtotalbase"]??0), processParams!, holidaysList,1,7);  // 1, InvoiceLineNumber fix for CCOF Base Payment. 7 PaymentType CCOF
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccof_approved_date"],
+                            grandTotalBase, processParams!, holidaysList, 1, 7);  // 1, InvoiceLineNumber fix for CCOF Base Payment. 7 PaymentType CCOF
                         break;
                     case 2: // CCFRI was approved in ER
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], ((decimal?)(enrolmentReport["ccof_grandtotalccfri"]) ?? 0), 
-                            processParams!, holidaysList,2,8);// 2, InvoiceLineNumber fix for CCFRI. 8 PaymentType CCFRI
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], ((decimal?)(enrolmentReport["ccof_grandtotalccfriprovider"]) ?? 0),
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRI,
+                            processParams!, holidaysList, 2, 8);// 2, InvoiceLineNumber fix for CCFRI. 8 PaymentType CCFRI
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRIProvider,
                             processParams!, holidaysList, 3, 10);// 3, InvoiceLineNumber fix for CCFRI Payment. 10 PaymentType CCFRI Provider
                         break;
                     default:
@@ -334,7 +354,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 var returnObject = ProcessResult.Failure(ProcessId, new String[] { "Critical error", ex.StackTrace }, 0, 0).ODProcessResult;
                 return returnObject;
             }
-            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": End Process for ER: "+processParams.EnrolmentReportid);
+            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": End Process for ER: " + processParams.EnrolmentReportid);
             return ProcessResult.Completed(ProcessId).SimpleProcessResult;
         }
     }
