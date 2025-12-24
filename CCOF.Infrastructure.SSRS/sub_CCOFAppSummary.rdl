@@ -31,6 +31,9 @@
     &lt;attribute name="ccof_submittedby" /&gt;
     &lt;attribute name="ccof_showdeclarationonreport" /&gt;
     &lt;attribute name="ccof_latestsubmissiondatepst" /&gt;
+ &lt;attribute name="ccof_has_banking_information_changed" /&gt;
+ &lt;attribute name="ccof_is_funding_agreement_confirmed" /&gt;
+ &lt;attribute name="ccof_are_licence_details_confirmed" /&gt;
     &lt;filter&gt;
       &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
     &lt;/filter&gt;
@@ -129,13 +132,29 @@
           <DataField>ccof_latestsubmissiondatepstValue</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="ccof_has_banking_information_changed">
+          <DataField>ccof_has_banking_information_changed</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="ccof_showdeclarationonreportValue">
           <DataField>ccof_showdeclarationonreportValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="ccof_has_banking_information_changedValue">
+          <DataField>ccof_has_banking_information_changedValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_is_funding_agreement_confirmed">
+          <DataField>ccof_is_funding_agreement_confirmed</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="org_address1_name">
           <DataField>org_address1_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_is_funding_agreement_confirmedValue">
+          <DataField>ccof_is_funding_agreement_confirmedValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="org_address1_city">
           <DataField>org_address1_city</DataField>
@@ -144,6 +163,14 @@
         <Field Name="org_address1_postalcode">
           <DataField>org_address1_postalcode</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_are_licence_details_confirmed">
+          <DataField>ccof_are_licence_details_confirmed</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_are_licence_details_confirmedValue">
+          <DataField>ccof_are_licence_details_confirmedValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="org_address1_stateorprovince">
           <DataField>org_address1_stateorprovince</DataField>
@@ -2645,7 +2672,7 @@
             </TablixRowHierarchy>
             <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCFRI</DataSetName>
-            <Top>5.09688in</Top>
+            <Top>5.59688in</Top>
             <Left>0.29104in</Left>
             <Height>6.1913in</Height>
             <Width>8.55272in</Width>
@@ -3008,7 +3035,7 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>11.35763in</Top>
+            <Top>11.85763in</Top>
             <Left>0.26502in</Left>
             <Height>4.13914in</Height>
             <Width>8.53831in</Width>
@@ -4382,6 +4409,211 @@ Intentionally supplying information that is false or misleading with respect to 
                     </TablixCell>
                   </TablixCells>
                 </TablixRow>
+                <TablixRow>
+                  <Height>0.20833in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Has Banking Information Changed?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Is Funding Agreement Confirmed?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox18">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Are Licence Details Confirmed?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox18</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ccof_has_banking_information_changed">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ccof_has_banking_information_changed.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ccof_has_banking_information_changed</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ccof_is_funding_agreement_confirmed">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ccof_is_funding_agreement_confirmed.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ccof_is_funding_agreement_confirmed</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ccof_are_licence_details_confirmed">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ccof_are_licence_details_confirmed.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ccof_are_licence_details_confirmed</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
@@ -4410,16 +4642,26 @@ Intentionally supplying information that is false or misleading with respect to 
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(First(Fields!ccof_applicationtypeValue.Value)=100000002,False,True)</Hidden>
+                  </Visibility>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(First(Fields!ccof_applicationtypeValue.Value)=100000002,False,True)</Hidden>
+                  </Visibility>
+                </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>APPData</DataSetName>
             <Top>1.61911in</Top>
             <Left>0.29104in</Left>
-            <Height>3.45in</Height>
+            <Height>3.90833in</Height>
             <Width>8.55271in</Width>
             <ZIndex>3</ZIndex>
             <Visibility>
-              <Hidden>=IIF(First(Fields!ccof_applicationtypeValue.Value)=100000000,False,True)</Hidden>
+              <Hidden>=IIF(First(Fields!ccof_applicationtypeValue.Value)=100000000 or First(Fields!ccof_applicationtypeValue.Value)=100000002,False,True)</Hidden>
             </Visibility>
             <Style>
               <Border>
@@ -4648,7 +4890,7 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>21.44121in</Top>
+            <Top>21.94121in</Top>
             <Left>0.26502in</Left>
             <Height>2.51735in</Height>
             <Width>8.60475in</Width>
@@ -4918,7 +5160,7 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>15.55232in</Top>
+            <Top>16.05232in</Top>
             <Left>0.26502in</Left>
             <Height>5.81944in</Height>
             <Width>8.60413in</Width>
@@ -4933,7 +5175,7 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
             </Style>
           </Rectangle>
         </ReportItems>
-        <Height>24.08357in</Height>
+        <Height>24.95856in</Height>
         <Style>
           <Border>
             <Style>None</Style>
