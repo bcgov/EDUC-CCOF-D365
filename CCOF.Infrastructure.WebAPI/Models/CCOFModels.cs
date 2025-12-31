@@ -352,82 +352,99 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string _ofm_regardingid_value { get; set; } = string.Empty; // ToDo: a workaround for polymorphic lookup
 
     }
-    public class PaymentLine
-    {
-        [Required(ErrorMessage = "Amount cannot be null.")]
-        public new decimal? ofm_amount { get; set; }
 
-        [Required(ErrorMessage = "A facility is mandatory, and its name must be provided.")]
-        [JsonPropertyName("ofm_facility.name")]
-        public new string ofm_facility { get; set; }
-
-        [Required(ErrorMessage = "Funding is required.")]
-        public new Guid? _ofm_funding_value { get; set; }
-
-        [Required(ErrorMessage = "Fiscal year is mandatory.")]
-        [JsonPropertyName("ofm_fiscal_year.ofm_financial_year")]
-        public new string? ofm_financial_year { get; set; }
-
-        [Required(ErrorMessage = "Invoice number is required.")]
-        public new string? ofm_invoice_number { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Site cannot be blank.")]
-        public new string? ofm_siteid { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Supplier details is missing.")]
-        public new string? ofm_supplierid { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Payment method is mandatory.")]
-        public new int? ofm_payment_method { get; set; }
-
-        [JsonPropertyName("Ack.ofm_cohortid")]
-        [Required(ErrorMessage = "Cohort cannot be blank on funding, and a corresponding acknowledgement number is required.")]
-        public string? ofm_cohort { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Line number is required.")]
-        public new int? ofm_invoice_line_number { get; set; }
-
-        [Required(ErrorMessage = "Effective date should be today date.")]
-        public new DateTime? ofm_effective_date { get; set; }
-
-        [Required(ErrorMessage = "Invoice date should be today date.")]
-        public new DateTime? ofm_invoice_date { get; set; }
-
-        [Required(ErrorMessage = "Invoice recieved date should be today date.")]
-        public new DateTime? ofm_invoice_received_date { get; set; }
-
-        [Required(ErrorMessage = "Organization detail is required.")]
-        public new Guid? _ofm_organization_value { get; set; }
-
-        [Required(ErrorMessage = "Payment type is required.")]
-        public new int? ofm_payment_type { get; set; }
-    }
 
     public class CcofInvoice : CcOf_Invoice
     {
-        public string? CcofBatchNumber { get; set; }
-        public DateTime? CcofEffectiveDate { get; set; }
-        public decimal? CcofGrandTotal { get; set; }
-        public DateTime? CcofInvoiceDate { get; set; }
-        public string? CcofInvoiceNumber { get; set; }
-        public DateTime? CcofInvoiceReceivedDate { get; set; }
-        public Guid? CcofInvoiceId { get; set; }
-        public string? CcofName { get; set; }
-        public string? CcofOrganization { get; set; }
-        public Guid? CcofOrganizationId { get; set; }
-        public string? CcofPaymentType { get; set; }
-        public string? CcofPaymentMethod { get; set; }
-        public string? CcofRemittanceMessage { get; set; }
-        public DateTime? CcofRevisedEffectiveDate { get; set; }
-        public DateTime? CcofRevisedInvoiceDate { get; set; }
-        public DateTime? CcofRevisedInvoiceReceivedDate { get; set; }
-        public string? CcofSiteNumber { get; set; }
-        public string? CcofSupplierNumber { get; set; }
+        public string ccof_batch_number { get; set; }
 
-        public int? StateCode { get; set; }
-        public int? StatusCode { get; set; }
+        public DateTime? ccof_effective_date { get; set; }
+
+        public decimal? ccof_grand_total { get; set; }
+
+        public DateTime? ccof_invoice_date { get; set; }
+
+        public string ccof_invoice_number { get; set; }
+
+        public DateTime? ccof_invoice_received_date { get; set; }
+
+        public Guid? ccof_invoiceid { get; set; }
+
+        public Guid? _ccof_organization_value { get; set; }
+
+        public string ccof_organization_id { get; set; }
+
+        public int? ccof_payment_type { get; set; }
+
+        public int? ccof_paymentmethod { get; set; }
+
+        public string ccof_remittance_message { get; set; }
+
+        public DateTime? ccof_revised_effective_date { get; set; }
+
+        public DateTime? ccof_revised_invoice_date { get; set; }
+
+        public DateTime? ccof_revised_invoice_received_date { get; set; }
+
+        public string ccof_site_number { get; set; }
+
+        public string ccof_supplier_number { get; set; }
+
+        public int? statecode { get; set; }
+
+        public int? statuscode { get; set; }
     }
 
+    //public class Invoice
+    //{
+    //    [Required(ErrorMessage = "Amount cannot be null.")]
+    //    public new decimal? ofm_amount { get; set; }
+
+    //    [Required(ErrorMessage = "A facility is mandatory, and its name must be provided.")]
+    //    [JsonPropertyName("ofm_facility.name")]
+    //    public new string ofm_facility { get; set; }
+
+    //    [Required(ErrorMessage = "Funding is required.")]
+    //    public new Guid? _ofm_funding_value { get; set; }
+
+    //    [Required(ErrorMessage = "Fiscal year is mandatory.")]
+    //    [JsonPropertyName("ofm_fiscal_year.ofm_financial_year")]
+    //    public new string? ofm_financial_year { get; set; }
+
+    //    [Required(ErrorMessage = "Invoice number is required.")]
+    //    public new string? ofm_invoice_number { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Site cannot be blank.")]
+    //    public new string? ofm_siteid { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Supplier details is missing.")]
+    //    public new string? ofm_supplierid { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Payment method is mandatory.")]
+    //    public new int? ofm_payment_method { get; set; }
+
+    //    [JsonPropertyName("Ack.ofm_cohortid")]
+    //    [Required(ErrorMessage = "Cohort cannot be blank on funding, and a corresponding acknowledgement number is required.")]
+    //    public string? ofm_cohort { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Line number is required.")]
+    //    public new int? ofm_invoice_line_number { get; set; }
+
+    //    [Required(ErrorMessage = "Effective date should be today date.")]
+    //    public new DateTime? ofm_effective_date { get; set; }
+
+    //    [Required(ErrorMessage = "Invoice date should be today date.")]
+    //    public new DateTime? ofm_invoice_date { get; set; }
+
+    //    [Required(ErrorMessage = "Invoice recieved date should be today date.")]
+    //    public new DateTime? ofm_invoice_received_date { get; set; }
+
+    //    [Required(ErrorMessage = "Organization detail is required.")]
+    //    public new Guid? _ofm_organization_value { get; set; }
+
+    //    [Required(ErrorMessage = "Payment type is required.")]
+    //    public new int? ofm_payment_type { get; set; }
+    //}
 
 
     public record D365CommunicationType

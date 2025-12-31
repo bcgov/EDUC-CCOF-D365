@@ -16694,6 +16694,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Pending", 0, "#f5ffb8")]
 		Pending = 700610000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Skipped", 5, "#e6e6e6")]
+		Skipped = 700610005,
 	}
 	
 	/// <summary>

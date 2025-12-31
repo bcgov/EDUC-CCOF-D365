@@ -27,7 +27,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments;
 public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> bccasApiSettings, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ID365DataService dataService, ILoggerFactory loggerFactory, TimeProvider timeProvider) : ID365ProcessProvider
 {
     private readonly BCCASApi _BCCASApi = bccasApiSettings.Value.BCCASApi;
-    private readonly IOptionsSnapshot<ExternalServices> bccasApiSettings = bccasApiSettings;
     private readonly ID365AppUserService _appUserService = appUserService;
     private readonly ID365WebApiService _d365webapiservice = d365WebApiService;
     private readonly ILoggerFactory loggerFactory = loggerFactory;
@@ -40,7 +39,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
     private double _controlAmount;
     private int _oracleBatchNumber;
     private string _cgiBatchNumber = string.Empty;
-    private List<PaymentLine> erroredline= new List<PaymentLine>();
+   // private List<PaymentLine> erroredline= new List<PaymentLine>();
     private ProcessData? _data;
     private ProcessParameter? _processParams;
     private string _currentFiscalYearId;
@@ -54,22 +53,21 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         {
             // For reference only
             var fetchXml = $"""
-                    <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false" count="1">
+                    <fetch>
                       <entity name="ofm_payment_file_exchange">
+                        <attribute name="ccof_last_ccof_cgi_oracle_number" />
                         <attribute name="ofm_payment_file_exchangeid" />
-                        <attribute name="ofm_name" />
+                        <attribute name="owningbusinessunit" />
                         <attribute name="ofm_batch_number" />
                         <attribute name="ofm_oracle_batch_name" />
-                        <order attribute="ofm_batch_number" descending="true" />
-                        <filter type="and">
-                          <condition attribute="ofm_fiscal_year" operator="eq" value="{_currentFiscalYearId}" />                  
-                        </filter>
+                        <attribute name="ofm_input_file_name" />
                       </entity>
                     </fetch>
                     """;
 
+           
             var requestUri = $"""
-                         ofm_payment_file_exchanges?$select=ofm_payment_file_exchangeid,ofm_name,ofm_batch_number,ofm_oracle_batch_name&$filter=(_ofm_fiscal_year_value eq '{_currentFiscalYearId}')&$orderby=ofm_batch_number desc
+                         ofm_payment_file_exchanges?fetchXml={WebUtility.UrlEncode(fetchXml)}
                          """;
 
             return requestUri;
@@ -128,12 +126,12 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     </fetch>
                     """;
 
-           
             var requestUri = $"""
-                         ccof_invoices?$select=ccof_batch_number,ccof_effective_date,ccof_grand_total,ccof_invoice_date,ccof_invoice_number,ccof_invoice_received_date,ccof_invoiceid,ccof_name,_ccof_organization_value,ccof_organization_id,ccof_payment_type,ccof_paymentmethod,ccof_remittance_message,ccof_revised_effective_date,ccof_revised_invoice_date,ccof_revised_invoice_received_date,ccof_site_number,ccof_supplier_number,_createdby_value,createdon,_createdonbehalfby_value,exchangerate,_modifiedby_value,modifiedon,_modifiedonbehalfby_value,overriddencreatedon,_ownerid_value,_owningbusinessunit_value,statecode,statuscode,_transactioncurrencyid_value&$expand=owningbusinessunit($select=name)&$filter=(statuscode eq {(int)CcOf_Invoice_StatusCode.Approved} and contains(owningbusinessunitname, 'CCOF')
+                         ccof_invoices?fetchXml={WebUtility.UrlEncode(fetchXml)}
                          """;
 
             return requestUri;
+         
         }
     }
    
@@ -232,6 +230,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         List<InvoiceHeader> invoiceHeaders = [];
         List<List<InvoiceHeader>> headerList = [];
         List<CcofInvoice> serializedPaymentData = [];
+
+
         CcofInvoice eachline ;
          var line = typeof(InvoiceLines);
         var header = typeof(InvoiceHeader);
@@ -242,7 +242,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         {
             var paymentData = await GetPaymentLineData();
             serializedPaymentData = JsonSerializer.Deserialize<List<CcofInvoice>>(paymentData.Data.ToString());
-            var grouppayment = serializedPaymentData?.GroupBy(p => p.CcofInvoiceNumber).ToList();
+            var grouppayment = serializedPaymentData?.GroupBy(p => p.ccof_invoice_number).ToList();
          //   var fiscalyear = serializedPaymentData?.FirstOrDefault()?.CcOf_Program_Year.Name;
 
             #endregion
@@ -255,15 +255,15 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var latestPaymentFileExchangeData = await GetDataAsync();
             var serializedPFXData = JsonSerializer.Deserialize<List<OfM_Payment_File_Exchange>>(latestPaymentFileExchangeData.Data.ToString());
 
-            if (serializedPFXData is not null && serializedPFXData.Count != 0 && serializedPFXData[0].OfM_Batch_Number != null)
+            if (serializedPFXData is not null && serializedPFXData.Count != 0 && serializedPFXData[0].CcOf_Last_CcOf_Cgi_Oracle_Number != null)
             {
-                _oracleBatchNumber = Convert.ToInt32(serializedPFXData[0].OfM_Batch_Number) + 1;
+                _oracleBatchNumber = Convert.ToInt32(serializedPFXData[0].CcOf_Last_CcOf_Cgi_Oracle_Number) + 1;
                 _cgiBatchNumber = (Convert.ToInt32(serializedPFXData[0].OfM_Batch_Number)).ToString("D9").Substring(0, 9);
                 oracleBatchName = _BCCASApi.clientCode  + "CCOF" + (_oracleBatchNumber).ToString("D5");
             }
             else
             {
-                _cgiBatchNumber = _BCCASApi.cGIBatchNumber;
+                _cgiBatchNumber = (Convert.ToInt32(serializedPFXData[0].OfM_Batch_Number)).ToString("D9").Substring(0, 9);
                 oracleBatchName = _BCCASApi.clientCode + "CCOF" + _BCCASApi.oracleBatchNumber;
             }
 
@@ -330,7 +330,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                             quantity = _BCCASApi.InvoiceLines.quantity,//Static Value:0000000.00 not used by feeder
                             unitPrice = _BCCASApi.InvoiceLines.unitPrice,//Static Value:000000000000.00 not used by feeder
                             optionalData = string.Empty.PadRight(line.FieldLength("optionalData")),// PO ship to asset tracking values are set to blank as it is optional
-                            distributionSupplierNumber = lineitem.item.CcofSupplierNumber.PadRight(line.FieldLength("distributionSupplierNumber")),// Supplier number from Organization
+                            distributionSupplierNumber = lineitem.item.ccof_supplier_number.PadRight(line.FieldLength("distributionSupplierNumber")),// Supplier number from Organization
                             flow = string.Empty.PadRight(line.FieldLength("flow")), //can be use to pass additional info from facility or application
                         });
                         _controlCount++;
@@ -342,8 +342,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                             batchType = _BCCASApi.batchType,//Static  value :AP
                             headertransactionType = _BCCASApi.InvoiceHeader.headertransactionType,//Static value:IH for each header
                             delimiter = _BCCASApi.delimiter,//Static value:\u001d
-                            supplierNumber = headeritem.First().CcofSupplierNumber.PadRight(header.FieldLength("supplierNumber")),// Populate from Organization Supplier info
-                            supplierSiteNumber = headeritem.First().CcofSiteNumber.PadLeft(header.FieldLength("supplierSiteNumber"), '0'),// Populate from Organization Supplier info
+                            supplierNumber = headeritem.First().ccof_supplier_number.PadRight(header.FieldLength("supplierNumber")),// Populate from Organization Supplier info
+                            supplierSiteNumber = headeritem.First().ccof_site_number.PadLeft(header.FieldLength("supplierSiteNumber"), '0'),// Populate from Organization Supplier info
                             invoiceNumber = headeritem.First().CcOf_Invoice_Number.PadRight(header.FieldLength("invoiceNumber")),// Autogenerated and unique for supplier transaction
                             PONumber = string.Empty.PadRight(header.FieldLength("PONumber")),// sending blank as not used by feeder
                             invoiceDate = headeritem.First().CcOf_Revised_Invoice_Date?.ToString("yyyyMMdd") ?? headeritem.First().CcOf_Invoice_Date?.ToString("yyyyMMdd"), // set to current date
@@ -367,20 +367,20 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     }
                     catch (Exception ex)
                     {
-                        erroredline.Add(new PaymentLine
-                        {
-                            ofm_amount = eachline.CcOf_Grand_Total.Value,
-                            ofm_cohort = ackNumber,
-                            ofm_effective_date= eachline.CcOf_Effective_Date,
-                            ofm_invoice_date=eachline.CcOf_Invoice_Date,
-                            ofm_invoice_received_date= eachline.CcOf_Invoice_Received_Date,
-                            ofm_invoice_number= eachline.CcOf_Invoice_Number,
-                            ofm_payment_method= (Int32) eachline.CcOf_PaymentMethod.Value,
-                            ofm_payment_type= (Int32) eachline.CcOf_Payment_Type.Value,
-                            ofm_siteid= eachline.CcOf_Site_Number,
-                            ofm_supplierid= eachline.CcOf_Supplier_Number,
-                            _ofm_organization_value= (Guid) eachline.CcOf_Organization.Id
-                        });
+                        //erroredline.Add(new Invoice
+                        //{
+                        //    ofm_amount = eachline.ccof.Value,
+                        //    ofm_cohort = ackNumber,
+                        //    ofm_effective_date= eachline.CcOf_Effective_Date,
+                        //    ofm_invoice_date=eachline.CcOf_Invoice_Date,
+                        //    ofm_invoice_received_date= eachline.CcOf_Invoice_Received_Date,
+                        //    ofm_invoice_number= eachline.CcOf_Invoice_Number,
+                        //    ofm_payment_method= (Int32) eachline.CcOf_PaymentMethod.Value,
+                        //    ofm_payment_type= (Int32) eachline.CcOf_Payment_Type.Value,
+                        //    ofm_siteid= eachline.CcOf_Site_Number,
+                        //    ofm_supplierid= eachline.CcOf_Supplier_Number,
+                        //    _ofm_organization_value= (Guid) eachline.CcOf_Organization.Id
+                        //});
 
                     }
                 }
@@ -465,7 +465,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             //var ccuserID = await _paymentvalidator.GetccuserEmail(true);
 
             //await _paymentvalidator.SendPaymentErrorEmail(500, "500",(Guid)(_processParams.Notification.SenderId));
-
+            Console.WriteLine(ex.Message);
 
         }
         return ProcessResult.Completed(ProcessId).SimpleProcessResult;
@@ -478,10 +478,10 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         {
             var payToUpdate = new JsonObject {
                   { "statuscode", Convert.ToInt16(OfM_Payment_StatusCode.ProcessingPayment) },
-                   {"ofm_batch_number",pay.CcofBatchNumber }
+                   {"ofm_batch_number",pay.ccof_batch_number }
              };
 
-            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(OfM_Payment.EntityLogicalCollectionName, pay.CcofInvoiceId), payToUpdate));
+            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(OfM_Payment.EntityLogicalCollectionName, pay.ccof_invoiceid), payToUpdate));
         });
 
         var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePayRequests, null);
