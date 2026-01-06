@@ -301,14 +301,11 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     var batch = differenceCsvRecords.Skip(i).Take(batchSize).ToList();
                     foreach (var record in batch)
                     {
-                        var statecode = Enum.IsDefined(typeof(Active), record?.statuscode) ? 0 : 1;
                         var ECECert = new JsonObject
                         {
                             { "ofm_first_name", record?.firstname},
                             { "ofm_last_name", record?.lastname},
-                            { "ofm_expiry_date", record?.expirydate?.ToString()},
-                            { "statuscode", record?.statuscode },
-                            { "statecode",  statecode}
+                            { "ofm_expiry_date", record?.expirydate?.ToString()}
                         };
                         upsertECERequests.Add(new UpsertRequest(new D365EntityReference("ofm_employee_certificates(ofm_certificate_number='" + record?.registrationnumber + "',ofm_certificate_level='" + record?.certificatelevel?.Replace(",", " ").ToString() + "',ofm_effective_date=" + record?.effectivedate + ")"), ECECert));
                     }
@@ -316,6 +313,25 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     if (upsertECECertResults.Errors.Any())
                     {
                         var errorInfos = ProcessResult.Failure(ProcessId, upsertECECertResults.Errors, upsertECECertResults.TotalProcessed, upsertECECertResults.TotalRecords);
+
+                        _logger.LogError(CustomLogEvent.Process, "Failed to Upsert ECE Certification: {error}", JsonValue.Create(errorInfos)!.ToString());
+                        upsertMessages += "Batch Upsert errors: " + JsonValue.Create(errorInfos) + "\n\r";
+                    }
+                    upsertECERequests.Clear();
+                    foreach (var record in batch)
+                    {
+                        var statecode = Enum.IsDefined(typeof(Active), record?.statuscode) ? 0 : 1;
+                        var ECECert = new JsonObject
+                        {
+                            { "statecode",  statecode},
+                            { "statuscode", record?.statuscode },
+                        };
+                        upsertECERequests.Add(new UpsertRequest(new D365EntityReference("ofm_employee_certificates(ofm_certificate_number='" + record?.registrationnumber + "',ofm_certificate_level='" + record?.certificatelevel?.Replace(",", " ").ToString() + "',ofm_effective_date=" + record?.effectivedate + ")"), ECECert, UpsertBehavior.PreventCreate));
+                    }
+                    var upsertECECertResponse = await d365WebApiService.SendBatchMessageAsync(_appUserService.AZSystemAppUser, upsertECERequests, null);
+                    if (upsertECECertResponse.Errors.Any())
+                    {
+                        var errorInfos = ProcessResult.Failure(ProcessId, upsertECECertResponse.Errors, upsertECECertResponse.TotalProcessed, upsertECECertResponse.TotalRecords);
 
                         _logger.LogError(CustomLogEvent.Process, "Failed to Upsert ECE Certification: {error}", JsonValue.Create(errorInfos)!.ToString());
                         upsertMessages += "Batch Upsert errors: " + JsonValue.Create(errorInfos) + "\n\r";
