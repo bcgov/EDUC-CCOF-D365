@@ -33,7 +33,7 @@ namespace CCOF.Infrastructure.Plugins.Licence
 
                 Guid recordId = context.PrimaryEntityId;
                 Entity current = null;
-                
+
                 var qe = new QueryExpression("ccof_license")
                 {
                     ColumnSet = new ColumnSet("ccof_licenseid")
@@ -49,8 +49,9 @@ namespace CCOF.Infrastructure.Plugins.Licence
                     target.GetAttributeValue<EntityReference>("ccof_facility") ??
                     current?.GetAttributeValue<EntityReference>("ccof_facility");
                 qe.Criteria.AddCondition("ccof_facility", ConditionOperator.Equal, facilityRef.Id);
-                qe.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
-                    
+                // Commented by Harpreet, This line is not allowing to create new version with DRAFT status
+                //qe.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+
                 if (target.Contains("statuscode") && ((OptionSetValue)target["statuscode"]).Value == 101510001)//ACTIVE
                 {
                     qe.Criteria.AddCondition("statuscode", ConditionOperator.Equal, 101510001);//ACTIVE
@@ -60,11 +61,15 @@ namespace CCOF.Infrastructure.Plugins.Licence
                         throw new InvalidPluginExecutionException("This facility already has an active licence version. End date the active version before proceeding.");
                     }
                 }
+
+                if (target.GetAttributeValue<DateTime?>("ccof_record_start_date") == null && target.GetAttributeValue<DateTime?>("ccof_record_end_date") == null)
+                    return;
                 if (target.Contains("ccof_record_start_date") || target.Contains("ccof_record_end_date"))
                 {
                     DateTime? start = GetDate(target, "ccof_record_start_date") ?? GetDate(current, "ccof_record_start_date");
                     DateTime? end = GetDate(target, "ccof_record_end_date") ?? GetDate(current, "ccof_record_end_date");
                     var endNotBeforeThisStartOrNull = new FilterExpression(LogicalOperator.Or);
+
                     endNotBeforeThisStartOrNull.AddCondition("ccof_record_end_date", ConditionOperator.OnOrAfter, start.Value);
                     endNotBeforeThisStartOrNull.AddCondition("ccof_record_end_date", ConditionOperator.Null);
 
