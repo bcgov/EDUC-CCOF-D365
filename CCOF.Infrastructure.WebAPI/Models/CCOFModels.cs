@@ -146,10 +146,16 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public DateTime? ccof_intakeperiodend { get; set; }
     }
 
-    public class Ack_Codes : OfM_AcK_Codes
+    public class Ack_Codes
     {
-        public Guid? _ofm_cohortid_value { get; set; }
-       
+
+        [JsonPropertyName("ofm_payment_type@OData.Community.Display.V1.FormattedValue")]
+        public string? OfmPaymentTypename { get; set; }
+
+        [JsonPropertyName("ofm_ack_number")]
+        public string? OfmAckNumber { get; set; }
+
+
     }
     public class Ccof_Application_Basefunding_Application
     {
@@ -353,7 +359,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
 
     }
 
-
+   
     public class CcofInvoice : CcOf_Invoice
     {
         public string ccof_batch_number { get; set; }
@@ -371,13 +377,14 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public Guid? ccof_invoiceid { get; set; }
 
         public Guid? _ccof_organization_value { get; set; }
-
+        public string ccof_organizationname { get; set; }
         public string ccof_organization_id { get; set; }
 
         public int? ccof_payment_type { get; set; }
 
         public int? ccof_paymentmethod { get; set; }
-
+        public string ccof_paymentmethodname { get; set; }
+        public string ccof_payment_typename { get; set; }
         public string ccof_remittance_message { get; set; }
 
         public DateTime? ccof_revised_effective_date { get; set; }
@@ -393,6 +400,13 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? statecode { get; set; }
 
         public int? statuscode { get; set; }
+
+        public new D365FiscalYear? ofm_fiscal_year { get; set; }
+    }
+
+    public class D365FiscalYear : OfM_Fiscal_Year
+    {
+        public new string ofm_financial_year { get; set; } = string.Empty;
     }
 
     //public class Invoice
@@ -452,4 +466,29 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? ofm_communication_typeid { get; set; }
         public Int16? ofm_communication_type_number { get; set; }
     }
+
+ 
+public class ofm_payment_file_exchange
+    {
+        
+        [JsonPropertyName("ofm_payment_file_exchangeid")]
+        public Guid OfmPaymentFileExchangeId { get; set; }
+
+        [JsonPropertyName("ofm_oracle_batch_name")]
+        public string OfmOracleBatchName { get; set; }
+
+        [JsonPropertyName("ofm_input_file_name")]
+        public string OfmInputFileName { get; set; }
+
+        [JsonPropertyName("_owningbusinessunit_value")]
+        public Guid OwningBusinessUnitValue { get; set; }
+
+        [JsonPropertyName("ofm_batch_number")]
+        public string OfmBatchNumber { get; set; }
+        
+
+         [JsonPropertyName("ccof_last_ccof_cgi_oracle_number")]
+        public string ccof_last_cgi_oracle_number { get; set; }
+    }
+
 }

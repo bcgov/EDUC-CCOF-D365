@@ -1052,6 +1052,17 @@ namespace CCOF.Core.DataContext
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_Fiscal_Year"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_Fiscal_Year> OfM_Fiscal_YearSet
+		{
+			get
+			{
+				return this.CreateQuery<CCOF.Core.DataContext.OfM_Fiscal_Year>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="CCOF.Core.DataContext.OfM_Payment"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<CCOF.Core.DataContext.OfM_Payment> OfM_PaymentSet
