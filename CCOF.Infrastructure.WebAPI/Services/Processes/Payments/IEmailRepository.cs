@@ -1,0 +1,350 @@
+﻿using CCOF.Core.DataContext;
+using CCOF.Infrastructure.WebAPI.Extensions;
+using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Services.AppUsers;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
+using CCOF.Infrastructure.WebAPI.Services.Processes;
+
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Extensions.Options;
+using CCOF.Infrastructure.WebAPI.Extensions;
+using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Services.AppUsers;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
+using System;
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
+
+namespace CCOF.Infrastructure.WebAPI.Services.Processes;
+
+public interface IEmailRepository
+{
+    Task<IEnumerable<D365CommunicationType>> LoadCommunicationTypeAsync();
+    Task<Guid?> CreateAndUpdateEmail(string subject, string emailDescription, List<Guid> toRecipient, Guid? senderId, string communicationType, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, Int16 processId, string regarding = "");
+    Task<ProcessData> GetTemplateDataAsync(int templateNumber);
+    Task<Guid?> CreateAndSendEmail(string subject, string emailDescription, JsonArray emailparties, string communicationType, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, Int16 processId, string regarding = "");
+    string StripHTML(string source);
+    
+}
+
+public class EmailRepository(ID365AppUserService appUserService, ID365WebApiService service, ID365DataService dataService, ILoggerFactory loggerFactory, IOptionsSnapshot<NotificationSettings> notificationSettings) : IEmailRepository
+{
+    private readonly ILogger _logger = loggerFactory.CreateLogger(LogCategory.Process);
+    private readonly ID365DataService _dataService = dataService;
+    private readonly ID365AppUserService _appUserService = appUserService;
+    private readonly ID365WebApiService _d365webapiservice = service;
+    private readonly NotificationSettings _notificationSettings = notificationSettings.Value;
+    private int _templateNumber;
+    Guid newEmailId;
+
+
+    #region Pre-Defined Queries
+
+    private string CommunicationTypeRequestUri
+    {
+        get
+        {
+            // For reference only
+            var fetchXml = """
+                            <fetch distinct="true" no-lock="true">
+                              <entity name="ofm_communication_type">
+                                <attribute name="ofm_communication_typeid" />
+                                <attribute name="ofm_communication_type_number" />
+                                <attribute name="statecode" />
+                                <filter>
+                                  <condition attribute="statecode" operator="eq" value="0" />
+                                </filter>
+                              </entity>
+                            </fetch>
+                """;
+
+            var requestUri = $"""
+                              ofm_communication_types?fetchXml={WebUtility.UrlEncode(fetchXml)}
+                              """;
+
+            return requestUri;
+        }
+    }
+
+    private string TemplatetoRetrieveUri
+    {
+        get
+        {
+            var fetchXml = $"""
+                <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+                  <entity name="template">
+                    <attribute name="title" />
+                    <attribute name="subjectsafehtml" />
+                    <attribute name="templatetypecode" />
+                    <attribute name="safehtml" />
+                    <attribute name="subjectsafehtml" />        
+                    <attribute name="languagecode" />
+                    <attribute name="templateid" />
+                    <attribute name="description" />
+                    <attribute name="body" />
+                    <order attribute="title" descending="false" />
+                    <filter type="or">
+                      <condition attribute="ccof_templateid" operator="eq" value="{_templateNumber}" />
+                          </filter>
+                  </entity>
+                </fetch>
+                """;
+
+            var requestUri = $"""
+                            templates?fetchXml={WebUtility.UrlEncode(fetchXml)}
+                            """;
+
+            return requestUri.CleanCRLF();
+        }
+    }
+    #endregion
+
+    public async Task<ProcessData> GetTemplateDataAsync(int templateNumber)
+    {
+        _templateNumber = templateNumber;
+        _logger.LogDebug(CustomLogEvent.Process, "Calling GetTemplateToSendEmail");
+
+        var response = await _d365webapiservice.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, TemplatetoRetrieveUri);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError(CustomLogEvent.Process, "Failed to query Emmail Template to update with the server error {responseBody}", responseBody.CleanLog());
+
+            return await Task.FromResult(new ProcessData(string.Empty));
+        }
+
+        var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+        JsonNode d365Result = string.Empty;
+        if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
+        {
+            if (currentValue?.AsArray().Count == 0)
+            {
+                _logger.LogInformation(CustomLogEvent.Process, "No template found with query {requestUri}", TemplatetoRetrieveUri.CleanLog());
+            }
+            d365Result = currentValue!;
+        }
+
+        _logger.LogDebug(CustomLogEvent.Process, "Query Result {queryResult}", d365Result.ToString().CleanLog());
+
+        return await Task.FromResult(new ProcessData(d365Result));
+    }
+
+    public async Task<IEnumerable<D365CommunicationType>> LoadCommunicationTypeAsync()
+    {
+        var localdata = await _dataService.FetchDataAsync(CommunicationTypeRequestUri, "CommunicationTypes");
+        var deserializedData = localdata.Data.Deserialize<List<D365CommunicationType>>(Setup.s_writeOptionsForLogs);
+
+        return await Task.FromResult(deserializedData!);
+    }
+    #region Create and send email
+
+    public async Task<Guid?> CreateAndSendEmail(string subject, string emailDescription, JsonArray emailParties, string communicationType, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, Int16 processId, string regarding = "")
+    {
+
+        var requestBody = new JsonObject(){
+                            {"subject",subject },
+                            {"description",emailDescription },
+                            {"email_activity_parties", emailParties },
+                            { "ofm_communication_type_Email@odata.bind", $"/ofm_communication_types({communicationType})"},
+                            {"ofm_regarding_data",regarding }// field is used for email pdf generation. Format:entityname#entityguid
+                        };
+
+        var response = await d365WebApiService.SendCreateRequestAsync(appUserService.AZSystemAppUser, "emails", requestBody.ToString());
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError(CustomLogEvent.Process, "Failed to create the record with the server error {responseBody}", responseBody.CleanLog());
+
+            return Guid.Empty;
+        }
+        else
+        {
+
+            var newEmail = await response.Content.ReadFromJsonAsync<JsonObject>();
+            newEmailId = (Guid)newEmail?["activityid"];
+            var sendEmailBatchResult = await d365WebApiService.SendPostRequestAsync(appUserService.AZSystemAppUser, newEmailId);
+            if (!sendEmailBatchResult.IsSuccessStatusCode)
+            {
+                var responseBody = sendEmailBatchResult.Content.ReadFromJsonAsync<JsonObject>();
+                _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody);
+
+                return Guid.Empty;
+            }
+        }
+
+        return await Task.FromResult(newEmailId);
+    }
+
+    #endregion
+
+    #region Create and Update Email
+
+    public async Task<Guid?> CreateAndUpdateEmail(string subject, string emailDescription, List<Guid> toRecipient, Guid? senderId, string communicationType, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, Int16 processId, string regarding = "")
+    {
+        toRecipient.ForEach(async recipient =>
+        {
+            var requestBody = new JsonObject(){
+                            {"subject",subject },
+                            {"description",emailDescription },
+                            {"email_activity_parties", new JsonArray(){
+                                new JsonObject
+                                {
+                                    { "partyid_systemuser@odata.bind", $"/systemusers({senderId})"},
+                                    { "participationtypemask", 1 } //From Email
+                                },
+                                new JsonObject
+                                {
+                                    { "partyid_contact@odata.bind", $"/contacts({recipient})" },
+                                    { "participationtypemask",   2 } //To Email                             
+                                }
+                            }},
+                            { "ofm_communication_type_Email@odata.bind", $"/ofm_communication_types({communicationType})"},
+                            {"ofm_regarding_data",regarding }// field is used for email pdf generation. Format:entityname#entityguid
+                        };
+
+            var response = await d365WebApiService.SendCreateRequestAsync(appUserService.AZSystemAppUser, "emails", requestBody.ToString());
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                _logger.LogError(CustomLogEvent.Process, "Failed to create the record with the server error {responseBody}", responseBody.CleanLog());
+
+                return;
+            }
+            else
+            {
+
+                var newEmail = await response.Content.ReadFromJsonAsync<JsonObject>();
+                newEmailId = (Guid)newEmail?["activityid"];
+
+                var emailStatement = $"emails({newEmailId})";
+
+                var payload = new JsonObject {
+                        { "ofm_sent_on", DateTime.UtcNow },
+                        { "statuscode", (int) Email_StatusCode.Completed },
+                        { "statecode", (int) Email_StateCode.Completed }};
+
+                var requestBody1 = JsonSerializer.Serialize(payload);
+
+                var patchResponse = await d365WebApiService.SendPatchRequestAsync(appUserService.AZSystemAppUser, emailStatement, requestBody1);
+
+                if (!patchResponse.IsSuccessStatusCode)
+                {
+                    var responseBody = await patchResponse.Content.ReadAsStringAsync();
+                    _logger.LogError(CustomLogEvent.Process, "Failed to patch the record with the server error {responseBody}", responseBody.CleanLog());
+
+                    return;
+                }
+            }
+        });
+
+
+        return await Task.FromResult(newEmailId);
+    }
+
+    public string StripHTML(string source)
+    {
+        try
+        {
+            string result;
+            // Remove HTML Development formatting
+            // Replace line breaks with space
+            // because browsers inserts space
+            result = source.Replace("\r", " ");
+            // Replace line breaks with space
+            // because browsers inserts space
+            result = result.Replace("\n", " ");
+            // Remove step-formatting
+            result = result.Replace("\t", string.Empty);
+            // Remove repeating spaces because browsers ignore them
+            result = System.Text.RegularExpressions.Regex.Replace(result,
+     @"( )+", " ");
+            // Remove the header (prepare first by clearing attributes)
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*head([^>])*>", "<head>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"(<( )*(/)( )*head( )*>)", "</head>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(<head>).*(</head>)", string.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            // remove all scripts (prepare first by clearing attributes)
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*script([^>])*>", "<script>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"(<( )*(/)( )*script( )*>)", "</script>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            //result = System.Text.RegularExpressions.Regex.Replace(result,
+            //@"(<script>)([^(<script>\.</script>)])*(</script>)",
+            //string.Empty,
+            // System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"(<script>).*(</script>)", string.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // remove all styles (prepare first by clearing attributes)
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*style([^>])*>", "<style>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"(<( )*(/)( )*style( )*>)", "</style>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(<style>).*(</style>)", string.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // insert tabs in spaces of <td> tags
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*td([^>])*>", "\t", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // insert line breaks in places of <BR> and <LI> tags
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*br( )*>", "\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*li( )*>", "\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // insert line paragraphs (double line breaks) in place
+            // if <P>, <DIV> and <TR> tags
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*div([^>])*>", "\r\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*tr([^>])*>", "\r\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<( )*p([^>])*>", "\r\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // Remove remaining tags like <a>, links, images,
+            // comments etc - anything that's enclosed inside < >
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"<[^>]*>", string.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // replace special characters:
+            result = System.Text.RegularExpressions.Regex.Replace(result, @" ", " ", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&bull;", " * ", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&lsaquo;", "<", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&rsaquo;", ">", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&trade;", "(tm)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&frasl;", "/", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&lt;", "<", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&gt;", ">", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&copy;", "(c)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&reg;", "(r)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // Remove all others.
+            result = System.Text.RegularExpressions.Regex.Replace(result, @"&(.{2,6});", string.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // for testing
+            // System.Text.RegularExpressions.Regex.Replace(result,
+            //this.txtRegex.Text,string.Empty,
+            //       System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // make line breaking consistent
+            result = result.Replace("\n", "\r");
+            // Remove extra line breaks and tabs:
+            // replace over 2 breaks with 2 and over 4 tabs with 4.
+            // Prepare first to remove any whitespaces in between
+            // the escaped characters and remove redundant tabs in between line breaks
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(\r)( )+(\r)", "\r\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(\t)( )+(\t)", "\t\t", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(\t)( )+(\r)", "\t\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(\r)( )+(\t)", "\r\t", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // Remove redundant tabs
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(\r)(\t)+(\r)", "\r\r", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            // Remove multiple tabs following a line break with just one tab
+            result = System.Text.RegularExpressions.Regex.Replace(result, "(\r)(\t)+", "\r\t", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            //Initial replacement target string for line breaks
+            string breaks = "\r\r\r";
+            // Initial replacement target string for tabs
+            string tabs = "\t\t\t\t\t";
+            for (int index = 0; index < result.Length; index++)
+            {
+                result = result.Replace(breaks, "\r\r");
+                result = result.Replace(tabs, "\t\t\t\t");
+                breaks = breaks + "\r";
+                tabs = tabs + "\t";
+            }
+            // That's it.
+            return result;
+        }
+        catch
+        {
+            return source;
+        }
+    }
+    #endregion
+}

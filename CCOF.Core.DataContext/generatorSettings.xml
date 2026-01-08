@@ -90,6 +90,7 @@ ccof_fee_region_lookup|
 ccof_fee_update_schedule|
 ccof_feefloorexempt|
 ccof_funding_agreement|
+ccof_invoice|
 ccof_license|
 ccof_license_category|
 ccof_license_childcare_category|
@@ -120,6 +121,7 @@ contact|
 email|
 ofm_ack_codes|
 ofm_data_import|
+ofm_fiscal_year|
 ofm_payment|
 ofm_payment_file_exchange|
 systemuser|
@@ -238,7 +240,7 @@ VoiceMail</TokenCapitalizationOverrides>
   <Namespace>CCOF.Core.DataContext</Namespace>
   <ServiceContextName>DataverseContext</ServiceContextName>
   <SuppressGeneratedCodeAttribute>true</SuppressGeneratedCodeAttribute>
-  <SettingsVersion>2.2025.4.20</SettingsVersion>
+  <SettingsVersion>2.2025.8.26</SettingsVersion>
   <UpdateBuilderSettingsJson>true</UpdateBuilderSettingsJson>
   <Version>2.2025.8.26</Version>
 </Config>

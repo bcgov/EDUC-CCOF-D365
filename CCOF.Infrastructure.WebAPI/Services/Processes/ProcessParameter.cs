@@ -43,6 +43,8 @@ public record ProcessParameter
     public Guid? EnrolmentReportid { get; set; }
     [property: JsonPropertyName("organization")]
     public OrganizationParameter? Organization { get; set; }
+    [property: JsonPropertyName("notification")]
+    public EmailParameter? Notification { get; set; }
     [property:JsonPropertyName("programApproved")]
     public int? programapproved { get; set; }
 
@@ -86,4 +88,36 @@ public record ProcessParameter
         [property: JsonPropertyName("incorporationNumber")]
         public string? incorporationNumber { get; set; }
     }
- }
+    public record EmailParameter
+    {
+        [property: JsonPropertyName("templateId")]
+        public Guid? TemplateId { get; set; }
+
+        [property: JsonPropertyName("templateNumber")]
+        public string? TemplateNumber { get; set; }
+
+        [property: JsonPropertyName("marketingListId")]
+        public Guid? MarketingListId { get; set; }
+
+        [property: JsonPropertyName("senderId")]
+        public Guid? SenderId { get; set; }
+
+        [property: JsonPropertyName("dueDate")]
+        public DateTime? DueDate { get; set; }
+
+        [property: JsonPropertyName("communicationTypeId")]
+        public Guid? CommunicationTypeId { get; set; }
+
+        [property: JsonPropertyName("communicationTypeNum")]
+        public int? CommunicationTypeNum { get; set; }
+
+        [property: JsonPropertyName("subject")]
+        public string? Subject { get; set; }
+
+        [property: JsonPropertyName("emailBody")]
+        public string? EmailBody { get; set; }
+
+        [property: JsonPropertyName("reportStartDate")]
+        public DateTime? ReportStartDate { get; set; }
+    }
+}

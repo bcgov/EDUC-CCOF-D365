@@ -1,7 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using System.Xml.Linq;
-using CCOF.Core.DataContext;
+﻿using CCOF.Core.DataContext;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace CCOF.Infrastructure.WebAPI.Models
 {
@@ -145,8 +146,18 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public DateTime? ccof_intakeperiodstart { get; set; }
         public DateTime? ccof_intakeperiodend { get; set; }
     }
-    
 
+    public class Ack_Codes
+    {
+
+        [JsonPropertyName("ofm_payment_type@OData.Community.Display.V1.FormattedValue")]
+        public string? OfmPaymentTypename { get; set; }
+
+        [JsonPropertyName("ofm_ack_number")]
+        public string? OfmAckNumber { get; set; }
+
+
+    }
     public class Ccof_Application_Basefunding_Application
     {
         public string? ccof_application_basefundingid { get; set; }
@@ -333,6 +344,152 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string? targetEntityLogicalName { get; set; }
         public string? targetEntitySetName { get; set; }
         public string? targetRecordGuid { get; set; }
+    }
+    public class D365PaymentLine : OfM_Payment
+    {
+        public new decimal? ofm_amount { get; set; }
+        public new Facility? ofm_facility { get; set; }
+        public new Guid? _ofm_organization_value { get; set; }
+        public new Application? ofm_application { get; set; }
+        
+        public new string ofm_invoice_number { get; set; } = string.Empty;
+        public new string ofm_siteid { get; set; } = string.Empty;
+        public new string ofm_supplierid { get; set; } = string.Empty;
+        public new int? ofm_payment_method { get; set; }
+        public string _ofm_regardingid_value { get; set; } = string.Empty; // ToDo: a workaround for polymorphic lookup
+
+    }
+
+   
+    public class CcofInvoice : CcOf_Invoice
+    {
+        public string ccof_batch_number { get; set; }
+
+        public DateTime? ccof_effective_date { get; set; }
+
+        public decimal? ccof_grand_total { get; set; }
+
+        public DateTime? ccof_invoice_date { get; set; }
+
+        public string ccof_invoice_number { get; set; }
+
+        public DateTime? ccof_invoice_received_date { get; set; }
+
+        public Guid? ccof_invoiceid { get; set; }
+
+        public Guid? _ccof_organization_value { get; set; }
+        public string ccof_organizationname { get; set; }
+        public string ccof_organization_id { get; set; }
+
+        public int? ccof_payment_type { get; set; }
+
+        public int? ccof_paymentmethod { get; set; }
+        public string ccof_paymentmethodname { get; set; }
+        public string ccof_payment_typename { get; set; }
+        public string ccof_remittance_message { get; set; }
+
+        public DateTime? ccof_revised_effective_date { get; set; }
+
+        public DateTime? ccof_revised_invoice_date { get; set; }
+
+        public DateTime? ccof_revised_invoice_received_date { get; set; }
+
+        public string ccof_site_number { get; set; }
+
+        public string ccof_supplier_number { get; set; }
+
+        public int? statecode { get; set; }
+
+        public int? statuscode { get; set; }
+
+        public new D365FiscalYear? ofm_fiscal_year { get; set; }
+    }
+
+    public class D365FiscalYear : OfM_Fiscal_Year
+    {
+        public new string ofm_financial_year { get; set; } = string.Empty;
+    }
+
+    //public class Invoice
+    //{
+    //    [Required(ErrorMessage = "Amount cannot be null.")]
+    //    public new decimal? ofm_amount { get; set; }
+
+    //    [Required(ErrorMessage = "A facility is mandatory, and its name must be provided.")]
+    //    [JsonPropertyName("ofm_facility.name")]
+    //    public new string ofm_facility { get; set; }
+
+    //    [Required(ErrorMessage = "Funding is required.")]
+    //    public new Guid? _ofm_funding_value { get; set; }
+
+    //    [Required(ErrorMessage = "Fiscal year is mandatory.")]
+    //    [JsonPropertyName("ofm_fiscal_year.ofm_financial_year")]
+    //    public new string? ofm_financial_year { get; set; }
+
+    //    [Required(ErrorMessage = "Invoice number is required.")]
+    //    public new string? ofm_invoice_number { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Site cannot be blank.")]
+    //    public new string? ofm_siteid { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Supplier details is missing.")]
+    //    public new string? ofm_supplierid { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Payment method is mandatory.")]
+    //    public new int? ofm_payment_method { get; set; }
+
+    //    [JsonPropertyName("Ack.ofm_cohortid")]
+    //    [Required(ErrorMessage = "Cohort cannot be blank on funding, and a corresponding acknowledgement number is required.")]
+    //    public string? ofm_cohort { get; set; } = string.Empty;
+
+    //    [Required(ErrorMessage = "Line number is required.")]
+    //    public new int? ofm_invoice_line_number { get; set; }
+
+    //    [Required(ErrorMessage = "Effective date should be today date.")]
+    //    public new DateTime? ofm_effective_date { get; set; }
+
+    //    [Required(ErrorMessage = "Invoice date should be today date.")]
+    //    public new DateTime? ofm_invoice_date { get; set; }
+
+    //    [Required(ErrorMessage = "Invoice recieved date should be today date.")]
+    //    public new DateTime? ofm_invoice_received_date { get; set; }
+
+    //    [Required(ErrorMessage = "Organization detail is required.")]
+    //    public new Guid? _ofm_organization_value { get; set; }
+
+    //    [Required(ErrorMessage = "Payment type is required.")]
+    //    public new int? ofm_payment_type { get; set; }
+    //}
+
+
+    public record D365CommunicationType
+    {
+        public string? ofm_communication_typeid { get; set; }
+        public Int16? ofm_communication_type_number { get; set; }
+    }
+
+ 
+public class ofm_payment_file_exchange
+    {
+        
+        [JsonPropertyName("ofm_payment_file_exchangeid")]
+        public Guid OfmPaymentFileExchangeId { get; set; }
+
+        [JsonPropertyName("ofm_oracle_batch_name")]
+        public string OfmOracleBatchName { get; set; }
+
+        [JsonPropertyName("ofm_input_file_name")]
+        public string OfmInputFileName { get; set; }
+
+        [JsonPropertyName("_owningbusinessunit_value")]
+        public Guid OwningBusinessUnitValue { get; set; }
+
+        [JsonPropertyName("ofm_batch_number")]
+        public string OfmBatchNumber { get; set; }
+        
+
+         [JsonPropertyName("ccof_last_ccof_cgi_oracle_number")]
+        public string ccof_last_cgi_oracle_number { get; set; }
     }
 
 }
