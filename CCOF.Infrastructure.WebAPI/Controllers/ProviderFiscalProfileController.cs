@@ -204,7 +204,7 @@ and _parentaccountid_value eq {token["Organization.accountid"]})";
         {
             if (applicationJson.ccof_applicationccfri_Application_ccof_ap.Count != 0)
             {
-                var getApplicationCCFRIStatement = @$"ccof_applicationccfris?$select=ccof_applicationccfriid,ccof_ccfrioptin,ccof_closureformcomplete,_ccof_facility_value,ccof_formcomplete,ccof_has_nmf,ccof_has_rfi,ccof_nmf_formcomplete,ccof_rfi_formcomplete,ccof_unlock_ccfri,ccof_unlock_nmf_rfi,ccof_unlock_rfi,ccof_unlock_afsenable,ccof_unlock_afs,ccof_afs_status,statuscode&$expand=ccof_Facility($select=accountid),ccof_Application($select=ccof_applicationid)&$filter=(ccof_Facility/ccof_facilitystatus ne 100000010) and (ccof_Application/ccof_applicationid eq {applicationId})";
+                var getApplicationCCFRIStatement = @$"ccof_applicationccfris?$select=ccof_applicationccfriid,ccof_ccfrioptin,ccof_closureformcomplete,_ccof_facility_value,ccof_formcomplete,ccof_has_nmf,ccof_has_rfi,ccof_nmf_formcomplete,ccof_rfi_formcomplete,ccof_unlock_ccfri,ccof_unlock_nmf_rfi,ccof_unlock_rfi,ccof_unlock_afsenable,ccof_unlock_afs,ccof_afs_status,ccof_unlock_closures,statuscode&$expand=ccof_Facility($select=accountid),ccof_Application($select=ccof_applicationid)&$filter=(ccof_Facility/ccof_facilitystatus ne 100000010) and (ccof_Application/ccof_applicationid eq {applicationId})";
 
                 var applicationCCFRIResponse = _d365webapiservice.SendRetrieveRequestAsync(getApplicationCCFRIStatement, true, 5000);
                 if (applicationCCFRIResponse.IsSuccessStatusCode)
