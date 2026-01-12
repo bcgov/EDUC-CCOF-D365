@@ -137,6 +137,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         <filter>
                           <condition attribute="ccof_closure_status" operator="eq" value="100000001" />  
                           <condition attribute="ccof_program_year" operator="eq" value="{programYearGuid}" />
+                          <condition attribute="ccof_facilityinfo" operator="eq" value="{facilityGuid}" />
                           <condition attribute="statecode" operator="eq" value="0" />
                         </filter>
                       </entity>
