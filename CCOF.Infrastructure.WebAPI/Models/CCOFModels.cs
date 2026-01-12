@@ -186,6 +186,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_unlock_nmf_rfi { get; set; }
         public int? ccof_unlock_afsenable { get; set; }
         public int? ccof_unlock_afs { get; set; }
+        public int? ccof_unlock_closures{ get; set; }
         public int? ccof_afs_status { get; set; }
         public bool? ccof_has_nmf { get; set; }
         public bool? ccof_has_rfi { get; set; }
