@@ -100,7 +100,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                         <attribute name="ccof_organization_id" />
                         <attribute name="ccof_payment_type" />
                         <attribute name="ccof_paymentmethod" />
-                        <attribute name="ccof_remittance_message" />
+                        <attribute name="ccof_remittancemessage" />
                         <attribute name="ccof_revised_effective_date" />
                         <attribute name="ccof_revised_invoice_date" />
                         <attribute name="ccof_revised_invoice_received_date" />
@@ -377,20 +377,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     }
                     catch (Exception ex)
                     {
-                        //erroredline.Add(new Invoice
-                        //{
-                        //    ofm_amount = eachline.ccof.Value,
-                        //    ofm_cohort = ackNumber,
-                        //    ofm_effective_date= eachline.CcOf_Effective_Date,
-                        //    ofm_invoice_date=eachline.CcOf_Invoice_Date,
-                        //    ofm_invoice_received_date= eachline.CcOf_Invoice_Received_Date,
-                        //    ofm_invoice_number= eachline.CcOf_Invoice_Number,
-                        //    ofm_payment_method= (Int32) eachline.CcOf_PaymentMethod.Value,
-                        //    ofm_payment_type= (Int32) eachline.CcOf_Payment_Type.Value,
-                        //    ofm_siteid= eachline.CcOf_Site_Number,
-                        //    ofm_supplierid= eachline.CcOf_Supplier_Number,
-                        //    _ofm_organization_value= (Guid) eachline.CcOf_Organization.Id
-                        //});
+                        Console.WriteLine(ex.Message);
 
                     }
                 }
@@ -457,17 +444,6 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             }
 
             #endregion
-
-            //if(erroredline.Count>0)
-            //{
-            //    var invalidLine = await _paymentvalidator.AreAllPropertiesValid(erroredline);
-            //    if (invalidLine.Count > 0)
-            //    {
-            //       var opsuserID = await _paymentvalidator.GetOpssupervisorEmail();
-            //       await _paymentvalidator.SendPaymentErrorEmail(500, _processParams.Notification?.TemplateNumber, (Guid)(_processParams.Notification.SenderId), invalidLine);
-            //    }
-
-            //}
         }
         catch (Exception ex)
         {
