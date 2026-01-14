@@ -1,5 +1,4 @@
-﻿﻿
-var CCOF = CCOF || {};
+﻿var CCOF = CCOF || {};
 CCOF.MonthlyEnrollment = CCOF.MonthlyEnrollment || {};
 CCOF.MonthlyEnrollment.Form = CCOF.MonthlyEnrollment.Form || {};
 CCOF.MonthlyEnrollment.Form = {
@@ -99,7 +98,7 @@ CCOF.MonthlyEnrollment.Form = {
         var isAuthorized = false;
         var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
         userRoles.forEach(function hasRole(item, index) {
-            if (item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Leadership" || item.name === "CCOF - Admin" || item.name === "System Administrator") {
+            if (item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Leadership" || item.name === "System Administrator") {
                 isAuthorized = true;
             }
         });
@@ -168,10 +167,10 @@ CCOF.MonthlyEnrollment.Form = {
                     flowUrl = result[0]["environmentvariabledefinition_environmentvariablevalue"][0].value;
                     let body = {
                         "ERGuid": entityId,
-                        "targetRecordGuid": currentuserid,
+                        "targetRecordGuid": getCleanedGuid(currentuserid),
                         "targetName": username,
                         "targetEntitySetName": "systemusers",
-                        "targetEntityLogicalName": "systemuser",
+                        "targetEntityLogicalName": "systemuser"
                     };
                     // let flowUrl = "https://1a49df49f24be835ab86dc8d9c0010.f5.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e770ae8aae7a4c37bc401dfa3783b988/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bLYcH5CkLCwmM2akaqlXmmOfd9lzE9oTaIXzpy97yds";
                     var input = JSON.stringify(body);
@@ -228,81 +227,16 @@ CCOF.MonthlyEnrollment.Form = {
         let CCOFStatus_Warning = [5, 10];                 // 5-Rejected, 10-Expired	
         let CCOFStatus_Prohibited = [7, 8, 9];            // 7-Approved for payment, 8-Paid, 9-Processing Error	
 
-        isRecalcAllowed = false;
-        if (CCFRIStatus_Eligible.includes(CCFRIStatus) && CCOFStatus_Eligible.includes(CCOFStatus)) {
-            isRecalcAllowed = true;
-        }
-
         var isAuthorized = false;
         var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
         userRoles.forEach(function hasRole(item, index) {
-            if (item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Leadership" || item.name === "CCOF - Admin" || item.name === "System Administrator") {
+            if (item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Leadership" || item.name === "System Administrator") {
                 isAuthorized = true;
             }
         });
-        if (isAuthorized && isRecalcAllowed) {
-            var confirmStrings = {
-                title: "Confirm Recalculation",
-                text: "Are you sure you want to perform recalculation on this record? Please click Yes button to continue, or click No button to cancel.",
-                confirmButtonLabel: "Yes",
-                cancelButtonLabel: "No"
-            };
-            var confirmOptions = { height: 240, width: 520 };
-            Xrm.Navigation.openConfirmDialog(confirmStrings, confirmOptions).then(
-                function (success) {
-                    if (success.confirmed) {
-                        formContext.ui.setFormNotification("Recalculating ER...", "INFO", "RecalculatingER");
-                        let flowUrl;
-                        let result = getSyncMultipleRecord("environmentvariabledefinitions?$select=defaultvalue&$expand=environmentvariabledefinition_environmentvariablevalue($select=value)&$filter=(schemaname eq 'ccof_RecalculateER') and (environmentvariabledefinition_environmentvariablevalue/any(o1:(o1/environmentvariablevalueid ne null)))&$top=50");
-                        flowUrl = result[0]["environmentvariabledefinition_environmentvariablevalue"][0].value;
-                        let body = {
-                            "id": entityId
-                        };
-                        // let flowUrl = "https://1a49df49f24be835ab86dc8d9c0010.f5.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e770ae8aae7a4c37bc401dfa3783b988/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bLYcH5CkLCwmM2akaqlXmmOfd9lzE9oTaIXzpy97yds";
-                        var input = JSON.stringify(body);
-                        var req = new XMLHttpRequest();
-                        req.open("POST", flowUrl, true);
-                        req.setRequestHeader('Content-Type', 'application/json');
-                        req.onreadystatechange = function () {
-                            if (this.readyState === 4) {
-                                req.onreadystatechange = null;
-                                if (this.status === 200) {
-                                    debugger;
-                                    var result = this.response;
-                                    if (formContext.getAttribute("ccof_ccfri_internal_status").getValue() == 6 || formContext.getAttribute("ccof_ccof_internal_status").getValue() == 6) {
-                                        formContext.getAttribute("ccof_ccfri_internal_status").setValue(4);           // 4-Review, 6*-Verified
-                                        formContext.getAttribute("ccof_ccof_internal_status").setValue(4);            // 4-Review, 6*-Verified
-                                        formContext.getAttribute("ccof_ccof_base_verification").setValue(101510001);  // 101510001-Undo Verify
-                                        formContext.getAttribute("ccof_ccfri_verification").setValue(101510001);      // 101510001-Undo Verify                                       
-                                        formContext.data.entity.save();
-                                    }
-                                    formContext.ui.setFormNotification("Recalculating ER is complete", "INFO", "RecalculatingER");
-                                    formContext.ui.clearFormNotification("RecalculatingER");
-                                    Xrm.Navigation.openAlertDialog(result);
-                                }
-                                else if (this.status === 400) {
-                                    Xrm.Utility.closeProgressIndicator();
-                                    formContext.ui.clearFormNotification("RecalculatingER");
-                                    var result = "There are something error! Please contact administrator!\n" + this.response;
-                                    var alertStrings = { confirmButtonLabel: "Ok", text: result, title: "Error!" };
-                                    var alertOptions = { height: 240, width: 520 };
-                                    Xrm.Navigation.openAlertDialog(alertStrings, alertOptions);
-                                }
-                            }
-                        };
-                        req.send(input);
-                    }
-                    else {
-                        console.log("The recalculation does NOT proceed");
-                    }
-                },
-                function (error) {
-                    Xrm.Navigation.openErrorDialog({ message: error });
-                });
-
-        } else {
-            var alertStrings = { confirmButtonLabel: "Ok", text: "You are not allowed to perform recalculation. Please verify if you have proper security role, and if the CCFRI & CCOF statuses are eligible to proceed.", title: "Recalculation is prohibited" };
-            var alertOptions = { height: 240, width: 520 };
+        if (!isAuthorized) {
+            let alertStrings = { confirmButtonLabel: "Ok", text: "You are not allowed to perform recalculation. Please verify if you have proper security role.", title: "Recalculation is prohibited" };
+            let alertOptions = { height: 240, width: 520 };
             Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
                 function (success) {
                     console.log("Alert dialog closed");
@@ -311,7 +245,118 @@ CCOF.MonthlyEnrollment.Form = {
                     console.log(error.message);
                 }
             );
+            return;
         }
+
+        isRecalcAllowed = false;
+        if (CCFRIStatus_Eligible.includes(CCFRIStatus) && CCOFStatus_Eligible.includes(CCOFStatus)) {
+            isRecalcAllowed = true;
+        }
+        if (!isRecalcAllowed) {
+            let alertStrings = { confirmButtonLabel: "Ok", text: "You are not allowed to perform recalculation. Please verify if the CCFRI & CCOF statuses are eligible to proceed.", title: "Recalculation is prohibited" };
+            let alertOptions = { height: 240, width: 520 };
+            Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+                function (success) {
+                    console.log("Alert dialog closed");
+                },
+                function (error) {
+                    console.log(error.message);
+                }
+            );
+            return;
+        }
+
+        var confirmStrings = {
+            title: "Confirm Recalculation",
+            text: "Are you sure you want to perform recalculation on this record? Please click Yes button to continue, or click No button to cancel.",
+            confirmButtonLabel: "Yes",
+            cancelButtonLabel: "No"
+        };
+        var confirmOptions = { height: 240, width: 520 };
+        Xrm.Navigation.openConfirmDialog(confirmStrings, confirmOptions).then(
+            function (success) {
+                if (success.confirmed) {
+                    formContext.ui.setFormNotification("Recalculating ER...", "INFO", "RecalculatingER");
+                    let flowUrl;
+                    let result = getSyncMultipleRecord("environmentvariabledefinitions?$select=defaultvalue&$expand=environmentvariabledefinition_environmentvariablevalue($select=value)&$filter=(schemaname eq 'ccof_RecalculateER') and (environmentvariabledefinition_environmentvariablevalue/any(o1:(o1/environmentvariablevalueid ne null)))&$top=50");
+                    flowUrl = result[0]["environmentvariabledefinition_environmentvariablevalue"][0].value;
+                    let body = {
+                        "ERGuid": entityId,
+                        "targetRecordGuid": getCleanedGuid(currentuserid),
+                        "targetName": username,
+                        "targetEntitySetName": "systemusers",
+                        "targetEntityLogicalName": "systemuser"
+                    };
+                    // let flowUrl = "https://1a49df49f24be835ab86dc8d9c0010.f5.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e770ae8aae7a4c37bc401dfa3783b988/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bLYcH5CkLCwmM2akaqlXmmOfd9lzE9oTaIXzpy97yds";
+                    var input = JSON.stringify(body);
+                    var req = new XMLHttpRequest();
+                    req.open("POST", flowUrl, true);
+                    req.setRequestHeader('Content-Type', 'application/json');
+                    req.onreadystatechange = function () {
+                        if (this.readyState === 4) {
+                            req.onreadystatechange = null;
+                            if (this.status === 200) {
+                                debugger;
+                                var result = this.response;
+                                if (formContext.getAttribute("ccof_ccfri_internal_status").getValue() == 6 || formContext.getAttribute("ccof_ccof_internal_status").getValue() == 6) {
+                                    formContext.getAttribute("ccof_ccfri_internal_status").setValue(4);           // 4-Review, 6*-Verified
+                                    formContext.getAttribute("ccof_ccof_internal_status").setValue(4);            // 4-Review, 6*-Verified
+                                    formContext.getAttribute("ccof_ccof_base_verification").setValue(101510001);  // 101510001-Undo Verify
+                                    formContext.getAttribute("ccof_ccfri_verification").setValue(101510001);      // 101510001-Undo Verify                                       
+                                    formContext.data.entity.save();
+                                }
+                                formContext.ui.setFormNotification("Recalculating ER is complete", "INFO", "RecalculatingER");
+                                formContext.ui.clearFormNotification("RecalculatingER");
+                                Xrm.Navigation.openAlertDialog(result);
+                            }
+                            else if (this.status === 400) {
+                                Xrm.Utility.closeProgressIndicator();
+                                formContext.ui.clearFormNotification("RecalculatingER");
+                                var result = "There are something error! Please contact administrator!\n" + this.response;
+                                var alertStrings = { confirmButtonLabel: "Ok", text: result, title: "Error!" };
+                                var alertOptions = { height: 240, width: 520 };
+                                Xrm.Navigation.openAlertDialog(alertStrings, alertOptions);
+                            }
+                        }
+                    };
+                    req.send(input);
+                }
+                else {
+                    console.log("The recalculation does NOT proceed");
+                }
+            },
+            function (error) {
+                Xrm.Navigation.openErrorDialog({ message: error });
+            }
+        );
+    },
+    showHideCreateAdjustmentERButton: function (primaryControl) {
+        debugger;
+        var formContext = primaryControl;
+
+        var visible = false;
+        var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+        userRoles.forEach(function hasRole(item, index) {
+            if (item.name === "CCOF - Admin" || item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Sr. Adjudicator"
+                || item.name === "CCOF - Mod QC" || item.name === "CCOF - Leadership") {
+                visible = true;
+            }
+        });
+        return visible;
+    },
+    showHideRecalculateButton: function (primaryControl) {
+        debugger;
+        var formContext = primaryControl;
+
+        var visible = false;
+        var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+        userRoles.forEach(function hasRole(item, index) {
+            if (item.name === "CCOF - Admin" || item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Sr. Adjudicator"
+                || item.name === "CCOF - Mod QC" || item.name === "CCOF - Leadership") {
+                visible = true;
+            }
+        });
+        return visible;
     }
 }
 function onChange_locked(executionContext) {
@@ -339,14 +384,27 @@ function onChange_locked(executionContext) {
 }
 function onChange_CCOFBaseVerification(executionContext) {
     debugger;
+    let userSettings = Xrm.Utility.getGlobalContext().userSettings;
+    let currentUser = new Array();
+    currentUser[0] = new Object();
+    currentUser[0].entityType = "systemuser";
+    currentUser[0].id = userSettings.userId;
+    currentUser[0].name = userSettings.userName;
+    let currentDateTime = new Date();
     let formContext = executionContext.getFormContext();
     if (formContext.getAttribute("ccof_ccof_base_verification").getValue() === 101510002) { // Reject
         formContext.getControl("ccof_rejectreason").setVisible(true);
         formContext.getAttribute("ccof_rejectreason").setRequiredLevel("required")
         formContext.getControl("ccof_internalreason").setVisible(true);
         if (formContext.getAttribute("ccof_ccfri_verification").getValue() != 101510002) {
-            formContext.getAttribute("ccof_ccfri_verification").setValue(101510002); // set CCFRI Verification to Reject
+            formContext.getAttribute("ccof_ccfri_verification").setValue(101510002);         // set CCFRI Verification to Reject
+            formContext.getAttribute("ccof_qr_verified_by_ccfri").setValue(null);     // set lookup to current user
+            formContext.getAttribute("ccof_qr_verified_on_ccfri").setValue(null); // set now() to verification date             
         }
+        formContext.getAttribute("ccof_qr_verified_by_ccof").setValue(null);          // set lookup to  null
+        formContext.getAttribute("ccof_qr_verified_on_ccof").setValue(null);      // set now() to verification null    
+        formContext.getControl("ccof_qr_verified_by_ccof").setDisabled(false);         // set unlocked
+        formContext.getControl("ccof_qr_verified_on_ccof").setDisabled(false);  	//set unlocked  
     } else {
         formContext.getAttribute("ccof_rejectreason").setRequiredLevel("none")
         formContext.getAttribute("ccof_rejectreason").setValue(null);
@@ -357,20 +415,49 @@ function onChange_CCOFBaseVerification(executionContext) {
         formContext.getControl("ccof_internalreason").setVisible(false);
         formContext.getAttribute("ccof_internalreason").setValue(null);
         if (formContext.getAttribute("ccof_ccfri_verification").getValue() === 101510002) { // Reject
-            formContext.getAttribute("ccof_ccfri_verification").setValue(null); // set CCFRI Verification to null
+            formContext.getAttribute("ccof_ccfri_verification").setValue(null);             // set CCFRI Verification to null
+            formContext.getAttribute("ccof_qr_verified_by_ccfri").setValue(null);           // set lookup to null
+            formContext.getAttribute("ccof_qr_verified_on_ccfri").setValue(null);           // set now() to null  	
+            formContext.getControl("ccof_qr_verified_by_ccfri").setDisabled(false);         // set unlocked
+            formContext.getControl("ccof_qr_verified_on_ccfri").setDisabled(false);  	//set unlocked  		
         }
+        if (formContext.getAttribute("ccof_ccof_base_verification").getValue() === 101510000) { //verrified
+            formContext.getAttribute("ccof_qr_verified_by_ccof").setValue(currentUser);         // set lookup to current user
+            formContext.getAttribute("ccof_qr_verified_on_ccof").setValue(currentDateTime);     // set now() to verification date   
+            formContext.getControl("ccof_qr_verified_by_ccof").setDisabled(true);         // set locked
+            formContext.getControl("ccof_qr_verified_on_ccof").setDisabled(true);  	//setlocked
+        } else {
+            formContext.getAttribute("ccof_qr_verified_by_ccof").setValue(null);         // set lookup to current user
+            formContext.getAttribute("ccof_qr_verified_on_ccof").setValue(null);     // set now() to verification date 
+            formContext.getControl("ccof_qr_verified_by_ccof").setDisabled(false);         // set unlocked
+            formContext.getControl("ccof_qr_verified_on_ccof").setDisabled(false);  	//set unlocked  
+        }
+
     }
 }
 function onChange_CCFRIVerification(executionContext) {
     debugger;
+    let userSettings = Xrm.Utility.getGlobalContext().userSettings;
+    let currentUser = new Array();
+    currentUser[0] = new Object();
+    currentUser[0].entityType = "systemuser";
+    currentUser[0].id = userSettings.userId;
+    currentUser[0].name = userSettings.userName;
+    let currentDateTime = new Date();
     let formContext = executionContext.getFormContext();
     if (formContext.getAttribute("ccof_ccfri_verification").getValue() === 101510002) { // Reject
         formContext.getControl("ccof_rejectreason").setVisible(true);
         formContext.getAttribute("ccof_rejectreason").setRequiredLevel("required")
         formContext.getControl("ccof_internalreason").setVisible(true);
         if (formContext.getAttribute("ccof_ccof_base_verification").getValue() != 101510002) {
-            formContext.getAttribute("ccof_ccof_base_verification").setValue(101510002); //  set Base Verification to Reject
+            formContext.getAttribute("ccof_ccof_base_verification").setValue(101510002);       // set Base Verification to Reject
+            formContext.getAttribute("ccof_qr_verified_by_ccof").setValue(null);        // set lookup to current user
+            formContext.getAttribute("ccof_qr_verified_on_ccof").setValue(null);    // set now() to verification date            
         }
+        formContext.getAttribute("ccof_qr_verified_by_ccfri").setValue(null);           // set lookup to current user
+        formContext.getAttribute("ccof_qr_verified_on_ccfri").setValue(null);       // set now() to verification date
+        formContext.getControl("ccof_qr_verified_by_ccfri").setDisabled(false);         // set unlocked
+        formContext.getControl("ccof_qr_verified_on_ccfri").setDisabled(false);  	//set unlocked           
     } else {
         formContext.getAttribute("ccof_rejectreason").setRequiredLevel("none")
         formContext.getAttribute("ccof_rejectreason").setValue(null);
@@ -381,8 +468,25 @@ function onChange_CCFRIVerification(executionContext) {
         formContext.getControl("ccof_internalreason").setVisible(false);
         formContext.getAttribute("ccof_internalreason").setValue(null);
         if (formContext.getAttribute("ccof_ccof_base_verification").getValue() === 101510002) {
-            formContext.getAttribute("ccof_ccof_base_verification").setValue(null); //  set Base Verification to Reject
+            formContext.getAttribute("ccof_ccof_base_verification").setValue(null);            // set Base Verification to Reject
+            formContext.getAttribute("ccof_qr_verified_by_ccof").setValue(null);               // set lookup to null
+            formContext.getAttribute("ccof_qr_verified_on_ccof").setValue(null);               // set now() to null 	
+            formContext.getControl("ccof_qr_verified_by_ccof").setDisabled(false);         // set unlocked
+            formContext.getControl("ccof_qr_verified_on_ccof").setDisabled(false);  	//set unlocked  	
         }
+        if (formContext.getAttribute("ccof_ccfri_verification").getValue() === 101510000) {   //verify
+            formContext.getAttribute("ccof_qr_verified_by_ccfri").setValue(currentUser);           // set lookup to current user
+            formContext.getAttribute("ccof_qr_verified_on_ccfri").setValue(currentDateTime);       // set now() to verification date     
+            formContext.getControl("ccof_qr_verified_by_ccfri").setDisabled(true);         // set locked
+            formContext.getControl("ccof_qr_verified_on_ccfri").setDisabled(true);  	//setlocked
+        } else {
+            formContext.getAttribute("ccof_qr_verified_by_ccfri").setValue(null);           // set lookup to current user
+            formContext.getAttribute("ccof_qr_verified_on_ccfri").setValue(null);
+            formContext.getControl("ccof_qr_verified_by_ccfri").setDisabled(false);         // set unlocked
+            formContext.getControl("ccof_qr_verified_on_ccfri").setDisabled(false);  	//set unlocked   
+
+        }
+
     }
 }
 function onChange_RejectReason(executionContext) {
