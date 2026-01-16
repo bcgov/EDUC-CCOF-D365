@@ -30,7 +30,6 @@ D365_CONFIGURATION=$(jq << JSON
     "MinsToCache": 60
   },
   "D365AuthSettings": $(cat "$DYNAMICS_AUTHENTICATION_SETTINGS"),
-  "BCCASApi": $(cat "$BCCASApi"),
   "ExternalServices":$(cat "$ExternalServices")
 }
 
