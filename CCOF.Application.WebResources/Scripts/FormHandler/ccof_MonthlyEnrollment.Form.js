@@ -95,27 +95,6 @@ CCOF.MonthlyEnrollment.Form = {
         let CCOFStatus_Warning = [5, 10];                  // 5-Rejected, 10-Expired	
         let CCOFStatus_Prohibited = [7, 8, 9];             // 7-Approved for payment, 8-Paid, 9-Processing Error	
 
-        var isAuthorized = false;
-        var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
-        userRoles.forEach(function hasRole(item, index) {
-            if (item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Leadership" || item.name === "System Administrator") {
-                isAuthorized = true;
-            }
-        });
-        if (!isAuthorized) {
-            let alertStrings = { confirmButtonLabel: "Ok", text: "You are not allowed to create adjustment enrolment report for it. Please verify if you have proper security role.", title: "Adjustment Enrolment Report Creation is prohibited" };
-            let alertOptions = { height: 240, width: 520 };
-            Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
-                function (success) {
-                    console.log("Alert dialog closed");
-                },
-                function (error) {
-                    console.log(error.message);
-                }
-            );
-            return;
-        }
-
         isCreateAdjusment = false;
         if (CCFRIStatus_Prohibited.includes(CCFRIStatus) && CCOFStatus_Prohibited.includes(CCOFStatus)) {
             isCreateAdjusment = true;
@@ -226,27 +205,6 @@ CCOF.MonthlyEnrollment.Form = {
         let CCOFStatus_Eligible = [1, 2, 3, 4, 6];        // 1-Created, 2-Incomplete, 3-Submitted, 4-Review, 6*-Verified
         let CCOFStatus_Warning = [5, 10];                 // 5-Rejected, 10-Expired	
         let CCOFStatus_Prohibited = [7, 8, 9];            // 7-Approved for payment, 8-Paid, 9-Processing Error	
-
-        var isAuthorized = false;
-        var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
-        userRoles.forEach(function hasRole(item, index) {
-            if (item.name === "CCOF - Accounts" || item.name === "CCOF - Sr. Accounts" || item.name === "CCOF - Leadership" || item.name === "System Administrator") {
-                isAuthorized = true;
-            }
-        });
-        if (!isAuthorized) {
-            let alertStrings = { confirmButtonLabel: "Ok", text: "You are not allowed to perform recalculation. Please verify if you have proper security role.", title: "Recalculation is prohibited" };
-            let alertOptions = { height: 240, width: 520 };
-            Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
-                function (success) {
-                    console.log("Alert dialog closed");
-                },
-                function (error) {
-                    console.log(error.message);
-                }
-            );
-            return;
-        }
 
         isRecalcAllowed = false;
         if (CCFRIStatus_Eligible.includes(CCFRIStatus) && CCOFStatus_Eligible.includes(CCOFStatus)) {
