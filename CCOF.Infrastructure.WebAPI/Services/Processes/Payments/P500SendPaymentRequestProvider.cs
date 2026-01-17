@@ -76,8 +76,42 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         }
     }
 
-    
-  
+    public string RequestCCOFPaymentLineUri
+    {
+        get
+        {
+            // For reference only
+            var fetchXml = $"""
+                    <fetch>
+                      <entity name="ofm_payment">
+                        <attribute name="statecode" />
+                        <attribute name="statuscode" />
+                        <attribute name="ofm_paymentid" />
+                        <filter>
+                          <condition attribute="statecode" operator="eq" value="0" />
+                        </filter>
+                        <link-entity name="ccof_invoice" from="ccof_invoiceid" to="ccof_invoice" link-type="inner" alias="invoice">
+                          <attribute name="ccof_coding_line_type" />
+                          <attribute name="ccof_invoiceid" />
+                          <attribute name="ccof_organization" />
+                          <attribute name="ccof_payment_type" />
+                          <filter>
+                            <condition attribute="statecode" operator="eq" value="0" />
+                            <condition attribute="statuscode" operator="eq" value="{(int)CcOf_Invoice_StatusCode.Approved}" />
+                            <condition attribute="owningbusinessunitname" operator="like" value="%CCOF%" />
+                          </filter>
+                        </link-entity>
+                      </entity>
+                    </fetch>
+                    """;
+            var requestUri = $"""
+                         ofm_payments?fetchXml={WebUtility.UrlEncode(fetchXml)}
+                         """;
+
+            return requestUri;
+        }
+    }
+
     public string RequestInvoiceUri
     {
         get
@@ -225,6 +259,38 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         return await Task.FromResult(_data);
     }
+    public async Task<ProcessData> GetCCOFPaymentLineData()
+    {
+        _logger.LogDebug(CustomLogEvent.Process, "Calling GetData of {nameof}", nameof(P500SendPaymentRequestProvider));
+
+
+        var response = await _d365webapiservice.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, RequestCCOFPaymentLineUri, isProcess: true);
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError(CustomLogEvent.Process, "Failed to query the requests with the server error {responseBody}", responseBody);
+
+            return await Task.FromResult(new ProcessData(string.Empty));
+        }
+
+        var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+        JsonNode d365Result = string.Empty;
+        if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
+        {
+            if (currentValue?.AsArray().Count == 0)
+            {
+                _logger.LogInformation(CustomLogEvent.Process, "No records found");
+            }
+            d365Result = currentValue!;
+        }
+
+        _data = new ProcessData(d365Result);
+
+        _logger.LogDebug(CustomLogEvent.Process, "Query Result {_data}", _data.Data.ToJsonString());
+
+        return await Task.FromResult(_data);
+    }
 
     public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
     {
@@ -232,7 +298,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         List<InvoiceHeader> invoiceHeaders = [];
         List<List<InvoiceHeader>> headerList = [];
         List<CcofInvoice> serializedPaymentData = [];
-
+        List<OfM_Payment> CCOFPaymentLines = [];  // for CCOF Paymentlines
 
         CcofInvoice eachline ;
          var line = typeof(InvoiceLines);
@@ -247,6 +313,12 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var grouppayment = serializedPaymentData?.GroupBy(p => p.ccof_invoice_number).ToList();
             //var fiscalyear = serializedPaymentData?.FirstOrDefault()?.ofm_fiscal_year.ofm_financial_year;
             var fiscalyear = "2026";
+
+            var ccofPaymentLineData = await GetCCOFPaymentLineData();
+            CCOFPaymentLines= JsonSerializer.Deserialize<List<OfM_Payment>>(ccofPaymentLineData.Data.ToString());
+            var testString = CCOFPaymentLines.First().Id;
+
+            await MarkCCOFPaymentLinesAsProcessed(appUserService, d365WebApiService, CCOFPaymentLines);
 
             #endregion
 
@@ -441,6 +513,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
                 if (savePFEResult)
                     await MarkPaymentLinesAsProcessed(appUserService, d365WebApiService, paylinesToUpdate);
+                    await MarkCCOFPaymentLinesAsProcessed(appUserService, d365WebApiService, CCOFPaymentLines);
             }
 
             #endregion
@@ -482,7 +555,28 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         return paymentBatchResult.SimpleBatchResult;
     }
+    private async Task<JsonObject> MarkCCOFPaymentLinesAsProcessed(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, List<OfM_Payment> payments)
+    {
+        var updatePayRequests = new List<HttpRequestMessage>() { };
+        payments.ForEach(pay =>
+        {
+            var payToUpdate = new JsonObject {
+                  { "statuscode", Convert.ToInt32(OfM_Payment_StatusCode.ProcessingPayment) }
+             };
+            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(OfM_Payment.EntityLogicalCollectionName, pay.OfM_PaymentId), payToUpdate));
+        });
 
+        var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePayRequests, null);
+        if (paymentBatchResult.Errors.Any())
+        {
+            var errors = ProcessResult.Failure(ProcessId, paymentBatchResult.Errors, paymentBatchResult.TotalProcessed, paymentBatchResult.TotalRecords);
+            _logger.LogError(CustomLogEvent.Process, "Failed to update invoice status with an error: {error}", JsonValue.Create(errors)!.ToString());
+
+            return errors.SimpleProcessResult;
+        }
+
+        return paymentBatchResult.SimpleBatchResult;
+    }
     private async Task<bool> SaveInboxFileOnNewPaymentFileExchangeRecord(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, string feederNumber, string result)
     {
         var inboxFileName = ("INBOX.F" + feederNumber + "." + DateTime.UtcNow.ToLocalPST().ToString("yyyyMMddHHmmss"));
