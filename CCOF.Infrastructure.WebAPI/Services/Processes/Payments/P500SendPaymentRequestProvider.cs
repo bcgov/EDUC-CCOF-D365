@@ -298,7 +298,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         List<InvoiceHeader> invoiceHeaders = [];
         List<List<InvoiceHeader>> headerList = [];
         List<CcofInvoice> serializedPaymentData = [];
-        List<OfM_Payment> CCOFPaymentLines = [];  // for CCOF Paymentlines
+        List<D365PaymentLine> CCOFPaymentLines = [];  // for CCOF Paymentlines
 
         CcofInvoice eachline ;
          var line = typeof(InvoiceLines);
@@ -315,11 +315,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var fiscalyear = "2026";
 
             var ccofPaymentLineData = await GetCCOFPaymentLineData();
-            CCOFPaymentLines= JsonSerializer.Deserialize<List<OfM_Payment>>(ccofPaymentLineData.Data.ToString());
-            var testString = CCOFPaymentLines.First().Id;
-
-            await MarkCCOFPaymentLinesAsProcessed(appUserService, d365WebApiService, CCOFPaymentLines);
-
+            CCOFPaymentLines= JsonSerializer.Deserialize<List<D365PaymentLine>>(ccofPaymentLineData.Data.ToString());
             #endregion
 
             #region Step 0.2: Get latest Oracle Batch Number
@@ -555,7 +551,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         return paymentBatchResult.SimpleBatchResult;
     }
-    private async Task<JsonObject> MarkCCOFPaymentLinesAsProcessed(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, List<OfM_Payment> payments)
+    private async Task<JsonObject> MarkCCOFPaymentLinesAsProcessed(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, List<D365PaymentLine> payments)
     {
         var updatePayRequests = new List<HttpRequestMessage>() { };
         payments.ForEach(pay =>
@@ -563,7 +559,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var payToUpdate = new JsonObject {
                   { "statuscode", Convert.ToInt32(OfM_Payment_StatusCode.ProcessingPayment) }
              };
-            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(OfM_Payment.EntityLogicalCollectionName, pay.OfM_PaymentId), payToUpdate));
+            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(D365PaymentLine.EntityLogicalCollectionName, pay.ofm_paymentid), payToUpdate));
         });
 
         var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePayRequests, null);
