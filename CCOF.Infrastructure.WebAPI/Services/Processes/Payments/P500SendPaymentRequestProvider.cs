@@ -79,7 +79,6 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
     {
         get
         {
-            // For reference only
             var fetchXml = $"""
                     <fetch>
                       <entity name="ofm_payment">
@@ -266,7 +265,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         List<InvoiceHeader> invoiceHeaders = [];
         List<List<InvoiceHeader>> headerList = [];
         List<CcofInvoice> serializedInvoiceData = [];
-
+        List<D365PaymentLine> CCOFPaymentLines = [];  // for CCOF Paymentlines
         List<InvoiceCommentLines> invoiceCommentLines = [];
         CcofInvoice eachline ;
          var line = typeof(InvoiceLines);
@@ -282,7 +281,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var grouppayment = serializedInvoiceData?.GroupBy(p => p.ccof_invoice_number).ToList();
             //var fiscalyear = serializedPaymentData?.FirstOrDefault()?.ofm_fiscal_year.ofm_financial_year;
             var fiscalyear = "2026";
-
+            var ccofPaymentLineData = await GetCCOFPaymentLineData();
+            CCOFPaymentLines = JsonSerializer.Deserialize<List<D365PaymentLine>>(ccofPaymentLineData.Data.ToString());
             #endregion
 
             #region Step 0.2: Get latest Oracle Batch Number
@@ -532,6 +532,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
                 if (savePFEResult)
                     await MarkPaymentLinesAsProcessed(appUserService, d365WebApiService, paylinesToUpdate);
+                await MarkCCOFPaymentLinesAsProcessed(appUserService, d365WebApiService, CCOFPaymentLines);
             }
 
             #endregion
@@ -573,7 +574,28 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         return paymentBatchResult.SimpleBatchResult;
     }
+    private async Task<JsonObject> MarkCCOFPaymentLinesAsProcessed(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, List<D365PaymentLine> payments)
+    {
+        var updatePayRequests = new List<HttpRequestMessage>() { };
+        payments.ForEach(pay =>
+        {
+            var payToUpdate = new JsonObject {
+                  { "statuscode", Convert.ToInt32(OfM_Payment_StatusCode.ProcessingPayment) }
+             };
+            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(D365PaymentLine.EntityLogicalCollectionName, pay.ofm_paymentid), payToUpdate));
+        });
 
+        var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePayRequests, null);
+        if (paymentBatchResult.Errors.Any())
+        {
+            var errors = ProcessResult.Failure(ProcessId, paymentBatchResult.Errors, paymentBatchResult.TotalProcessed, paymentBatchResult.TotalRecords);
+            _logger.LogError(CustomLogEvent.Process, "Failed to update invoice status with an error: {error}", JsonValue.Create(errors)!.ToString());
+
+            return errors.SimpleProcessResult;
+        }
+
+        return paymentBatchResult.SimpleBatchResult;
+    }
     private async Task<bool> SaveInboxFileOnNewPaymentFileExchangeRecord(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, string feederNumber, string result)
     {
         var inboxFileName = ("INBOX.F" + feederNumber + "." + DateTime.UtcNow.ToLocalPST().ToString("yyyyMMddHHmmss"));
