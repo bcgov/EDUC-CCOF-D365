@@ -5756,11 +5756,14 @@ Intentionally supplying information that is false or misleading with respect to 
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND Not(IsNothing(Fields!org_ccof_partner3lastname.Value)), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
+                  </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
@@ -5770,6 +5773,9 @@ Intentionally supplying information that is false or misleading with respect to 
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "APPData")))), false, true)</Hidden>
+                  </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember />
@@ -5810,11 +5816,13 @@ Intentionally supplying information that is false or misleading with respect to 
                   <Visibility>
                     <Hidden>=IIF(First(Fields!ccof_applicationtypeValue.Value)=100000002,False,True)</Hidden>
                   </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
                     <Hidden>=IIF(First(Fields!ccof_applicationtypeValue.Value)=100000002,False,True)</Hidden>
                   </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
