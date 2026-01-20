@@ -264,7 +264,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000001, First(Fields!app_ccof_public_sector_employer.Value, "CRM"), "N/a")</Value>
+                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000000, First(Fields!app_ccof_public_sector_employer.Value, "CRM"), "N/a")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <TextDecoration>None</TextDecoration>
@@ -297,7 +297,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000001, First(Fields!app_ccof_describe_your_org.Value, "CRM"), "N/a")</Value>
+                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000000, First(Fields!app_ccof_describe_your_org.Value, "CRM"), "N/a")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <TextDecoration>None</TextDecoration>
@@ -320,7 +320,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000001, First(Fields!app_ccof_ecewe_selecttheapplicablesector.Value, "CRM"), "N/a")</Value>
+                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000000, First(Fields!app_ccof_ecewe_selecttheapplicablesector.Value, "CRM"), "N/a")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <TextDecoration>None</TextDecoration>
@@ -422,7 +422,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000000 AND (First(Fields!app_ccof_describe_your_orgValue.Value, "CRM") = 100000001 Or First(Fields!app_ccof_public_sector_employerValue.Value, "CRM")) = 1, First(Fields!ccof_facilityunionstatus.Value, "CRM"), "N/a")</Value>
+                                  <Value>=IIF(First(Fields!app_ccof_providertypeValue.Value, "CRM") = 100000000 AND First(Fields!app_ccof_describe_your_orgValue.Value, "CRM") = 100000001 AND First(Fields!app_ccof_public_sector_employerValue.Value, "CRM") = 1, First(Fields!ccof_facilityunionstatus.Value, "CRM"), "N/a")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <TextDecoration>None</TextDecoration>
