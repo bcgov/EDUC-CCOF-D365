@@ -75,9 +75,43 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             return requestUri;
         }
     }
+    public string RequestCCOFPaymentLineUri
+    {
+        get
+        {
+            // For reference only
+            var fetchXml = $"""
+                    <fetch>
+                      <entity name="ofm_payment">
+                        <attribute name="statecode" />
+                        <attribute name="statuscode" />
+                        <attribute name="ofm_paymentid" />
+                        <filter>
+                          <condition attribute="statecode" operator="eq" value="0" />
+                        </filter>
+                        <link-entity name="ccof_invoice" from="ccof_invoiceid" to="ccof_invoice" link-type="inner" alias="invoice">
+                          <attribute name="ccof_coding_line_type" />
+                          <attribute name="ccof_invoiceid" />
+                          <attribute name="ccof_organization" />
+                          <attribute name="ccof_payment_type" />
+                          <filter>
+                            <condition attribute="statecode" operator="eq" value="0" />
+                            <condition attribute="statuscode" operator="eq" value="{(int)CcOf_Invoice_StatusCode.Approved}" />
+                            <condition attribute="owningbusinessunitname" operator="like" value="%CCOF%" />
+                          </filter>
+                        </link-entity>
+                      </entity>
+                    </fetch>
+                    """;
+            var requestUri = $"""
+                         ofm_payments?fetchXml={WebUtility.UrlEncode(fetchXml)}
+                         """;
 
-    
-  
+            return requestUri;
+        }
+    }
+
+
     public string RequestInvoiceUri
     {
         get
