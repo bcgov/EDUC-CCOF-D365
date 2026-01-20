@@ -258,7 +258,38 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         return await Task.FromResult(_data);
     }
+    public async Task<ProcessData> GetCCOFPaymentLineData()
+    {
+        _logger.LogDebug(CustomLogEvent.Process, "Calling GetData of {nameof}", nameof(P500SendPaymentRequestProvider));
 
+
+        var response = await _d365webapiservice.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, RequestCCOFPaymentLineUri, isProcess: true);
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError(CustomLogEvent.Process, "Failed to query the requests with the server error {responseBody}", responseBody);
+
+            return await Task.FromResult(new ProcessData(string.Empty));
+        }
+
+        var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+        JsonNode d365Result = string.Empty;
+        if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
+        {
+            if (currentValue?.AsArray().Count == 0)
+            {
+                _logger.LogInformation(CustomLogEvent.Process, "No records found");
+            }
+            d365Result = currentValue!;
+        }
+
+        _data = new ProcessData(d365Result);
+
+        _logger.LogDebug(CustomLogEvent.Process, "Query Result {_data}", _data.Data.ToJsonString());
+
+        return await Task.FromResult(_data);
+    }
     public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
     {
         _processParams = processParams;
