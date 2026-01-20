@@ -387,7 +387,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? ccof_paymentmethod { get; set; }
         public string ccof_paymentmethodname { get; set; }
         public string ccof_payment_typename { get; set; }
-        public string ccof_remittance_message { get; set; }
+        public string ccof_remittancemessage { get; set; }
 
         public DateTime? ccof_revised_effective_date { get; set; }
 

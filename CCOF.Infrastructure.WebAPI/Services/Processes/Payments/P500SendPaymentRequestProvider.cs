@@ -231,20 +231,21 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         _processParams = processParams;
         List<InvoiceHeader> invoiceHeaders = [];
         List<List<InvoiceHeader>> headerList = [];
-        List<CcofInvoice> serializedPaymentData = [];
+        List<CcofInvoice> serializedInvoiceData = [];
 
-
+        List<InvoiceCommentLines> invoiceCommentLines = [];
         CcofInvoice eachline ;
          var line = typeof(InvoiceLines);
+        var commentline = typeof(InvoiceCommentLines);
         var header = typeof(InvoiceHeader);
         string inboxFileBytes = string.Empty;
 
         #region Step 0.1: Get paymentlines data & current Financial Year
         try
         {
-            var paymentData = await GetPaymentLineData();
-            serializedPaymentData = JsonSerializer.Deserialize<List<CcofInvoice>>(paymentData.Data.ToString());
-            var grouppayment = serializedPaymentData?.GroupBy(p => p.ccof_invoice_number).ToList();
+            var invoiceData = await GetPaymentLineData();
+            serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(invoiceData.Data.ToString());
+            var grouppayment = serializedInvoiceData?.GroupBy(p => p.ccof_invoice_number).ToList();
             //var fiscalyear = serializedPaymentData?.FirstOrDefault()?.ofm_fiscal_year.ofm_financial_year;
             var fiscalyear = "2026";
 
@@ -283,9 +284,20 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
             #region Step 1: Handlebars format to generate Inbox data
 
-            string source = "{{feederNumber}}{{batchType}}{{transactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{messageVersionNumber}}{{delimiter}}\n" + "{{#each InvoiceHeader}}{{this.feederNumber}}{{this.batchType}}{{this.headertransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.PONumber}}{{this.invoiceType}}{{this.invoiceDate}}{{this.payGroupLookup}}{{this.remittanceCode}}{{this.grossInvoiceAmount}}{{this.CAD}}{{this.invoiceDate}}{{this.termsName}}{{this.description}}{{this.goodsDate}}{{this.invoiceRecDate}}{{this.oracleBatchName}}{{this.SIN}}{{this.payflag}}{{this.flow}}{{this.delimiter}}\n" +
-                            "{{#each InvoiceLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.invoiceLineNumber}}{{this.committmentLine}}{{this.lineAmount}}{{this.lineCode}}{{this.distributionACK}}{{this.lineDescription}}{{this.effectiveDate}}{{this.quantity}}{{this.unitPrice}}{{this.optionalData}}{{this.distributionSupplierNumber}}{{this.flow}}{{this.delimiter}}\n{{/each}}{{/each}}" +
-                            "{{this.feederNumber}}{{this.batchType}}{{this.trailertransactionType}}{{this.delimiter}}{{this.feederNumber}}{{this.fiscalYear}}{{this.cGIBatchNumber}}{{this.controlCount}}{{this.controlAmount}}{{this.delimiter}}\n";
+            string source = @"
+{{feederNumber}}{{batchType}}{{transactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{messageVersionNumber}}{{delimiter}}
+{{#each InvoiceHeader}}
+{{this.feederNumber}}{{this.batchType}}{{this.headertransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.PONumber}}{{this.invoiceType}}{{this.invoiceDate}}{{this.payGroupLookup}}{{this.remittanceCode}}{{this.grossInvoiceAmount}}{{this.CAD}}{{this.invoiceDate}}{{this.termsName}}{{this.description}}{{this.goodsDate}}{{this.invoiceRecDate}}{{this.oracleBatchName}}{{this.SIN}}{{this.payflag}}{{this.flow}}{{this.delimiter}}
+{{#each InvoiceLines}}
+{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.invoiceLineNumber}}{{this.committmentLine}}{{this.lineAmount}}{{this.lineCode}}{{this.distributionACK}}{{this.lineDescription}}{{this.effectiveDate}}{{this.quantity}}{{this.unitPrice}}{{this.optionalData}}{{this.distributionSupplierNumber}}{{this.flow}}{{this.delimiter}}
+{{/each}}
+{{#each InvoiceCommentLines}}
+{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.CommentLineNumber}}{{this.Comment}}{{this.delimiter}}
+{{/each}}
+{{/each}}
+{{feederNumber}}{{batchType}}{{trailertransactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{controlCount}}{{controlAmount}}{{delimiter}}
+";
+
 
             var template = Handlebars.Compile(source);
 
@@ -311,12 +323,23 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 ackNumber = "0622265006500650822007400000000000";
                 double invoiceamount = 0.00;
                 List<InvoiceLines> invoiceLines = [];
+                
+
 
                 foreach (var lineitem in headeritem.Select((item, i) => (item, i)))
                 {
                     eachline = lineitem.item;
                     try
                     {
+                   
+                        string remittanceMessage = Regex.Replace(lineitem.item.ccof_remittancemessage ?? string.Empty, @"\s+",string.Empty);
+
+                        List<InvoiceCommentLines> headerCommentLines = new();
+
+                        int maxLineLength = 40;
+                        int maxLines = 10;
+
+                        int lineCount = 0;
                         invoiceamount = invoiceamount + Convert.ToDouble(lineitem.item.ccof_grand_total);//line amount should come from invoice
                         var paytype = lineitem.item.ccof_payment_typename;
                       
@@ -344,7 +367,32 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                             flow = string.Empty.PadRight(line.FieldLength("flow")), //can be use to pass additional info from facility or application
                         });
                         _controlCount++;
+                        for (int i = 0; i < remittanceMessage.Length && lineCount < maxLines; i += maxLineLength)
+                        {
+                            string messagePart = remittanceMessage.Substring(
+                                i,
+                                Math.Min(maxLineLength, remittanceMessage.Length - i)
+                            );
 
+                            headerCommentLines.Add(new InvoiceCommentLines
+                            {
+                                feederNumber = _BCCASApi.feederNumber,
+                                batchType = _BCCASApi.batchType,
+                                delimiter = _BCCASApi.delimiter,
+                                linetransactionType = _BCCASApi.InvoiceCommentLines.linetransactionType,
+                                invoiceNumber = lineitem.item.ccof_invoice_number
+                                    .PadRight(line.FieldLength("invoiceNumber")),
+                                supplierNumber = lineitem.item.ccof_supplier_number
+                                    .PadRight(line.FieldLength("supplierNumber")),
+                                supplierSiteNumber = lineitem.item.ccof_site_number
+                                    .PadLeft(line.FieldLength("supplierSiteNumber"), '0'),
+                                committmentLineNumber = _BCCASApi.InvoiceCommentLines.committmentLineNumber,
+                                Comment = messagePart.PadRight(line.FieldLength("Comment"))
+                            });
+
+                            _controlCount++;
+                            lineCount++;
+                        }
 
                         invoiceHeaders.Add(new InvoiceHeader
                         {
@@ -370,7 +418,9 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                             payflag = _BCCASApi.InvoiceHeader.payflag,// Static value: Y (separate chq for each line)
                             description = Regex.Replace(headeritem.First()?.ccof_organization_id, @"[^\w $\-]", "").PadRight(header.FieldLength("description")).Substring(0, header.FieldLength("description")),// can be used to pass extra info
                             flow = string.Empty.PadRight(header.FieldLength("flow")),// can be used to pass extra info
-                            invoiceLines = invoiceLines
+                            invoiceLines = invoiceLines,
+                            InvoiceCommentLines = headerCommentLines
+                           
                         });
                         _controlAmount = _controlAmount + invoiceamount;
                         _controlCount++;
@@ -403,15 +453,21 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 headeritem.ForEach(x =>
                 {
 
-                    foreach (var paydata in serializedPaymentData.Where(paydata => paydata.ccof_invoice_number == x.invoiceLines.First().invoiceNumber.TrimEnd()))
+                    foreach (var paydata in serializedInvoiceData.Where(paydata => paydata.ccof_invoice_number == x.invoiceLines.First().invoiceNumber.TrimEnd()))
                     {
                         paydata.ccof_batch_number = _cgiBatchNumber;
                         paylinesToUpdate.Add(paydata);
                     }
                 });
 
-                _controlAmount = (Double)headeritem.SelectMany(x => x.invoiceLines).ToList().Sum(x => Convert.ToDecimal(x.lineAmount));
-                _controlCount = headeritem.SelectMany(x => x.invoiceLines).ToList().Count + headeritem.Count;
+                //_controlAmount = (Double)headeritem.SelectMany(x => x.invoiceLines).ToList().Sum(x => Convert.ToDecimal(x.lineAmount));
+                //_controlCount = headeritem.SelectMany(x => x.invoiceLines).ToList().Count + headeritem.SelectMany(x => x.InvoiceCommentLines).ToList().Count + headeritem.Count;
+
+                _controlAmount = (double)headeritem.SelectMany(x => x.invoiceLines).Sum(x => Convert.ToDecimal(x.lineAmount));
+                _controlCount =
+                    headeritem.Count                                         // IH
+                  + headeritem.SelectMany(x => x.invoiceLines).Count()       // IL
+                  + invoiceCommentLines.Count;                               // IC 
 
                 var data = new
                 {
@@ -426,6 +482,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     controlAmount = _controlAmount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture).PadLeft(header.FieldLength("grossInvoiceAmount"), '0'),// total sum of amount
                     trailertransactionType = _BCCASApi.trailertransactionType,//Static  value :BT
                     InvoiceHeader = headeritem
+                    
                 };
 
                 inboxFileBytes += template(data);

@@ -84,7 +84,8 @@ public record InvoiceHeader
     public required string flow { get; set; }
     [StringLength(9)]
     public required string SIN { get; set; }
-    public List<InvoiceLines>? invoiceLines { get; set; }
+    public List<InvoiceLines> invoiceLines { get; set; }
+    public List<InvoiceCommentLines> InvoiceCommentLines { get; set; }
 }
 
 public record InvoiceLines
@@ -123,8 +124,33 @@ public record InvoiceLines
     public required string distributionSupplierNumber { get; set; }
     [StringLength(110)]
     public required string flow { get; set; }
+    [StringLength(4)]
+    public  string committmentLineNumber { get; set; }
+
+    [StringLength(40)]
+    public  string Comment { get; set; }
 
 }
+public record InvoiceCommentLines
+{
+    public required string feederNumber { get; set; }
+    public required string batchType { get; set; }
+    public required string delimiter { get; set; }
+    public required string linetransactionType { get; set; }
+    [StringLength(50)]
+    public required string invoiceNumber { get; set; }
+    [StringLength(6)]
+    public required string supplierNumber { get; set; }
+    [StringLength(3)]
+    public required string supplierSiteNumber { get; set; }
+    [StringLength(4)]
+    public required string committmentLineNumber { get; set; }
+    
+    [StringLength(40)]
+    public required string Comment { get; set; }
+
+}
+
 
 public record FeedbackBatch
 {
