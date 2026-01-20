@@ -33,13 +33,13 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
     private readonly TimeProvider timeProvider = timeProvider;
     private readonly ILogger _logger = loggerFactory.CreateLogger(LogCategory.Process);
     private readonly ID365DataService _dataService = dataService;
-  //  private readonly IPaymentValidator _paymentvalidator = paymentvalidator;
+    //  private readonly IPaymentValidator _paymentvalidator = paymentvalidator;
 
     private int _controlCount;
     private double _controlAmount;
     private int _oracleBatchNumber;
     private string _cgiBatchNumber = string.Empty;
-   // private List<PaymentLine> erroredline= new List<PaymentLine>();
+    // private List<PaymentLine> erroredline= new List<PaymentLine>();
     private ProcessData? _data;
     private ProcessParameter? _processParams;
     private string _currentFiscalYearId;
@@ -67,7 +67,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     </fetch>
                     """;
 
-           
+
             var requestUri = $"""
                          ofm_payment_file_exchanges?fetchXml={WebUtility.UrlEncode(fetchXml)}
                          """;
@@ -167,10 +167,10 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                          """;
 
             return requestUri;
-         
+
         }
     }
-   
+
     public string RequestACKCodeUri
     {
         get
@@ -226,7 +226,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         return await Task.FromResult(_data);
     }
 
-   
+
     public async Task<ProcessData> GetPaymentLineData()
     {
         _logger.LogDebug(CustomLogEvent.Process, "Calling GetData of {nameof}", nameof(P500SendPaymentRequestProvider));
@@ -300,8 +300,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         List<CcofInvoice> serializedPaymentData = [];
         List<D365PaymentLine> CCOFPaymentLines = [];  // for CCOF Paymentlines
 
-        CcofInvoice eachline ;
-         var line = typeof(InvoiceLines);
+        CcofInvoice eachline;
+        var line = typeof(InvoiceLines);
         var header = typeof(InvoiceHeader);
         string inboxFileBytes = string.Empty;
 
@@ -315,7 +315,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var fiscalyear = "2026";
 
             var ccofPaymentLineData = await GetCCOFPaymentLineData();
-            CCOFPaymentLines= JsonSerializer.Deserialize<List<D365PaymentLine>>(ccofPaymentLineData.Data.ToString());
+            CCOFPaymentLines = JsonSerializer.Deserialize<List<D365PaymentLine>>(ccofPaymentLineData.Data.ToString());
             #endregion
 
             #region Step 0.2: Get latest Oracle Batch Number
@@ -329,7 +329,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             if (serializedPFXData is not null && serializedPFXData.Count != 0 && serializedPFXData[0].ccof_last_cgi_oracle_number != null)
             {
                 _oracleBatchNumber = Convert.ToInt32(serializedPFXData[0].ccof_last_cgi_oracle_number) + 1;
-                oracleBatchName = _BCCASApi.clientCode  + "CCOF" + (_oracleBatchNumber).ToString("D5");
+                oracleBatchName = _BCCASApi.clientCode + "CCOF" + (_oracleBatchNumber).ToString("D5");
 
                 _cgiBatchNumber = (Convert.ToInt32(serializedPFXData[0].OfmBatchNumber)).ToString("D9").Substring(0, 9);
             }
@@ -338,7 +338,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 _oracleBatchNumber = Convert.ToInt32(_BCCASApi.oracleBatchNumber);
                 oracleBatchName = _BCCASApi.clientCode + "CCOF" + _BCCASApi.oracleBatchNumber;
                 _cgiBatchNumber = (Convert.ToInt32(serializedPFXData[0].OfmBatchNumber)).ToString("D9").Substring(0, 9);
-                
+
             }
 
             #endregion
@@ -387,7 +387,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     {
                         invoiceamount = invoiceamount + Convert.ToDouble(lineitem.item.ccof_grand_total);//line amount should come from invoice
                         var paytype = lineitem.item.ccof_payment_typename;
-                      
+
                         invoiceLines.Add(new InvoiceLines
                         {
                             feederNumber = _BCCASApi.feederNumber,// Static value:3540
@@ -401,7 +401,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                             committmentLine = _BCCASApi.InvoiceLines.committmentLine,//Static value:0000
                             lineAmount = (lineitem.item.ccof_grand_total.Value < 0 ? "-" : "") + Math.Abs(lineitem.item.ccof_grand_total.Value).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture).PadLeft(line.FieldLength("lineAmount") - (lineitem.item.ccof_grand_total.Value < 0 ? 1 : 0), '0'),// come from split funding amount per facility
                             lineCode = (lineitem.item.ccof_grand_total.Value > 0 ? "D" : "C"),//if it is positive then line code is Debit otherwise credit
-                                                                                  //distributionACK = _BCCASApi.InvoiceLines.distributionACK.PadRight(line.FieldLength("distributionACK")),// using test data shared by CAS,should be changed for prod
+                                                                                              //distributionACK = _BCCASApi.InvoiceLines.distributionACK.PadRight(line.FieldLength("distributionACK")),// using test data shared by CAS,should be changed for prod
                             distributionACK = ackNumber.PadRight(line.FieldLength("distributionACK")), //fetching from ACK Codes from dataverse based on payment type and cohort
                             lineDescription = (lineitem.item.ccof_payment_type).ToString().PadRight(line.FieldLength("lineDescription")), // Pouplate extra info from facility
                             effectiveDate = lineitem.item.ccof_revised_effective_date?.ToString("yyyyMMdd") ?? lineitem.item.ccof_effective_date?.ToString("yyyyMMdd"),//same as invoice date
@@ -509,7 +509,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
                 if (savePFEResult)
                     await MarkPaymentLinesAsProcessed(appUserService, d365WebApiService, paylinesToUpdate);
-                    await MarkCCOFPaymentLinesAsProcessed(appUserService, d365WebApiService, CCOFPaymentLines);
+                await MarkCCOFPaymentLinesAsProcessed(appUserService, d365WebApiService, CCOFPaymentLines);
             }
 
             #endregion
@@ -625,7 +625,4 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
         return await Task.FromResult(deserializedData!); ;
     }
-
-  
-
 }
