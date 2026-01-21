@@ -144,7 +144,7 @@ public record InvoiceCommentLines
     [StringLength(3)]
     public required string supplierSiteNumber { get; set; }
     [StringLength(4)]
-    public required string committmentLineNumber { get; set; }
+    public required string CommentLineNumber { get; set; }
     
     [StringLength(40)]
     public required string Comment { get; set; }

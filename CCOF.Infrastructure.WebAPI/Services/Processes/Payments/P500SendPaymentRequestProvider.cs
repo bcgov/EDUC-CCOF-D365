@@ -405,6 +405,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                         int maxLines = 10;
 
                         int lineCount = 0;
+                        int CommentLineNumber = 1;
                         invoiceamount = invoiceamount + Convert.ToDouble(lineitem.item.ccof_grand_total);//line amount should come from invoice
                         var paytype = lineitem.item.ccof_payment_typename;
                       
@@ -451,12 +452,13 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                                     .PadRight(line.FieldLength("supplierNumber")),
                                 supplierSiteNumber = lineitem.item.ccof_site_number
                                     .PadLeft(line.FieldLength("supplierSiteNumber"), '0'),
-                                committmentLineNumber = _BCCASApi.InvoiceCommentLines.committmentLineNumber,
+                                CommentLineNumber = CommentLineNumber.ToString("D4"),
                                 Comment = messagePart.PadRight(line.FieldLength("Comment"))
                             });
 
                             _controlCount++;
                             lineCount++;
+                            CommentLineNumber++;
                         }
 
                         invoiceHeaders.Add(new InvoiceHeader
@@ -524,9 +526,6 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                         paylinesToUpdate.Add(paydata);
                     }
                 });
-
-                //_controlAmount = (Double)headeritem.SelectMany(x => x.invoiceLines).ToList().Sum(x => Convert.ToDecimal(x.lineAmount));
-                //_controlCount = headeritem.SelectMany(x => x.invoiceLines).ToList().Count + headeritem.SelectMany(x => x.InvoiceCommentLines).ToList().Count + headeritem.Count;
 
                 _controlAmount = (double)headeritem.SelectMany(x => x.invoiceLines).Sum(x => Convert.ToDecimal(x.lineAmount));
                 _controlCount =
