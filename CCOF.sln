@@ -42,7 +42,7 @@ Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "CCOF.Infrastructure.SSRS", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CCOF.Core.DataContext", "CCOF.Core.DataContext\CCOF.Core.DataContext.shproj", "{7E11D821-093B-4E0C-B139-04348871A472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCOF.Infrastructure.PCFControl", "CCOF.Infrastructure.PCFControl\", "{96668DEF-DF5A-46E9-9128-820CA1037DAA}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CCOF.Infrastructure.PCFControl", "CCOF.Infrastructure.PCFControl\", "{96668DEF-DF5A-46E9-9128-820CA1037DAA}"
 ProjectSection(WebsiteProperties) = preProject
 	TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 	Debug.AspNetCompiler.VirtualPath = "/localhost_64378"
