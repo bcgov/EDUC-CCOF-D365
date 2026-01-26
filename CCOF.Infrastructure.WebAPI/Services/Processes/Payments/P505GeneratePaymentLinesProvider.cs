@@ -30,30 +30,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         public string ProcessName => Setup.Process.Payments.GeneratePaymentLinesName;
         public string CodingLineType_FetchParameter;
         #region Data Queries
-        public string BusinessClosuresRequestUri
-        { // ofm_holiday_type" operator="eq" value="1"  Standard for CCOF. 2 for OFM
-            get
-            {
-                var fetchXml = $$"""
-                    <fetch>
-                      <entity name="ofm_stat_holiday">
-                        <attribute name="ofm_date_observed" />
-                        <attribute name="ofm_holiday_type" />
-                        <attribute name="ofm_stat_holidayid" />
-                        <filter>
-                          <condition attribute="ofm_holiday_type" operator="eq" value="1" />
-                        </filter>
-                      </entity>
-                    </fetch>
-                    """;
-
-                var requestUri = $"""
-                         ofm_stat_holidaies?fetchXml={WebUtility.UrlEncode(fetchXml)}
-                         """;
-
-                return requestUri;
-            }
-        }
         public string EnrolmentReportPaymentUri
         {
             get
@@ -142,36 +118,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             }
         }
         #endregion
-        public async Task<ProcessData> GetBusinessClosuresDataAsync()
-        {
-            _logger.LogDebug(CustomLogEvent.Process, nameof(GetBusinessClosuresDataAsync));
-
-            var response = await _d365WebApiService.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, BusinessClosuresRequestUri, false, 0, true);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                _logger.LogError(CustomLogEvent.Process, "Failed to query Funding record information with the server error {responseBody}", responseBody.CleanLog());
-
-                return await Task.FromResult(new ProcessData(string.Empty));
-            }
-
-            var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
-
-            JsonNode d365Result = string.Empty;
-            if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
-            {
-                if (currentValue?.AsArray().Count == 0)
-                {
-                    _logger.LogInformation(CustomLogEvent.Process, "No records found with query {requestUri}", BusinessClosuresRequestUri.CleanLog());
-                }
-                d365Result = currentValue!;
-            }
-
-            _logger.LogDebug(CustomLogEvent.Process, "Query Result {queryResult}", d365Result.ToString().CleanLog());
-
-            return await Task.FromResult(new ProcessData(d365Result));
-        }
         public async Task<ProcessData> GetCodingLineTypeDataAsync()
         {
             _logger.LogDebug(CustomLogEvent.Process, nameof(GetCodingLineTypeDataAsync));
@@ -193,7 +139,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             {
                 if (currentValue?.AsArray().Count == 0)
                 {
-                    _logger.LogInformation(CustomLogEvent.Process, "No records found with query {requestUri}", BusinessClosuresRequestUri.CleanLog());
+                    _logger.LogInformation(CustomLogEvent.Process, "No records found with query {requestUri}", CodingLineTypeRequestUri.CleanLog());
                 }
                 d365Result = currentValue!;
             }
@@ -232,9 +178,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
             return await Task.FromResult(new ProcessData(d365Result));
         }
-        private async Task<JsonObject> CreateSinglePayment(JsonNode enrolmentReport, DateTime paymentDate, decimal? totalAmount,
-                                                            ProcessParameter processParams, List<DateTime> holidaysList,
-                                                            int invoiceLineNumber, int paymentType)
+        private async Task<JsonObject> CreateSinglePayment(JsonNode enrolmentReport, DateTime paymentDate, decimal? totalAmount,int invoiceLineNumber, int paymentType)
         {
             DateTime invoiceDate = paymentDate;
             DateTime invoiceReceivedDate = invoiceDate;
@@ -291,11 +235,10 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             if (!response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                _logger.LogError(CustomLogEvent.Process, "Failed to create a payment with the server error {responseBody}. ProcessParam {param}", responseBody.CleanLog(), JsonValue.Create(processParams)?.ToString());
+                _logger.LogError(CustomLogEvent.Process, "Failed to create a payment with the server error {responseBody}", responseBody.CleanLog());
 
                 return ProcessResult.Failure(ProcessId, [responseBody], 0, 0).SimpleProcessResult;
             }
-
             return ProcessResult.Completed(ProcessId).SimpleProcessResult;
         }
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
@@ -315,9 +258,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     return ProcessResult.Completed(ProcessId).SimpleProcessResult;
                 }
                 JsonNode? enrolmentReport = enrolmentReportData.First();
-                var businessClosuresData = await GetBusinessClosuresDataAsync();
-                var closures = JsonSerializer.Deserialize<JsonArray>(businessClosuresData.Data.ToString());
-                List<DateTime> holidaysList = closures!.Select(closure => (DateTime)closure["ofm_date_observed"]).ToList();
                 decimal grandTotalBase=0, grandTotalCCFRI=0, grandTotalCCFRIProvider = 0;
                 grandTotalBase =
                     (int)enrolmentReport["ccof_reporttype"] == 100000000
@@ -334,14 +274,11 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 switch ((int)processParams.programapproved)
                 {
                     case 1:  // CCOF was approved in ER
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccof_approved_date"],
-                            grandTotalBase, processParams!, holidaysList, 1, 7);  // 1, InvoiceLineNumber fix for CCOF Base Payment. 7 PaymentType CCOF
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccof_approved_date"],grandTotalBase, 1, 7);  // 1, InvoiceLineNumber fix for CCOF Base Payment. 7 PaymentType CCOF
                         break;
                     case 2: // CCFRI was approved in ER
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRI,
-                            processParams!, holidaysList, 2, 8);// 2, InvoiceLineNumber fix for CCFRI. 8 PaymentType CCFRI
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRIProvider,
-                            processParams!, holidaysList, 3, 10);// 3, InvoiceLineNumber fix for CCFRI Payment. 10 PaymentType CCFRI Provider
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRI,2, 8);// 2, InvoiceLineNumber fix for CCFRI. 8 PaymentType CCFRI
+                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRIProvider,3, 10);// 3, InvoiceLineNumber fix for CCFRI Payment. 10 PaymentType CCFRI Provider
                         break;
                     default:
                         _logger.LogError(CustomLogEvent.Process, "Unable to generate payments for Erolment Report {ERid}. Invalid ApprovedType {programApproved}", processParams?.EnrolmentReportid, processParams?.programapproved);
