@@ -71,7 +71,32 @@ CCOF.Funding.Ribbon = {
                 }
             );
     },
-
+    BulkApproveFA: function (selectedControl, selectedItemIds) {
+        debugger;
+        var gridContext = selectedControl;
+        var pageInput = {
+            pageType: "custom",
+            name: "ccof_bulkapprovefundingagreements_a6eae",
+            recordId: selectedItemIds
+        };
+        var navigationOptions = {
+            target: 2,
+            position: 1,
+            height: 900,
+            width: {value: 75, unit:"%"},
+        };
+        Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+            .then(
+                function () {
+                    gridContext.refresh();
+                    console.log("Success");
+                }
+            ).catch(
+                function (error) {
+                    console.log(Error);
+                }
+            );
+    },
     showHideCreateMOD: function (primaryControl) {
         debugger;
         var formContext = primaryControl;
@@ -81,7 +106,7 @@ CCOF.Funding.Ribbon = {
         var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
 
         userRoles.forEach(function hasRole(item, index) {
-            if (item.name === "CCOF - Admin" || item.name === "CCOF - Leadership" || item.name === "System Administrator") {
+            if (item.name === "CCOF - Admin" || item.name === "CCOF - Leadership" || item.name === "CCOF - Super Awesome Mods Squad" || item.name === "CCOF - Mod QC" ||item.name === "System Administrator") {
                 visible = true;
             }
         });
@@ -91,7 +116,37 @@ CCOF.Funding.Ribbon = {
         if (!CreateMODButton.ready) return false; // default while loading
         return showButton && visible && CreateMODButton.noDrafted;
     },
+    showHideGenerateFAPDF: function (primaryControl) {
+        debugger;
+        var formContext = primaryControl;
+        var statusReason = formContext.getAttribute("statuscode").getValue();
 
+        var visible = false;
+        var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+
+        userRoles.forEach(function hasRole(item, index) {
+            if (item.name === "CCOF - Admin" || item.name === "CCOF - Leadership" || item.name === "CCOF - Super Awesome Mods Squad" || item.name === "CCOF - Mod QC" ||item.name === "System Administrator") {
+                visible = true;
+            }
+        });
+
+        // "Drafted" | "Drafted – Provider Action Required" | "Drafted - with Ministry"      
+        var showButton = (statusReason === 101510002 || statusReason === 101510003 || statusReason === 101510004)
+        return showButton && visible;
+    },
+    showHideBulkApproveFA: function (selectedControl) {
+        debugger;
+        var visible = false;
+        var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+
+        userRoles.forEach(function hasRole(item, index) {
+            if (item.name === "CCOF - Admin" || item.name === "CCOF - Leadership" ||item.name === "System Administrator") {
+                visible = true;
+            }
+        });
+
+        return visible;
+    },
     initCreateMODButton: function (executionContext) {
         debugger;
         var formContext = executionContext.getFormContext();
