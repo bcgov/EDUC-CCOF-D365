@@ -660,9 +660,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 //["ccof_ccofbaserate@odata.bind"] = PreviousER["_ccof_ccofbaserate_value"] == null ? null : $"/ccof_rates({PreviousER["_ccof_ccofbaserate_value"].ToString()})",
                 ["ccof_ccofbaserate@odata.bind"] = ccofBaseRateBind,
                 ["ccof_ccfriproviderpaymentrate@odata.bind"] = providerPaymentRateBind,
-                ["ccof_ccfridailyratemax@odata.bind"] = PreviousER["_ccof_ccfridailyratemax_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemax_value"].ToString() + ")",
-                ["ccof_ccfridailyratemin@odata.bind"] = PreviousER["_ccof_ccfridailyratemin_value"] == null ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemin_value"].ToString() + ")",
+                ["ccof_ccfridailyratemax@odata.bind"] = PreviousER["_ccof_ccfridailyratemax_value"].ToString() == "" ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemax_value"].ToString() + ")",
+                ["ccof_ccfridailyratemin@odata.bind"] = PreviousER["_ccof_ccfridailyratemin_value"].ToString() == "" ? null : $"/ccof_rates(" + PreviousER["_ccof_ccfridailyratemin_value"].ToString() + ")",
                 [$"{lookupFieldSchemaName}_{targetEntityLogicalName}@odata.bind"] = (string.IsNullOrEmpty(targetEntityLogicalName) || string.IsNullOrEmpty(targetEntitySetName) || string.IsNullOrEmpty(targetRecordGuid)) ? null : $"/{targetEntitySetName}({targetRecordGuid})",
+                ["ccof_licence@odata.bind"] = PreviousER["_ccof_licence_value"].ToString() == "" ? null : $"/ccof_licenses(" + PreviousER["_ccof_licence_value"].ToString() + ")",
                 ["ccof_ccfricompleteapproved"]=ccfriCompleteApproved,
                 #region main fields need to copied to Adjustment ER
                 // Total Enrolled

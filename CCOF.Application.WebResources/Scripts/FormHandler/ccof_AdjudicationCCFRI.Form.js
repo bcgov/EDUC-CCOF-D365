@@ -1,4 +1,3 @@
-
 var AdjCCFRI = AdjCCFRI || {};
 AdjCCFRI.Form = AdjCCFRI.Form || {};
 //Formload logic starts here
@@ -44,7 +43,30 @@ AdjCCFRI.Form = {
         //    formContext.ui.tabs.get("decisionemail").setVisible(false);
         //}
 
-
+        // Jan 26,2026 ticket 6933
+        debugger;
+        let formContext = executionContext.getFormContext();
+        let app = formContext.getAttribute("ccof_application").getValue();
+        let appId = app[0].id;
+        Xrm.WebApi.retrieveRecord("ccof_application", appId, "?$select=ccof_applicationtype,ccof_name").then(
+            function success(results) {
+                console.log(results);
+                if (results["ccof_applicationtype"] != null) {
+                    let appType = results["ccof_applicationtype"];
+                    if (appType === 100000002) { // renewal application
+                        formContext.getControl("ccof_unlock_ccof").setVisible(false);
+                        formContext.getControl("ccof_unlockrenewal").setVisible(true);
+                    }
+                    else {
+                        formContext.getControl("ccof_unlock_ccof").setVisible(true);
+                        formContext.getControl("ccof_unlockrenewal").setVisible(false);
+                    }
+                }
+            },
+            function (error) {
+                console.log(error.message);
+            }
+        );
     },
 
     saveConfirm: function (executionContext) {
@@ -69,3 +91,44 @@ AdjCCFRI.Form = {
         }
     }
 };
+
+
+
+function openCCFRIUnlockCustomPage(entityName, recordId, primaryControl) {
+    debugger;
+    var formContext = primaryControl;
+
+    Xrm.Navigation.navigateTo({
+        pageType: "custom",
+        name: "ccof_ccfriunlockform_6430d",
+        entityName: entityName,
+        recordId: recordId,
+
+
+    }, {
+        target: 2,
+        width: 1400,
+        height: 900
+    }
+    )
+        .then(function () {
+            formContext.data.refresh();
+        })
+        .catch(console.error);
+};
+function showHideCreateUnlockButton(primaryControl) {
+    debugger;
+    var formContext = primaryControl;
+
+
+    var visible = false;
+    var userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+    userRoles.forEach(function hasRole(item, index) {
+        if (item.name === "CCOF - Sr. Adjudicator" || item.name === "CCOF - QC" || item.name === "CCOF - Adjudicator" || item.name === "CCOF - Admin" || item.name === "CCOF - Leadership" || item.name === "System Administrator") {
+            visible = true;
+        }
+    });
+    return visible;
+};
+
+
