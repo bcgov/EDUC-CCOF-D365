@@ -1,26 +1,28 @@
 ﻿
-using HandlebarsDotNet;
-using Microsoft.Extensions.Options;
+using CCOF.Core.DataContext;
 using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Messages;
 using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services.AppUsers;
 using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
-using System.Text.Json.Nodes;
+using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
+using CCOF.Infrastructure.WebAPI.Services.Processes;
+using HandlebarsDotNet;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Extensions;
+using System;
+using System.Drawing.Text;
+using System.Linq.Expressions;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Linq.Expressions;
-using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
+using System.Text.Json.Nodes;
 //using ECC.Core.DataContext;
 using System.Text.Json.Serialization;
-using CCOF.Infrastructure.WebAPI.Services.Processes;
-using System;
-using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
-using CCOF.Core.DataContext;
-using System.Drawing.Text;
-using Microsoft.AspNetCore.Http;
+using System.Text.RegularExpressions;
+using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments;
 
@@ -343,7 +345,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
             #region Step 0.3: Get ACK Codes
 
-            IEnumerable<Ack_Codes> ackCode = await LoadACKCodeAsync();
+            //IEnumerable<Ack_Codes> ackCode = await LoadACKCodeAsync();
+            var ackCode = await GetACKCodes();
 
             #endregion
 
@@ -351,16 +354,10 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
             string source = @"
 {{feederNumber}}{{batchType}}{{transactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{messageVersionNumber}}{{delimiter}}
-{{#each InvoiceHeader}}
-{{this.feederNumber}}{{this.batchType}}{{this.headertransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.PONumber}}{{this.invoiceType}}{{this.invoiceDate}}{{this.payGroupLookup}}{{this.remittanceCode}}{{this.grossInvoiceAmount}}{{this.CAD}}{{this.invoiceDate}}{{this.termsName}}{{this.description}}{{this.goodsDate}}{{this.invoiceRecDate}}{{this.oracleBatchName}}{{this.SIN}}{{this.payflag}}{{this.flow}}{{this.delimiter}}
-{{#each InvoiceLines}}
-{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.invoiceLineNumber}}{{this.committmentLine}}{{this.lineAmount}}{{this.lineCode}}{{this.distributionACK}}{{this.lineDescription}}{{this.effectiveDate}}{{this.quantity}}{{this.unitPrice}}{{this.optionalData}}{{this.distributionSupplierNumber}}{{this.flow}}{{this.delimiter}}
-{{/each}}
-{{#each InvoiceCommentLines}}
-{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.CommentLineNumber}}{{this.Comment}}{{this.delimiter}}
-{{/each}}
-{{/each}}
-{{feederNumber}}{{batchType}}{{trailertransactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{controlCount}}{{controlAmount}}{{delimiter}}
+{{#each InvoiceHeader}}{{this.feederNumber}}{{this.batchType}}{{this.headertransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.PONumber}}{{this.invoiceType}}{{this.invoiceDate}}{{this.payGroupLookup}}{{this.remittanceCode}}{{this.grossInvoiceAmount}}{{this.CAD}}{{this.invoiceDate}}{{this.termsName}}{{this.description}}{{this.goodsDate}}{{this.invoiceRecDate}}{{this.oracleBatchName}}{{this.SIN}}{{this.payflag}}{{this.flow}}{{this.delimiter}}
+{{#each InvoiceLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.invoiceLineNumber}}{{this.committmentLine}}{{this.lineAmount}}{{this.lineCode}}{{this.distributionACK}}{{this.lineDescription}}{{this.effectiveDate}}{{this.quantity}}{{this.unitPrice}}{{this.optionalData}}{{this.distributionSupplierNumber}}{{this.flow}}{{this.delimiter}}
+{{/each}}{{#each InvoiceCommentLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.CommentLineNumber}}{{this.Comment}}{{this.delimiter}}
+{{/each}}{{/each}}{{feederNumber}}{{batchType}}{{trailertransactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{controlCount}}{{controlAmount}}{{delimiter}}
 ";
 
 
@@ -376,16 +373,24 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 // from payment line
 
                 string ackNumber = string.Empty;
+                var ackJsonArray = ackCode.Data.AsArray(); // convert JsonNode to JsonArray
 
-                //var ackCodeList = ackCode?
-                //    .Where(ack => ack.OfmPaymentTypename == paymentType)
-                //    .ToList();
+                var ackCodeList = JsonSerializer.Deserialize<List<Ack_Codes>>(
+                    ackJsonArray.ToJsonString(),
+                    Setup.s_writeOptionsForLogs
+                )!;
+                var filteredAck = ackCodeList
+    .Where(ack => ack.OfmPaymentType == (int)paymentType)
+    .ToList();
+                
 
-                //if (ackCodeList.Any() && ackCodeList.Count > 1)
-                //{
-                //    ackNumber = ackCodeList.Select(code => code.OfmAckNumber).FirstOrDefault();
-                //}
-                ackNumber = "0622265006500650822007400000000000";
+                //  var ackCodeList = ackCode?.Where(ack => ack.ofm_payment_type == paymentType.Get).ToList();
+
+                if (filteredAck.Any() && filteredAck.Count > 1)
+                {
+                    ackNumber = filteredAck.Select(code => code.OfmAckNumber).FirstOrDefault();
+                }
+              //  ackNumber = "0622265006500650822007400000000000";
                 double invoiceamount = 0.00;
                 List<InvoiceLines> invoiceLines = [];
                 
@@ -531,7 +536,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 _controlCount =
                     headeritem.Count                                         // IH
                   + headeritem.SelectMany(x => x.invoiceLines).Count()       // IL
-                  + invoiceCommentLines.Count;                               // IC 
+                  + headeritem.SelectMany(x => x.InvoiceCommentLines).Count();                              // IC 
 
                 var data = new
                 {
@@ -671,14 +676,44 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         }
         return await Task.FromResult(true);
     }
-    private async Task<IEnumerable<Ack_Codes>> LoadACKCodeAsync()
+    //private async Task<IEnumerable<Ack_Codes>> LoadACKCodeAsync()
+    //{
+    //    var localdata = await _dataService.FetchDataAsync(RequestACKCodeUri, "ACK_Codes");
+    //    // var deserializedData = localdata.Data.Deserialize<List<Ack_Codes>>(Setup.s_writeOptionsForLogs);
+    //    var deserializedData = JsonSerializer.Deserialize<List<Ack_Codes>>(localdata.Data.ToString());
+    //    return await Task.FromResult(deserializedData!);
+    //}
+
+    public async Task<ProcessData> GetACKCodes()
     {
-        var localdata = await _dataService.FetchDataAsync(RequestACKCodeUri, "ACK_Codes");
-        var deserializedData = localdata.Data.Deserialize<List<Ack_Codes>>(Setup.s_writeOptionsForLogs);
+        _logger.LogDebug(CustomLogEvent.Process, "Calling GetData of {nameof}", nameof(P500SendPaymentRequestProvider));
 
-        return await Task.FromResult(deserializedData!); ;
+
+        var response = await _d365webapiservice.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, RequestACKCodeUri, isProcess: true);
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            _logger.LogError(CustomLogEvent.Process, "Failed to query the requests with the server error {responseBody}", responseBody);
+
+            return await Task.FromResult(new ProcessData(string.Empty));
+        }
+
+        var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+        JsonNode d365Result = string.Empty;
+        if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
+        {
+            if (currentValue?.AsArray().Count == 0)
+            {
+                _logger.LogInformation(CustomLogEvent.Process, "No records found");
+            }
+            d365Result = currentValue!;
+        }
+
+        _data = new ProcessData(d365Result);
+
+        _logger.LogDebug(CustomLogEvent.Process, "Query Result {_data}", _data.Data.ToJsonString());
+
+        return await Task.FromResult(_data);
     }
-
-  
-
 }

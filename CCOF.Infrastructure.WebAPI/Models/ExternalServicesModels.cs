@@ -125,7 +125,7 @@ public record InvoiceLines
     [StringLength(110)]
     public required string flow { get; set; }
     [StringLength(4)]
-    public  string committmentLineNumber { get; set; }
+    public string committmentLineNumber { get; set; }
 
     [StringLength(40)]
     public  string Comment { get; set; }
