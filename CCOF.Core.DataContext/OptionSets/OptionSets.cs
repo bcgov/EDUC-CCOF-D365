@@ -20358,6 +20358,10 @@ namespace CCOF.Core.DataContext
 		HOLD = 101510001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Invoiced", 9)]
+		Invoiced = 101510002,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Paid", 1)]
 		Paid = 2,
 		
