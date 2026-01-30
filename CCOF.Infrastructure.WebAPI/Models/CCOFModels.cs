@@ -141,6 +141,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
     {
         public string? ccof_name { get; set; }
         public string? ccof_program_yearid { get; set; }
+        public string? ccof_financial_year { get; set; }
         public int? statuscode { get; set; }
         public DateTime? ccof_declarationbstart { get; set; }
         public DateTime? ccof_intakeperiodstart { get; set; }
@@ -359,7 +360,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public string _ofm_regardingid_value { get; set; } = string.Empty; // ToDo: a workaround for polymorphic lookup
         public Guid? ofm_paymentid { get; set; }
         public int? statecode { get; set; }
-        public new Guid? ccof_invoice { get; set; }
+        public Guid? _ccof_invoice_value { get; set; }
         public int? statuscode { get; set; }
 
     }
@@ -407,14 +408,14 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? statuscode { get; set; }
 
         public string ccof_casresponse { get; set; }
-        public new D365FiscalYear? ofm_fiscal_year { get; set; }
+        public Ccof_Programyear? ccof_ProgramYear { get; set; }
     }
 
     public class D365FiscalYear : OfM_Fiscal_Year
     {
         public new string ofm_financial_year { get; set; } = string.Empty;
     }
-
+   
     public record D365CommunicationType
     {
         public string? ofm_communication_typeid { get; set; }

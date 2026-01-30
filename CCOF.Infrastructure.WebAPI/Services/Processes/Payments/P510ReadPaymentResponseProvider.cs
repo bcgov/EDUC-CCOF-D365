@@ -312,21 +312,21 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
                 //Update it with latest cas response.
                 var invoiceToUpdate = new JsonObject {
                     {CcofInvoice.Fields.CcOf_Cas_Response, casResponse},
-                    {CcofInvoice.Fields.StateCode,(int)((line?.ILCode=="0000" &&header?.IHCode=="0000") ?CcOf_Invoice_StateCode.Inactive:CcOf_Invoice_StateCode.Active)},
+                    {CcofInvoice.Fields.StateCode,(int)((line?.ILCode=="0000" &&header?.IHCode=="0000") ?CcOf_Invoice_StateCode.Active:CcOf_Invoice_StateCode.Active)},
                     {CcofInvoice.Fields.StatusCode,(int)((line?.ILCode=="0000" && header?.IHCode=="0000")?CcOf_Invoice_StatusCode.Paid:CcOf_Invoice_StatusCode.ProcessingError)},
                     {CcofInvoice.Fields.CcOf_Revised_Invoice_Date,( header?.IHCode!="0000")?revisedInvoiceDate.ToString("yyyy-MM-dd"): null},
                     {CcofInvoice.Fields.CcOf_Revised_Invoice_Received_Date,( header?.IHCode!="0000")?revisedInvoiceReceivedDate.ToString("yyyy-MM-dd"):null },
                     {CcofInvoice.Fields.CcOf_Revised_Effective_Date,(header?.IHCode!="0000")?revisedEffectiveDate.ToString("yyyy-MM-dd"):null }
                 };
                 bool isPaid = line?.ILCode == "0000" && header?.IHCode == "0000";
-                var relatedPaymentLines = serializedPayData?.Where(p =>p?.CcOf_Invoice != null && p.ccof_invoice == invoice?.ccof_invoiceid);
+                var relatedPaymentLines = serializedPayData?.Where(p => p?._ccof_invoice_value != null && p._ccof_invoice_value == invoice?.ccof_invoiceid).ToList();
 
 
 
 
                 if (relatedPaymentLines != null)
                 {
-                    foreach (var paymentLine in relatedPaymentLines)
+                  relatedPaymentLines?.ForEach(async paymentLine =>
                     {
                         
                         var paymentLineUpdate = new JsonObject { 
@@ -337,8 +337,8 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
                         { D365PaymentLine.Fields.OfM_Revised_Invoice_Received_Date, header?.IHCode != "0000" ? revisedInvoiceReceivedDate.ToString("yyyy-MM-dd") : null }, 
                         { D365PaymentLine.Fields.OfM_Revised_Effective_Date, header?.IHCode != "0000" ? revisedEffectiveDate.ToString("yyyy-MM-dd") : null } };
 
-                        updatePaymentLineRequests.Add(new D365UpdateRequest(new D365EntityReference(D365PaymentLine.EntityLogicalCollectionName, paymentLine.ofm_paymentid),paymentLineUpdate ));
-                    }
+                        updatePaymentLineRequests.Add(new D365UpdateRequest(new D365EntityReference(D365PaymentLine.EntityLogicalCollectionName, paymentLine.ofm_paymentid), paymentLineUpdate));
+                    });
                 }
 
 

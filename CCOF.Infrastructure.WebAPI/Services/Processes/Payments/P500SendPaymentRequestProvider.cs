@@ -154,6 +154,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                         <attribute name="statecode" />
                         <attribute name="statuscode" />
                         <attribute name="transactioncurrencyid" />
+                    <attribute name="ccof_financial_year" />
                         <filter>
                           <condition attribute="statuscode" operator="eq" value="{(int)CcOf_Invoice_StatusCode.Approved}" />
                           <condition attribute="owningbusinessunitname" operator="like" value="%CCOF%" />
@@ -312,8 +313,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var invoiceData = await GetPaymentLineData();
             serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(invoiceData.Data.ToString());
             var grouppayment = serializedInvoiceData?.GroupBy(p => p.ccof_invoice_number).ToList();
-            //var fiscalyear = serializedPaymentData?.FirstOrDefault()?.ofm_fiscal_year.ofm_financial_year;
-            var fiscalyear = "2026";
+            var fiscalyear = serializedInvoiceData?.FirstOrDefault()?.ccof_ProgramYear.ccof_financial_year;
             var ccofPaymentLineData = await GetCCOFPaymentLineData();
             CCOFPaymentLines = JsonSerializer.Deserialize<List<D365PaymentLine>>(ccofPaymentLineData.Data.ToString());
             #endregion
