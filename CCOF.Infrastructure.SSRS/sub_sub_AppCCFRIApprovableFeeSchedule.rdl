@@ -50,7 +50,7 @@
     &lt;filter&gt;
       &lt;condition attribute="statecode" operator="eq" value="0" /&gt;
     &lt;/filter&gt;
-    &lt;order attribute="ccof_category" /&gt;
+    &lt;order attribute="ccof_program_year" /&gt;
     &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
       &lt;attribute name="ccof_applicationccfriid" /&gt;
       &lt;attribute name="ccof_facility" /&gt;
@@ -65,6 +65,9 @@
           &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
         &lt;/filter&gt;
       &lt;/link-entity&gt;
+    &lt;/link-entity&gt;
+    &lt;link-entity name="ccof_childcare_category" from="ccof_childcare_categoryid" to="ccof_category" alias="category"&gt;
+      &lt;order attribute="ccof_childcarecategorynumber" /&gt;
     &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
@@ -908,7 +911,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>1.19736in</Top>
+            <Top>1.18347in</Top>
             <Height>0.4in</Height>
             <Width>6.70833in</Width>
             <ZIndex>1</ZIndex>
