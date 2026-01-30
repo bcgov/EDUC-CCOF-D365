@@ -46,6 +46,7 @@
       &lt;attribute name="ccof_programyear" /&gt;
       &lt;attribute name="ccof_providertype" /&gt;
   &lt;attribute name="ccof_ecewe_confirmation" /&gt;
+&lt;attribute name="ccof_union_agreement_reached" /&gt;
       &lt;filter&gt;
         &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
       &lt;/filter&gt;
@@ -158,6 +159,14 @@
         </Field>
         <Field Name="app_ccof_ecewe_confirmationValue">
           <DataField>app_ccof_ecewe_confirmationValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="app_ccof_union_agreement_reached">
+          <DataField>app_ccof_union_agreement_reached</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="app_ccof_union_agreement_reachedValue">
+          <DataField>app_ccof_union_agreement_reachedValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
@@ -546,7 +555,7 @@
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=First(Fields!app_ccof_ecewe_confirmationValue.Value, "CRM") &lt;&gt; 1</Hidden>
+                    <Hidden>=First(Fields!app_ccof_union_agreement_reachedValue.Value, "CRM") &lt;&gt; 100000000</Hidden>
                   </Visibility>
                   <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
