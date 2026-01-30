@@ -321,10 +321,6 @@ CCOF.MonthlyEnrollment.Form = {
         let formContext = primaryControl;
         let entityId = formContext.data.entity.getId();
         entityId = getCleanedGuid(entityId);
-        var userSettings = Xrm.Utility.getGlobalContext().userSettings;
-        var currentuserid = userSettings.userId;
-        var username = userSettings.userName;
-
         let activePaymentLines = getSyncMultipleRecord("ofm_payments?$select=_ccof_coding_line_type_value,_ccof_invoice_value,_ccof_monthly_enrollment_report_value,_ofm_application_value,_ofm_facility_value,ofm_name,ofm_payment_type,statecode,statuscode&$filter=(statecode eq 0 and _ccof_monthly_enrollment_report_value eq " + entityId + ")&$orderby=_ccof_invoice_value desc");
         if (activePaymentLines.length === 0 || activePaymentLines[0]["_ccof_invoice_value"] != null) {
             let alertStrings = { confirmButtonLabel: "Ok", text: "You cannot undo the payment approval because no payment lines were generated, or the payments have already been invoiced.", title: "Undo Paymentlines Approval is prohibited" };
@@ -370,17 +366,18 @@ CCOF.MonthlyEnrollment.Form = {
                     }
                     )
                     if (isCCOF) {
-                        formContext.getAttribute("ccof_ccof_internal_status").setValue(4); // Reveiw
-                        formContext.getAttribute("ccof_ccof_base_verification").setValue(null);
+                        formContext.getAttribute("ccof_ccof_internal_status").setValue(4); // Review
+                        formContext.getAttribute("ccof_ccof_base_verification").setValue(101510001);// Undo Verify
                         formContext.getAttribute("ccof_qr_verified_by_ccof").setValue(null);
                         formContext.getAttribute("ccof_qr_verified_on_ccof").setValue(null);
                     };
                     if (isCCFRI) {
-                        formContext.getAttribute("ccof_ccfri_internal_status").setValue(4); // Reveiw
-                        formContext.getAttribute("ccof_ccfri_verification").setValue(null);
+                        formContext.getAttribute("ccof_ccfri_internal_status").setValue(4); // Review
+                        formContext.getAttribute("ccof_ccfri_verification").setValue(101510001); // Undo Verify
                         formContext.getAttribute("ccof_qr_verified_by_ccfri").setValue(null);
                         formContext.getAttribute("ccof_qr_verified_on_ccfri").setValue(null);
                     };
+                    formContext.data.save();
                 }
                 else {
                     console.log("The Undo Payment Approval does NOT proceed");
@@ -390,6 +387,27 @@ CCOF.MonthlyEnrollment.Form = {
                 Xrm.Navigation.openErrorDialog({ message: error });
             }
         );
+    },
+    showHideUndoPaymentApprovalButton: function (primaryControl) {
+        debugger;
+        let formContext = primaryControl;
+        let visible = false;
+        let userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+        userRoles.forEach(function hasRole(item, index) {
+            if (item.name === "CCOF - Sr. Adjudicator" || item.name === "System Administrator") {
+                visible = true;
+            }
+        });
+        if (!visible) return visible;
+        let entityId = formContext.data.entity.getId();
+        entityId = getCleanedGuid(entityId);
+        let activePaymentLines = getSyncMultipleRecord("ofm_payments?$select=_ccof_coding_line_type_value,_ccof_invoice_value,_ccof_monthly_enrollment_report_value,_ofm_application_value,_ofm_facility_value,ofm_name,ofm_payment_type,statecode,statuscode&$filter=(statecode eq 0 and _ccof_monthly_enrollment_report_value eq " + entityId + ")&$orderby=_ccof_invoice_value desc");
+        if (activePaymentLines.length === 0 || activePaymentLines[0]["_ccof_invoice_value"] != null) {
+            visible = false;
+        } else {
+            visible = true;
+        }
+        return visible;
     }
 }
 function onChange_locked(executionContext) {

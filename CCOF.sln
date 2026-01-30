@@ -42,26 +42,26 @@ Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "CCOF.Infrastructure.SSRS", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CCOF.Core.DataContext", "CCOF.Core.DataContext\CCOF.Core.DataContext.shproj", "{7E11D821-093B-4E0C-B139-04348871A472}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CCOF.Infrastructure.PCFControl", "CCOF.Infrastructure.PCFControl\", "{96668DEF-DF5A-46E9-9128-820CA1037DAA}"
-ProjectSection(WebsiteProperties) = preProject
-	TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
-	Debug.AspNetCompiler.VirtualPath = "/localhost_64378"
-	Debug.AspNetCompiler.PhysicalPath = "CCOF.Infrastructure.PCFControl\"
-	Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64378\"
-	Debug.AspNetCompiler.Updateable = "true"
-	Debug.AspNetCompiler.ForceOverwrite = "true"
-	Debug.AspNetCompiler.FixedNames = "false"
-	Debug.AspNetCompiler.Debug = "True"
-	Release.AspNetCompiler.VirtualPath = "/localhost_64378"
-	Release.AspNetCompiler.PhysicalPath = "CCOF.Infrastructure.PCFControl\"
-	Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64378\"
-	Release.AspNetCompiler.Updateable = "true"
-	Release.AspNetCompiler.ForceOverwrite = "true"
-	Release.AspNetCompiler.FixedNames = "false"
-	Release.AspNetCompiler.Debug = "False"
-	VWDPort = "64378"
-	SlnRelativePath = "CCOF.Infrastructure.PCFControl\"
-EndProjectSection
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CCOF.Infrastructure.PCFControl(1)", "CCOF.Infrastructure.PCFControl\", "{96668DEF-DF5A-46E9-9128-820CA1037DAA}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_63590"
+		Debug.AspNetCompiler.PhysicalPath = "CCOF.Infrastructure.PCFControl\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63590\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_63590"
+		Release.AspNetCompiler.PhysicalPath = "CCOF.Infrastructure.PCFControl\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63590\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "63590"
+		SlnRelativePath = "CCOF.Infrastructure.PCFControl\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,8 +107,8 @@ Global
 		{96668DEF-DF5A-46E9-9128-820CA1037DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96668DEF-DF5A-46E9-9128-820CA1037DAA}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
 		{96668DEF-DF5A-46E9-9128-820CA1037DAA}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
-		{96668DEF-DF5A-46E9-9128-820CA1037DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96668DEF-DF5A-46E9-9128-820CA1037DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96668DEF-DF5A-46E9-9128-820CA1037DAA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{96668DEF-DF5A-46E9-9128-820CA1037DAA}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -120,7 +120,6 @@ Global
 		{AF8281ED-0771-493E-8F75-122B289D8996} = {044E25FD-D499-4F3E-B754-D8213C70272B}
 		{BFAB83AE-9833-47AD-86E0-D9FD5501B7E1} = {044E25FD-D499-4F3E-B754-D8213C70272B}
 		{7E11D821-093B-4E0C-B139-04348871A472} = {C839EACF-98C2-427E-A269-125F9A2D9E53}
-		{96668DEF-DF5A-46E9-9128-820CA1037DAA} = {044E25FD-D499-4F3E-B754-D8213C70272B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03EBDCA4-3EEB-4430-9D1F-BB76ADE05BBF}
