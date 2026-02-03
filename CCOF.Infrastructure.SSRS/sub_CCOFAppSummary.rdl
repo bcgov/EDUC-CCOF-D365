@@ -2279,7 +2279,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.16in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2307,7 +2307,33 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.16in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Subreport Name="Subreport3">
+                                        <ReportName>sub_sub_AppLicenceDetails</ReportName>
+                                        <Parameters>
+                                          <Parameter Name="FacilityID">
+                                            <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
+                                          </Parameter>
+                                        </Parameters>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Subreport>
+                                      <ColSpan>3</ColSpan>
+                                      <rd:Selected>true</rd:Selected>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.16in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2336,7 +2362,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.17042in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2390,7 +2416,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.34958in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2418,7 +2444,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.57778in</Height>
+                                <Height>0.36in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2503,7 +2529,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.16in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2532,7 +2558,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.16in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2561,7 +2587,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.16in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2590,7 +2616,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17778in</Height>
+                                <Height>0.16in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2634,6 +2660,7 @@
                                   <Hidden>=IIF(First(Fields!ccof_applicationtypeValue.Value)=100000000,False,True)</Hidden>
                                 </Visibility>
                               </TablixMember>
+                              <TablixMember />
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
