@@ -82,7 +82,7 @@
     &lt;attribute name="ccof_beforekindergarten" /&gt;
     &lt;attribute name="ccof_beforeschool" /&gt;
     &lt;attribute name="ccof_isthefacilitylocatedonschoolproperty" /&gt;
-    &lt;attribute name="ccof_monthswhenalloftheprogramsclosedcomplete" /&gt;
+    &lt;attribute name="ccof_monthwhenfacilityisclosedforentiremonth" /&gt;
     &lt;filter&gt;
       &lt;condition attribute="statecode" operator="eq" value="0" /&gt;
       &lt;condition attribute="ccof_application" operator="eq" value="@ApplicationID" /&gt;
@@ -524,12 +524,12 @@
           <DataField>ccof_isthefacilitylocatedonschoolpropertyValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="ccof_monthswhenalloftheprogramsclosedcomplete">
-          <DataField>ccof_monthswhenalloftheprogramsclosedcomplete</DataField>
+        <Field Name="ccof_monthwhenfacilityisclosedforentiremonth">
+          <DataField>ccof_monthwhenfacilityisclosedforentiremonth</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_monthswhenalloftheprogramsclosedcompleteValue">
-          <DataField>ccof_monthswhenalloftheprogramsclosedcompleteValue</DataField>
+        <Field Name="ccof_monthwhenfacilityisclosedforentiremonthValue">
+          <DataField>ccof_monthwhenfacilityisclosedforentiremonthValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
@@ -865,7 +865,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_monthswhenalloftheprogramsclosedcomplete.Value, "AppCCOF")</Value>
+                                  <Value>=First(Fields!ccof_monthwhenfacilityisclosedforentiremonth.Value, "AppCCOF")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Normal</FontWeight>
@@ -2722,7 +2722,7 @@
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(First(Fields!ccof_monthswhenalloftheprogramsclosedcomplete.Value, "AppCCOF") = "Yes", false, true)</Hidden>
+                    <Hidden>=IIF(First(Fields!ccof_monthwhenfacilityisclosedforentiremonth.Value, "AppCCOF") = "Yes", false, true)</Hidden>
                   </Visibility>
                 </TablixMember>
                 <TablixMember />
