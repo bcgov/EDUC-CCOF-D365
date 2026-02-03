@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
         <ConnectString>https://mychildcareservicesdev.crm3.dynamics.com/</ConnectString>
+        <Prompt>Specify a user name and password for data source DynamicsCRM:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>5376d888-1bf8-41da-b3d2-96f23af6745b</rd:DataSourceID>
@@ -41,8 +42,7 @@
     &lt;attribute name="ccof_oct" /&gt;
     &lt;attribute name="ccof_programyear" /&gt;
     &lt;attribute name="ccof_sep" /&gt;
-    &lt;order attribute="ccof_childcarecategory" /&gt;
-    &lt;order attribute="ccof_programyear" descending="true" /&gt;
+    &lt;order attribute="ccof_programyear" /&gt;
     &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
       &lt;attribute name="ccof_applicationccfriid" /&gt;
       &lt;attribute name="ccof_facility" /&gt;
@@ -51,6 +51,9 @@
       &lt;filter&gt;
         &lt;condition attribute="ccof_applicationccfriid" operator="eq" value="@ApplicationCCFRIID" /&gt;
       &lt;/filter&gt;
+    &lt;/link-entity&gt;
+    &lt;link-entity name="ccof_childcare_category" from="ccof_childcare_categoryid" to="ccof_childcarecategory" alias="category"&gt;
+      &lt;order attribute="ccof_childcarecategorynumber" /&gt;
     &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
