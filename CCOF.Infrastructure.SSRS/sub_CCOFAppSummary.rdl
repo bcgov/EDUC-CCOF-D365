@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+  <am:AuthoringMetadata>
+    <am:CreatedBy>
+      <am:Name>SSDTRS</am:Name>
+      <am:Version>17.14.36717.8</am:Version>
+    </am:CreatedBy>
+    <am:UpdatedBy>
+      <am:Name>SSDTRS</am:Name>
+      <am:Version>17.14.36717.8</am:Version>
+    </am:UpdatedBy>
+    <am:LastModifiedTimestamp>2026-02-03T18:01:03.1368210Z</am:LastModifiedTimestamp>
+  </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -2279,7 +2290,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.16in</Height>
+                                <Height>0.14545in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2307,7 +2318,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.16in</Height>
+                                <Height>0.14545in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2325,7 +2336,6 @@
                                         </Style>
                                       </Subreport>
                                       <ColSpan>3</ColSpan>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
@@ -2333,7 +2343,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.16in</Height>
+                                <Height>0.14545in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2362,7 +2372,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.17042in</Height>
+                                <Height>0.15587in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2416,7 +2426,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.34958in</Height>
+                                <Height>0.33503in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2444,11 +2454,11 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.36in</Height>
+                                <Height>0.19754in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
-                                      <Textbox Name="Textbox223">
+                                      <Textbox Name="Textbox19">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
@@ -2457,7 +2467,6 @@
                                               <TextRun>
                                                 <Value>CCFRI Opt-In/Opt-Out Status:</Value>
                                                 <Style>
-                                                  <FontFamily>Arial</FontFamily>
                                                   <FontSize>8pt</FontSize>
                                                   <TextDecoration>None</TextDecoration>
                                                   <Color>Gray</Color>
@@ -2475,13 +2484,51 @@
                                               <TextRun>
                                                 <Value>=Fields!AppCCFRI_ccof_ccfrioptin.Value</Value>
                                                 <Style>
-                                                  <FontFamily>Arial</FontFamily>
+                                                  <FontStyle>Normal</FontStyle>
+                                                  <FontFamily>BCSans</FontFamily>
                                                   <TextDecoration>None</TextDecoration>
+                                                </Style>
+                                              </TextRun>
+                                              <TextRun>
+                                                <Value xml:space="preserve">   </Value>
+                                                <Style>
+                                                  <FontStyle>Normal</FontStyle>
+                                                  <FontFamily>BCSans</FontFamily>
+                                                  <TextDecoration>None</TextDecoration>
+                                                  <Color>Gray</Color>
                                                 </Style>
                                               </TextRun>
                                             </TextRuns>
                                             <Style />
                                           </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox19</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                      <ColSpan>3</ColSpan>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.29337in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox223">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
@@ -2529,7 +2576,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.16in</Height>
+                                <Height>0.14545in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2558,7 +2605,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.16in</Height>
+                                <Height>0.14545in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2587,7 +2634,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.16in</Height>
+                                <Height>0.14545in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2616,7 +2663,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.16in</Height>
+                                <Height>0.14545in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2665,6 +2712,11 @@
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(Fields!AppCCFRI_ccof_ccfrioptinValue.Value = 1, False, True)</Hidden>
+                                </Visibility>
+                              </TablixMember>
                               <TablixMember />
                               <TablixMember />
                               <TablixMember>
