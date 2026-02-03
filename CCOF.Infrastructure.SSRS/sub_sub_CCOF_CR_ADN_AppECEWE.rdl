@@ -7,9 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.14.36717.8</am:Version>
+      <am:Version>17.14.36623.8</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-01-20T17:05:14.7816753Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-02-02T23:48:46.9097957Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -284,7 +284,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Which of the following describes your organziation?</Value>
+                                  <Value>Which of the following describes your organization?</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
