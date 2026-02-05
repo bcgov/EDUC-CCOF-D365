@@ -1,19 +1,20 @@
 ﻿//using ECC.Core.DataContext;
 using CCOF.Infrastructure.WebAPI.Extensions;
+using CCOF.Infrastructure.WebAPI.Messages;
 using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services.AppUsers;
 using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
-using System.Text.Json.Nodes;
-using CCOF.Infrastructure.WebAPI.Messages;
-using Microsoft.Extensions.Options;
-using System.Net;
 using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
-using System.Text.Json;
-using System.Xml.Linq;
-using Polly.Caching;
+using Microsoft.Extensions.Options;
+using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json.Linq;
 using Polly;
+using Polly.Caching;
 using Polly.Retry;
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Xml.Linq;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
@@ -72,7 +73,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         public string ApprovedClosureDayRequestUri
         {
             get
-            {  // Fetch xml is only for reference as we need get more than 5000 records
+            {  // Fetch xml is only for reference as we need get more than 5000 records // 100000001 Complete-Approved. 100000002 Complete-Not Approved
                 var fetchXml = $$"""
                         <fetch>
                           <entity name="ccof_application_ccfri_closure">
@@ -96,14 +97,18 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             <attribute name="ccof_pastercorrected" />
                             <attribute name="ccof_payment_eligibility" />
                             <filter>
-                              <condition attribute="ccof_closure_status" operator="eq" value="100000001" />  
                               <condition attribute="ccof_program_year" operator="eq" value="{{_processParams.InitialEnrolmentReport.ProgramYearId}}" />
                               <condition attribute="statecode" operator="eq" value="0" />
+                              <filter type="or">
+                                  <condition attribute="ccof_closure_status" operator="eq" value="100000001" />
+                                  <condition attribute="ccof_closure_status" operator="eq" value="100000002" />
+                              </filter>
                             </filter>
+                            <order attribute="ccof_startdate" />
                           </entity>
                         </fetch>
                         """;
-                var requestUri = $"ccof_application_ccfri_closures?$select=_ccof_program_year_value,ccof_age_affected_groups,ccof_closure_status,ccof_closure_type,ccof_comment,ccof_emergency_closure_type,ccof_enddate,ccof_is_full_closure,ccof_name,_ccof_organizationfacility_value,ccof_startdate,ccof_totaldays,ccof_totalworkdays,statecode,statuscode,_ccof_facilityinfo_value,ccof_paidclosure,ccof_pastercorrected,ccof_payment_eligibility&$filter=(ccof_closure_status eq 100000001 and _ccof_program_year_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + " and statecode eq 0)";
+                var requestUri = $"ccof_application_ccfri_closures?$select=_ccof_program_year_value,ccof_age_affected_groups,ccof_closure_status,ccof_closure_type,ccof_comment,ccof_emergency_closure_type,ccof_enddate,ccof_is_full_closure,ccof_name,_ccof_organizationfacility_value,ccof_startdate,ccof_totaldays,ccof_totalworkdays,statecode,statuscode,_ccof_facilityinfo_value,ccof_paidclosure,ccof_pastercorrected,ccof_payment_eligibility&$filter=(_ccof_program_year_value eq " + _processParams.InitialEnrolmentReport.ProgramYearId + " and statecode eq 0 and (ccof_closure_status eq 100000001 or ccof_closure_status eq 100000002))&$orderby=ccof_startdate asc";
                 return requestUri.CleanCRLF();
             }
         }
@@ -561,7 +566,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 // int batchSize = 50;
                 int batchSize = 25;
                 _logger.LogInformation("Creating Draft Monthly Enrolment Reports for " + _processParams.InitialEnrolmentReport.FacilityGuid.Count() + " Facilities");
-
+                int totalProcessed =0;
+                int totalErrorCount =0;
                 for (int i = 0; i < _processParams.InitialEnrolmentReport.FacilityGuid.Count(); i += batchSize)
                 {
                     List<HttpRequestMessage> createEnrolmentReportRequests = [];
@@ -569,6 +575,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     foreach (var record in batch)
                     {
                         // Identity Closure Days
+                        Boolean closureIndicator = false;
                         var approvedClosureDaysArray = allApprovedClosureDays.Where(node => node?["_ccof_facilityinfo_value"]?.GetValue<string>() == record).ToArray();
                         var dailyEnrollmentSelected = new List<JsonObject>();
                         var dailyEnrollmentArray = dailyEnrolment;
@@ -583,6 +590,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             DateTime currentDayEnrollmentDate = new DateTime(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, dayOfMonth);
                             // Check if this day falls within any approved closure period
                             int? closurePaymentEligibility = null;
+                            string? ageAffectedGroups=string.Empty;  // for multiple optionset
+                            bool? isFullClosure = false;
                             if (approvedClosureDaysArray != null)
                             {
                                 foreach (JsonObject closure in approvedClosureDaysArray)
@@ -591,10 +600,12 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                     {
                                         DateTime startDate = closure["ccof_startdate"].GetValue<DateTime>().Date;
                                         DateTime endDate = closure["ccof_enddate"].GetValue<DateTime>().Date;
-                                        int paymentEligibility = closure["ccof_payment_eligibility"].GetValue<int>();
                                         if (currentDayEnrollmentDate >= startDate && currentDayEnrollmentDate <= endDate)
                                         {
-                                            closurePaymentEligibility = paymentEligibility;
+                                            closureIndicator = true;
+                                            closurePaymentEligibility = closure["ccof_payment_eligibility"]?.GetValue<int>();
+                                            ageAffectedGroups =   closure["ccof_age_affected_groups"]?.GetValue<string>();
+                                            isFullClosure = closure["ccof_is_full_closure"]?.GetValue<Boolean>();
                                             // _logger.LogInformation($"Daily enrollment day {currentDayEnrollmentDate.ToShortDateString()} is within closure {startDate.ToShortDateString()} - {endDate.ToShortDateString()}. Setting payment eligibility to {paymentEligibility}");
                                             break;
                                         }
@@ -604,7 +615,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             // Set ccof_paymenteligibility if a closure match was found
                             if (closurePaymentEligibility.HasValue)
                             {
-                                selectedObject["ccof_paymenteligibility"] = JsonValue.Create(closurePaymentEligibility.Value);
+                                selectedObject["ccof_paymenteligibility"] = JsonValue.Create(closurePaymentEligibility);
+                                selectedObject["ccof_ageaffectedgroups"] = JsonValue.Create(ageAffectedGroups); 
+                                selectedObject["ccof_isfullclosure"] = JsonValue.Create(isFullClosure);
                             }
                             dailyEnrollmentSelected.Add(selectedObject);
                         }
@@ -809,6 +822,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             ["ccof_ccfridailyratemax@odata.bind"] = ccfriMax?["ccof_rateid"]?.GetValue<string>() is string CCFRIMaxRateId ? $"/ccof_rates({CCFRIMaxRateId})" : null,
                             ["ccof_ccfridailyratemin@odata.bind"] = ccfriMin?["ccof_rateid"]?.GetValue<string>() is string CCFRIMinRateId ? $"/ccof_rates({CCFRIMinRateId})" : null,
                             ["ccof_ccfricompleteapproved"] = ccfriCompleteApproved,
+                            ["ccof_closureindicator"] = closureIndicator,
                             ["ccof_reportextension"] = new JsonObject()
                             {
                                 // Approved Parent Fee
@@ -864,11 +878,14 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
                         _logger.LogError(CustomLogEvent.Process, "Failed to Create Enrolment Report: {error}", JsonValue.Create(errorInfos)!.ToString());
                     }
+                    totalProcessed = totalProcessed + ERBatchResult.TotalProcessed;
+                    totalErrorCount = totalErrorCount + ERBatchResult.Errors?.Count() ?? 0;
                     await Task.Delay(5000);  // deplay 5 seconds avoid api throtting.
                 }
                 var endtime = _timeProvider.GetTimestamp();
                 var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
+                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Total records processed:"+(totalProcessed+totalErrorCount)+" Records processed successfully:"+totalProcessed
+                    +" Records processed with error:"+totalErrorCount+" Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
                 _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Draft ERs Creation Batch process is Complete");
                 return ProcessResult.Completed(ProcessId).SimpleProcessResult;
             }
