@@ -109,7 +109,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             }
         }
         public string ApprovedClosureDayRequestUri
-        {  // 100000001 Complete_Approved
+        {  // 100000001 Complete_Approved 100000002 Complete-Not Approved
             get
             {
                 var fetchXml = $"""
@@ -135,11 +135,15 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                         <attribute name="ccof_pastercorrected" />
                         <attribute name="ccof_payment_eligibility" />
                         <filter>
-                          <condition attribute="ccof_closure_status" operator="eq" value="100000001" />  
                           <condition attribute="ccof_program_year" operator="eq" value="{programYearGuid}" />
                           <condition attribute="ccof_facilityinfo" operator="eq" value="{facilityGuid}" />
                           <condition attribute="statecode" operator="eq" value="0" />
+                          <filter type="or">
+                              <condition attribute="ccof_closure_status" operator="eq" value="100000001" />
+                              <condition attribute="ccof_closure_status" operator="eq" value="100000002" />
+                          </filter>
                         </filter>
+                        <order attribute="ccof_startdate" />
                       </entity>
                     </fetch>
                     """;
@@ -589,7 +593,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             var approvedClosureDays = JObject.Parse(response.Content.ReadAsStringAsync().Result.ToString());
             JArray? approvedClosureDaysArray = approvedClosureDays["value"] as JArray;
             // _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Endpoint: GenerateAdjusementER Raw Approved Closures JSON: " + approvedClosureDaysArray?.ToString() ?? "[]");
-
+            Boolean closureIndicator = false;
             if (dailyEnrollmentArray != null)
             {
                 foreach (var item in dailyEnrollmentArray)
@@ -603,6 +607,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     DateTime currentDayEnrollmentDate = new DateTime(int.Parse(year), month, dayOfMonth);
                     // Check if this day falls within any approved closure period
                     int? closurePaymentEligibility = null;
+                    string? ageAffectedGroups = string.Empty;  // for multiple optionset
+                    bool? isFullClosure = false;
                     if (approvedClosureDaysArray != null)
                     {
                         foreach (JObject closure in approvedClosureDaysArray)
@@ -611,10 +617,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             {
                                 DateTime startDate = closure["ccof_startdate"].Value<DateTime>().Date;
                                 DateTime endDate = closure["ccof_enddate"].Value<DateTime>().Date;
-                                int paymentEligibility = closure["ccof_payment_eligibility"].Value<int>();
+                                // int paymentEligibility = closure["ccof_payment_eligibility"].Value<int>();
                                 if (currentDayEnrollmentDate >= startDate && currentDayEnrollmentDate <= endDate)
                                 {
-                                    closurePaymentEligibility = paymentEligibility;
+                                    closureIndicator = true;
+                                    closurePaymentEligibility = closure["ccof_payment_eligibility"]?.Value<int>();
+                                    ageAffectedGroups = closure["ccof_age_affected_groups"]?.Value<string>();
+                                    isFullClosure = closure["ccof_is_full_closure"]?.Value<Boolean>();
+                                    //closurePaymentEligibility = paymentEligibility;
                                     //  _logger.LogInformation($"Daily enrollment day {currentDayEnrollmentDate.ToShortDateString()} is within closure {startDate.ToShortDateString()} - {endDate.ToShortDateString()}. Setting payment eligibility to {paymentEligibility}");
                                     break;
                                 }
@@ -624,7 +634,10 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                     // Set ccof_paymenteligibility if a closure match was found
                     if (closurePaymentEligibility.HasValue)
                     {
-                        selectedObject["ccof_paymenteligibility"] = JsonValue.Create(closurePaymentEligibility.Value);
+                        // selectedObject["ccof_paymenteligibility"] = JsonValue.Create(closurePaymentEligibility.Value);
+                        selectedObject["ccof_paymenteligibility"] = JsonValue.Create(closurePaymentEligibility);
+                        selectedObject["ccof_ageaffectedgroups"] = JsonValue.Create(ageAffectedGroups);
+                        selectedObject["ccof_isfullclosure"] = JsonValue.Create(isFullClosure);
                     }
                     if (itemObj["ccof_day"] != null) selectedObject["ccof_day"] = JsonValue.Create(itemObj["ccof_day"].Value<int?>());
                     if (itemObj["ccof_daytype"] != null) selectedObject["ccof_daytype"] = JsonValue.Create(itemObj["ccof_daytype"].Value<int?>());
@@ -665,6 +678,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 [$"{lookupFieldSchemaName}_{targetEntityLogicalName}@odata.bind"] = (string.IsNullOrEmpty(targetEntityLogicalName) || string.IsNullOrEmpty(targetEntitySetName) || string.IsNullOrEmpty(targetRecordGuid)) ? null : $"/{targetEntitySetName}({targetRecordGuid})",
                 ["ccof_licence@odata.bind"] = PreviousER["_ccof_licence_value"].ToString() == "" ? null : $"/ccof_licenses(" + PreviousER["_ccof_licence_value"].ToString() + ")",
                 ["ccof_ccfricompleteapproved"]=ccfriCompleteApproved,
+                ["ccof_closureindicator"] = closureIndicator,
                 #region main fields need to copied to Adjustment ER
                 // Total Enrolled
                 ["ccof_totalenrolled0to18"] = PreviousER["ccof_totalenrolled0to18"]?.Value<int?>(),
