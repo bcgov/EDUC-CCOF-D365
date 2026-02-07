@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
-  <am:AuthoringMetadata>
-    <am:CreatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>17.14.36717.8</am:Version>
-    </am:CreatedBy>
-    <am:UpdatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>17.14.36717.8</am:Version>
-    </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-02-03T18:01:03.1368210Z</am:LastModifiedTimestamp>
-  </am:AuthoringMetadata>
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -46,6 +35,7 @@
     &lt;attribute name="ccof_has_banking_information_changed" /&gt;
     &lt;attribute name="ccof_is_funding_agreement_confirmed" /&gt;
     &lt;attribute name="ccof_are_licence_details_confirmed" /&gt;
+    &lt;attribute name="ccof_application_template_version" /&gt;
     &lt;filter&gt;
       &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
     &lt;/filter&gt;
@@ -88,10 +78,6 @@
         &lt;attribute name="ccof_name" /&gt;
         &lt;attribute name="ccof_programyear" /&gt;
       &lt;/link-entity&gt;
-    &lt;/link-entity&gt;
-    &lt;link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_programyear" link-type="inner" alias="ProgramYear"&gt;
-      &lt;attribute name="ccof_ccof_application_template_version" /&gt;
-      &lt;attribute name="ccof_name" /&gt;
     &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
@@ -184,6 +170,10 @@
         <Field Name="ccof_is_funding_agreement_confirmedValue">
           <DataField>ccof_is_funding_agreement_confirmedValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_application_template_version">
+          <DataField>ccof_application_template_version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="org_address1_city">
           <DataField>org_address1_city</DataField>
@@ -351,14 +341,6 @@
         </Field>
         <Field Name="org_ccof_partner4middlename">
           <DataField>org_ccof_partner4middlename</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ProgramYear_ccof_ccof_application_template_version">
-          <DataField>ProgramYear_ccof_ccof_application_template_version</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ProgramYear_ccof_name">
-          <DataField>ProgramYear_ccof_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -2239,12 +2221,12 @@
                               <TablixMember />
                               <TablixMember>
                                 <Visibility>
-                                  <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                                  <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                                 </Visibility>
                               </TablixMember>
                               <TablixMember>
                                 <Visibility>
-                                  <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                                  <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                                 </Visibility>
                               </TablixMember>
                               <TablixMember />
@@ -3200,13 +3182,13 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>18.61293in</Top>
-            <Left>0.18521in</Left>
-            <Height>4.13914in</Height>
-            <Width>8.53831in</Width>
+            <Top>14.88029in</Top>
+            <Left>0.17244in</Left>
+            <Height>4.22482in</Height>
+            <Width>8.61119in</Width>
             <ZIndex>2</ZIndex>
             <Visibility>
-              <Hidden>=IIF(First(Fields!ccof_showdeclarationonreportValue.Value, "APPData")=100000000,False,True)</Hidden>
+              <Hidden>=IIF((IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!ccof_showdeclarationonreportValue.Value, "APPData") = 100000000, False, True)</Hidden>
             </Visibility>
             <Style>
               <Border>
@@ -5811,49 +5793,49 @@ Intentionally supplying information that is false or misleading with respect to 
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND Not(IsNothing(Fields!org_ccof_partner4lastname.Value)), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "APPData")))), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
@@ -5861,13 +5843,13 @@ Intentionally supplying information that is false or misleading with respect to 
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
@@ -5881,12 +5863,12 @@ Intentionally supplying information that is false or misleading with respect to 
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                    <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                   </Visibility>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                    <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                   </Visibility>
                 </TablixMember>
                 <TablixMember />
@@ -5936,6 +5918,140 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Border>
                 </Style>
               </Image>
+              <Textbox Name="Textbox14">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Your Organization's Authorized Signing Authority</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <Color>Gray</Color>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox6</rd:DefaultName>
+                <Top>1.82985in</Top>
+                <Height>0.25in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox15">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=First(Fields!ccof_submittedby.Value, "APPData")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox7</rd:DefaultName>
+                <Top>2.1493in</Top>
+                <Height>0.2in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>2</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox13">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I, the applicant, do hereby certify that all the information provided is true and complete to the best of my knowledge and belief. By clicking this checkbox, I indicate that I agree to the foregoing terms and conditions.</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox5</rd:DefaultName>
+                <Top>1.36805in</Top>
+                <Left>0.28297in</Left>
+                <Height>0.39236in</Height>
+                <Width>7.89583in</Width>
+                <ZIndex>3</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox92">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Date: </Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Label>Time Stamp</Label>
+                        <Value>=Format(First(Fields!ccof_latestsubmissiondatepstValue.Value, "APPData"),"MMM dd, yyyy hh:mm tt")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox92</rd:DefaultName>
+                <Top>2.13541in</Top>
+                <Left>5.61116in</Left>
+                <Height>0.2in</Height>
+                <Width>2.51319in</Width>
+                <ZIndex>4</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
               <Textbox Name="Textbox12">
                 <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
@@ -5992,143 +6108,10 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox4</rd:DefaultName>
+                <Top>0.14992cm</Top>
                 <Left>0.07225in</Left>
                 <Height>1.23958in</Height>
                 <Width>8.41667in</Width>
-                <ZIndex>1</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox14">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>Your Organization's Authorized Signing Authority</Value>
-                        <Style>
-                          <FontFamily>Arial</FontFamily>
-                          <Color>Gray</Color>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style />
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox6</rd:DefaultName>
-                <Top>1.82985in</Top>
-                <Height>0.25in</Height>
-                <Width>3.60417in</Width>
-                <ZIndex>2</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox15">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>=First(Fields!ccof_submittedby.Value, "APPData")</Value>
-                        <Style>
-                          <FontFamily>Arial</FontFamily>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style />
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox7</rd:DefaultName>
-                <Top>2.1493in</Top>
-                <Height>0.2in</Height>
-                <Width>3.60417in</Width>
-                <ZIndex>3</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox13">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>I, the applicant, do hereby certify that all the information provided is true and complete to the best of my knowledge and belief. By clicking this checkbox, I indicate that I agree to the foregoing terms and conditions.</Value>
-                        <Style>
-                          <FontFamily>Arial</FontFamily>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style />
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox5</rd:DefaultName>
-                <Top>1.36805in</Top>
-                <Left>0.28297in</Left>
-                <Height>0.39236in</Height>
-                <Width>7.89583in</Width>
-                <ZIndex>4</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox92">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>Date: </Value>
-                        <Style>
-                          <FontFamily>Arial</FontFamily>
-                        </Style>
-                      </TextRun>
-                      <TextRun>
-                        <Label>Time Stamp</Label>
-                        <Value>=Format(First(Fields!ccof_latestsubmissiondatepstValue.Value, "APPData"),"MMM dd, yyyy hh:mm tt")</Value>
-                        <Style>
-                          <FontFamily>Arial</FontFamily>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style />
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox92</rd:DefaultName>
-                <Top>2.13541in</Top>
-                <Left>5.61116in</Left>
-                <Height>0.2in</Height>
-                <Width>2.51319in</Width>
                 <ZIndex>5</ZIndex>
                 <Style>
                   <Border>
@@ -6141,13 +6124,13 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>28.64121in</Top>
-            <Left>0.19215in</Left>
+            <Top>25.17663in</Top>
+            <Left>0.15286in</Left>
             <Height>2.51735in</Height>
             <Width>8.60475in</Width>
             <ZIndex>4</ZIndex>
             <Visibility>
-              <Hidden>=IIF(First(Fields!ccof_showdeclarationonreportValue.Value, "APPData")=100000002,False,True)</Hidden>
+              <Hidden>=IIF((IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!ccof_showdeclarationonreportValue.Value, "APPData") = 100000002, False, True)</Hidden>
             </Visibility>
             <Style>
               <Border>
@@ -6411,13 +6394,986 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>22.80788in</Top>
-            <Left>0.19215in</Left>
+            <Top>19.17455in</Top>
+            <Left>0.1795in</Left>
             <Height>5.81944in</Height>
             <Width>8.60413in</Width>
             <ZIndex>5</ZIndex>
             <Visibility>
-              <Hidden>=IIF(First(Fields!ccof_showdeclarationonreportValue.Value, "APPData")=100000001,False,True)</Hidden>
+              <Hidden>=IIF((IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!ccof_showdeclarationonreportValue.Value, "APPData") = 100000001, False, True)</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Rectangle Name="RectangleDeclarationA2">
+            <ReportItems>
+              <Image Name="Image4">
+                <Source>Embedded</Source>
+                <Value>checkmarkxxl</Value>
+                <Sizing>FitProportional</Sizing>
+                <Top>4.19957in</Top>
+                <Left>0.0998cm</Left>
+                <Height>0.13542in</Height>
+                <Width>0.18751in</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                </Style>
+              </Image>
+              <Textbox Name="Textbox21">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I, the applicant, do hereby certify that all the information provided is true and complete to the best of my knowledge and belief. By clicking this check-box, I indicate that I agree to the foregoing terms and conditions.</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox5</rd:DefaultName>
+                <Top>4.05721in</Top>
+                <Left>0.3292in</Left>
+                <Height>0.39236in</Height>
+                <Width>7.8496in</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox22">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Your Organization's Authorized Signing Authority</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <Color>Gray</Color>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox6</rd:DefaultName>
+                <Top>4.54679in</Top>
+                <Left>0.0998cm</Left>
+                <Height>0.25in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>2</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox24">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=First(Fields!ccof_submittedby.Value, "APPData")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox7</rd:DefaultName>
+                <Top>4.82457in</Top>
+                <Left>0.0998cm</Left>
+                <Height>0.2in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>3</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox113">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Date: </Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Label>Time Stamp</Label>
+                        <Value>=Format(First(Fields!ccof_latestsubmissiondatepstValue.Value, "APPData"), "MMM dd, yyyy hh:mm tt")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox92</rd:DefaultName>
+                <Top>4.83846in</Top>
+                <Left>5.50345in</Left>
+                <Height>0.2in</Height>
+                <Width>2.44792in</Width>
+                <ZIndex>4</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox25">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Declaration</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value />
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I hereby confirm that the information I have provided in this application is complete and accurate. I certify that I have read and understand the following requirements:</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
+</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>•  </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>Each facility must be licensed under the Community Care and Assisted Living Act;</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
+</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>•  </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>Each facility must be in compliance with the Community Care and Assisted Living Act and Child Care Licensing Regulation;</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
+</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>•  </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>Each facility must be willing to provide services to families who receive the Affordable Child Care Benefit;</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
+</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>•  </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>The organization must be in good standing with BC Registrar of Companies (if a nonprofit society or a registered company); and</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">
+</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>3pt</FontSize>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>•  </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>Arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                          <Color>#000000</Color>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>The applicant must be in good standing with the Ministry of Education and Child Care (that is, the Applicant must either have no outstanding balances owing to the Ministry OR the Applicant must have established payment plans for outstanding balances and these must be in good standing).</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>
+Intentionally supplying information that is false or misleading with respect to a material fact in order to obtain a child care grant may lead to action being taken under section 16 of the Early Learning and Child Care Act. If you are convicted of an offence under section 16, in addition to any punishment imposed, the court may order you to pay to the government all or part of any amount you received under the Early Learning and Child Care Act as a result of committing the offence.</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value />
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I do hereby certify that I am the authorized signing authority and that all of the information provided is true and complete to the best of my knowledge and belief.</Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <LeftIndent>0cm</LeftIndent>
+                    <RightIndent>0cm</RightIndent>
+                    <Style>
+                      <TextAlign>Left</TextAlign>
+                    </Style>
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value />
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <LeftIndent>0cm</LeftIndent>
+                    <RightIndent>0cm</RightIndent>
+                    <Style>
+                      <TextAlign>Left</TextAlign>
+                    </Style>
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I consent to the Ministry contacting other branches within the Ministry and other Province ministries to validate the accuracy of any information that I have provided.</Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontFamily>arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <LeftIndent>0cm</LeftIndent>
+                    <RightIndent>0cm</RightIndent>
+                    <Style>
+                      <TextAlign>Left</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox4</rd:DefaultName>
+                <Top>0.05581in</Top>
+                <Left>0.02602in</Left>
+                <Height>3.94584in</Height>
+                <Width>8.37044in</Width>
+                <ZIndex>5</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+            </ReportItems>
+            <Top>28.22593in</Top>
+            <Left>0.17888in</Left>
+            <Height>5.20763in</Height>
+            <Width>8.53831in</Width>
+            <ZIndex>6</ZIndex>
+            <Visibility>
+              <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!ccof_showdeclarationonreportValue.Value, "APPData") = 100000002, False, True)</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Rectangle Name="RectangleDeclarationB2">
+            <ReportItems>
+              <Image Name="Image5">
+                <Source>Embedded</Source>
+                <Value>checkmarkxxl</Value>
+                <Sizing>FitProportional</Sizing>
+                <Top>4.88194in</Top>
+                <Left>0.02602in</Left>
+                <Height>0.15625in</Height>
+                <Width>0.18751in</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                </Style>
+              </Image>
+              <Textbox Name="Textbox27">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value xml:space="preserve">                                                    </Value>
+                        <Style />
+                      </TextRun>
+                      <TextRun>
+                        <Value>Funding Agreement Number:  </Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>14pt</FontSize>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>=Lookup(First(Fields!ccof_programyearValue.Value, "APPData"), Fields!fundingagreement_ccof_programyearValue.Value, Fields!fundingagreement_ccof_name.Value, "APPData")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>14pt</FontSize>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value xml:space="preserve"> </Value>
+                        <Style>
+                          <FontSize>14pt</FontSize>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Declaration</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value />
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I do hereby certify that I am the authorized signing authority and that all of the information provided is true and complete to the best of my knowledge and belief.
+I consent to the Ministry contacting other branches within the Ministry and other Province ministries to validate the accuracy of any </Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>information that I have provided.
+By completing and submitting this form electronically, I hereby confirm that I have carefully read this form and the corresponding terms and conditions of the Child Care Operating Funding Agreement (the Funding Agreement) and that I agree to be bound by such terms and conditions. I further confirm that by clicking “I agree, consent, and certify” below, I represent and warrant that:
+    a. I am the authorized representative and signing authority of the Provider as named in the Funding Agreement (the Provider);
+    b. I have authority to submit this form on behalf of the Provider and that by clicking “I agree, consent, and certify”, I do hereby bind the Provider to the terms and conditions of the Funding Agreement if the Province accepts this form and enrols the Provider in any or all of the Child Care Operating Funding Program, the Child Care Fee Reduction Initiative, or the ECE Wage Enhancement;
+   c. All information provided on this form or otherwise in support of the Provider to receive funding under the Funding Agreement is true and complete to the best of my knowledge and belief. I understand and acknowledge that providing false or misleading information either on this form or otherwise to the Province to obtain any funding under the Funding Agreement or otherwise failing to comply with the Funding Agreement could result in certain penalties or repayment obligations, or both, under any or all of the Early Learning and Child Care Act, any successor legislation, or the Funding Agreement;
+   d. If I have applied for and been approved by the Province to enrol in the ECE Wage Enhancement, the Provider has taken all actions required under any collective agreement to which it is a party to ensure it is:
+    i. permitted to apply for the ECE Wage Enhancement for any of its unionized Early Childhood Educators (ECEs); and
+    ii. able to comply with its ECE Wage Enhancement related obligations under the Funding Agreement.</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value />
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I understand and acknowledge that until such time as the Province confirms approval or temporary approval of enrolment, in writing, in the Child Care Fee Reduction Initiative or the ECE Wage Enhancement, the Provider is not formally enrolled in these initiatives. The Province is not responsible for any pre-payments the Provider may make in anticipation of enrolment in either of these initiatives and any pre-payments made are at the Provider's own risk.</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox4</rd:DefaultName>
+                <Top>0.11458in</Top>
+                <Left>0.0254in</Left>
+                <Height>4.69792in</Height>
+                <Width>8.41667in</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox28">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I agree, consent, and certify</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox5</rd:DefaultName>
+                <Top>4.86806in</Top>
+                <Left>0.28991in</Left>
+                <Height>0.25in</Height>
+                <Width>2.41667in</Width>
+                <ZIndex>2</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox31">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Your Organization's Authorized Signing Authority</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <Color>Gray</Color>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox6</rd:DefaultName>
+                <Top>5.14584in</Top>
+                <Height>0.25in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>3</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox32">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=First(Fields!ccof_submittedby.Value, "APPData")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox7</rd:DefaultName>
+                <Top>5.47917in</Top>
+                <Height>0.2in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>4</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox115">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Date: </Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Label>Time Stamp</Label>
+                        <Value>=Format(First(Fields!ccof_latestsubmissiondatepstValue.Value, "APPData"), "MMM dd, yyyy hh:mm tt")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox92</rd:DefaultName>
+                <Top>5.47917in</Top>
+                <Left>5.18616in</Left>
+                <Height>0.2in</Height>
+                <Width>2.61009in</Width>
+                <ZIndex>5</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+            </ReportItems>
+            <Top>33.48911in</Top>
+            <Left>0.15348in</Left>
+            <Height>5.81944in</Height>
+            <Width>8.60413in</Width>
+            <ZIndex>7</ZIndex>
+            <Visibility>
+              <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!ccof_showdeclarationonreportValue.Value, "APPData") = 100000001, False, True)</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Rectangle Name="RectangleDeclarationDefault2">
+            <ReportItems>
+              <Image Name="Image6">
+                <Source>Embedded</Source>
+                <Value>checkmarkxxl</Value>
+                <Sizing>FitProportional</Sizing>
+                <Top>1.47569in</Top>
+                <Left>0.02602in</Left>
+                <Height>0.15625in</Height>
+                <Width>0.18751in</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                </Style>
+              </Image>
+              <Textbox Name="Textbox33">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Your Organization's Authorized Signing Authority</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <Color>Gray</Color>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox6</rd:DefaultName>
+                <Top>1.82985in</Top>
+                <Height>0.25in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox34">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=First(Fields!ccof_submittedby.Value, "APPData")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox7</rd:DefaultName>
+                <Top>2.1493in</Top>
+                <Height>0.2in</Height>
+                <Width>3.60417in</Width>
+                <ZIndex>2</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox35">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I agree, consent, and certify</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox5</rd:DefaultName>
+                <Top>1.35416in</Top>
+                <Left>0.28991in</Left>
+                <Height>0.26389in</Height>
+                <Width>7.89583in</Width>
+                <ZIndex>3</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox116">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Date: </Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Label>Time Stamp</Label>
+                        <Value>=Format(First(Fields!ccof_latestsubmissiondatepstValue.Value, "APPData"), "MMM dd, yyyy hh:mm tt")</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox92</rd:DefaultName>
+                <Top>2.13541in</Top>
+                <Left>5.61116in</Left>
+                <Height>0.2in</Height>
+                <Width>2.51319in</Width>
+                <ZIndex>4</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="Textbox36">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Declaration</Value>
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value />
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I do hereby certify that I am the authorized signing authority and that all of the information provided is true and complete to the best of my knowledge and belief.</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>I consent to the Ministry contacting other branches within the Ministry and other Province ministries to validate the accuracy of any information that I have provided.</Value>
+                        <Style>
+                          <FontFamily>Arial</FontFamily>
+                          <FontWeight>Normal</FontWeight>
+                          <TextDecoration>None</TextDecoration>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox4</rd:DefaultName>
+                <Top>0.14992cm</Top>
+                <Left>0.07225in</Left>
+                <Height>1.23958in</Height>
+                <Width>8.41667in</Width>
+                <ZIndex>5</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+            </ReportItems>
+            <Top>39.43444in</Top>
+            <Left>0.15348in</Left>
+            <Height>2.51735in</Height>
+            <Width>8.60475in</Width>
+            <ZIndex>8</ZIndex>
+            <Visibility>
+              <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!ccof_showdeclarationonreportValue.Value, "APPData") = 100000000, False, True)</Hidden>
             </Visibility>
             <Style>
               <Border>
@@ -6426,14 +7382,14 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
             </Style>
           </Rectangle>
         </ReportItems>
-        <Height>31.24189in</Height>
+        <Height>41.96568in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>8.95919in</Width>
+      <Width>8.95086in</Width>
       <Page>
         <PageHeight>16.54in</PageHeight>
         <PageWidth>11.5in</PageWidth>
