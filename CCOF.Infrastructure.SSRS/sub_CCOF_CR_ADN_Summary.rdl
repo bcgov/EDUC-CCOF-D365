@@ -68,6 +68,7 @@
           &lt;attribute name="address2_postalcode" /&gt;
           &lt;attribute name="address2_stateorprovince" /&gt;
           &lt;attribute name="primarycontactid" /&gt;
+          &lt;attribute name="primarycontactid" /&gt;
           &lt;attribute name="accountnumber" /&gt;
           &lt;attribute name="ccof_partner1firstname" /&gt;
           &lt;attribute name="ccof_partner1lastname" /&gt;
@@ -338,12 +339,24 @@
           <DataField>org_primarycontactidEntityName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_primarycontactid0">
+          <DataField>org_primarycontactid0</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="org_ccof_partner1firstname">
           <DataField>org_ccof_partner1firstname</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_primarycontactidValue0">
+          <DataField>org_primarycontactidValue0</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
         <Field Name="org_ccof_partner1lastname">
           <DataField>org_ccof_partner1lastname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="org_primarycontactidEntityName0">
+          <DataField>org_primarycontactidEntityName0</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="org_accountnumber">
@@ -6652,7 +6665,7 @@ Intentionally supplying information that is false or misleading with respect to 
                         </Style>
                       </TextRun>
                       <TextRun>
-                        <Value>=Lookup(First(Fields!ccof_programyearValue.Value, "APPData"), Fields!fundingagreement_ccof_programyearValue.Value, Fields!fundingagreement_ccof_name.Value, "APPData")</Value>
+                        <Value>=Lookup(First(Fields!ccof_program_yearValue.Value, "LicenseInfo"),Fields!fundingagreement_ccof_programyearValue.Value,Fields!fundingagreement_ccof_name.Value,"LicenseInfo")</Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
                           <FontSize>14pt</FontSize>
