@@ -315,6 +315,99 @@ CCOF.MonthlyEnrollment.Form = {
             }
         });
         return visible;
+    },
+    UndoPaymentApproval: function (primaryControl) {
+        debugger;
+        let formContext = primaryControl;
+        let entityId = formContext.data.entity.getId();
+        entityId = getCleanedGuid(entityId);
+        let activePaymentLines = getSyncMultipleRecord("ofm_payments?$select=_ccof_coding_line_type_value,_ccof_invoice_value,_ccof_monthly_enrollment_report_value,_ofm_application_value,_ofm_facility_value,ofm_name,ofm_payment_type,statecode,statuscode&$filter=(statecode eq 0 and _ccof_monthly_enrollment_report_value eq " + entityId + ")&$orderby=_ccof_invoice_value desc");
+        if (activePaymentLines.length === 0 || activePaymentLines[0]["_ccof_invoice_value"] != null) {
+            let alertStrings = { confirmButtonLabel: "Ok", text: "You cannot undo the payment approval because no payment lines were generated, or the payments have already been invoiced.", title: "Undo Paymentlines Approval is prohibited" };
+            let alertOptions = { height: 240, width: 520 };
+            Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
+                function (success) {
+                    console.log("Alert dialog closed");
+                },
+                function (error) {
+                    console.log(error.message);
+                }
+            );
+            return;
+        }
+        let confirmStrings = {
+            title: "Confirm Undo Paymentline Approval",
+            text: "Are you sure you want to undo paymentline approval  for this record? Please click Yes button to continue, or click No button to cancel.",
+            confirmButtonLabel: "Yes",
+            cancelButtonLabel: "No"
+        };
+        let confirmOptions = { height: 240, width: 520 };
+        let isCCOF = false;
+        let isCCFRI = false;
+        Xrm.Navigation.openConfirmDialog(confirmStrings, confirmOptions).then(
+            function (success) {
+                if (success.confirmed) {
+                    let promises = [];
+
+                    activePaymentLines.forEach(function (record) {
+                        let data = {
+                            statecode: 1,
+                            statuscode: 7 // Cancelled
+                        };
+                        if (record["ofm_payment_type"] === 7) { // CCOF
+                            isCCOF = true;
+                        };
+                        if (record["ofm_payment_type"] === 8 || record["ofm_payment_type"] === 10) { // CCFRI, CCFRI Provider 
+                            isCCFRI = true;
+                        };
+                        promises.push(
+                            Xrm.WebApi.updateRecord("ofm_payment", record["ofm_paymentid"], data)
+                        );
+                    }
+                    )
+                    if (isCCOF) {
+                        formContext.getAttribute("ccof_ccof_internal_status").setValue(4); // Review
+                        formContext.getAttribute("ccof_ccof_base_verification").setValue(101510001);// Undo Verify
+                        formContext.getAttribute("ccof_qr_verified_by_ccof").setValue(null);
+                        formContext.getAttribute("ccof_qr_verified_on_ccof").setValue(null);
+                    };
+                    if (isCCFRI) {
+                        formContext.getAttribute("ccof_ccfri_internal_status").setValue(4); // Review
+                        formContext.getAttribute("ccof_ccfri_verification").setValue(101510001); // Undo Verify
+                        formContext.getAttribute("ccof_qr_verified_by_ccfri").setValue(null);
+                        formContext.getAttribute("ccof_qr_verified_on_ccfri").setValue(null);
+                    };
+                    formContext.data.save();
+                }
+                else {
+                    console.log("The Undo Payment Approval does NOT proceed");
+                }
+            },
+            function (error) {
+                Xrm.Navigation.openErrorDialog({ message: error });
+            }
+        );
+    },
+    showHideUndoPaymentApprovalButton: function (primaryControl) {
+        debugger;
+        let formContext = primaryControl;
+        let visible = false;
+        let userRoles = Xrm.Utility.getGlobalContext().userSettings.roles;
+        userRoles.forEach(function hasRole(item, index) {
+            if (item.name === "CCOF - Sr. Accounts" || item.name === "System Administrator") {
+                visible = true;
+            }
+        });
+        if (!visible) return visible;
+        let entityId = formContext.data.entity.getId();
+        entityId = getCleanedGuid(entityId);
+        let activePaymentLines = getSyncMultipleRecord("ofm_payments?$select=_ccof_coding_line_type_value,_ccof_invoice_value,_ccof_monthly_enrollment_report_value,_ofm_application_value,_ofm_facility_value,ofm_name,ofm_payment_type,statecode,statuscode&$filter=(statecode eq 0 and _ccof_monthly_enrollment_report_value eq " + entityId + ")&$orderby=_ccof_invoice_value desc");
+        if (activePaymentLines.length === 0 || activePaymentLines[0]["_ccof_invoice_value"] != null) {
+            visible = false;
+        } else {
+            visible = true;
+        }
+        return visible;
     }
 }
 function onChange_locked(executionContext) {
