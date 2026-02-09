@@ -1330,7 +1330,7 @@ namespace CCOF.Core.DataContext
 	}
 	
 	/// <summary>
-	/// Type of sharing roles associated with Power Virtual Agents bots.
+	/// Type of sharing roles associated with Copilot Studio agents.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
 	public enum BotSharingRoleTypes
@@ -4966,6 +4966,55 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Over OOSC-K", 9)]
 		OverOOSCK = 100000009,
+	}
+	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum CcOf_Flag_Scope
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Application", 3)]
+		Application = 4,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Change Request", 9)]
+		ChangeRequest = 10,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Closure", 10)]
+		Closure = 11,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("ECE WE Report", 7)]
+		ECEWEReport = 8,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Enrollment Report", 6)]
+		EnrollmentReport = 7,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Funding", 4)]
+		Funding = 5,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Licence", 5)]
+		Licence = 6,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Organization and all facilities", 1)]
+		Organizationandallfacilities = 2,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Organization Only", 0)]
+		OrganizationOnly = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Payment line", 8)]
+		Paymentline = 9,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Specific facility", 2)]
+		Specificfacility = 3,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
@@ -10238,11 +10287,11 @@ namespace CCOF.Core.DataContext
 		AccountLeads = 16,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Account Research Agent Trigger", 139)]
+		[OptionSetMetadataAttribute("Account Research Agent Trigger", 140)]
 		AccountResearchAgentTrigger = 11850,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Account Research Result", 142)]
+		[OptionSetMetadataAttribute("Account Research Result", 141)]
 		AccountResearchResult = 11851,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10262,15 +10311,15 @@ namespace CCOF.Core.DataContext
 		Appointment = 4201,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Approval Stage Approval", 134)]
+		[OptionSetMetadataAttribute("Approval Stage Approval", 133)]
 		ApprovalStageApproval = 11784,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Approval Stage Condition", 135)]
+		[OptionSetMetadataAttribute("Approval Stage Condition", 136)]
 		ApprovalStageCondition = 11785,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Approval Stage Order", 138)]
+		[OptionSetMetadataAttribute("Approval Stage Order", 137)]
 		ApprovalStageOrder = 11786,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10310,7 +10359,7 @@ namespace CCOF.Core.DataContext
 		BotVariable = 12114,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Case", 133)]
+		[OptionSetMetadataAttribute("Case", 134)]
 		Case = 112,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10350,7 +10399,7 @@ namespace CCOF.Core.DataContext
 		ConnectionRole = 3231,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Contact", 145)]
+		[OptionSetMetadataAttribute("Contact", 146)]
 		Contact = 2,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10446,11 +10495,11 @@ namespace CCOF.Core.DataContext
 		FunctionalLocation = 10168,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Functional Location Type", 137)]
+		[OptionSetMetadataAttribute("Functional Location Type", 138)]
 		FunctionalLocationType = 11343,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Functional Location Type Template Association", 141)]
+		[OptionSetMetadataAttribute("Functional Location Type Template Association", 142)]
 		FunctionalLocationTypeTemplateAssociation = 11345,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10602,7 +10651,7 @@ namespace CCOF.Core.DataContext
 		Lead = 4,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Lead Agent Result", 143)]
+		[OptionSetMetadataAttribute("Lead Agent Result", 144)]
 		LeadAgentResult = 11852,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10610,7 +10659,7 @@ namespace CCOF.Core.DataContext
 		LeadCompetitors = 24,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Lead Delink Result", 146)]
+		[OptionSetMetadataAttribute("Lead Delink Result", 145)]
 		LeadDelinkResult = 11853,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10622,11 +10671,11 @@ namespace CCOF.Core.DataContext
 		LeadToOpportunitySalesProcess = 954,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Location Template Association", 140)]
+		[OptionSetMetadataAttribute("Location Template Association", 139)]
 		LocationTemplateAssociation = 11344,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("MobileSource", 136)]
+		[OptionSetMetadataAttribute("MobileSource", 135)]
 		MobileSource = 11237,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10758,7 +10807,7 @@ namespace CCOF.Core.DataContext
 		ProductInventory = 10647,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Product Map", 131)]
+		[OptionSetMetadataAttribute("Product Map", 132)]
 		ProductMap = 11774,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -10786,7 +10835,7 @@ namespace CCOF.Core.DataContext
 		PropertyInstance = 1333,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Property Location Association", 144)]
+		[OptionSetMetadataAttribute("Property Location Association", 143)]
 		PropertyLocationAssociation = 11346,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -11062,7 +11111,7 @@ namespace CCOF.Core.DataContext
 		WorkOrderIncident = 10672,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Work order not-to-exceed", 132)]
+		[OptionSetMetadataAttribute("Work order not-to-exceed", 131)]
 		Workordernottoexceed = 11159,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -13505,6 +13554,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Copy", 3)]
 		Copy = 100230304,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom", 28)]
+		Custom = 100230329,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Discard", 16)]
@@ -17451,6 +17504,10 @@ namespace CCOF.Core.DataContext
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Copilot", 3)]
 		Copilot = 100230204,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Custom", 25)]
+		Custom = 100230326,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Custom entity summary", 8)]

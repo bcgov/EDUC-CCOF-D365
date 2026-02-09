@@ -137,7 +137,7 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public ccof_ccof_change_request_Application_ccof_appl[]? ccof_ccof_change_request_Application_ccof_appl { get; set; }       
     }
 
-    public class Ccof_Programyear
+    public class Ccof_Programyear 
     {
         public string? ccof_name { get; set; }
         public string? ccof_program_yearid { get; set; }
@@ -408,7 +408,9 @@ namespace CCOF.Infrastructure.WebAPI.Models
         public int? statuscode { get; set; }
 
         public string ccof_casresponse { get; set; }
-        public Ccof_Programyear? ccof_ProgramYear { get; set; }
+        [JsonPropertyName("program_year.ccof_financial_year")]
+        public string ccof_financial_year { get; set; }
+
     }
 
     public class D365FiscalYear : OfM_Fiscal_Year
