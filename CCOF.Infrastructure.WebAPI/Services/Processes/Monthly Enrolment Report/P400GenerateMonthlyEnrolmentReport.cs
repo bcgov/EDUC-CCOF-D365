@@ -144,6 +144,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             <filter>
                               <condition attribute="statecode" operator="eq" value="0" />
                             </filter>
+                            <order attribute="ccof_effectivestartdate" descending="true" />
                           </entity>
                         </fetch>
                         """;
@@ -530,6 +531,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 _processParams = processParams;
                 int businessDay = 0;
                 var entitySetName = "ccof_monthlyenrollmentreports";
+                DateOnly rateEffectiveDate = new DateOnly(int.Parse(_processParams.InitialEnrolmentReport.Year), (int)_processParams.InitialEnrolmentReport.Month, 01);
                 int fiscalMonth = (((int)_processParams.InitialEnrolmentReport.Month + 8) % 12) + 1;
                 // for Approved Parent fee
                 var MonthLogicalNameTemp = JsonNode.Parse(monthLogicalNameString)?.AsArray() ?? throw new Exception("Invalid JSON");
@@ -648,21 +650,31 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                                 providerType = 100000001; // Family
                             }
                         }
-                        //else
-                        //{
-                        //    throw new InvalidOperationException($"Organization with accountid '{record}' not found.");
-                        //}
+                        // Set rates for ER
+                        // 100000001 IHMA Base Funding;  100000000 Base Funding
                         bool IHMALicenceExist = facilityLicence.Any(node => node?["_ccof_facility_value"]?.GetValue<string>() == record);
-                        var ccofBaseRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
-                                                               node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000)); // 100000001 IHMA Base Funding;  100000000 Base Funding
-                        //var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
-                        //                                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
-                        var ccfriMax = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                        var ccofBaseRate = rate.OrderByDescending(node => DateOnly.Parse(node["ccof_effectivestartdate"].GetValue<string>()))
+                                            .FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                                                   node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000) &&
+                                                   DateOnly.Parse(node?["ccof_effectivestartdate"]?.GetValue<string>()) <=rateEffectiveDate &&
+                                                   (node?["ccof_effectiveenddate"]?.ToString() == null ||DateOnly.Parse(node["ccof_effectiveenddate"]?.GetValue<string>()) >= rateEffectiveDate));
+                        //var ccfriProviderPaymentRate = rate.OrderByDescending(node => DateOnly.Parse(node["ccof_effectivestartdate"].GetValue<string>()))
+                        //                    .FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                        //                                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002) &&
+                        //                                       DateOnly.Parse(node?["ccof_effectivestartdate"]?.GetValue<string>()) <= rateEffectiveDate &&
+                        //                                       (node?["ccof_effectiveenddate"]?.ToString() == null || DateOnly.Parse(node["ccof_effectiveenddate"]?.GetValue<string>()) >= rateEffectiveDate)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
+                        var ccfriMax = rate.OrderByDescending(node => DateOnly.Parse(node["ccof_effectivestartdate"].GetValue<string>()))
+                                            .FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                                                    node?["ccof_ratetype"]?.GetValue<int>() == 100000004 &&
-                                                                   node?["ccof_businessday"]?.GetValue<int>() == businessDay); //100000004 CCFRI Max;
-                        var ccfriMin = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                                                                   node?["ccof_businessday"]?.GetValue<int>() == businessDay &&
+                                                                   DateOnly.Parse(node?["ccof_effectivestartdate"]?.GetValue<string>()) <= rateEffectiveDate &&
+                                                                   (node?["ccof_effectiveenddate"]?.ToString() == null || DateOnly.Parse(node["ccof_effectiveenddate"]?.GetValue<string>()) >= rateEffectiveDate)); //100000004 CCFRI Max;
+                        var ccfriMin = rate.OrderByDescending(node=>DateOnly.Parse(node["ccof_effectivestartdate"].GetValue<string>()))
+                                            .FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
                                                                    node?["ccof_ratetype"]?.GetValue<int>() == 100000005 &&
-                                                                   node?["ccof_businessday"]?.GetValue<int>() == businessDay); // 100000005 CCFRI Min
+                                                                   node?["ccof_businessday"]?.GetValue<int>() == businessDay &&
+                                                                   DateOnly.Parse(node?["ccof_effectivestartdate"]?.GetValue<string>()) <= rateEffectiveDate &&
+                                                                   (node?["ccof_effectiveenddate"]?.ToString() == null || DateOnly.Parse(node["ccof_effectiveenddate"]?.GetValue<string>()) >= rateEffectiveDate)); // 100000005 CCFRI Min
 
                         JsonNode? approvedParentfee0to18 = null;
                         JsonNode? approvedParentfee18to36 = null;
@@ -790,8 +802,11 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             (approvedParentFeesForMonth["ccof_approvedparentfeepre"] == null || approvedParentFeesForMonth["ccof_approvedparentfeepre"].GetValue<decimal>() == 0);
                         if (!allFeesEmptyOrZero)
                         {
-                            var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
-                                                                   node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
+                            var ccfriProviderPaymentRate = rate.OrderByDescending(node => DateOnly.Parse(node["ccof_effectivestartdate"].GetValue<string>()))
+                                                    .FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                                                                   node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002) &&
+                                                                   DateOnly.Parse(node?["ccof_effectivestartdate"]?.GetValue<string>()) <= rateEffectiveDate &&
+                                                                   (node?["ccof_effectiveenddate"]?.ToString() == null || DateOnly.Parse(node["ccof_effectiveenddate"]?.GetValue<string>()) >= rateEffectiveDate)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
                             if (ccfriProviderPaymentRate != null && ccfriProviderPaymentRate["ccof_rateid"] != null)
                             {
                                 providerPaymentRateBind = $"/ccof_rates({ccfriProviderPaymentRate["ccof_rateid"]?.GetValue<string>()})";

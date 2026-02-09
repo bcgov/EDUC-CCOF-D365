@@ -79,6 +79,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             <filter>
                               <condition attribute="statecode" operator="eq" value="0" />
                             </filter>
+                             <order attribute="ccof_effectivestartdate" descending="true" />
                           </entity>
                         </fetch>
                         """;
@@ -416,6 +417,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             month = (int)PreviousER["ccof_month"];
             int fiscalMonth = ((month + 8) % 12) + 1;
             year = PreviousER["ccof_year"]?.ToString().Trim();
+            DateOnly rateEffectiveDate = new DateOnly(int.Parse(year), (int)month, 01);
             JsonNode? ccfriMax = JsonObject.Parse(PreviousER["ccof_ccfridailyratemax"].ToString());
             JsonNode? ccfriMin = JsonObject.Parse(PreviousER["ccof_ccfridailyratemin"].ToString());
             response = _d365webapiservice.SendRetrieveRequestAsync(FeeFloorExemptRequestUri, true);
@@ -550,8 +552,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             JArray? FacilityLicenseArray = (JArray)FacilityLicenseJsonObject["value"];
             List<JsonNode> facilityLicence = FacilityLicenseArray.Select(j => JsonNode.Parse(j.ToString())).ToList();
             bool IHMALicenceExist = facilityLicence != null && facilityLicence.Count > 0;
-            var ccofBaseRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
-                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000)); // 100000001 IHMA Base Funding;  100000000 Base Funding
+            //var ccofBaseRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+            //           node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000)); // 100000001 IHMA Base Funding;  100000000 Base Funding
+            var ccofBaseRate = rate.OrderByDescending(node => DateOnly.Parse(node["ccof_effectivestartdate"].GetValue<string>()))
+                    .FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                           node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000001 : 100000000) &&
+                           DateOnly.Parse(node?["ccof_effectivestartdate"]?.GetValue<string>()) <= rateEffectiveDate &&
+                           (node?["ccof_effectiveenddate"]?.ToString() == null || DateOnly.Parse(node["ccof_effectiveenddate"]?.GetValue<string>()) >= rateEffectiveDate));
+
             if (ccofBaseRate != null && ccofBaseRate["ccof_rateid"] != null)
             {
                 ccofBaseRateBind = $"/ccof_rates({ccofBaseRate["ccof_rateid"]?.GetValue<string>()})";
@@ -568,8 +576,14 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                 (approvedParentFeesForMonth["ccof_approvedparentfeepre"] == null || approvedParentFeesForMonth["ccof_approvedparentfeepre"].GetValue<decimal>() == 0);
             if (!allFeesEmptyOrZero)
             {
-                var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
-                                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
+                //var ccfriProviderPaymentRate = rate.FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                //                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
+                var ccfriProviderPaymentRate = rate.OrderByDescending(node => DateOnly.Parse(node["ccof_effectivestartdate"].GetValue<string>()))
+                        .FirstOrDefault(node => node?["ccof_providertype"]?.GetValue<int>() == providerType &&
+                                       node?["ccof_ratetype"]?.GetValue<int>() == (int)(IHMALicenceExist ? 100000003 : 100000002) &&
+                                       DateOnly.Parse(node?["ccof_effectivestartdate"]?.GetValue<string>()) <= rateEffectiveDate &&
+                                       (node?["ccof_effectiveenddate"]?.ToString() == null || DateOnly.Parse(node["ccof_effectiveenddate"]?.GetValue<string>()) >= rateEffectiveDate)); // 100000003 IHMA Provider Payment Rate;100000002 CCFRI Provider Payment;
+
                 if (ccfriProviderPaymentRate != null && ccfriProviderPaymentRate["ccof_rateid"] != null)
                 {
                     providerPaymentRateBind = $"/ccof_rates({ccfriProviderPaymentRate["ccof_rateid"]?.GetValue<string>()})";
@@ -617,14 +631,12 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
                             {
                                 DateTime startDate = closure["ccof_startdate"].Value<DateTime>().Date;
                                 DateTime endDate = closure["ccof_enddate"].Value<DateTime>().Date;
-                                // int paymentEligibility = closure["ccof_payment_eligibility"].Value<int>();
                                 if (currentDayEnrollmentDate >= startDate && currentDayEnrollmentDate <= endDate)
                                 {
                                     closureIndicator = true;
                                     closurePaymentEligibility = closure["ccof_payment_eligibility"]?.Value<int>();
                                     ageAffectedGroups = closure["ccof_age_affected_groups"]?.Value<string>();
                                     isFullClosure = closure["ccof_is_full_closure"]?.Value<Boolean>();
-                                    //closurePaymentEligibility = paymentEligibility;
                                     //  _logger.LogInformation($"Daily enrollment day {currentDayEnrollmentDate.ToShortDateString()} is within closure {startDate.ToShortDateString()} - {endDate.ToShortDateString()}. Setting payment eligibility to {paymentEligibility}");
                                     break;
                                 }
