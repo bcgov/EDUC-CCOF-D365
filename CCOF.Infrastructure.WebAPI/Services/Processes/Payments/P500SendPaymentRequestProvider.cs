@@ -154,12 +154,13 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                         <attribute name="statecode" />
                         <attribute name="statuscode" />
                         <attribute name="transactioncurrencyid" />
-                    <attribute name="ccof_financial_year" />
                         <filter>
                           <condition attribute="statuscode" operator="eq" value="{(int)CcOf_Invoice_StatusCode.Approved}" />
                           <condition attribute="owningbusinessunitname" operator="like" value="%CCOF%" />
                         </filter>
-                       
+                       <link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_program_year" link-type="outer" alias="program_year" visible="false">
+                    <attribute name="ccof_financial_year"/>
+                    </link-entity>
                       </entity>
                     </fetch>
                     """;
@@ -313,7 +314,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             var invoiceData = await GetPaymentLineData();
             serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(invoiceData.Data.ToString());
             var grouppayment = serializedInvoiceData?.GroupBy(p => p.ccof_invoice_number).ToList();
-            var fiscalyear = serializedInvoiceData?.FirstOrDefault()?.ccof_ProgramYear.ccof_financial_year;
+            var fiscalyear = serializedInvoiceData?.FirstOrDefault()?.ccof_financial_year;
             var ccofPaymentLineData = await GetCCOFPaymentLineData();
             CCOFPaymentLines = JsonSerializer.Deserialize<List<D365PaymentLine>>(ccofPaymentLineData.Data.ToString());
             #endregion
@@ -352,14 +353,13 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
 
             #region Step 1: Handlebars format to generate Inbox data
 
-            string source = @"
-{{feederNumber}}{{batchType}}{{transactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{messageVersionNumber}}{{delimiter}}
-{{#each InvoiceHeader}}{{this.feederNumber}}{{this.batchType}}{{this.headertransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.PONumber}}{{this.invoiceType}}{{this.invoiceDate}}{{this.payGroupLookup}}{{this.remittanceCode}}{{this.grossInvoiceAmount}}{{this.CAD}}{{this.invoiceDate}}{{this.termsName}}{{this.description}}{{this.goodsDate}}{{this.invoiceRecDate}}{{this.oracleBatchName}}{{this.SIN}}{{this.payflag}}{{this.flow}}{{this.delimiter}}
-{{#each InvoiceLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.invoiceLineNumber}}{{this.committmentLine}}{{this.lineAmount}}{{this.lineCode}}{{this.distributionACK}}{{this.lineDescription}}{{this.effectiveDate}}{{this.quantity}}{{this.unitPrice}}{{this.optionalData}}{{this.distributionSupplierNumber}}{{this.flow}}{{this.delimiter}}
-{{/each}}{{#each InvoiceCommentLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.CommentLineNumber}}{{this.Comment}}{{this.delimiter}}
-{{/each}}{{/each}}{{feederNumber}}{{batchType}}{{trailertransactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{controlCount}}{{controlAmount}}{{delimiter}}
-";
-
+            
+            string source = "{{feederNumber}}{{batchType}}{{transactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{messageVersionNumber}}{{delimiter}}\n" 
+                + "{{#each InvoiceHeader}}{{this.feederNumber}}{{this.batchType}}{{this.headertransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.PONumber}}{{this.invoiceType}}{{this.invoiceDate}}{{this.payGroupLookup}}{{this.remittanceCode}}{{this.grossInvoiceAmount}}{{this.CAD}}{{this.invoiceDate}}{{this.termsName}}{{this.description}}{{this.goodsDate}}{{this.invoiceRecDate}}{{this.oracleBatchName}}{{this.SIN}}{{this.payflag}}{{this.flow}}{{this.delimiter}}\n" +
+                           "{{#each InvoiceLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.invoiceLineNumber}}{{this.committmentLine}}{{this.lineAmount}}{{this.lineCode}}{{this.distributionACK}}{{this.lineDescription}}{{this.effectiveDate}}{{this.quantity}}{{this.unitPrice}}{{this.optionalData}}{{this.distributionSupplierNumber}}{{this.flow}}{{this.delimiter}}\n{{/each}}" +
+                           "{{#each InvoiceCommentLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.CommentLineNumber}}{{this.Comment}}{{this.delimiter}} \n{{/each}}{{/each}}" +
+                           "{{this.feederNumber}}{{this.batchType}}{{this.trailertransactionType}}{{this.delimiter}}{{this.feederNumber}}{{this.fiscalYear}}{{this.cGIBatchNumber}}{{this.controlCount}}{{this.controlAmount}}{{this.delimiter}}\n";
+           
 
             var template = Handlebars.Compile(source);
 
@@ -370,6 +370,10 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 var pay_method = (ECc_Payment_Method)headeritem.First().ccof_paymentmethod;
 
                 var paymentType = ((ECc_Payment_Type)headeritem.First().ccof_payment_type);
+
+                var codingLineType = headeritem.First().CcOf_Coding_Line_TypeName;
+
+                
                 // from payment line
 
                 string ackNumber = string.Empty;
@@ -379,18 +383,12 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     ackJsonArray.ToJsonString(),
                     Setup.s_writeOptionsForLogs
                 )!;
-                var filteredAck = ackCodeList
+                ackNumber = ackCodeList
     .Where(ack => ack.OfmPaymentType == (int)paymentType)
-    .ToList();
-                
+    .Select(ack => ack.OfmAckNumber)
+    .FirstOrDefault();
 
-                //  var ackCodeList = ackCode?.Where(ack => ack.ofm_payment_type == paymentType.Get).ToList();
-
-                if (filteredAck.Any() && filteredAck.Count > 1)
-                {
-                    ackNumber = filteredAck.Select(code => code.OfmAckNumber).FirstOrDefault();
-                }
-              //  ackNumber = "0622265006500650822007400000000000";
+               
                 double invoiceamount = 0.00;
                 List<InvoiceLines> invoiceLines = [];
                 
