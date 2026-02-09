@@ -97,7 +97,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                           <attribute name="ccof_payment_type" />
                           <filter>
                             <condition attribute="statecode" operator="eq" value="0" />
-                            <condition attribute="statuscode" operator="eq" value="{(int)CcOf_Invoice_StatusCode.ProcessingPayment}" />
+                            <condition attribute="statuscode" operator="eq" value="{(int)CcOf_Invoice_StatusCode.Approved}" />
                             <condition attribute="owningbusinessunitname" operator="like" value="%CCOF%" />
                           </filter>
                         </link-entity>
