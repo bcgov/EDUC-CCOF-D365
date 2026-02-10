@@ -5808,8 +5808,8 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                 <Source>Embedded</Source>
                 <Value>checkmarkxxl</Value>
                 <Sizing>FitProportional</Sizing>
-                <Top>3.84096in</Top>
-                <Left>0.02207in</Left>
+                <Top>3.54583in</Top>
+                <Left>0.01626in</Left>
                 <Height>0.13542in</Height>
                 <Width>0.18751in</Width>
                 <Style>
@@ -6020,8 +6020,8 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Paragraphs>
                 <rd:DefaultName>Textbox4</rd:DefaultName>
                 <Top>0.09722in</Top>
-                <Left>0.02207in</Left>
-                <Height>3.41667in</Height>
+                <Left>0.02496in</Left>
+                <Height>3.31667in</Height>
                 <Width>8.37044in</Width>
                 <ZIndex>1</ZIndex>
                 <Style>
@@ -6051,8 +6051,8 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox5</rd:DefaultName>
-                <Top>3.72291in</Top>
-                <Left>0.27902in</Left>
+                <Top>3.42778in</Top>
+                <Left>0.27321in</Left>
                 <Height>0.39236in</Height>
                 <Width>7.8496in</Width>
                 <ZIndex>2</ZIndex>
@@ -6083,8 +6083,8 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox6</rd:DefaultName>
-                <Top>4.2229in</Top>
-                <Left>0.02207in</Left>
+                <Top>3.92777in</Top>
+                <Left>0.01626in</Left>
                 <Height>0.25in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>3</ZIndex>
@@ -6115,8 +6115,7 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox7</rd:DefaultName>
-                <Top>4.54235in</Top>
-                <Left>0.00581in</Left>
+                <Top>4.24722in</Top>
                 <Height>0.2in</Height>
                 <Width>3.60417in</Width>
                 <ZIndex>4</ZIndex>
@@ -6156,8 +6155,8 @@ Intentionally supplying information that is false or misleading with respect to 
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox92</rd:DefaultName>
-                <Top>4.48679in</Top>
-                <Left>5.43166in</Left>
+                <Top>4.19166in</Top>
+                <Left>5.42585in</Left>
                 <Height>0.2in</Height>
                 <Width>2.53125in</Width>
                 <ZIndex>5</ZIndex>
@@ -6173,9 +6172,9 @@ Intentionally supplying information that is false or misleading with respect to 
               </Textbox>
             </ReportItems>
             <Top>15.87661in</Top>
-            <Left>0.17289in</Left>
+            <Left>0.17in</Left>
             <Height>4.74235in</Height>
-            <Width>8.5325in</Width>
+            <Width>8.53539in</Width>
             <ZIndex>5</ZIndex>
             <Visibility>
               <Hidden>=IIF((IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities")) OR First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!cr_ccof_showdeclarationonreportValue.Value, "addNewFacilities") = 100000000, False, True)</Hidden>
@@ -6413,7 +6412,6 @@ Intentionally supplying information that is false or misleading with respect to 
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
-                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -6442,7 +6440,6 @@ Intentionally supplying information that is false or misleading with respect to 
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
-                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -6471,7 +6468,6 @@ Intentionally supplying information that is false or misleading with respect to 
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
-                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -6500,7 +6496,6 @@ Intentionally supplying information that is false or misleading with respect to 
 </Value>
                         <Style>
                           <FontFamily>Arial</FontFamily>
-                          <FontSize>3pt</FontSize>
                         </Style>
                       </TextRun>
                       <TextRun>
@@ -6551,7 +6546,7 @@ Intentionally supplying information that is false or misleading with respect to 
                         <Value>I do hereby certify that I am the authorized signing authority and that all of the information provided is true and complete to the best of my knowledge and belief.</Value>
                         <Style>
                           <FontStyle>Normal</FontStyle>
-                          <FontFamily>arial</FontFamily>
+                          <FontFamily>Arial</FontFamily>
                           <FontWeight>Normal</FontWeight>
                           <TextDecoration>None</TextDecoration>
                         </Style>
@@ -6569,7 +6564,7 @@ Intentionally supplying information that is false or misleading with respect to 
                         <Value />
                         <Style>
                           <FontStyle>Normal</FontStyle>
-                          <FontFamily>arial</FontFamily>
+                          <FontFamily>Arial</FontFamily>
                           <FontWeight>Normal</FontWeight>
                           <TextDecoration>None</TextDecoration>
                         </Style>
@@ -6587,7 +6582,7 @@ Intentionally supplying information that is false or misleading with respect to 
                         <Value>I consent to the Ministry contacting other branches within the Ministry and other Province ministries to validate the accuracy of any information that I have provided.</Value>
                         <Style>
                           <FontStyle>Normal</FontStyle>
-                          <FontFamily>arial</FontFamily>
+                          <FontFamily>Arial</FontFamily>
                           <FontWeight>Normal</FontWeight>
                           <TextDecoration>None</TextDecoration>
                         </Style>
@@ -6623,7 +6618,7 @@ Intentionally supplying information that is false or misleading with respect to 
             <Width>8.53831in</Width>
             <ZIndex>6</ZIndex>
             <Visibility>
-              <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!cr_ccof_showdeclarationonreport.Value, "addNewFacilities") = 100000002, False, True)</Hidden>
+              <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!cr_ccof_showdeclarationonreportValue.Value, "addNewFacilities") = 100000002, False, True)</Hidden>
             </Visibility>
             <Style>
               <Border>
@@ -6915,7 +6910,7 @@ By completing and submitting this form electronically, I hereby confirm that I h
             <Width>8.60413in</Width>
             <ZIndex>7</ZIndex>
             <Visibility>
-              <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!cr_ccof_showdeclarationonreport.Value, "addNewFacilities") = 100000001, False, True)</Hidden>
+              <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!cr_ccof_showdeclarationonreportValue.Value, "addNewFacilities") = 100000001, False, True)</Hidden>
             </Visibility>
             <Style>
               <Border>
@@ -7151,7 +7146,7 @@ By completing and submitting this form electronically, I hereby confirm that I h
             <Width>8.60475in</Width>
             <ZIndex>8</ZIndex>
             <Visibility>
-              <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!cr_ccof_showdeclarationonreport.Value, "addNewFacilities") = 100000000, False, True)</Hidden>
+              <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!cr_ccof_showdeclarationonreportValue.Value, "addNewFacilities") = 100000000, False, True)</Hidden>
             </Visibility>
             <Style>
               <Border>
