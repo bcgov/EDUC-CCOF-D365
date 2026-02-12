@@ -270,52 +270,6 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.25in</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox25">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Child Care Fee Reduction Initiative (CCFRI)</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>12pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>SteelBlue</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox25</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <ColSpan>6</ColSpan>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell />
-                    <TablixCell />
-                    <TablixCell />
-                    <TablixCell />
-                    <TablixCell />
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
                   <Height>0.5in</Height>
                   <TablixCells>
                     <TablixCell>
@@ -823,9 +777,6 @@
             <TablixRowHierarchy>
               <TablixMembers>
                 <TablixMember>
-                  <KeepWithGroup>After</KeepWithGroup>
-                </TablixMember>
-                <TablixMember>
                   <Group Name="Details" />
                   <TablixMembers>
                     <TablixMember />
@@ -837,7 +788,7 @@
             <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCFRIParentFee</DataSetName>
             <Top>0.01958in</Top>
-            <Height>1.15in</Height>
+            <Height>0.9in</Height>
             <Width>7.83333in</Width>
             <Style>
               <Border>
@@ -846,7 +797,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.16958in</Height>
+        <Height>0.95083in</Height>
         <Style />
       </Body>
       <Width>7.86459in</Width>

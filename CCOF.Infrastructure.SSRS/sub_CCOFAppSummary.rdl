@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
-  <am:AuthoringMetadata>
-    <am:CreatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>17.14.36717.8</am:Version>
-    </am:CreatedBy>
-    <am:UpdatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>17.14.36717.8</am:Version>
-    </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-02-03T18:01:03.1368210Z</am:LastModifiedTimestamp>
-  </am:AuthoringMetadata>
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -2271,7 +2260,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>2in</Height>
+                  <Height>2.40625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2290,7 +2279,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.14545in</Height>
+                                <Height>0.18239in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2318,23 +2307,39 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.14545in</Height>
+                                <Height>0.23447in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
-                                      <Subreport Name="Subreport3">
-                                        <ReportName>sub_sub_AppLicenceDetails</ReportName>
-                                        <Parameters>
-                                          <Parameter Name="FacilityID">
-                                            <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
-                                          </Parameter>
-                                        </Parameters>
+                                      <Textbox Name="Textbox21">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Child Care Fee Reduction Initiative (CCFRI)</Value>
+                                                <Style>
+                                                  <FontSize>12pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>SteelBlue</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox21</rd:DefaultName>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
                                           </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
-                                      </Subreport>
+                                      </Textbox>
                                       <ColSpan>3</ColSpan>
                                     </CellContents>
                                   </TablixCell>
@@ -2343,7 +2348,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.14545in</Height>
+                                <Height>0.1303in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2372,7 +2377,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.15587in</Height>
+                                <Height>0.24489in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2426,7 +2431,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.33503in</Height>
+                                <Height>0.19488in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2454,7 +2459,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.19754in</Height>
+                                <Height>0.26573in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2521,7 +2526,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.29337in</Height>
+                                <Height>0.37197in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2576,7 +2581,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.14545in</Height>
+                                <Height>0.23655in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2605,7 +2610,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.14545in</Height>
+                                <Height>0.11989in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2634,7 +2639,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.14545in</Height>
+                                <Height>0.22405in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2663,7 +2668,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.14545in</Height>
+                                <Height>0.20114in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2746,7 +2751,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.2in</Height>
+                  <Height>0.22083in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2775,7 +2780,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.2in</Height>
+                  <Height>0.18958in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2839,7 +2844,7 @@
             <DataSetName>AppCCFRI</DataSetName>
             <Top>8.43021in</Top>
             <Left>0.29105in</Left>
-            <Height>6.1913in</Height>
+            <Height>6.60797in</Height>
             <Width>8.55272in</Width>
             <ZIndex>1</ZIndex>
             <Style>
