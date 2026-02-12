@@ -102,7 +102,12 @@ public static class Setup
             public const Int16 GetPaymentResponseId = 510;
             public const string GetPaymentResponseName = "Get Payment Feedback and Invoices to BC Pay";
 
-          
+            public const Int16 GenerateECEWEPaymentLinesId = 515;
+            public const string GenerateECEWEPaymentLinesName = "Generate Payment Lines - ECEWE";
+
+
+
+
         }
 
         public static class FundingReports

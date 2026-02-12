@@ -41,6 +41,8 @@ public record ProcessParameter
     public Guid? DataImportId { get; set; }
     [property: JsonPropertyName("enrolmentReportid")]
     public Guid? EnrolmentReportid { get; set; }
+    [property: JsonPropertyName("MonthlyECEWEReportId")]
+    public Guid? MonthlyECEWEReportId { get; set; }
     [property: JsonPropertyName("organization")]
     public OrganizationParameter? Organization { get; set; }
     [property: JsonPropertyName("notification")]
@@ -61,6 +63,25 @@ public record ProcessParameter
     [property: JsonPropertyName("initialEnrolmentReport")]
     public InitialEnrolmentReportParameter? InitialEnrolmentReport { get; set; }
     public record InitialEnrolmentReportParameter
+    {
+        [property: JsonPropertyName("year")]
+        public string? Year { get; set; }
+
+        [property: JsonPropertyName("month")]
+        public int? Month { get; set; }
+
+        [property: JsonPropertyName("programYearId")]
+        public string? ProgramYearId { get; set; }
+
+        [property: JsonPropertyName("facilityGuid")]
+        public string[]? FacilityGuid { get; set; }
+    }
+    #endregion
+
+    #region Initial Monthly ECEWE Report
+    [property: JsonPropertyName("monthlyECEWEReport")]
+    public MonthlyECEWEReportParameter? MonthlyECEWEReport { get; set; }
+    public record MonthlyECEWEReportParameter
     {
         [property: JsonPropertyName("year")]
         public string? Year { get; set; }

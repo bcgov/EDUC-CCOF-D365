@@ -64,6 +64,7 @@ builder.Services.AddScoped<ID365ProcessProvider, P400GenerateMonthlyEnrolmentRep
 builder.Services.AddScoped<ID365ProcessProvider, P700ECEREmployeeCertificates>();
 builder.Services.AddScoped<ID365ProcessProvider, P500SendPaymentRequestProvider>();
 builder.Services.AddScoped<ID365ProcessProvider, P510ReadPaymentResponseProvider>();
+builder.Services.AddScoped<ID365ProcessProvider, P515GenerateECEWEPaymentLinesProvider>();
 
 builder.Services.AddD365HttpClient(builder.Configuration);
 builder.Services.AddMvcCore().AddApiExplorer();
