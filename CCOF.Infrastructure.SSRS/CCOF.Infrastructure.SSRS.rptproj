@@ -62,6 +62,7 @@
     <Report Include="sub_CCOF_CR_Other_Summary.rdl" />
     <Report Include="sub_sub_AppCCFRIApprovableFeeSchedule.rdl" />
     <Report Include="sub_sub_AppCCFRIClosure.rdl" />
+    <Report Include="sub_sub_AppCCFRIClosureVersion2.rdl" />
     <Report Include="sub_sub_AppCCFRINMF.rdl" />
     <Report Include="sub_sub_AppCCFRIParentFee.rdl" />
     <Report Include="sub_sub_AppCCFRIRFI.rdl" />
