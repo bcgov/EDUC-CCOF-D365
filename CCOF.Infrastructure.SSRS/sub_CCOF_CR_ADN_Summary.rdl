@@ -2615,7 +2615,7 @@
                                   <TablixCell>
                                     <CellContents>
                                       <Subreport Name="Subreport2">
-                                        <ReportName />
+                                        <ReportName>sub_sub_CCOF_CR_ADN_AppCCFRIClosureVersion2</ReportName>
                                         <Parameters>
                                           <Parameter Name="ApplicationID">
                                             <Value>=First(Fields!app_ccof_applicationid.Value, "addNewFacilities")</Value>
@@ -2631,6 +2631,7 @@
                                         </Style>
                                       </Subreport>
                                       <ColSpan>3</ColSpan>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />

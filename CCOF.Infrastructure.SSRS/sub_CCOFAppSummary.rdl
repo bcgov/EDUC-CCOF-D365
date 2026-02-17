@@ -2579,7 +2579,7 @@
                                   <TablixCell>
                                     <CellContents>
                                       <Subreport Name="Placeholder">
-                                        <ReportName>sub_sub_AppCCFRIClosure</ReportName>
+                                        <ReportName>sub_sub_AppCCFRIClosureVersion2</ReportName>
                                         <Parameters>
                                           <Parameter Name="ApplicationID">
                                             <Value>=Parameters!ApplicationID.Value</Value>

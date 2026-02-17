@@ -73,6 +73,7 @@
     <Report Include="sub_sub_AppSDDetails.rdl" />
     <Report Include="sub_sub_App_AFS_Doc.rdl" />
     <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRIClosure.rdl" />
+    <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRIClosureVersion2.rdl" />
     <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRINMF.rdl" />
     <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRIParentFee.rdl" />
     <Report Include="sub_sub_CCOF_CR_ADN_AppCCFRIRFI.rdl" />
