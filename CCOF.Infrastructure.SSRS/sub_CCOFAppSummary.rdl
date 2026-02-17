@@ -35,6 +35,7 @@
     &lt;attribute name="ccof_has_banking_information_changed" /&gt;
     &lt;attribute name="ccof_is_funding_agreement_confirmed" /&gt;
     &lt;attribute name="ccof_are_licence_details_confirmed" /&gt;
+    &lt;attribute name="ccof_application_template_version" /&gt;
     &lt;filter&gt;
       &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
     &lt;/filter&gt;
@@ -77,10 +78,6 @@
         &lt;attribute name="ccof_name" /&gt;
         &lt;attribute name="ccof_programyear" /&gt;
       &lt;/link-entity&gt;
-    &lt;/link-entity&gt;
-    &lt;link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_programyear" link-type="inner" alias="ProgramYear"&gt;
-      &lt;attribute name="ccof_ccof_application_template_version" /&gt;
-      &lt;attribute name="ccof_name" /&gt;
     &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
@@ -173,6 +170,10 @@
         <Field Name="ccof_is_funding_agreement_confirmedValue">
           <DataField>ccof_is_funding_agreement_confirmedValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_application_template_version">
+          <DataField>ccof_application_template_version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="org_address1_city">
           <DataField>org_address1_city</DataField>
@@ -340,14 +341,6 @@
         </Field>
         <Field Name="org_ccof_partner4middlename">
           <DataField>org_ccof_partner4middlename</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ProgramYear_ccof_ccof_application_template_version">
-          <DataField>ProgramYear_ccof_ccof_application_template_version</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ProgramYear_ccof_name">
-          <DataField>ProgramYear_ccof_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -2228,12 +2221,12 @@
                               <TablixMember />
                               <TablixMember>
                                 <Visibility>
-                                  <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                                  <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                                 </Visibility>
                               </TablixMember>
                               <TablixMember>
                                 <Visibility>
-                                  <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                                  <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                                 </Visibility>
                               </TablixMember>
                               <TablixMember />
@@ -2279,7 +2272,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.18239in</Height>
+                                <Height>0.16719in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2307,7 +2300,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.23447in</Height>
+                                <Height>0.21927in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2348,7 +2341,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.1303in</Height>
+                                <Height>0.13177in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2377,7 +2370,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.24489in</Height>
+                                <Height>0.21302in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2431,7 +2424,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.19488in</Height>
+                                <Height>0.17968in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2459,7 +2452,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.26573in</Height>
+                                <Height>0.25053in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2526,7 +2519,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.37197in</Height>
+                                <Height>0.35677in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2581,7 +2574,36 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.23655in</Height>
+                                <Height>0.16719in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Subreport Name="Placeholder">
+                                        <ReportName>sub_sub_AppCCFRIClosure</ReportName>
+                                        <Parameters>
+                                          <Parameter Name="ApplicationID">
+                                            <Value>=Parameters!ApplicationID.Value</Value>
+                                          </Parameter>
+                                          <Parameter Name="FacilityID">
+                                            <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
+                                          </Parameter>
+                                        </Parameters>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Subreport>
+                                      <ColSpan>3</ColSpan>
+                                      <rd:Selected>true</rd:Selected>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.22135in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2610,7 +2632,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.11989in</Height>
+                                <Height>0.13802in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2639,7 +2661,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.22405in</Height>
+                                <Height>0.20052in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2668,7 +2690,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.20114in</Height>
+                                <Height>0.16094in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2714,13 +2736,28 @@
                               </TablixMember>
                               <TablixMember />
                               <TablixMember />
-                              <TablixMember />
-                              <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                                </Visibility>
+                                <HideIfNoRows>true</HideIfNoRows>
+                              </TablixMember>
                               <TablixMember />
                               <TablixMember>
                                 <Visibility>
                                   <Hidden>=IIF(Fields!AppCCFRI_ccof_ccfrioptinValue.Value = 1, False, True)</Hidden>
                                 </Visibility>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1"), false, true)</Hidden>
+                                </Visibility>
+                                <HideIfNoRows>true</HideIfNoRows>
                               </TablixMember>
                               <TablixMember />
                               <TablixMember />
@@ -2844,7 +2881,7 @@
             <DataSetName>AppCCFRI</DataSetName>
             <Top>8.43021in</Top>
             <Left>0.29105in</Left>
-            <Height>6.60797in</Height>
+            <Height>6.60796in</Height>
             <Width>8.55272in</Width>
             <ZIndex>1</ZIndex>
             <Style>
@@ -5816,49 +5853,49 @@ Intentionally supplying information that is false or misleading with respect to 
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND Not(IsNothing(Fields!org_ccof_partner4lastname.Value)), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "APPData")))), false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "APPData"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "APPData")))), false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
@@ -5866,13 +5903,13 @@ Intentionally supplying information that is false or misleading with respect to 
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData"))) AND NOT(First(Fields!ccof_application_template_version.Value, "APPData") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "APPData") = 100000006, false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
@@ -5886,12 +5923,12 @@ Intentionally supplying information that is false or misleading with respect to 
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                    <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                   </Visibility>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(IsNothing(First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData")) OR First(Fields!ProgramYear_ccof_ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                    <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
                   </Visibility>
                 </TablixMember>
                 <TablixMember />
