@@ -300,15 +300,7 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
             {
                 string casResponse = (line?.ILCode != "0000") ? string.Concat("Error:", line?.ILCode, " ", line?.ILError) : string.Empty;
                 casResponse += (header?.IHCode != "0000") ? string.Concat(header?.IHCode, " ", header?.IHError) : string.Empty;
-                //Check if payment faced error in processing.
-
-                //if (header?.IHCode != "0000")
-                //{
-                //    var subject = pay.ofm_name;
-                //    //create Integration log with an error message.
-                //  //  createIntregrationLogTasks.Add(CreateIntegrationErrorLog(subject, pay.ofm_application.ofm_applicationid.Value, casResponse, "CFS Integration Error", appUserService, d365WebApiService));
-                //}
-
+               
                 //Update it with latest cas response.
                 var invoiceToUpdate = new JsonObject {
                     {CcofInvoice.Fields.CcOf_Cas_Response, casResponse},

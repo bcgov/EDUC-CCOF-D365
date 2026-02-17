@@ -1,6 +1,4 @@
-﻿//using ECC.Core.DataContext;
-using System.Text.Json.Serialization;
-using CCOF.Infrastructure.WebAPI.Extensions;
+﻿using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Models;
 
 using CCOF.Infrastructure.WebAPI.Services.AppUsers;
@@ -8,29 +6,23 @@ using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 using System.Net;
 using System.Text.Json.Nodes;
 using System.Text.Json;
-using CCOF.Infrastructure.WebAPI.Services.Processes;
-using CCOF.Infrastructure.WebAPI.Messages;
+
 using Microsoft.Extensions.Options;
-using System;
-using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
-using CCOF.Core.DataContext;
-using System.Drawing.Text;
-using Microsoft.AspNetCore.Http;
+
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 {
-    public class P505GeneratePaymentLinesProvider(IOptionsSnapshot<ExternalServices> bccasApiSettings, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ILoggerFactory loggerFactory) : ID365ProcessProvider
+    public class P515GenerateECEWEPaymentLinesProvider(IOptionsSnapshot<ExternalServices> bccasApiSettings, ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ILoggerFactory loggerFactory) : ID365ProcessProvider
     {
-        private readonly BCCASApi _BCCASApi = bccasApiSettings.Value.BCCASApi;
         private readonly ID365AppUserService _appUserService = appUserService;
         private readonly ID365WebApiService _d365WebApiService = d365WebApiService;
         private readonly ILogger _logger = loggerFactory.CreateLogger(LogCategory.Process);
         private ProcessParameter? _processParams;
-        public Int16 ProcessId => Setup.Process.Payments.GeneratePaymentLinesId;
-        public string ProcessName => Setup.Process.Payments.GeneratePaymentLinesName;
+        public Int16 ProcessId => Setup.Process.Payments.GenerateECEWEPaymentLinesId;
+        public string ProcessName => Setup.Process.Payments.GenerateECEWEPaymentLinesName;
         public string CodingLineType_FetchParameter;
         #region Data Queries
-        public string EnrolmentReportPaymentUri
+        public string MonthlyECEWEReportUri
         {
             get
             {
@@ -55,7 +47,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         <attribute name="statuscode"/>
                         <order attribute="ccof_name" descending="false"/>    <filter type="and">
                           <condition attribute="statecode" operator="eq" value="0"/>
-                          <condition attribute="ccof_ece_monthly_reportid" operator="eq" value="{{_processParams.EnrolmentReportid.ToString()}}"/>
+                          <condition attribute="ccof_ece_monthly_reportid" operator="eq" value="{{_processParams.MonthlyECEWEReportId.ToString()}}"/>
                         </filter>    <link-entity 
                             name="ccof_program_year" 
                             alias="programYear" 
@@ -74,7 +66,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                     </fetch>
                     """;
                 var requestUri = $"""
-                         ccof_monthlyenrollmentreports?fetchXml={WebUtility.UrlEncode(fetchXml)}
+                         ccof_ece_monthly_reports?fetchXml={WebUtility.UrlEncode(fetchXml)}
                          """;
                 return requestUri;
             }
@@ -146,7 +138,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
         {
             _logger.LogDebug(CustomLogEvent.Process, "GetDataAsync");
 
-            var response = await _d365WebApiService.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, EnrolmentReportPaymentUri);
+            var response = await _d365WebApiService.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, MonthlyECEWEReportUri);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -163,7 +155,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             {
                 if (currentValue?.AsArray().Count == 0)
                 {
-                    _logger.LogInformation(CustomLogEvent.Process, "No records found with query {requestUri}", EnrolmentReportPaymentUri.CleanLog());
+                    _logger.LogInformation(CustomLogEvent.Process, "No records found with query {requestUri}", MonthlyECEWEReportUri.CleanLog());
                 }
                 d365Result = currentValue!;
             }
@@ -172,34 +164,31 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
             return await Task.FromResult(new ProcessData(d365Result));
         }
-        private async Task<JsonObject> CreateSinglePayment(JsonNode enrolmentReport, DateTime paymentDate, decimal? totalAmount,int invoiceLineNumber, int paymentType)
+        private async Task<JsonObject> CreateSinglePayment(JsonNode monthlyECEWEReport, DateTime paymentDate, decimal? totalAmount, int invoiceLineNumber, int paymentType)
         {
             DateTime invoiceDate = paymentDate;
             DateTime invoiceReceivedDate = invoiceDate;
             DateTime effectiveDate = invoiceDate;
             string paymentTypeString = paymentType switch
             {
-                7 => "CCOF",
-                8 => "CCFRI",
-                10 => "CCFRI Provider",
+               
+               9 => "ECEWE",
+                11 => "ECESB",
                 _ => "Unknown"
             };
-            var multiKeyDict = new Dictionary<(string, int, string), string>()   // 1 - Current, 4 - Historical
+            var multiKeyDict = new Dictionary<(string, int, string), string>()  
             {
-                { ("CCOF", 1, "positive"), "CE"},
-                { ("CCOF", 1, "negative"), "CR"},
-                { ("CCOF", 4, "positive"), "PE"},
-                { ("CCOF", 4, "negative"), "PR"},
-                { ("CCFRI", 1, "positive"), "CS"},
-                { ("CCFRI", 1, "negative"), "CY"},
-                { ("CCFRI", 4, "positive"), "PX"},
-                { ("CCFRI", 4, "negative"), "PY"},
-                { ("CCFRI Provider", 1, "positive"), "CA"},
-                { ("CCFRI Provider", 1, "negative"), "CB"},
-                { ("CCFRI Provider", 4, "positive"), "PA"},
-                { ("CCFRI Provider", 4, "negative"), "PB"}
+                { ("ECESB", 1, "positive"), "CC"},
+                { ("ECESB", 1, "negative"), "CD"},
+                { ("ECESB", 4, "positive"), "PC"},
+                { ("ECESB", 4, "negative"), "PD"},
+                { ("ECEWE", 1, "positive"), "CW"},
+                { ("ECEWE", 1, "negative"), "CZ"},
+                { ("ECEWE", 4, "positive"), "PW"},
+                { ("ECEWE", 4, "negative"), "PZ"},
+
             };
-            int statuscodeFY = (int)enrolmentReport["programYear.statuscode"];    // 1 - Current, 4 - Historical
+            int statuscodeFY = (int)monthlyECEWEReport["programYear.statuscode"];    // 1 - Current, 4 - Historical
             string totalAmountSign = totalAmount >= 0 ? "positive" : "negative";
             CodingLineType_FetchParameter = multiKeyDict[(paymentTypeString, statuscodeFY, totalAmountSign)];
             var codingLineTypeString = await GetCodingLineTypeDataAsync();
@@ -212,16 +201,16 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                             { "ofm_invoice_line_number", invoiceLineNumber},
                             { "ofm_amount", totalAmount},
                             { "ofm_payment_type", paymentType},
-                            { "ccof_monthly_enrollment_report@odata.bind",$"/ccof_monthlyenrollmentreports({enrolmentReport["ccof_monthlyenrollmentreportid"]})" },
+                            { "ccof_monthly_ecewe_report@odata.bind",$"/ccof_ece_monthly_reports({monthlyECEWEReport["ccof_ece_monthly_reportid"]})" },
                             { "ofm_invoice_date", invoiceDate.ToString("yyyy-MM-dd") },
                             { "ofm_invoice_received_date", invoiceReceivedDate.ToString("yyyy-MM-dd")},
                             { "ofm_effective_date", effectiveDate.ToString("yyyy-MM-dd")},
-                            { "ccof_program_year@odata.bind",$"/ccof_program_years({enrolmentReport["_ccof_programyear_value"]})" },
+                            { "ccof_program_year@odata.bind",$"/ccof_program_years({monthlyECEWEReport["_ccof_fiscal_year_value"]})" },
                             { "ccof_coding_line_type@odata.bind",$"/ccof_coding_line_types({codingLineTypeId})" },
                             { "statuscode",4  }, //Approved for Payment in PaymentLine table
-                            { "ofm_facility@odata.bind", $"/accounts({enrolmentReport["_ccof_facility_value"]})" },
-                            { "ofm_organization@odata.bind", $"/accounts({enrolmentReport["_ccof_organization_value"]})" },
-                            { "ofm_description", $"{enrolmentReport?["facility.name"] +" " +enrolmentReport?["ccof_month"]+"/"+enrolmentReport?["ccof_year"]+" " +paymentTypeString}" },
+                            { "ofm_facility@odata.bind", $"/accounts({monthlyECEWEReport["_ccof_facility_value"]})" },
+                            { "ofm_organization@odata.bind", $"/accounts({monthlyECEWEReport["_ccof_organization_value"]})" },
+                            { "ofm_description", $"{monthlyECEWEReport?["facility.name"] +" " +monthlyECEWEReport?["ccof_month"]+"/"+monthlyECEWEReport?["ccof_year"]+" " +paymentTypeString}" },
                         };
             var requestBody = JsonSerializer.Serialize(payload);
             _logger.LogInformation("Payment payload: {payload}", requestBody);
@@ -244,38 +233,29 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             {
                 _processParams = processParams;
                 var entitySetName = "ofm_payments";
-                var enrolmentReportString = await GetDataAsync();
-                JsonArray? enrolmentReportData = JsonSerializer.Deserialize<JsonArray>(enrolmentReportString.Data);
-                if (enrolmentReportData is null || !enrolmentReportData.Any())
+                var monthlyECEWEReportString = await GetDataAsync();
+                JsonArray? monthlyECEWEReportData = JsonSerializer.Deserialize<JsonArray>(monthlyECEWEReportString.Data);
+                if (monthlyECEWEReportData is null || !monthlyECEWEReportData.Any())
                 {
-                    _logger.LogError(CustomLogEvent.Process, "Unable to retrieve the Monthly Enrolment Report record Id {enrolmentReportId}", processParams!.EnrolmentReportid);
+                    _logger.LogError(CustomLogEvent.Process, "Unable to retrieve the Monthly ECEWE Report record Id {MonthlyECEWEReport}", processParams!.MonthlyECEWEReport);
                     return ProcessResult.Completed(ProcessId).SimpleProcessResult;
                 }
-                JsonNode? enrolmentReport = enrolmentReportData.First();
-                decimal grandTotalBase=0, grandTotalCCFRI=0, grandTotalCCFRIProvider = 0;
-                grandTotalBase =
-                    (int)enrolmentReport["ccof_reporttype"] == 100000000
-                        ? ((decimal?)enrolmentReport["ccof_grandtotalbase"] ?? 0)
-                        : ((decimal?)enrolmentReport["reportext.ccof_diffgrandtotalbase"] ?? 0);
-                grandTotalCCFRI =
-                    (int)enrolmentReport["ccof_reporttype"] == 100000000
-                        ? ((decimal?)enrolmentReport["ccof_grandtotalccfri"] ?? 0)
-                        : ((decimal?)enrolmentReport["reportext.ccof_diffgrandtotalccfri"] ?? 0);
-                grandTotalCCFRIProvider =
-                    (int)enrolmentReport["ccof_reporttype"] == 100000000
-                        ? ((decimal?)enrolmentReport["ccof_grandtotalccfriprovider"] ?? 0)
-                        : ((decimal?)enrolmentReport["reportext.ccof_diffgrandtotalccfriprovider"] ?? 0);
+                JsonNode? monthlyECEWEReport = monthlyECEWEReportData.First();
+                decimal grandTotalECEWE = 0, grandTotalSB = 0;
+                grandTotalECEWE = ((decimal?)monthlyECEWEReport["ccof_we_subtotal"] ?? 0);
+
+                grandTotalSB = ((decimal?)monthlyECEWEReport["ccof_sb_subtotal"] ?? 0);
+                  
                 switch ((int)processParams.programapproved)
                 {
                     case 1:  // CCOF was approved in ER
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccof_approved_date"],grandTotalBase, 1, 7);  // 1, InvoiceLineNumber fix for CCOF Base Payment. 7 PaymentType CCOF
-                        break;
-                    case 2: // CCFRI was approved in ER
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRI,2, 8);// 2, InvoiceLineNumber fix for CCFRI. 8 PaymentType CCFRI
-                        await CreateSinglePayment(enrolmentReport, (DateTime)enrolmentReport["ccof_ccfri_approved_date"], grandTotalCCFRIProvider,3, 10);// 3, InvoiceLineNumber fix for CCFRI Payment. 10 PaymentType CCFRI Provider
-                        break;
+                        await CreateSinglePayment(monthlyECEWEReport, pstTime, grandTotalECEWE, 1, 9);
+                        await CreateSinglePayment(monthlyECEWEReport, pstTime, grandTotalSB, 1, 11);// 1, InvoiceLineNumber fix for CCOF Base Payment. 7 PaymentType CCOF
+                        break; 
+
+
                     default:
-                        _logger.LogError(CustomLogEvent.Process, "Unable to generate payments for Erolment Report {ERid}. Invalid ApprovedType {programApproved}", processParams?.EnrolmentReportid, processParams?.programapproved);
+                        _logger.LogError(CustomLogEvent.Process, "Unable to generate payments for Monthly ECEWE Report {ERid}. Invalid ApprovedType {programApproved}", processParams?.MonthlyECEWEReport, processParams?.programapproved);
                         break;
                 }
             }
@@ -285,7 +265,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 var returnObject = ProcessResult.Failure(ProcessId, new String[] { "Critical error", ex.StackTrace }, 0, 0).ODProcessResult;
                 return returnObject;
             }
-            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": End Process for ER: " + processParams.EnrolmentReportid);
+            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": End Process for ER: " + processParams.MonthlyECEWEReport);
             return ProcessResult.Completed(ProcessId).SimpleProcessResult;
         }
     }
