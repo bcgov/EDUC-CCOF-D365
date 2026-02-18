@@ -3583,7 +3583,7 @@ false,true)</Hidden>
                 <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF( First(Fields!ccof_maxnoofweeksperyearextendedhoursoffered.Value, "AppCCOF") = 1,
+                    <Hidden>=IIF( Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
     False,
     True
 )</Hidden>
@@ -3592,7 +3592,7 @@ false,true)</Hidden>
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF( First(Fields!ccof_maxnoofweeksperyearextendedhoursoffered.Value, "AppCCOF") = 1,
+                    <Hidden>=IIF( Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
     False,
     True
 )</Hidden>

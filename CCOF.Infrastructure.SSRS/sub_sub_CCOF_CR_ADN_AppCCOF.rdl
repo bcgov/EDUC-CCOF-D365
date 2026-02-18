@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
         <ConnectString>https://mychildcareservicesdev.crm3.dynamics.com/</ConnectString>
+        <Prompt>Specify a user name and password for data source CRM:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>c8b283ed-9546-440d-9d9c-c1d20b0f47df</rd:DataSourceID>
@@ -81,13 +82,28 @@
     &lt;attribute name="ccof_beforekindergarten" /&gt;
     &lt;attribute name="ccof_beforeschool" /&gt;
     &lt;attribute name="ccof_isthefacilitylocatedonschoolproperty" /&gt;
+    &lt;attribute name="ccof_monthwhenfacilityisclosedforentiremonth" /&gt;
+    &lt;attribute name="ccof_careonschoolgrounds4hoursorlessextendedcc" /&gt;
+    &lt;attribute name="ccof_careonschoolgroundsmorethan4hrsextendedcc" /&gt;
+    &lt;attribute name="ccof_familychildcare4hoursorlessextendedcc" /&gt;
+    &lt;attribute name="ccof_familychildcaremorethan4hoursextendedcc" /&gt;
+    &lt;attribute name="ccof_inhomemultiagecc4hoursorlessextendedcc" /&gt;
+    &lt;attribute name="ccof_inhomemultiageccmorethan4hoursextendedcc" /&gt;
+    &lt;attribute name="ccof_maxnoofweeksperyearextendedhoursoffered" /&gt;
+    &lt;attribute name="ccof_maxnoofdaysperweekextendedhoursoffered" /&gt;
+    &lt;attribute name="ccof_providertype" /&gt;
+    &lt;attribute name="ccof_schoolagecareonschoolgroundsmaxnumber" /&gt;
     &lt;filter&gt;
       &lt;condition attribute="statecode" operator="eq" value="0" /&gt;
       &lt;condition attribute="ccof_application" operator="eq" value="@ApplicationID" /&gt;
       &lt;condition attribute="ccof_facility" operator="eq" value="@FacilityID" /&gt;
     &lt;/filter&gt;
+    &lt;link-entity name="ccof_application" from="ccof_applicationid" to="ccof_application" link-type="inner" alias="application"&gt;
+      &lt;attribute name="ccof_application_template_version" /&gt;
+    &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
         <Field Name="ccof_30monthtoschoolage4hoursoflessextendedcc">
@@ -522,6 +538,98 @@
           <DataField>ccof_isthefacilitylocatedonschoolpropertyValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="ccof_monthwhenfacilityisclosedforentiremonth">
+          <DataField>ccof_monthwhenfacilityisclosedforentiremonth</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_monthwhenfacilityisclosedforentiremonthValue">
+          <DataField>ccof_monthwhenfacilityisclosedforentiremonthValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_careonschoolgrounds4hoursorlessextendedcc">
+          <DataField>ccof_careonschoolgrounds4hoursorlessextendedcc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_careonschoolgrounds4hoursorlessextendedccValue">
+          <DataField>ccof_careonschoolgrounds4hoursorlessextendedccValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_careonschoolgroundsmorethan4hrsextendedcc">
+          <DataField>ccof_careonschoolgroundsmorethan4hrsextendedcc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_careonschoolgroundsmorethan4hrsextendedccValue">
+          <DataField>ccof_careonschoolgroundsmorethan4hrsextendedccValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_familychildcare4hoursorlessextendedcc">
+          <DataField>ccof_familychildcare4hoursorlessextendedcc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_familychildcare4hoursorlessextendedccValue">
+          <DataField>ccof_familychildcare4hoursorlessextendedccValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_familychildcaremorethan4hoursextendedcc">
+          <DataField>ccof_familychildcaremorethan4hoursextendedcc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_familychildcaremorethan4hoursextendedccValue">
+          <DataField>ccof_familychildcaremorethan4hoursextendedccValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_inhomemultiagecc4hoursorlessextendedcc">
+          <DataField>ccof_inhomemultiagecc4hoursorlessextendedcc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_inhomemultiagecc4hoursorlessextendedccValue">
+          <DataField>ccof_inhomemultiagecc4hoursorlessextendedccValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_inhomemultiageccmorethan4hoursextendedcc">
+          <DataField>ccof_inhomemultiageccmorethan4hoursextendedcc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_inhomemultiageccmorethan4hoursextendedccValue">
+          <DataField>ccof_inhomemultiageccmorethan4hoursextendedccValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_maxnoofweeksperyearextendedhoursoffered">
+          <DataField>ccof_maxnoofweeksperyearextendedhoursoffered</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_maxnoofweeksperyearextendedhoursofferedValue">
+          <DataField>ccof_maxnoofweeksperyearextendedhoursofferedValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_maxnoofdaysperweekextendedhoursoffered">
+          <DataField>ccof_maxnoofdaysperweekextendedhoursoffered</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_maxnoofdaysperweekextendedhoursofferedValue">
+          <DataField>ccof_maxnoofdaysperweekextendedhoursofferedValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_providertype">
+          <DataField>ccof_providertype</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_providertypeValue">
+          <DataField>ccof_providertypeValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_schoolagecareonschoolgroundsmaxnumber">
+          <DataField>ccof_schoolagecareonschoolgroundsmaxnumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="application_ccof_application_template_version">
+          <DataField>application_ccof_application_template_version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_schoolagecareonschoolgroundsmaxnumberValue">
+          <DataField>ccof_schoolagecareonschoolgroundsmaxnumberValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
       </Fields>
     </DataSet>
   </DataSets>
@@ -533,10 +641,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.8125in</Width>
+                  <Width>3.625in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.21875in</Width>
+                  <Width>2.49875in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.66667in</Width>
@@ -587,7 +695,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.35417in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -598,7 +706,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Maximum number of days per week you provide child care: </Value>
+                                  <Value>Maximum number of days per week you provide child care:  </Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -640,7 +748,15 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Maximum number of weeks per year you provide child care: </Value>
+                                  <Value>Maximum number of weeks per year you provide child care:</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
@@ -648,7 +764,9 @@
                                 </TextRun>
                                 <TextRun>
                                   <Value>=First(Fields!ccof_maxnoofweeksperyearyouprovidechildcare.Value, "AppCCOF")</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -671,7 +789,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.41666in</Height>
+                  <Height>0.4in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -682,165 +800,64 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Months where ALL of the programs at this facility are closed for the entire month:
-</Value>
+                                  <Value>Facility hours of operation: </Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
+                                    <FontFamily>arial</FontFamily>
                                     <FontSize>8pt</FontSize>
-                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>From:</Value>
+                                  <Style>
+                                    <FontFamily>arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Label>January</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinjanValue.Value=1,"January","")</Value>
+                                  <Value xml:space="preserve"> </Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <TextDecoration>None</TextDecoration>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_facilityhoursofoperationfrom.Value, "AppCCOF")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve"> </Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <TextDecoration>None</TextDecoration>
+                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Label>February</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinfebValue.Value=1,"February","")</Value>
+                                  <Value>To:</Value>
                                   <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>March</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinmarValue.Value=1,"March","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
+                                    <FontFamily>arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve"> </Value>
                                   <Style>
-                                    <TextDecoration>None</TextDecoration>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Label>April</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinaprValue.Value=1,"April","")</Value>
+                                  <Value>=First(Fields!ccof_facilityhoursofoperationto.Value, "AppCCOF")</Value>
                                   <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>May</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinmayValue.Value=1,"May","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>June</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinjunValue.Value=1,"June","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>July</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinjulValue.Value=1,"July","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>August</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinaugValue.Value=1,"August","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>September</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinsepValue.Value=1,"September","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>October</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinoctValue.Value=1,"October","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>November</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityinnovValue.Value=1,"November","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Label>December</Label>
-                                  <Value>=IIF(Fields!ccof_closedfacilityindecValue.Value=1,"December","")</Value>
-                                  <Style>
-                                    <TextDecoration>None</TextDecoration>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -872,7 +889,46 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Facility hours of operation: From: </Value>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox13</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Are there months when ALL of the programs at this facility are closed for the entire month?</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
@@ -881,27 +937,369 @@
                               </TextRuns>
                               <Style />
                             </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox21">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_facilityhoursofoperationfrom.Value, "AppCCOF")</Value>
-                                  <Style />
-                                </TextRun>
-                                <TextRun>
-                                  <Value> - </Value>
+                                  <Value>=First(Fields!ccof_monthwhenfacilityisclosedforentiremonth.Value, "AppCCOF")</Value>
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=First(Fields!ccof_facilityhoursofoperationto.Value, "AppCCOF")</Value>
-                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox13</rd:DefaultName>
+                          <rd:DefaultName>Textbox19</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.39167in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Months where ALL of the programs at this facility are closed for the entire month:
+</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>January</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinjanValue.Value=1,"January","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>February</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinfebValue.Value=1,"February","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>March</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinmarValue.Value=1,"March","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>April</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinaprValue.Value=1,"April","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>May</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinmayValue.Value=1,"May","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>June</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinjunValue.Value=1,"June","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>July</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinjulValue.Value=1,"July","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>August</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinaugValue.Value=1,"August","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>September</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinsepValue.Value=1,"September","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>October</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinoctValue.Value=1,"October","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>November</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityinnovValue.Value=1,"November","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Label>December</Label>
+                                  <Value>=IIF(Fields!ccof_closedfacilityindecValue.Value=1,"December","")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox18">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox18</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox27">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox27</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox30">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox30</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -932,6 +1330,7 @@
                                   <Value>Type of Service</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -969,6 +1368,7 @@
                                   <Value>Maximum Number</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -995,7 +1395,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1045,6 +1445,7 @@
                                   <Value>=First(Fields!ccof_maximumlicensedcapacity.Value, "AppCCOF")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1068,7 +1469,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1118,6 +1519,7 @@
                                   <Value>=First(Fields!ccof_groupchildcareunder36months.Value, "AppCCOF")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1141,7 +1543,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1191,6 +1593,7 @@
                                   <Value>=First(Fields!ccof_groupchildcare30monthtoschoolagemaxnumber.Value, "AppCCOF")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1215,6 +1618,217 @@
                 </TablixRow>
                 <TablixRow>
                   <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox33">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Group Child Care (School Age/ School Age Care on School Grounds)</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox67">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_groupchildcareschoolagecareonschoolground.Value, "AppCCOF")</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox67</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox62">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Group Child Care (School Age)</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox62</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox64">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_groupchildcareschoolagecareonschoolground.Value, "AppCCOF")</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox64</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox69">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>School Age Care on School Grounds</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox69</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox71">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_schoolagecareonschoolgroundsmaxnumber.Value, "AppCCOF")</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox71</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1264,6 +1878,7 @@
                                   <Value>=First(Fields!ccof_preschoolmaxnumber.Value, "AppCCOF")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1287,80 +1902,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox29">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Group Child Care (School Age/ School Age Care on School Grounds)</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox29</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <ColSpan>2</ColSpan>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell />
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox31">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=First(Fields!ccof_groupchildcareschoolagecareonschoolground.Value, "AppCCOF")</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox31</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1410,6 +1952,7 @@
                                   <Value>=First(Fields!ccof_multiagechildcaremaxnumber.Value, "AppCCOF")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1433,7 +1976,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.51042in</Height>
+                  <Height>0.6in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1473,67 +2016,90 @@
                                   <Value>=Fields!ccof_preschoolsessionmon.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve">                             </Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ccof_preschoolsessiontues.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve"> </Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve">                            </Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve">  </Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ccof_preschoolsessionwed.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve">                             </Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ccof_preschoolsessionthurs.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve">                                      </Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ccof_preschoolsessionfri.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve">                                       </Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ccof_preschoolsessiontotal.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve">  </Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -1559,7 +2125,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1579,7 +2145,10 @@
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ccof_isthefacilitylocatedonschoolproperty.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -1605,7 +2174,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.4in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1631,47 +2200,61 @@
                               <TextRuns>
                                 <TextRun>
                                   <Label>Before School</Label>
-                                  <Value>=IIF(Fields!ccof_beforeschoolValue.Value=1,"Before School","")+","</Value>
+                                  <Value>=IIF(First(Fields!ccof_beforeschoolValue.Value) = 1,"Before School","")+","</Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve"> </Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Label>After School</Label>
-                                  <Value>=IIF(Fields!ccof_afterschoolValue.Value=1,"After School","")+","</Value>
+                                  <Value>=IIF(FIRST(Fields!ccof_afterschoolValue.Value) = 1,"After School","")+","</Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve"> </Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Label>Before Kindergarten</Label>
-                                  <Value>=IIF(Fields!ccof_beforekindergartenValue.Value=1,"Before Kindergarten","")+","</Value>
+                                  <Value>=IIF(FIRST(Fields!ccof_beforekindergartenValue.Value) = 1,"Before Kindergarten","")+","</Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve"> </Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Label>After Kindergarten</Label>
-                                  <Value>=IIF(Fields!ccof_afterkindergartenValue.Value=1,"After Kindergarten","")</Value>
+                                  <Value>=IIF(FIRST(Fields!ccof_afterkindergartenValue.Value) = 1,"After Kindergarten","")</Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
@@ -1699,7 +2282,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1749,6 +2332,7 @@
                                   <Value>=First(Fields!ccof_regularlyofferextendeddailyhourofchildca.Value, "AppCCOF")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1773,6 +2357,150 @@
                 </TablixRow>
                 <TablixRow>
                   <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Maximum number of days per week you offer extended hours of chid care?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox54">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_maxnoofdaysperweekextendedhoursoffered.Value, "AppCCOF")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox54</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Maximum number of weeks per year you offer extended hours of child care?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_maxnoofweeksperyearextendedhoursoffered.Value, "AppCCOF")</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1828,6 +2556,7 @@
                                   <Value>Type of Service</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1849,7 +2578,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1864,6 +2592,7 @@
                                   <Value>4 hours or less  extended child care</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1896,6 +2625,7 @@
                                   <Value>More than 4 hours extended child care</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1919,7 +2649,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1964,7 +2694,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_under36months4hoursoflessextendedcc.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_under36months4hoursoflessextendedcc.Value),
+    "NA",
+    Fields!ccof_under36months4hoursoflessextendedcc.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -1974,10 +2707,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox45</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_under36monthsValue.Value, "AppCCOF")) OR 
-     First(Fields!ccof_has_under36monthsValue.Value, "AppCCOF") = true,false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2000,7 +2729,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_under36monthsmorethan4hourextendedcc.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_under36monthsmorethan4hourextendedcc.Value),
+    "NA",
+    Fields!ccof_under36monthsmorethan4hourextendedcc.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2010,9 +2742,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox46</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_under36months_extendedccValue.Value, "AppCCOF")) OR First(Fields!ccof_has_under36months_extendedccValue.Value, "AppCCOF")=true,false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2029,7 +2758,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2074,7 +2803,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_30monthtoschoolage4hoursoflessextendedcc.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_30monthtoschoolage4hoursoflessextendedcc.Value),
+    "NA",
+    Fields!ccof_30monthtoschoolage4hoursoflessextendedcc.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2084,9 +2816,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox48</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_30monthtoschoolageValue.Value, "AppCCOF")) OR First(Fields!ccof_has_30monthtoschoolageValue.Value, "AppCCOF")=true,false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2109,7 +2838,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_30monthtoschoolagemorethan4hourextended.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_30monthtoschoolagemorethan4hourextended.Value),
+    "NA",
+    Fields!ccof_30monthtoschoolagemorethan4hourextended.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2119,9 +2851,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox49</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_30monthtoschoolage_extendedccValue.Value, "AppCCOF")) OR First(Fields!ccof_has_30monthtoschoolage_extendedccValue.Value, "AppCCOF")=true,false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2138,7 +2867,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2183,7 +2912,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_schoolageonground4hoursoflessextendedcc.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_schoolageonground4hoursoflessextendedcc.Value),
+    "NA",
+    Fields!ccof_schoolageonground4hoursoflessextendedcc.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2193,9 +2925,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox51</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_schoolagecareonschoolgroundValue.Value, "AppCCOF")) OR First(Fields!ccof_has_schoolagecareonschoolgroundValue.Value, "AppCCOF")=true,false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2218,7 +2947,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_schoolageongroundmorethan4hrextendedcc.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_schoolageongroundmorethan4hrextendedcc.Value),
+    "NA",
+    Fields!ccof_schoolageongroundmorethan4hrextendedcc.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2228,9 +2960,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox52</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_schoolagecareonschoolground_extendedcValue.Value, "AppCCOF")) OR First(Fields!ccof_has_schoolagecareonschoolground_extendedcValue.Value, "AppCCOF")=true,false,true)</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2248,6 +2977,215 @@
                 </TablixRow>
                 <TablixRow>
                   <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox72">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Group Child Care (School Age)</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox72</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox73">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_schoolageonground4hoursoflessextendedcc.Value),
+    "NA",
+    Fields!ccof_schoolageonground4hoursoflessextendedcc.Value
+)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox73</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox74">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_schoolageongroundmorethan4hrextendedcc.Value),
+    "NA",
+    Fields!ccof_schoolageongroundmorethan4hrextendedcc.Value
+)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox74</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox75">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Group Child Care on School Grounds</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox75</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox76">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_careonschoolgrounds4hoursorlessextendedcc.Value),
+    "NA",
+    Fields!ccof_careonschoolgrounds4hoursorlessextendedcc.Value
+)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox76</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox77">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_careonschoolgroundsmorethan4hrsextendedcc.Value),
+    "NA",
+    Fields!ccof_careonschoolgroundsmorethan4hrsextendedcc.Value)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox77</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2285,26 +3223,28 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox54">
+                        <Textbox Name="ccof_multiagechildcare4hoursoflessextendedcc">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_multiagechildcare4hoursoflessextendedcc.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_multiagechildcare4hoursoflessextendedcc.Value),
+    "NA",
+   Fields!ccof_multiagechildcare4hoursoflessextendedcc.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox54</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_multiagechildcareValue.Value, "AppCCOF")) OR First(Fields!ccof_has_multiagechildcareValue.Value, "AppCCOF")=true,false,true)</Hidden>
-                          </Visibility>
+                          <rd:DefaultName>ccof_multiagechildcare4hoursoflessextendedcc</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2327,7 +3267,199 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_multiagechildcaremorethan4hourextendedcc.Value, "AppCCOF")</Value>
+                                  <Value>=IIF(IsNothing(Fields!ccof_multiagechildcaremorethan4hourextendedcc.Value),
+    "NA",
+    Fields!ccof_multiagechildcaremorethan4hourextendedcc.Value
+)</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox55</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox56">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Family Child Care</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox56</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox57">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_familychildcare4hoursorlessextendedccValue.Value),
+    "NA",
+    Fields!ccof_familychildcare4hoursorlessextendedccValue.Value
+)</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox57</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox58">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_familychildcaremorethan4hoursextendedcc.Value),
+    "NA",
+    Fields!ccof_familychildcaremorethan4hoursextendedcc.Value
+)</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox58</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox59">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>In-Home Multi-Age Child Care</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox59</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox60">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_inhomemultiagecc4hoursorlessextendedcc.Value),
+    "NA",
+    Fields!ccof_inhomemultiagecc4hoursorlessextendedcc.Value
+)</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -2336,10 +3468,42 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox55</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>=IIF(IsNothing(First(Fields!ccof_has_multiagechildcare_extendedccValue.Value, "AppCCOF")) OR First(Fields!ccof_has_multiagechildcare_extendedccValue.Value, "AppCCOF")=true,false,true)</Hidden>
-                          </Visibility>
+                          <rd:DefaultName>Textbox60</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox61">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=IIF(IsNothing(Fields!ccof_inhomemultiageccmorethan4hoursextendedcc.Value),
+    "NA",
+    Fields!ccof_inhomemultiageccmorethan4hoursextendedcc.Value
+)</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox61</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2370,48 +3534,200 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(Fields!ccof_has_preschoolValue.Value=true,false,true)</Hidden>
+                    <Hidden>=IIF(First(Fields!ccof_monthwhenfacilityisclosedforentiremonth.Value, "AppCCOF") = "Yes", false, true)</Hidden>
                   </Visibility>
                 </TablixMember>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF")) OR First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1", false, true)</Hidden>
+                  </Visibility>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF")) OR First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1", false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF"))) AND NOT(First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1"), false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF"))) AND NOT(First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1"), false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
                 <TablixMember />
                 <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(First(Fields!ccof_preschoolmaxnumberValue.Value, "AppCCOF") &gt; 0,
+false,true)</Hidden>
+                  </Visibility>
+                </TablixMember>
                 <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIf(First(Fields!ccof_isthefacilitylocatedonschoolpropertyValue.Value, "AppCCOF") = 1, False, True)</Hidden>
+                  </Visibility>
+                </TablixMember>
                 <TablixMember />
-                <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF( Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF( Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF( Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF( Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(
+    Fields!ccof_providertypeValue.Value = 100000000
+    AND Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(
+    Fields!ccof_providertypeValue.Value = 100000000
+    AND Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(
+    (IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF")) OR First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1")
+	AND Fields!ccof_providertypeValue.Value = 100000000
+    AND Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(
+	NOT(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF")))
+	AND NOT(First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1")
+    AND Fields!ccof_providertypeValue.Value = 100000000
+    AND Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(
+	NOT(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF")))
+	AND NOT(First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1")
+    AND Fields!ccof_providertypeValue.Value = 100000000
+    AND Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF( Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(
+    Fields!ccof_providertypeValue.Value = 100000001
+    AND Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(
+    Fields!ccof_providertypeValue.Value = 100000001
+    AND Fields!ccof_regularlyofferextendeddailyhourofchildcaValue.Value = 1,
+    False,
+    True
+)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
+            <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCOF</DataSetName>
-            <Height>5.63542in</Height>
-            <Width>8.69792in</Width>
+            <Height>7.99584in</Height>
+            <Width>8.79042in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <BottomBorder>
+                <Style>None</Style>
+              </BottomBorder>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>5.69792in</Height>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
+        <Height>8.10417in</Height>
+        <Style />
       </Body>
       <Width>8.79042in</Width>
       <Page>
-        <PageHeight>12in</PageHeight>
         <PageWidth>11.5in</PageWidth>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>

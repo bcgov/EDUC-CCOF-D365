@@ -2373,7 +2373,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.175in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2401,7 +2401,48 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.175in</Height>
+                                <Height>0.15556in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox2">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Child Care Fee Reduction Initiative (CCFRI)</Value>
+                                                <Style>
+                                                  <FontSize>12pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>SteelBlue</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox2</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                      <ColSpan>3</ColSpan>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2430,7 +2471,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.175in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2485,7 +2526,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.185in</Height>
+                                <Height>0.16556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2513,7 +2554,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.675in</Height>
+                                <Height>0.65556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2610,7 +2651,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.175in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2631,7 +2672,6 @@
                                         </Style>
                                       </Subreport>
                                       <ColSpan>3</ColSpan>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
@@ -2639,7 +2679,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.175in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2667,7 +2707,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.175in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2710,6 +2750,7 @@
                                   <Hidden>=IIF(First(Fields!app_ccof_applicationtypeValue.Value, "addNewFacilities")=100000000,False,True)</Hidden>
                                 </Visibility>
                               </TablixMember>
+                              <TablixMember />
                               <TablixMember />
                               <TablixMember>
                                 <Visibility>
