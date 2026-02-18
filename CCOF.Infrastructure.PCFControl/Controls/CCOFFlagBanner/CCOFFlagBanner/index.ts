@@ -104,7 +104,9 @@ private _orgLookup: {
       (context.mode as { recordId?: string }).recordId;
 
     this.recordId = normalizeGuid(idCandidate);
+     setTimeout(() => {
     void this.render();
+  }, 400);
   }
 
   public updateView(context: ComponentFramework.Context<IInputs>): void {
@@ -128,7 +130,9 @@ private _orgLookup: {
    
 
     if (!this.isRendered || prevId !== this.recordId) {
-      void this.render();
+       setTimeout(() => {
+    void this.render();
+  }, 400);
     }
   }
 
@@ -194,7 +198,7 @@ const scopeRaw = context.parameters.Scope.raw ?? "[]";
       console.log("loadrelatedNotes");
       const items = await this.loadRelatedNotes(this.recordId);
        if (items.length === 0) {
-        root.innerHTML = `<span class="notes-empty">No related notes.</span>`;
+        root.innerHTML = `<span class="notes-empty">No related flags.</span>`;
         return;
       }
 
@@ -263,11 +267,11 @@ ReactDOM.render(React.createElement(React.Fragment, null, elements), this.contai
   const today = this.formatDate(new Date());
   let fetchXml;
   let fetchxmlforapp;
-  const orgId= normalizeGuid(this.OrgId);
+  let orgId= normalizeGuid(this.OrgId);
   const scopeValuesXml = this.Scope
     .map(v => `<value>${v}</value>`)
     .join("");
-   console.log("Raw entityType:", JSON.stringify(this._orgLookup?.entityType));
+   console.log("Raw entityType:", this._orgLookup?.entityType);
 
  /*const allowedTypes = ["account", "ccof_application"];
 
@@ -277,6 +281,11 @@ if (!allowedTypes.includes(this._orgLookup?.entityType.trim().toLowerCase() ?? "
 
   console.log("ORG ID from Scope"+orgId);
   console.log("Record ID from Scope"+fundingId);
+  if (!orgId) {
+    orgId = fundingId;
+    console.log("orgId was undefined — assigned fundingId instead:", orgId);
+}
+
 
  if (this.Scope.includes(3)){
      fetchXml = `
@@ -326,7 +335,7 @@ const result = await this.context.webAPI.retrieveMultipleRecords(
     `?fetchXml=${encodeURIComponent(fetchxmlforapp)}`
 );
 let orgGuid = null;
-console.log("test");
+console.log("test1");
 
 if (result.entities.length > 0) {
       const row = result.entities[0];
@@ -346,6 +355,7 @@ if (result.entities.length > 0) {
         <entity name='${this.notesEntity}'>
           <attribute name='${notesPk}' />
           <attribute name='${this.notesTitleAttr}' />
+            <filter type='and'>
           <filter type='or'>
          <condition attribute='ccof_end_date' operator='ge' value='${today}'/>
          <condition attribute='ccof_end_date' operator='null'/>
