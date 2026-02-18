@@ -2438,6 +2438,9 @@
                                             <Value>=Fields!AppCCFRI_ccof_facilityValue.Value</Value>
                                           </Parameter>
                                         </Parameters>
+                                        <Visibility>
+                                          <Hidden>=IIF(IsNothing(First(Fields!ccof_application_template_version.Value, "APPData")) OR First(Fields!ccof_application_template_version.Value, "APPData") = "1", false, true)</Hidden>
+                                        </Visibility>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -2578,7 +2581,7 @@
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
-                                      <Subreport Name="Placeholder">
+                                      <Subreport Name="subreportCCFRIClosure">
                                         <ReportName>sub_sub_AppCCFRIClosureVersion2</ReportName>
                                         <Parameters>
                                           <Parameter Name="ApplicationID">
@@ -2595,7 +2598,6 @@
                                         </Style>
                                       </Subreport>
                                       <ColSpan>3</ColSpan>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
