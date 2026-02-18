@@ -3550,7 +3550,7 @@
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF(NOT(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF"))) AND NOT(First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1"), false, true)</Hidden>
+                    <Hidden>=IIF(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF")) OR First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1", false, true)</Hidden>
                   </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
@@ -3561,6 +3561,9 @@
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!application_ccof_application_template_version.Value, "AppCCOF"))) AND NOT(First(Fields!application_ccof_application_template_version.Value, "AppCCOF") = "1"), false, true)</Hidden>
+                  </Visibility>
                   <HideIfNoRows>true</HideIfNoRows>
                 </TablixMember>
                 <TablixMember />
