@@ -1,0 +1,30 @@
+{
+  
+
+  "compilerOptions": {
+    "jsx": "react-jsx",        // or "react" for older versions
+    "target": "es5",
+    "module": "es6",
+    "lib": ["dom", "es2015", "es2017"],
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["powerapps-component-framework"],
+    "typeRoots": ["./node_modules/@types"]
+  },
+ 
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "out",
+    "bin",
+    "Solutions"
+
+  ]
+
+ 
+}
