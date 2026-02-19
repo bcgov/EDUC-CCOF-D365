@@ -35,13 +35,12 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
     private readonly TimeProvider timeProvider = timeProvider;
     private readonly ILogger _logger = loggerFactory.CreateLogger(LogCategory.Process);
     private readonly ID365DataService _dataService = dataService;
-  //  private readonly IPaymentValidator _paymentvalidator = paymentvalidator;
+  
 
     private int _controlCount;
     private double _controlAmount;
     private int _oracleBatchNumber;
     private string _cgiBatchNumber = string.Empty;
-   // private List<PaymentLine> erroredline= new List<PaymentLine>();
     private ProcessData? _data;
     private ProcessParameter? _processParams;
     private string _currentFiscalYearId;
@@ -160,6 +159,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                         </filter>
                        <link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_program_year" link-type="outer" alias="program_year" visible="false">
                     <attribute name="ccof_financial_year"/>
+                    <attribute name="statuscode"/>
                     </link-entity>
                       </entity>
                     </fetch>
@@ -185,12 +185,14 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                         <attribute name="ofm_ack_number" />
                         <attribute name="ofm_cohortid" />
                         <attribute name="ofm_payment_type" />
+                        <attribute name="ccof_provider_type" />
+                        <attribute name="ccof_accrual" />
                       </entity>
                     </fetch>
                     """;
 
             var requestUri = $"""
-                         ofm_ack_codeses?$select=ofm_ack_number,_ofm_cohortid_value,ofm_payment_type
+                         ofm_ack_codeses?$select=ofm_ack_number,_ofm_cohortid_value,ofm_payment_type,ccof_provider_type,ccof_accrual
                          """;
 
             return requestUri;
@@ -312,6 +314,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         try
         {
             var invoiceData = await GetPaymentLineData();
+            JsonArray? invoiceDataArray = JsonSerializer.Deserialize<JsonArray>(invoiceData.Data);
+            JsonNode? invoice = invoiceDataArray.First();
             serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(invoiceData.Data.ToString());
             var grouppayment = serializedInvoiceData?.GroupBy(p => p.ccof_invoice_number).ToList();
             var fiscalyear = serializedInvoiceData?.FirstOrDefault()?.ccof_financial_year;
@@ -372,8 +376,11 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 var paymentType = ((ECc_Payment_Type)headeritem.First().ccof_payment_type);
 
                 var codingLineType = headeritem.First().CcOf_Coding_Line_TypeName;
-
-                
+                var orgid = headeritem.First().ccof_organization_id;// Group = 1 Family = 2
+                int providerType = orgid.Contains("G") ? 1 : 2;
+                int statuscodeFY = (int)invoice["program_year.statuscode"];// 1 - Current, 4 - Historical
+                bool isInvoiceAccrual = statuscodeFY == 4 ? true : false;
+                //is Accrule on ACK code NO = 0 YES =1
                 // from payment line
 
                 string ackNumber = string.Empty;
@@ -383,10 +390,15 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     ackJsonArray.ToJsonString(),
                     Setup.s_writeOptionsForLogs
                 )!;
+                //ack.ccof_accrual == isInvoiceAccrual
                 ackNumber = ackCodeList
-    .Where(ack => ack.OfmPaymentType == (int)paymentType)
+    .Where(ack =>
+            ack.OfmPaymentType == (int)paymentType &&
+            ack.ccof_provider_type == providerType &&
+            ack.ccof_accrual == isInvoiceAccrual
+            )
     .Select(ack => ack.OfmAckNumber)
-    .FirstOrDefault();
+    .FirstOrDefault();                                  
 
                
                 double invoiceamount = 0.00;
@@ -572,10 +584,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         }
         catch (Exception ex)
         {
-            //var opsuserID = await _paymentvalidator.GetOpssupervisorEmail(true);
-            //var ccuserID = await _paymentvalidator.GetccuserEmail(true);
-
-            //await _paymentvalidator.SendPaymentErrorEmail(500, "500",(Guid)(_processParams.Notification.SenderId));
+            
             Console.WriteLine(ex.Message);
 
         }
@@ -638,7 +647,6 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             ["ofm_name"] = inboxFileName,
             ["ofm_batch_number"] = _cgiBatchNumber,
             ["ccof_last_ccof_cgi_oracle_number"] = _oracleBatchNumber.ToString()
-            //["ofm_fiscal_year@odata.bind"] = $"/ofm_fiscal_years(abf35f80-5499-ee11-be37-000d3a09d499)"
         };
 
         var pfeCreateResponse = await d365WebApiService.SendCreateRequestAsync(appUserService.AZSystemAppUser, OfM_Payment_File_Exchange.EntitySetName, requestBody.ToString());
@@ -674,14 +682,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         }
         return await Task.FromResult(true);
     }
-    //private async Task<IEnumerable<Ack_Codes>> LoadACKCodeAsync()
-    //{
-    //    var localdata = await _dataService.FetchDataAsync(RequestACKCodeUri, "ACK_Codes");
-    //    // var deserializedData = localdata.Data.Deserialize<List<Ack_Codes>>(Setup.s_writeOptionsForLogs);
-    //    var deserializedData = JsonSerializer.Deserialize<List<Ack_Codes>>(localdata.Data.ToString());
-    //    return await Task.FromResult(deserializedData!);
-    //}
-
+    
     public async Task<ProcessData> GetACKCodes()
     {
         _logger.LogDebug(CustomLogEvent.Process, "Calling GetData of {nameof}", nameof(P500SendPaymentRequestProvider));
