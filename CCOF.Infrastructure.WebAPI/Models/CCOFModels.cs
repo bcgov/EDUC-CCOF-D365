@@ -156,6 +156,11 @@ namespace CCOF.Infrastructure.WebAPI.Models
         [JsonPropertyName("ofm_ack_number")]
         public string? OfmAckNumber { get; set; }
 
+        [JsonPropertyName("ccof_provider_type")]
+        public int? ccof_provider_type { get; set; }
+        [JsonPropertyName("ccof_accrual")]
+        public bool? ccof_accrual { get; set; }
+
 
     }
     public class Ccof_Application_Basefunding_Application
