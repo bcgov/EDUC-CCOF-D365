@@ -3,20 +3,20 @@
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="DynamicsCRM">
+    <DataSource Name="CRMAppCCFRIClosure">
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
         <ConnectString>https://mychildcareservicesdev.crm3.dynamics.com/</ConnectString>
-        <Prompt>Specify a user name and password for data source DynamicsCRM:</Prompt>
+        <Prompt>Specify a user name and password for data source CRMAppCCFRIClosure:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
-      <rd:DataSourceID>5376d888-1bf8-41da-b3d2-96f23af6745b</rd:DataSourceID>
+      <rd:DataSourceID>47e144e1-1ce3-4bd2-9eff-f4c7aa61c50e</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="AppCCFRIParentFee">
+    <DataSet Name="AppCCFRIClosure">
       <Query>
-        <DataSourceName>DynamicsCRM</DataSourceName>
+        <DataSourceName>CRMAppCCFRIClosure</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@FacilityID">
             <Value>=Parameters!FacilityID.Value</Value>
@@ -26,53 +26,43 @@
           </QueryParameter>
         </QueryParameters>
         <CommandText>&lt;fetch&gt;
-  &lt;entity name="ccof_application_ccfri_childcarecategory"&gt;
+  &lt;entity name="ccof_application_ccfri_closure"&gt;
     &lt;attribute name="ccof_name" /&gt;
-    &lt;attribute name="ccof_application_ccfri_childcarecategoryid" /&gt;
     &lt;attribute name="ccof_applicationccfri" /&gt;
-    &lt;attribute name="ccof_apr" /&gt;
-    &lt;attribute name="ccof_aug" /&gt;
-    &lt;attribute name="ccof_childcarecategory" /&gt;
-    &lt;attribute name="ccof_feb" /&gt;
-    &lt;attribute name="ccof_jan" /&gt;
-    &lt;attribute name="ccof_jul" /&gt;
-    &lt;attribute name="ccof_jun" /&gt;
-    &lt;attribute name="ccof_dec" /&gt;
-    &lt;attribute name="ccof_frequency" /&gt;
-    &lt;attribute name="ccof_mar" /&gt;
-    &lt;attribute name="ccof_may" /&gt;
-    &lt;attribute name="ccof_nov" /&gt;
-    &lt;attribute name="ccof_oct" /&gt;
-    &lt;attribute name="ccof_programyear" /&gt;
-    &lt;attribute name="ccof_sep" /&gt;
-    &lt;order attribute="ccof_programyear" /&gt;
-    &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" alias="appccfri"&gt;
+    &lt;attribute name="ccof_closure_type" /&gt;
+    &lt;attribute name="ccof_enddate" /&gt;
+    &lt;attribute name="ccof_paidclosure" /&gt;
+    &lt;attribute name="ccof_program_year" /&gt;
+    &lt;attribute name="ccof_startdate" /&gt;
+    &lt;attribute name="ccof_comment" /&gt;
+&lt;attribute name="ccof_is_full_closure" /&gt;
+&lt;attribute name="ccof_ageaffectedgroupstext" /&gt;
+    &lt;filter&gt;
+      &lt;condition attribute="statecode" operator="eq" value="0" /&gt;
+    &lt;/filter&gt;
+    &lt;order attribute="ccof_applicationccfri" /&gt;
+    &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
       &lt;attribute name="ccof_applicationccfriid" /&gt;
       &lt;attribute name="ccof_facility" /&gt;
       &lt;attribute name="ccof_faclilityid" /&gt;
+  &lt;attribute name="ccof_chargefeeccfri" /&gt;
       &lt;attribute name="ccof_name" /&gt;
       &lt;filter&gt;
         &lt;condition attribute="ccof_facility" operator="eq" value="@FacilityID" /&gt;
       &lt;/filter&gt;
-      &lt;link-entity name="ccof_application" from="ccof_applicationid" to="ccof_application"&gt;
+      &lt;link-entity name="ccof_application" from="ccof_applicationid" to="ccof_application" link-type="inner" alias="app"&gt;
         &lt;filter&gt;
           &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
         &lt;/filter&gt;
       &lt;/link-entity&gt;
     &lt;/link-entity&gt;
-    &lt;link-entity name="ccof_childcare_category" from="ccof_childcare_categoryid" to="ccof_childcarecategory" link-type="inner" alias="category"&gt;
-      &lt;order attribute="ccof_childcarecategorynumber" /&gt;
-    &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
         <Field Name="ccof_name">
           <DataField>ccof_name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_application_ccfri_childcarecategoryid">
-          <DataField>ccof_application_ccfri_childcarecategoryid</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ccof_applicationccfri">
@@ -87,68 +77,64 @@
           <DataField>ccof_applicationccfriEntityName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_apr">
-          <DataField>ccof_apr</DataField>
+        <Field Name="ccof_closure_type">
+          <DataField>ccof_closure_type</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_aprValue">
-          <DataField>ccof_aprValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="ccof_closure_typeValue">
+          <DataField>ccof_closure_typeValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="ccof_aug">
-          <DataField>ccof_aug</DataField>
+        <Field Name="ccof_enddate">
+          <DataField>ccof_enddate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_augValue">
-          <DataField>ccof_augValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="ccof_enddateValue">
+          <DataField>ccof_enddateValue</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="ccof_childcarecategory">
-          <DataField>ccof_childcarecategory</DataField>
+        <Field Name="ccof_paidclosure">
+          <DataField>ccof_paidclosure</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_childcarecategoryValue">
-          <DataField>ccof_childcarecategoryValue</DataField>
+        <Field Name="ccof_paidclosureValue">
+          <DataField>ccof_paidclosureValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_program_year">
+          <DataField>ccof_program_year</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_program_yearValue">
+          <DataField>ccof_program_yearValue</DataField>
           <rd:TypeName>System.Guid</rd:TypeName>
         </Field>
-        <Field Name="ccof_childcarecategoryEntityName">
-          <DataField>ccof_childcarecategoryEntityName</DataField>
+        <Field Name="ccof_program_yearEntityName">
+          <DataField>ccof_program_yearEntityName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_feb">
-          <DataField>ccof_feb</DataField>
+        <Field Name="ccof_startdate">
+          <DataField>ccof_startdate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_febValue">
-          <DataField>ccof_febValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="ccof_startdateValue">
+          <DataField>ccof_startdateValue</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="ccof_jan">
-          <DataField>ccof_jan</DataField>
+        <Field Name="ccof_comment">
+          <DataField>ccof_comment</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_janValue">
-          <DataField>ccof_janValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ccof_jul">
-          <DataField>ccof_jul</DataField>
+        <Field Name="ccof_is_full_closure">
+          <DataField>ccof_is_full_closure</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_julValue">
-          <DataField>ccof_julValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="ccof_is_full_closureValue">
+          <DataField>ccof_is_full_closureValue</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
-        <Field Name="ccof_jun">
-          <DataField>ccof_jun</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_junValue">
-          <DataField>ccof_junValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ccof_dec">
-          <DataField>ccof_dec</DataField>
+        <Field Name="ccof_ageaffectedgroupstext">
+          <DataField>ccof_ageaffectedgroupstext</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="appccfri_ccof_applicationccfriid">
@@ -159,85 +145,29 @@
           <DataField>appccfri_ccof_facility</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ccof_decValue">
-          <DataField>ccof_decValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
         <Field Name="appccfri_ccof_facilityValue">
           <DataField>appccfri_ccof_facilityValue</DataField>
           <rd:TypeName>System.Guid</rd:TypeName>
         </Field>
-        <Field Name="ccof_frequency">
-          <DataField>ccof_frequency</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="appccfri_ccof_facilityEntityName">
           <DataField>appccfri_ccof_facilityEntityName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_frequencyValue">
-          <DataField>ccof_frequencyValue</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ccof_mar">
-          <DataField>ccof_mar</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="appccfri_ccof_faclilityid">
           <DataField>appccfri_ccof_faclilityid</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="appccfri_ccof_chargefeeccfri">
+          <DataField>appccfri_ccof_chargefeeccfri</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="appccfri_ccof_chargefeeccfriValue">
+          <DataField>appccfri_ccof_chargefeeccfriValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="appccfri_ccof_name">
           <DataField>appccfri_ccof_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_marValue">
-          <DataField>ccof_marValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ccof_may">
-          <DataField>ccof_may</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_mayValue">
-          <DataField>ccof_mayValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ccof_nov">
-          <DataField>ccof_nov</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_novValue">
-          <DataField>ccof_novValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ccof_oct">
-          <DataField>ccof_oct</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_octValue">
-          <DataField>ccof_octValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ccof_programyear">
-          <DataField>ccof_programyear</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_programyearValue">
-          <DataField>ccof_programyearValue</DataField>
-          <rd:TypeName>System.Guid</rd:TypeName>
-        </Field>
-        <Field Name="ccof_programyearEntityName">
-          <DataField>ccof_programyearEntityName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_sep">
-          <DataField>ccof_sep</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ccof_sepValue">
-          <DataField>ccof_sepValue</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -246,113 +176,47 @@
     <ReportSection>
       <Body>
         <ReportItems>
-          <Tablix Name="Tablix1">
+          <Tablix Name="TablixClosure">
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.27083in</Width>
+                  <Width>1.46528in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.36458in</Width>
+                  <Width>1.36111in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.52084in</Width>
+                  <Width>2.32986in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.25in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1.15625in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1.27083in</Width>
+                  <Width>1.8021in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.5in</Height>
+                  <Height>0.25in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox12">
+                        <Textbox Name="Textbox1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Parent Fees</Value>
+                                  <Value>Closures</Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value xml:space="preserve"> </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_programyear.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_childcarecategory.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_frequency.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Your highest monthly parent fee before CCFRI is applied in every month below.</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>SteelBlue</Color>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -364,65 +228,74 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>6</ColSpan>
+                        <ColSpan>4</ColSpan>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell />
-                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.41667in</Height>
+                  <Height>0.25in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="ccof_name">
+                        <Textbox Name="Textbox37">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Apr: </Value>
+                                  <Value>Do you charge parent fees at this facility for any closures on business days (other than provincial statutory holidays)? Only indicate the date of closures where parent fees are charged.</Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_apr.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Oct: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_aug.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>ccof_name</rd:DefaultName>
+                          <rd:DefaultName>Textbox37</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox40">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>ChargeFee</Label>
+                                  <Value>=Fields!appccfri_ccof_chargefeeccfri.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox40</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -436,229 +309,31 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="ccof_childcarecategoryValue">
+                        <Textbox Name="Textbox16">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>May: </Value>
+                                  <Value>Closure Start Date</Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_may.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Nov: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_nov.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>ccof_childcarecategoryValue</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="ccof_aprValue">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Jun: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_jun.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Dec: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_dec.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>ccof_aprValue</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="ccof_applicationccfri">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Jul: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_jul.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Jan: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_jan.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>ccof_applicationccfri</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox11">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Aug: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_aug.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Feb: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_feb.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <rd:DefaultName>Textbox16</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -681,36 +356,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Sep: </Value>
+                                  <Value>End Date</Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_sep.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Mar: </Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ccof_mar.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -731,6 +380,297 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox19">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Reason</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox19</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.2in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ccof_startdate">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Format(Fields!ccof_startdateValue.Value,"yyyy-MM-dd")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ccof_startdate</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ccof_enddate">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Format(Fields!ccof_enddateValue.Value,"yyyy-MM-dd")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ccof_enddate</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ccof_comment">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ccof_comment.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ccof_comment</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox9">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Is this a full facility closure?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox30">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ccof_is_full_closure.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox30</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox25">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Select all care categories that are affected by the closure: </Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox25</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox32">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ccof_ageaffectedgroupstext.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox32</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
@@ -741,25 +681,39 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
               <TablixMembers>
                 <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
                   <Group Name="Details" />
                   <TablixMembers>
                     <TablixMember />
                     <TablixMember />
+                    <TablixMember />
+                    <TablixMember>
+                      <Visibility>
+                        <Hidden>=IIF(
+ Fields!ccof_is_full_closureValue.Value = 0,
+    False,
+    True
+)</Hidden>
+                      </Visibility>
+                    </TablixMember>
                   </TablixMembers>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>AppCCFRIParentFee</DataSetName>
-            <Top>0.01958in</Top>
-            <Height>0.91667in</Height>
-            <Width>7.83333in</Width>
+            <KeepTogether>true</KeepTogether>
+            <DataSetName>AppCCFRIClosure</DataSetName>
+            <Height>1.45in</Height>
+            <Width>6.95835in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -767,10 +721,10 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.28625in</Height>
+        <Height>1.7in</Height>
         <Style />
       </Body>
-      <Width>7.86459in</Width>
+      <Width>6.95835in</Width>
       <Page>
         <PageWidth>11.5in</PageWidth>
         <LeftMargin>1in</LeftMargin>
@@ -784,20 +738,10 @@
   <ReportParameters>
     <ReportParameter Name="ApplicationID">
       <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>58f67f45-e8d1-ef11-8ee9-7c1e5240b09b</Value>
-        </Values>
-      </DefaultValue>
       <Prompt>Application GUID</Prompt>
     </ReportParameter>
     <ReportParameter Name="FacilityID">
       <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>81e53c88-8615-f011-998a-7c1e524098a2</Value>
-        </Values>
-      </DefaultValue>
       <Prompt>Facility GUID</Prompt>
     </ReportParameter>
   </ReportParameters>
@@ -820,5 +764,5 @@
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportID>e4d5a488-97cd-429e-afdb-cada3dad263e</rd:ReportID>
+  <rd:ReportID>dcd0c75e-e6e5-4ed7-85be-e0372ae05cac</rd:ReportID>
 </Report>

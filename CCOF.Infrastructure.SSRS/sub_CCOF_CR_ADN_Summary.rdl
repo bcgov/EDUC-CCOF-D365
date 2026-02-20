@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
         <ConnectString>https://mychildcareservicesdev.crm3.dynamics.com/</ConnectString>
+        <Prompt>Specify a user name and password for data source DynamicsDev:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>f0bdff18-5d51-489d-97c5-c1e2b3737da3</rd:DataSourceID>
@@ -46,6 +47,7 @@
           &lt;attribute name="ccof_consent" /&gt;
           &lt;attribute name="ccof_submittedby" /&gt;
           &lt;attribute name="ccof_programyear" /&gt;
+          &lt;attribute name="ccof_application_template_version" /&gt;
         &lt;/link-entity&gt;
         &lt;link-entity name="account" from="accountid" to="ccof_organization" link-type="inner" alias="org"&gt;
           &lt;attribute name="accountid" /&gt;
@@ -68,12 +70,25 @@
           &lt;attribute name="primarycontactid" /&gt;
           &lt;attribute name="primarycontactid" /&gt;
           &lt;attribute name="accountnumber" /&gt;
+          &lt;attribute name="ccof_partner1firstname" /&gt;
+          &lt;attribute name="ccof_partner1lastname" /&gt;
+          &lt;attribute name="ccof_partner1middlename" /&gt;
+          &lt;attribute name="ccof_partner2firstname" /&gt;
+          &lt;attribute name="ccof_partner2lastname" /&gt;
+          &lt;attribute name="ccof_partner2middlename" /&gt;
+          &lt;attribute name="ccof_partner3firstname" /&gt;
+          &lt;attribute name="ccof_partner3lastname" /&gt;
+          &lt;attribute name="ccof_partner3middlename" /&gt;
+          &lt;attribute name="ccof_partner4firstname" /&gt;
+          &lt;attribute name="ccof_partner4lastname" /&gt;
+          &lt;attribute name="ccof_partner4middlename" /&gt;
+          &lt;attribute name="ccof_doingbusinessas" /&gt;
         &lt;/link-entity&gt;
       &lt;/link-entity&gt;
     &lt;/link-entity&gt;
     &lt;link-entity name="account" from="accountid" to="ccof_facility" link-type="inner" alias="facility"&gt;
       &lt;attribute name="accountid" /&gt;
-          &lt;attribute name="name" /&gt;
+      &lt;attribute name="name" /&gt;
       &lt;attribute name="accountnumber" /&gt;
       &lt;attribute name="ccof_facilitylicencenumber" /&gt;
       &lt;attribute name="address1_city" /&gt;
@@ -236,6 +251,10 @@
           <DataField>app_ccof_programyearValue</DataField>
           <rd:TypeName>System.Guid</rd:TypeName>
         </Field>
+        <Field Name="app_ccof_application_template_version">
+          <DataField>app_ccof_application_template_version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="app_ccof_consentValue">
           <DataField>app_ccof_consentValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -340,6 +359,10 @@
           <DataField>facility_accountid</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_ccof_partner1firstname">
+          <DataField>org_ccof_partner1firstname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_accountnumber">
           <DataField>facility_accountnumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -348,20 +371,44 @@
           <DataField>facility_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_ccof_partner1lastname">
+          <DataField>org_ccof_partner1lastname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_ccof_facilitylicencenumber">
           <DataField>facility_ccof_facilitylicencenumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="org_ccof_partner1middlename">
+          <DataField>org_ccof_partner1middlename</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="org_ccof_partner2firstname">
+          <DataField>org_ccof_partner2firstname</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="facility_address1_city">
           <DataField>facility_address1_city</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_ccof_partner2lastname">
+          <DataField>org_ccof_partner2lastname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_address1_composite">
           <DataField>facility_address1_composite</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_ccof_partner2middlename">
+          <DataField>org_ccof_partner2middlename</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_address1_postalcode">
           <DataField>facility_address1_postalcode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="org_ccof_partner3firstname">
+          <DataField>org_ccof_partner3firstname</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="facility_address1_stateorprovince">
@@ -372,20 +419,44 @@
           <DataField>facility_address1_primarycontactname</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_ccof_partner3lastname">
+          <DataField>org_ccof_partner3lastname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="org_ccof_partner3middlename">
+          <DataField>org_ccof_partner3middlename</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_ccof_facilitystartdate">
           <DataField>facility_ccof_facilitystartdate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="org_ccof_partner4firstname">
+          <DataField>org_ccof_partner4firstname</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="facility_ccof_facilitystartdateValue">
           <DataField>facility_ccof_facilitystartdateValue</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="org_ccof_partner4lastname">
+          <DataField>org_ccof_partner4lastname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_ccof_position">
           <DataField>facility_ccof_position</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="org_ccof_partner4middlename">
+          <DataField>org_ccof_partner4middlename</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_emailaddress1">
           <DataField>facility_emailaddress1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="org_ccof_doingbusinessas">
+          <DataField>org_ccof_doingbusinessas</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="facility_telephone1">
@@ -2247,8 +2318,18 @@
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
-                              <TablixMember />
-                              <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF((IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities")) OR First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1"), False, True)</Hidden>
+                                </Visibility>
+                                <HideIfNoRows>true</HideIfNoRows>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF((IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities")) OR First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1"), False, True)</Hidden>
+                                </Visibility>
+                                <HideIfNoRows>true</HideIfNoRows>
+                              </TablixMember>
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
@@ -2292,7 +2373,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2320,7 +2401,48 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.15556in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox2">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Child Care Fee Reduction Initiative (CCFRI)</Value>
+                                                <Style>
+                                                  <FontSize>12pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>SteelBlue</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox2</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                      <ColSpan>3</ColSpan>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2349,7 +2471,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2404,7 +2526,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.21in</Height>
+                                <Height>0.16556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2432,7 +2554,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.7in</Height>
+                                <Height>0.65556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2529,7 +2651,35 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.15556in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Subreport Name="Subreport2">
+                                        <ReportName>sub_sub_CCOF_CR_ADN_AppCCFRIClosureVersion2</ReportName>
+                                        <Parameters>
+                                          <Parameter Name="ApplicationID">
+                                            <Value>=First(Fields!app_ccof_applicationid.Value, "addNewFacilities")</Value>
+                                          </Parameter>
+                                          <Parameter Name="FacilityID">
+                                            <Value>=Fields!ccof_facilityValue.Value</Value>
+                                          </Parameter>
+                                        </Parameters>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Subreport>
+                                      <ColSpan>3</ColSpan>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2557,7 +2707,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.2in</Height>
+                                <Height>0.15556in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2602,8 +2752,22 @@
                               </TablixMember>
                               <TablixMember />
                               <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF((IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities")) OR First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1"), False, True)</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF((IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities")) OR First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1"), False, True)</Hidden>
+                                </Visibility>
+                              </TablixMember>
                               <TablixMember />
-                              <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1"), false, true)</Hidden>
+                                </Visibility>
+                              </TablixMember>
                               <TablixMember />
                               <TablixMember />
                             </TablixMembers>
@@ -2710,8 +2874,8 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>addNewFacilities</DataSetName>
-            <Top>5.83208in</Top>
-            <Left>0.29104in</Left>
+            <Top>8.42027in</Top>
+            <Left>0.32683in</Left>
             <Height>6.70425in</Height>
             <Width>8.5325in</Width>
             <ZIndex>1</ZIndex>
@@ -2990,6 +3154,874 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox80">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 1 First Name
+</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox80</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox81">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 1 Middle Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox81</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox82">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 1 Last Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox82</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox121">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner1firstname</Label>
+                                  <Value>=First(Fields!org_ccof_partner1firstname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox122">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner1middlename</Label>
+                                  <Value>=First(Fields!org_ccof_partner1middlename.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox124">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner1lastname</Label>
+                                  <Value>=First(Fields!org_ccof_partner1lastname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox83">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 2 First Name
+</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox80</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox84">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 2 Middle Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox81</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox85">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 2 Last Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox82</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox125">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner2firstname</Label>
+                                  <Value>=First(Fields!org_ccof_partner2firstname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox157">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner2middlename</Label>
+                                  <Value>=First(Fields!org_ccof_partner2middlename.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox160">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner2lastname</Label>
+                                  <Value>=First(Fields!org_ccof_partner2lastname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox86">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 3 First Name
+</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox80</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox87">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 3 Middle Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox81</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox88">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 3 Last Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox82</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox161">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner3firstname</Label>
+                                  <Value>=First(Fields!org_ccof_partner3firstname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <ToolTip>=IIf(IsNothing(Fields!org_ccof_partner3firstname.Value) And IsNothing(Fields!org_ccof_partner3lastname.Value), True, False)</ToolTip>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox162">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner3middlename</Label>
+                                  <Value>=First(Fields!org_ccof_partner3middlename.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox163">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner3lastname</Label>
+                                  <Value>=First(Fields!org_ccof_partner3lastname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox89">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 4 First Name
+</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox80</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox90">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 4 Middle Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox81</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox91">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Partner 4 Last Name</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox82</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox164">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner4firstname</Label>
+                                  <Value>=First(Fields!org_ccof_partner4firstname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox165">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner4middlename</Label>
+                                  <Value>=First(Fields!org_ccof_partner4middlename.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox166">
+                          <CanGrow>true</CanGrow>
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Label>org_ccof_partner4lastname</Label>
+                                  <Value>=First(Fields!org_ccof_partner4lastname.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
                   <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
@@ -3070,6 +4102,209 @@
                     </TablixCell>
                     <TablixCell />
                     <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox331">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Doing Business As</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox331</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox332">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox332</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox333">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox333</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ccof_ecewe">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!org_ccof_doingbusinessas.Value, "addNewFacilities")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ccof_ecewe</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox335">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox335</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox336">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox336</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
@@ -4094,6 +5329,66 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006, false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006, false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006, false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006, false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "addNewFacilities")))), false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner3firstname.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner3middlename.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner3lastname.Value, "addNewFacilities")))), false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "addNewFacilities")))), false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006 AND (Not(IsNothing(First(Fields!org_ccof_partner4firstname.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner4middlename.Value, "addNewFacilities"))) OR Not(IsNothing(First(Fields!org_ccof_partner4lastname.Value, "addNewFacilities")))), false, true)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006, false, true)</Hidden>
+                  </Visibility>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF(NOT(IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities"))) AND NOT(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1") AND First(Fields!org_ccof_typeoforganizationValue.Value, "addNewFacilities") = 100000006, false, true)</Hidden>
+                  </Visibility>
+                </TablixMember>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -4102,10 +5397,18 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF((IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities")) OR First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1"), False, True)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
+                <TablixMember>
+                  <Visibility>
+                    <Hidden>=IIF((IsNothing(First(Fields!app_ccof_application_template_version.Value, "addNewFacilities")) OR First(Fields!app_ccof_application_template_version.Value, "addNewFacilities") = "1"), False, True)</Hidden>
+                  </Visibility>
+                  <HideIfNoRows>true</HideIfNoRows>
+                </TablixMember>
                 <TablixMember />
                 <TablixMember />
               </TablixMembers>
@@ -4113,7 +5416,7 @@
             <DataSetName>addNewFacilities</DataSetName>
             <Top>1.66077in</Top>
             <Left>0.29104in</Left>
-            <Height>3.9136in</Height>
+            <Height>6.4136in</Height>
             <Width>8.55271in</Width>
             <ZIndex>2</ZIndex>
             <Visibility>
@@ -4347,8 +5650,8 @@
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>23.39261in</Top>
-            <Left>0.29686in</Left>
+            <Top>26.80579in</Top>
+            <Left>0.22855in</Left>
             <Height>2.51735in</Height>
             <Width>8.59499in</Width>
             <ZIndex>3</ZIndex>
@@ -4623,8 +5926,8 @@ By completing and submitting this Program Confirmation Form (the Form) electroni
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>17.47798in</Top>
-            <Left>0.29104in</Left>
+            <Top>20.97524in</Top>
+            <Left>0.22855in</Left>
             <Height>5.76111in</Height>
             <Width>8.58455in</Width>
             <ZIndex>4</ZIndex>
@@ -5007,8 +6310,8 @@ Intentionally supplying information that is false or misleading with respect to 
                 </Style>
               </Textbox>
             </ReportItems>
-            <Top>12.67174in</Top>
-            <Left>0.29105in</Left>
+            <Top>16.16344in</Top>
+            <Left>0.2355in</Left>
             <Height>4.74235in</Height>
             <Width>8.5325in</Width>
             <ZIndex>5</ZIndex>
@@ -5022,7 +6325,7 @@ Intentionally supplying information that is false or misleading with respect to 
             </Style>
           </Rectangle>
         </ReportItems>
-        <Height>26.03148in</Height>
+        <Height>29.35648in</Height>
         <Style>
           <Border>
             <Style>None</Style>
