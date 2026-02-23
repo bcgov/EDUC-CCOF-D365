@@ -36,40 +36,46 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             {
                 var fetchXml = $$"""
                     <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
-                      <entity name="ccof_ece_monthly_report">
-                        <attribute name="statecode"/>
-                        <attribute name="ccof_ece_monthly_reportid"/>
-                        <attribute name="ccof_name"/>
-                        <attribute name="createdon"/>
-                        <attribute name="ccof_total_amount"/>
-                        <attribute name="ccof_we_subtotal"/>
-                        <attribute name="ccof_sb_subtotal"/>
-                        <attribute name="ccof_approval_date"/>
-                        <attribute name="ccof_verification_date"/>
-                        <attribute name="ccof_facility"/>
-                        <attribute name="ccof_fiscal_year"/>
-                        <attribute name="ccof_organization"/>
-                        <attribute name="ccof_month"/>
-                        <attribute name="ccof_report_type"/>
-                        <attribute name="ccof_year"/>
-                        <attribute name="statuscode"/>
-                        <order attribute="ccof_name" descending="false"/>    <filter type="and">
-                          <condition attribute="statecode" operator="eq" value="0"/>
-                          <condition attribute="ccof_ece_monthly_reportid" operator="eq" value="{{_processParams.EnrolmentReportid.ToString()}}"/>
-                        </filter>    <link-entity 
-                            name="ccof_program_year" 
-                            alias="programYear" 
-                            link-type="inner" 
-                            from="ccof_program_yearid" 
-                            to="ccof_fiscal_year">
+                      <entity name="ccof_monthlyenrollmentreport">
+                        <attribute name="ccof_ccfri_external_status" />
+                        <attribute name="ccof_ccfri_internal_status" />
+                        <attribute name="ccof_ccfri_verification" />
+                        <attribute name="ccof_ccof_base_verification" />
+                        <attribute name="ccof_ccof_external_status" />
+                        <attribute name="ccof_ccof_internal_status" />
+                        <attribute name="ccof_facility" />
+                        <attribute name="ccof_grandtotalbase" />
+                        <attribute name="ccof_grandtotalccfri" />
+                        <attribute name="ccof_grandtotalccfriprovider" />
+                        <attribute name="ccof_month" />
+                        <attribute name="ccof_monthlyenrollmentreportid" />
+                        <attribute name="ccof_organization" />
+                        <attribute name="ccof_programyear" />
+                        <attribute name="ccof_reportversion" />
+                        <attribute name="ccof_year" />
+                        <attribute name="statecode" />
+                        <attribute name="statuscode" />
+                        <attribute name="ccof_ccfri_approved_date" />
+                        <attribute name="ccof_ccof_approved_date" />
+                        <attribute name="ccof_reporttype" />
+                        <link-entity name="account" from="accountid" to="ccof_facility" link-type="inner" alias="facility">
+                          <attribute name="name" />
+                          <attribute name="accountnumber" />
+                        </link-entity>
+                        <link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_programyear" link-type="inner" alias="programYear">
                           <attribute name="ccof_name" />
                           <attribute name="ccof_programyearnumber" />
                           <attribute name="statuscode" />
                         </link-entity>
-                    <link-entity name="account" from="accountid" to="ccof_facility" link-type="inner" alias="facility">
-                      <attribute name="name" />
-                      <attribute name="accountnumber" />
-                    </link-entity>
+                        <link-entity name="ccof_monthlyenrolmentreportextension" from="ccof_monthlyenrolmentreportextensionid" to="ccof_reportextension" link-type="inner" alias="reportext">
+                          <attribute name="ccof_diffgrandtotalbase" />
+                          <attribute name="ccof_diffgrandtotalccfri" />
+                          <attribute name="ccof_diffgrandtotalccfriprovider" />
+                          <attribute name="ccof_name" />
+                        </link-entity>
+                        <filter>
+                          <condition attribute="ccof_monthlyenrollmentreportid" operator="eq" value="{{_processParams.EnrolmentReportid.ToString()}}" />
+                        </filter>
                       </entity>
                     </fetch>
                     """;

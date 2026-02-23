@@ -19,32 +19,6 @@ Account.OrgFacility.Ribbon = {
             return true;
         }
     },
-    hideSub: function (primaryControl) {
-        try {
-            debugger;
-
-            // If not on a form, fail safe (return true to avoid hiding everywhere)
-            if (!primaryControl || !primaryControl.ui || !primaryControl.ui.formSelector) {
-                return true;
-            }
-
-            var formSelector = primaryControl.ui.formSelector;
-            var currentItem = formSelector.getCurrentItem && formSelector.getCurrentItem();
-            if (!currentItem) {
-                return true;
-            }
-
-            var label = currentItem.getLabel && currentItem.getLabel();
-            // If on "Organization Overview" form → return false to HIDE / DISABLE (depending on rule type)
-            if (label === "Organization Overview") {
-                return false;
-            }
-            return true;
-        } catch (e) {
-            // On any error, do not block the UI; default to showing/enabling
-            return true;
-        }
-    },
     openNewChildFromParent: function (primaryControl) {
         debugger;
         var formContext = primaryControl;
@@ -94,3 +68,6 @@ Account.OrgFacility.Ribbon = {
         );
     }
 }
+
+
+
