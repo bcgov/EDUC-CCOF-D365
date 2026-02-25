@@ -216,6 +216,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
             var payload = new JsonObject()
                         {
                             { "ofm_invoice_line_number", invoiceLineNumber},
+                            { "ccof_originalamount", totalAmount},
                             { "ofm_amount", totalAmount},
                             { "ofm_payment_type", paymentType},
                             { "ccof_monthly_enrollment_report@odata.bind",$"/ccof_monthlyenrollmentreports({enrolmentReport["ccof_monthlyenrollmentreportid"]})" },
