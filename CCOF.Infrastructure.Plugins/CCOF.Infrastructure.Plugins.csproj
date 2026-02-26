@@ -126,6 +126,7 @@
     <Compile Include="App Status History\AppStatusHistory.cs" />
     <Compile Include="ECE-WE-Facility\ValidateECEWEFacilityApproval.cs" />
     <Compile Include="ECEWE\GenerateMonthlyReportNumber.cs" />
+    <Compile Include="ECEWE\ValidateRatesDateRange.cs" />
     <Compile Include="FundingAgreement\RestrictFundingStatus.cs" />
     <Compile Include="FundingAgreement\CreateFundingMOD.cs" />
     <Compile Include="Licence\OnlyOneActiveLicence.cs" />
