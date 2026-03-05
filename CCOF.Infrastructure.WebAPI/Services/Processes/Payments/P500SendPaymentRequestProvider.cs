@@ -390,17 +390,15 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     ackJsonArray.ToJsonString(),
                     Setup.s_writeOptionsForLogs
                 )!;
-                //ack.ccof_accrual == isInvoiceAccrual
+                
                 ackNumber = ackCodeList
-    .Where(ack =>
-            ack.OfmPaymentType == (int)paymentType &&
-            ack.ccof_provider_type == providerType &&
-            ack.ccof_accrual == isInvoiceAccrual
-            )
-    .Select(ack => ack.OfmAckNumber)
-    .FirstOrDefault();                                  
+    .FirstOrDefault(ack =>
+        ack.OfmPaymentType == (int)paymentType &&
+        ack.ccof_provider_type == providerType &&
+        ack.ccof_accrual == isInvoiceAccrual)
+    ?.OfmAckNumber;
 
-               
+
                 double invoiceamount = 0.00;
                 List<InvoiceLines> invoiceLines = [];
                 
