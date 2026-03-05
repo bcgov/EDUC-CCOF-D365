@@ -98,6 +98,10 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                             <condition attribute="statecode" operator="eq" value="0" />
                             <condition attribute="statuscode" operator="eq" value="{(int)CcOf_Invoice_StatusCode.Approved}" />
                             <condition attribute="owningbusinessunitname" operator="like" value="%CCOF%" />
+                    <condition attribute="ccof_supplier_number" operator="not-null"/>
+                    <condition attribute="ccof_site_number" operator="not-null"/>
+                    <condition attribute="ccof_invoice_date" operator="not-null"/>
+                    <condition attribute="ccof_paymentmethod" operator="not-null"/>
                           </filter>
                         </link-entity>
                       </entity>
