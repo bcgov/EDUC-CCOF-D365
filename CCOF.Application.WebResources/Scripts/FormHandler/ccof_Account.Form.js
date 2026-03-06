@@ -22,6 +22,7 @@ Account.OrgFacility.Form = {
             case 2: // update                           
                 this.getTypeOfForm();
                 this.setFilterXml_ParentFeeGrid(executionContext);
+                this.setFilterXml_Notes_Activities(executionContext);
                 webResourceNames.forEach(function (item, index) {
                     Account.OrgFacility.Form.passFormContextToHTML(formContext, item);
                 });
@@ -35,7 +36,7 @@ Account.OrgFacility.Form = {
                         subgrid.setShowCommandBar(false);
                     }
                 }, 2000); // adjust delay as needed
-
+                this.showChangeRequestBanner(executionContext);
                 break;
             case 3: //readonly
                 break;
@@ -51,7 +52,45 @@ Account.OrgFacility.Form = {
     onSave: function (executionContext) {
 
     },
+    showChangeRequestBanner: function (executionContext) {
+        debugger;
+        var formContext = executionContext.getFormContext();
 
+        var accountId = null;
+        var accType = formContext.getAttribute("ccof_accounttype");
+        if (!accType && accType == null) {
+            return;
+        }
+        if (accType.getValue() === 100000001) {
+
+            var parentId = formContext.getAttribute("parentaccountid").getValue();
+            parentId = parentId[0].id;
+            accountId = parentId.replace("{", "").replace("}", "");
+        } else {
+            accountId = formContext.data.entity.getId();
+        }
+
+
+        accountId = accountId.replace("{", "").replace("}", "");
+
+        var query = "?$filter=_ccof_organization_value eq " + accountId + " and statecode eq 0" +
+            " and (statuscode eq 3 or statuscode eq 4 or statuscode eq 10 or statuscode eq 11 or statuscode eq 5 or statuscode eq 9)";
+
+        Xrm.WebApi.retrieveMultipleRecords("ccof_change_request", query).then(
+            function success(results) {
+                if (results.entities.length > 0) {
+                    var bannerField = formContext.getAttribute("ccof_flag_banner");
+                    var bannerControl = formContext.getControl("ccof_flag_banner");
+
+                    if (bannerField && bannerControl) {
+
+                        bannerField.setSubmitMode("never");
+                        bannerControl.setVisible(true);
+                    }
+                }
+            },
+        );
+    },
 
 
     getTypeOfForm: function () {
@@ -60,7 +99,7 @@ Account.OrgFacility.Form = {
         console.log("typeOfInfo" + typeOfInfo);
         var lblForm;
         if (typeOfInfo == 100000000) {
-            allowedForms = ["Organization Information", "Organization Overview"];
+            allowedForms = ["Organization Overview", "Organization Information"];
 
             // lblForm = "Organization Information";
         }
@@ -180,6 +219,52 @@ Account.OrgFacility.Form = {
 
             },
             Xrm.Navigation.openErrorDialog);
+    },
+
+    setFilterXml_Notes_Activities: function (executionContext) {
+
+        var formContext = executionContext.getFormContext();
+        var subgrid_notes_activities = formContext.getControl("Subgrid_new_24");
+
+        var currentRecordId = formContext.data.entity.getId();
+
+        if (currentRecordId !== null) {
+            var conditionFetchXML = "";
+            Xrm.WebApi.retrieveMultipleRecords("account", "?$select=statuscode,accountid&$filter=(_parentaccountid_value eq " + currentRecordId + "or accountid eq " + currentRecordId + ")").then(
+                function success(results) {
+                    console.log(results);
+                    if (results.entities.length > 0) {
+                        for (var i = 0; i < results.entities.length; i++) {
+                            var result = results.entities[i];
+                            if (result["accountid"] !== null) {
+                                conditionFetchXML += "<value>{" + result["accountid"] + "}</value>";
+                            }
+                        }
+                    }
+                    else {
+                        conditionFetchXML += "<value>{00000000-0000-0000-0000-000000000000}</value>"
+                    }
+
+                    var activities_fetchXml = [
+                        "<fetch>",
+                        "  <entity name='activitypointer'>",
+                        "    <filter>",
+                        "      <condition attribute='regardingobjectid' operator='in'>",
+                        conditionFetchXML,
+                        "      </condition>",
+                        "    </filter>",
+                        "  </entity>",
+                        "</fetch>"
+                    ].join("");
+
+                    subgrid_notes_activities.setFilterXml(activities_fetchXml);
+                    subgrid_notes_activities.refresh();
+                },
+                function (error) {
+                    console.log(error.message);
+                }
+            );
+        }
     },
 
     passFormContextToHTML: function (formContext, webResourceName) {
