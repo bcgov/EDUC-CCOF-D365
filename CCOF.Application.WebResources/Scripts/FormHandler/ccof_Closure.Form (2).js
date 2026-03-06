@@ -55,7 +55,7 @@ CCOF.Closure.Form = {
         debugger;
         var formContext = executionContext.getFormContext();
         var statusReason = formContext.getAttribute("ccof_closure_status").getValue();
-        if (statusReason == 100000001) {
+        if (statusReason == 100000001 || (statusReason == 100000003 && formContext.getAttribute("ccof_approved_as").getValue() != null)) {
             formContext.getAttribute("ccof_approved_as").setRequiredLevel("required");
             formContext.getAttribute("ccof_payment_eligibility").setRequiredLevel("required");
         }
@@ -93,4 +93,39 @@ CCOF.Closure.Form = {
             formContext.getAttribute("ccof_closure_type").setRequiredLevel("required");
         }
     },
+    onSave: function (executionContext) {
+        debugger;
+        // ticket 7237 
+        let formContext = executionContext.getFormContext();
+        let eventArgs = executionContext.getEventArgs();
+        let statusReason = formContext.getAttribute("ccof_closure_status").getValue();
+        let paymentEligiblity = formContext.getAttribute("ccof_payment_eligibility").getValue();
+        let PaymentEligiblityApproved = [100000000, 100000001, 100000002];             // Child Care Fee Reduction Initiative, CCOF Base Funding and the Child Care Fee Reduction Initiative, CCOF Base Funding
+        if (statusReason == 100000001) { // COMPLETE - APPROVED
+            if (paymentEligiblity === "") {
+                eventArgs.preventDefault();
+                Xrm.Navigation.openAlertDialog({ text: "The Payment Eligibity cannot be null when the Closure Status is set to COMPLETE - APPROVED." });
+                return;
+            } else {
+                if (!PaymentEligiblityApproved.includes(paymentEligiblity)) {
+                    eventArgs.preventDefault();
+                    Xrm.Navigation.openAlertDialog({ text: "The Payment Eligibity must be CCFRI,CCOF or CCFRI+CCOF when the Closure Status is set to COMPLETE - APPROVED." });
+                    return;
+                }
+            }
+        }
+        if (statusReason == 100000002) { // COMPLETE - NOT APPROVED
+            if (paymentEligiblity === "") {
+                eventArgs.preventDefault();
+                Xrm.Navigation.openAlertDialog({ text: "The Payment Eligibity cannot be null when the Closure Status is set to COMPLETE - NOT APPROVED." });
+                return;
+            } else {
+                if (paymentEligiblity != 100000003) {
+                    eventArgs.preventDefault();
+                    Xrm.Navigation.openAlertDialog({ text: "The Payment Eligibity must be Inligible when the Closure Status is set to COMPLETE - NOT APPROVED." });
+                    return;
+                }
+            }
+        }
+    }
 }
