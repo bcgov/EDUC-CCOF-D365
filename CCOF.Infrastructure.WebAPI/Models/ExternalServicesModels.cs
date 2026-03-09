@@ -36,11 +36,7 @@ public class CertificationDetail
 
 public enum Active
 {
-    Active = 1,
-    Expired = 621870001,
-    Reprinted = 621870002,
-    Cancelled = 621870003,
-    Suspended = 621870004
+    Active = 1
 }
 
 public record InvoiceHeader

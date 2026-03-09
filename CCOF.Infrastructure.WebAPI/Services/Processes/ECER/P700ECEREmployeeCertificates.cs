@@ -121,14 +121,11 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     <attribute name=""ofm_is_active"" />
                     <attribute name=""ofm_last_name"" />
                     <attribute name=""ofm_middle_name"" />
-                    <filter>
-                      <condition attribute=""statecode"" operator=""eq"" value=""0"" />
-                    </filter>
                     <order attribute=""ofm_certificate_number"" />
                   </entity>
                 </fetch>";
                 var requestUri = $"""                                
-                                ofm_employee_certificates?$select=statuscode,ofm_certificate_level,ofm_expiry_date,ofm_certificate_number,ofm_effective_date,ofm_first_name,ofm_is_active,ofm_last_name,ofm_middle_name&$orderby=ofm_certificate_number asc&$filter=(statecode eq 0)
+                                ofm_employee_certificates?$select=statuscode,ofm_certificate_level,ofm_expiry_date,ofm_certificate_number,ofm_effective_date,ofm_first_name,ofm_is_active,ofm_last_name,ofm_middle_name&$orderby=ofm_certificate_number asc
                                 """;
                 return requestUri;
             }
@@ -299,13 +296,16 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                 {
                     var upsertECERequests = new List<HttpRequestMessage>();
                     var batch = differenceCsvRecords.Skip(i).Take(batchSize).ToList();
+                    var currentDate = DateTime.Now;
                     foreach (var record in batch)
                     {
+                        var isActive = currentDate < Convert.ToDateTime(record?.expirydate) ? true : false;
                         var ECECert = new JsonObject
                         {
                             { "ofm_first_name", record?.firstname},
                             { "ofm_last_name", record?.lastname},
-                            { "ofm_expiry_date", record?.expirydate?.ToString()}
+                            { "ofm_expiry_date", record?.expirydate?.ToString()},
+                            { "ofm_is_active", isActive}
                         };
                         upsertECERequests.Add(new UpsertRequest(new D365EntityReference("ofm_employee_certificates(ofm_certificate_number='" + record?.registrationnumber + "',ofm_certificate_level='" + record?.certificatelevel?.Replace(",", " ").ToString() + "',ofm_effective_date=" + record?.effectivedate + ")"), ECECert));
                     }
