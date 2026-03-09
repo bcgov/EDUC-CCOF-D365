@@ -201,6 +201,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     var tokenRequestBody = "grant_type=client_credentials&client_id=" + _ECERSettings.ClientId + "&client_secret=" + _ECERSettings.ClientSecret;
 
                     var tokenResult = await ECERAPIHandler.GetTokenAsync(tokenUrl, tokenRequestBody);
+                    _logger.LogInformation(CustomLogEvent.Process, "Token generated");
 
                     // Set the authorization header for subsequent API calls
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult);
@@ -211,6 +212,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     var filesUrl = string.Concat(_ECERSettings.ECERURL, "s");
                     HttpResponseMessage filesResponse = await client.GetAsync(filesUrl);
                     filesResponse.EnsureSuccessStatusCode();
+                    _logger.LogInformation(CustomLogEvent.Process, "Received file response");
 
                     string filesContent = await filesResponse.Content.ReadAsStringAsync();
                     List<CertificationFile> certificationFiles = JsonConvert.DeserializeObject<List<CertificationFile>>(filesContent);
@@ -225,15 +227,18 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     // Step 3. Download certification details from the first file
                     // ===========================
                     string firstFileId = certificationFiles[0].id;
-                    Console.WriteLine("Retrieving details for file id: " + firstFileId);
+                    _logger.LogInformation(CustomLogEvent.Process, "Retrieving details for file id: " + firstFileId);
 
                     var downloadUrl = string.Concat(_ECERSettings.ECERURL, "/download/", firstFileId);// $"https://dev-ecer-api.apps.silver.devops.gov.bc.ca/api/certifications/file/download/{firstFileId}";
                     HttpResponseMessage downloadResponse = await client.GetAsync(downloadUrl);
                     downloadResponse.EnsureSuccessStatusCode();
+                    _logger.LogInformation(CustomLogEvent.Process, "File download successful.");
+
                     #endregion
 
                     string downloadContent = await downloadResponse.Content.ReadAsStringAsync();
                     bool savePFEResult = await SaveImportFile(appUserService, d365WebApiService, downloadContent);
+                    _logger.LogInformation(CustomLogEvent.Process, "File saved in CMS.");
 
                     certificates = System.Text.Json.JsonSerializer.Deserialize<List<CertificationDetail>>(downloadContent);
                 }
