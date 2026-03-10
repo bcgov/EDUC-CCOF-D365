@@ -179,7 +179,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
         {
             var startTime = _timeProvider.GetTimestamp();
-            _logger.LogInformation(CustomLogEvent.Process, "Beginning to process P700 Data process at {startTime}", startTime);
+            var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
+            _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": Begin to process data for ECER");
             _processParams = processParams;
             string dataImportMessages = string.Empty;
             string upsertMessages = string.Empty;
@@ -393,8 +395,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                 if (upsertSucessfully && deactiveSucessfully)
                 {
                     var localtime = _timeProvider.GetLocalNow();
-                    TimeZoneInfo PSTZone = GetPSTTimeZoneInfo("Pacific Standard Time", "America/Los_Angeles");
-                    var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
                     var endtime = _timeProvider.GetTimestamp();
                     var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
                     dataImportMessages = pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time : " + Math.Round(timediff, 2) + " seconds.\r\n" + "Upsert " + differenceCsvRecords.Count + " record(s) sucessfully\r\n" + "Deactivated " + oldECECertData.Count + " records not existing in API sucessfully\r\n";
