@@ -47,7 +47,7 @@ jobs:
   openshift-ci-cd:
     name: Build and deploy Backend to DEV
     permissions:
-      contents: read
+      contents: write
     runs-on: ubuntu-24.04
     environment: dev
 
