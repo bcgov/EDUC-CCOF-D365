@@ -46,6 +46,8 @@ on:
 jobs:
   openshift-ci-cd:
     name: Build and deploy Backend to DEV
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     environment: dev
 
@@ -196,6 +198,8 @@ jobs:
           oc rollout status deployment/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}
   zap:
     name: Run Zap Scan
+    permissions:
+      contents: read
     needs: openshift-ci-cd
     runs-on: ubuntu-24.04
     environment: dev
