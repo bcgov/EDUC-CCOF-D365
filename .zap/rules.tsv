@@ -1,0 +1,12 @@
+100000	IGNORE	A Client Error response code was returned by the server
+100000	IGNORE	A Server Error response code was returned by the server
+100001	IGNORE	Unexpected Content-Type was returned
+10010	IGNORE	Session Management Response Identified
+10015	IGNORE	Re-examine Cache-control Directives
+10019	IGNORE	Content-Type Header Missing
+10021	IGNORE	X-Content-Type-Options Header Missing
+10024	IGNORE	Information Disclosure - Sensitive Information in URL
+10035	IGNORE	Strict-Transport-Security Header Not Set
+10049	IGNORE	Non-Storable Content
+10049	IGNORE	Storable and Cacheable Content
+90004	IGNORE	Cross-Origin-Resource-Policy Header Missing or Invalid
