@@ -21,6 +21,8 @@ on:
 jobs:
   openshift-ci-cd:
     name: Create Image
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     environment: dev
 
