@@ -48,6 +48,7 @@ jobs:
     name: Build and deploy Backend to DEV
     permissions:
       contents: write
+      packages: write
     runs-on: ubuntu-24.04
     environment: dev
 
