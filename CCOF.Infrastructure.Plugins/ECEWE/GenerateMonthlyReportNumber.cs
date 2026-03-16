@@ -64,8 +64,8 @@ namespace CCOF.Infrastructure.Plugins.ECEWE
                             var version = Convert.ToInt32(ece_report.Entities[0].Attributes["ccof_version"]) + 1;
                             entity["ccof_version"] = version;
                             if (version < 10)
-                                entity["ccof_name"] = base_Report["ccof_name"].ToString().Split('-').First() + "-0" + (version);
-                            else entity["ccof_name"] = base_Report["ccof_name"].ToString().Split('-').First() + "-" + (version);
+                                entity["ccof_name"] = base_Report["ccof_name"].ToString().Substring(0, base_Report["ccof_name"].ToString().LastIndexOf("-")) + "-0" + (version);
+                            else entity["ccof_name"] = base_Report["ccof_name"].ToString().Substring(0, base_Report["ccof_name"].ToString().LastIndexOf("-")) + "-" + (version);
 
 
 
@@ -74,7 +74,7 @@ namespace CCOF.Infrastructure.Plugins.ECEWE
                         {
                             tracingService.Trace("base report first part" + ((EntityReference)entity["ccof_base_report_id"]).Name);
 
-                            entity["ccof_name"] = base_Report["ccof_name"].ToString().Split('-').First() + "-02";
+                            entity["ccof_name"] = base_Report["ccof_name"].ToString().Substring(0, base_Report["ccof_name"].ToString().LastIndexOf("-")) + "-02";
                             entity["ccof_version"] = 2;
 
                         }
@@ -84,11 +84,13 @@ namespace CCOF.Infrastructure.Plugins.ECEWE
                     else
                     {
                         tracingService.Trace("base report main"+entity.GetAttributeValue<EntityReference>("ccof_facility").Id);
-                          var name = DateTime.UtcNow.Date.ToString("MMyyyy");
-                        if(facility.Attributes.Contains("accountnumber"))
+                        var year = entity["ccof_year"].ToString();
+                        var month = entity.GetAttributeValue<OptionSetValue>("ccof_month").Value.ToString().PadLeft(2, '0');
+                        var name = "MER-" + month + year;
+                        if (facility.Attributes.Contains("accountnumber"))
                         name = name + Convert.ToString(facility["accountnumber"]).Split('-').Last() + "-01";
                         
-                         entity["ccof_name"] = name.ToString();
+                        entity["ccof_name"] = name.ToString();
                         entity["ccof_version"] = 1;
                      
 
