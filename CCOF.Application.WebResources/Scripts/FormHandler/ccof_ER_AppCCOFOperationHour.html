@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facility Data Table</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 10px;
+            color: #333;
+        }
+
+        .table-container {
+            width: 100%;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #222;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            background-color: #f4f4f4;
+        }
+
+        tbody td {
+            padding: 15px;
+            font-size: 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .id-cell {
+            width: 45%;
+            border-right: 1px solid #ccc;
+        }
+
+            .id-cell a {
+                color: #005a9e;
+                text-decoration: underline;
+            }
+
+                .id-cell a:hover {
+                    text-decoration: none;
+                }
+
+        .time-cell {
+            width: 27.5%;
+        }
+    </style>
+    <script src="/WebResources/ClientGlobalContext.js.aspx" type="text/javascript"></script>
+
+</head>
+<body onload="onLoad()">
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID </th>
+                    <th>Facility hours of operation: From </th>
+                    <th>Facility hours of operation: To </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="id-cell"><span id="ccof_appccof_ID"></span></td>
+                    <td class="time-cell"><span id="ccof_appccof_OperationHourFrom"></span></td>
+                    <td class="time-cell"><span id="ccof_appccof_operationHourTo"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function onLoad() {
+            debugger;
+            const params = new URLSearchParams(window.location.search);
+            const recordId = params.get("id");
+            const entityName = params.get("typename");
+            console.log("Record ID:", recordId);
+            console.log("Entity:", entityName);
+            let programYear = window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue();
+            const programYearGuid = window.parent.Xrm.Page.getAttribute("ccof_programyear").getValue()[0].id;
+            const facilityGuid = window.parent.Xrm.Page.getAttribute("ccof_facility").getValue()[0].id;
+            const AppCCOF = getSyncMultipleRecord("ccof_application_basefundings?$select=ccof_facilityhoursofoperationfrom,ccof_facilityhoursofoperationto,ccof_name,ccof_application_basefundingid&$expand=ccof_Application($select=ccof_applicationid)&$filter=(statecode eq 0 and _ccof_facility_value eq " + getCleanedGuid(facilityGuid) + ") and (ccof_Application/_ccof_programyear_value eq " + getCleanedGuid(programYearGuid) + ")");
+            if (AppCCOF && AppCCOF.length > 0) {
+                let AppCCOFTdId = document.getElementById("ccof_appccof_ID");
+                if (AppCCOFTdId) {
+                    AppCCOFTdId.textContent = AppCCOF[0]["ccof_name"];
+                    console.log(`Application CCOF ID to: ${AppCCOF[0]["ccof_name"]}`);
+                }
+                AppCCOFTdId = document.getElementById("ccof_appccof_OperationHourFrom");
+                if (AppCCOFTdId && AppCCOF[0]["ccof_facilityhoursofoperationfrom"]) {
+                    AppCCOFTdId.textContent = AppCCOF[0]["ccof_facilityhoursofoperationfrom"];
+                }
+                AppCCOFTdId = document.getElementById("ccof_appccof_operationHourTo");
+                if (AppCCOFTdId && AppCCOF[0]["ccof_facilityhoursofoperationto"]) {
+                    AppCCOFTdId.textContent = AppCCOF[0]["ccof_facilityhoursofoperationto"];
+                }
+            }
+        }
+        function getCleanedGuid(id) {
+            return id.replace("{", "").replace("}", "");
+        }
+        function getSyncMultipleRecord(request) {
+            var result = null;
+            var req = new XMLHttpRequest();
+            req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + request, false);
+            req.setRequestHeader("OData-MaxVersion", "4.0");
+            req.setRequestHeader("OData-Version", "4.0");
+            req.setRequestHeader("Accept", "application/json");
+            req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
+            req.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    req.onreadystatechange = null;
+                    if (this.status === 200) {
+                        var results = JSON.parse(this.response);
+                        result = results.value;
+                    } else {
+                        Xrm.Utility.alertDialog(this.statusText);
+                    }
+                }
+            };
+            req.send();
+            return result;
+        }
+    </script>
+</body>
+</html>
