@@ -60,6 +60,40 @@ AdjECEWEFacility.ECEWEFac.Form = {
         else { }
     },
 
+    Adjudicate: function (primaryControl, primaryItemIds) {
+        var formContext = primaryControl;
+        //var recordId = formContext.data.entity.getId().replace(/[{}]/g, "");
+        var window_width = 400;
+        var window_height = 300;
+        var pageInput = {
+            pageType: "custom",
+            name: "ccof_adjudicateecewefacility_ec47f",
+            entityName: "ccof_adjudication_ecewe_facility",
+            recordId: primaryItemIds.join(","),
+        };
+        var navigationOptions = {
+            target: 2,
+            width: window_width,
+            height: window_height
+        };
+        Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+            .then(
+                function () {
+                    setTimeout(function () {
+                        Xrm.Navigation.openForm({
+                            entityName: formContext.data.entity.getEntityName(),
+                            entityId: formContext.data.entity.getId()
+                        });
+                    }, 1000)
+
+                }
+            ).catch(
+                function () {
+                    console.log(Error);
+                }
+            );
+    },
+
     showBanner: function (exeContext) {
         debugger;
         var formContext = exeContext.getFormContext();
