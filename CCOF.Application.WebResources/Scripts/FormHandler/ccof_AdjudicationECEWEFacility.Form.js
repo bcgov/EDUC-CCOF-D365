@@ -79,12 +79,7 @@ AdjECEWEFacility.ECEWEFac.Form = {
         Xrm.Navigation.navigateTo(pageInput, navigationOptions)
             .then(
                 function () {
-                    setTimeout(function () {
-                        Xrm.Navigation.openForm({
-                            entityName: formContext.data.entity.getEntityName(),
-                            entityId: formContext.data.entity.getId()
-                        });
-                    }, 1000)
+                    primaryControl?.refresh();
 
                 }
             ).catch(
@@ -92,6 +87,11 @@ AdjECEWEFacility.ECEWEFac.Form = {
                     console.log(Error);
                 }
             );
+    },
+
+    showAdjudicate: function (primaryControl) {
+        if (primaryControl.getViewSelector().getCurrentView()?.name == "ECE-WE Ready") { return true; }
+        return false;
     },
 
     showBanner: function (exeContext) {
