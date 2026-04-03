@@ -253,7 +253,9 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
     // var Programyear = regionInfo['ccof_Application']['_ccof_programyear_value@OData.Community.Display.V1.FormattedValue']; //"2022/23";
     var Limitfeesto70Percentile = expenseInfo['Limit Fees to NMF Benchmark'];
     // C33 of Stage 3 Calculator is from CRM Limit Fees to NMF Benchmark  (toggle) 
-    var DilutionCap = expenseInfo['MEFI Cap'] || Limitfeesto70Percentile; //B7  7963 will get value directly from CMS
+
+    //var DilutionCap = expenseInfo['MEFI Cap']; // CRM MEFI Cap (toggle) //B7  ?? need confirm  // comment it Oct 24, 2023
+    var InitalCalculation_DilutionCap = true;  // B7 of Calculations
     var TotalAllowedExpenses = 0; //B13 Total Allowed Expenses
     var AllowedExpensesLessExpenses = true;// B14 Allowed Expenses less than or equal to expenses
     var TotalIfLessThanCapped = true; // Pass // F15:If less than, capped ?; F16:Full Allowance Given ? (if less than request)
@@ -270,6 +272,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         ['PRE', ['PRE', 'ccof_tota']],
     ]);
     // console.log(ChildcareCategories.get('0-18')[0]);
+
 
     var TotalMonthlyExpenses = expenseInfo['Total Monthly Expenses'];// B11 ? comes from CRM
 
@@ -289,13 +292,13 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         entity['CareCategory'] = feeIncreaseDetails[i]['_ccof_childcarecategory_value@OData.Community.Display.V1.FormattedValue'];
         entity['AverageEnrollment'] = parseFloat(feeIncreaseDetails[i]['ccof_averageenrolment']);
         if (isMTFI) {
-            entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_mtfi_amount'];  
+            entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_mtfi_amount'];
         }
         else {
-            entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_cumulativefeeincrease']; 
+            entity['RequestedFeeIncrease'] = feeIncreaseDetails[i]['ccof_cumulativefeeincrease'];
         }
 
-        entity['FeeBeforeIncrease'] = Limitfeesto70Percentile ? feeIncreaseDetails[i]['ccof_feebeforeincrease'] : 0; // 7963
+        entity['FeeBeforeIncrease'] = feeIncreaseDetails[i]['ccof_feebeforeincrease'];
         FacilityInfo.push(entity);
     }
     console.log("FacilityInfo" + JSON.stringify(FacilityInfo));
@@ -381,10 +384,14 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         }
         // Calculation!B6. K3=Limit fees to 70 Percentile
         tempInital['Dilution Cap'] = Limitfeesto70Percentile ? tempCap['Lesser'] : MediansFee[FacilityInfo[i]['CareCategory'].concat('_Per10')];
+        // Calculation!B7
+        HstCap5Percent = true;         // Oct 19,2023 
+        //       InitalCalculation_DilutionCap = Limitfeesto70Percentile;
+        InitalCalculation_DilutionCap = Limitfeesto70Percentile || HstCap5Percent;
         // inital B9, will get it  until Round end.
         tempInital['FINAL APPROVABLE'] = 0;
         // Calculation!B10 Request/Dilution Cap Result
-        tempInital['Request/Dilution Cap Result'] = (DilutionCap && (tempInital['Request'] > tempInital['Dilution Cap'])) ? tempInital['Dilution Cap'] : tempInital['Request'];
+        tempInital['Request/Dilution Cap Result'] = (InitalCalculation_DilutionCap && (tempInital['Request'] > tempInital['Dilution Cap'])) ? tempInital['Dilution Cap'] : tempInital['Request'];
         InitalCalculation[FacilityInfo[i]['CareCategory']] = tempInital;
     }
     console.log("NMFIncreaseCap:" + JSON.stringify(NMFIncreaseCap));
@@ -442,7 +449,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         // B25 Approvable 1 
         Round1[item]['Approvable 1'] = !Round1[item]['Check for negative'] ? Round1[item]['Final Amount'] : ((Round1[item]['Final Amount'] > Round1[item]['Allowance']) ? Round1[item]['Final Amount'] : Round1[item]['Allowance']);
         // B26 Check for dilution cap
-        Round1[item]['Check for dilution cap'] = ((Round1[item]['Final Amount'] > InitalCalculation[item]['Dilution Cap']) && DilutionCap) ? true : false;
+        Round1[item]['Check for dilution cap'] = ((Round1[item]['Final Amount'] > InitalCalculation[item]['Dilution Cap']) && InitalCalculation_DilutionCap) ? true : false;
         // B27 Approvable 2
         Round1[item]['Approvable 2'] = !Round1[item]['Check for dilution cap'] ? Round1[item]['Approvable 1'] : InitalCalculation[item]['Dilution Cap'];
         // B28 Check for request cap  Request/Dilution Cap Result
@@ -450,7 +457,9 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
         // B29 Final approvable 
         Round1[item]['Final approvable'] = !Round1[item]['Check for request cap'] ? Round1[item]['Approvable 2'] : InitalCalculation[item]['Request/Dilution Cap Result'];
         // populate  B9     InitalCalculation[item]['FINAL APPROVABLE']
-        InitalCalculation[item]['FINAL APPROVABLE'] = (DilutionCap && (InitalCalculation[item]['Allowances'] > InitalCalculation[item]['Dilution Cap'])) ?
+
+        // populate  B9     InitalCalculation[item]['FINAL APPROVABLE']
+        InitalCalculation[item]['FINAL APPROVABLE'] = (InitalCalculation_DilutionCap && (InitalCalculation[item]['Allowances'] > InitalCalculation[item]['Dilution Cap'])) ?
             ((InitalCalculation[item]['Request'] < InitalCalculation[item]['Allowances']) ? InitalCalculation[item]['Request'] : InitalCalculation[item]['Allowances']) : Round1[item]['Final approvable'];
         //  Calculation!B12 Allowed Expense /category
         InitalCalculation[item]['Allowed Expense /category'] = (InitalCalculation[item]['Allowances'] > InitalCalculation[item]['Request']) ? 0 :
@@ -551,7 +560,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
                 /* }*/
                 // roundTemp[item]['Approvable 1'] = !roundTemp[item]['Check for negative'] ? roundTemp[item]['Final Amount'] : ((parseFloat(roundTemp[item]['Final Amount']) > parseFloat(Round1[item]['Allowance'])) ? parseFloat(roundTemp[item]['Final Amount']) : Round1[item]['Allowance']);
                 // B26 Check for dilution cap
-                roundTemp[item]['Check for dilution cap'] = ((parseFloat(roundTemp[item]['Final Amount']) > parseFloat(InitalCalculation[item]['Dilution Cap'])) && DilutionCap) ? true : false;
+                roundTemp[item]['Check for dilution cap'] = ((parseFloat(roundTemp[item]['Final Amount']) > parseFloat(InitalCalculation[item]['Dilution Cap'])) && InitalCalculation_DilutionCap) ? true : false;
                 // B27 Approvable 2
                 roundTemp[item]['Approvable 2'] = !roundTemp[item]['Check for dilution cap'] ? roundTemp[item]['Approvable 1'] : InitalCalculation[item]['Dilution Cap'];
                 // B28 Check for request cap  Request/Dilution Cap Result
@@ -561,7 +570,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
 
                 if (i === FacilityInfo.length - 1) {
                     // populate B9     // populate FINAL APPROVABLE to InitalCalculation from RoundArray
-                    InitalCalculation[item]['FINAL APPROVABLE'] = (DilutionCap && (parseFloat(InitalCalculation[item]['Allowances']) > parseFloat(InitalCalculation[item]['Dilution Cap']))) ?
+                    InitalCalculation[item]['FINAL APPROVABLE'] = (InitalCalculation_DilutionCap && (parseFloat(InitalCalculation[item]['Allowances']) > parseFloat(InitalCalculation[item]['Dilution Cap']))) ?
                         ((parseFloat(InitalCalculation[item]['Request']) < parseFloat(InitalCalculation[item]['Allowances'])) ? InitalCalculation[item]['Request'] : InitalCalculation[item]['Allowances']) : roundTemp[item]['Final approvable'];
                     //  Calculation!B12 Allowed Expense /category
                     InitalCalculation[item]['Allowed Expense /category'] = (parseFloat(InitalCalculation[item]['Allowances']) > parseFloat(InitalCalculation[item]['Request'])) ? 0 :
@@ -876,6 +885,7 @@ function Calculator(regionInfo, feeIncreaseDetails, expenseInfo, InitialTotalAll
     // add return value UNUSED EXPENSES 20230823
 
     returnValue['MTFI:Unused Expenses'] = (TotalMonthlyExpenses - TotalAllowedExpenses);
+
 
 
     return returnValue;
