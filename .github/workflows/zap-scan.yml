@@ -12,7 +12,7 @@ on:
         options:
         - 'dev'
         - 'qa'
-        - 'uat'
+        - 'test'
         - 'efx'
         - 'prod'
   workflow_call:
@@ -53,8 +53,8 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.13.0
         with:
-          target: "https://ccof-d365api-${{ inputs.env }}-${{ secrets.CCOF_NAMESPACE_NO_ENV }}-${{ env.OPENSHIFT_ENV }}.apps.silver.devops.gov.bc.ca/swagger/v1/swagger.json"
-          artifact_name: ccof_d365_api_zap
+          target: "https://ccof-d365api-${{ inputs.env }}-${{ secrets.CCOF_NAMESPACE_NO_ENV }}-${{ env.OPENSHIFT_ENV }}.apps.silver.devops.gov.bc.ca/api"
+          artifact_name: ccof_d365_api_${{ inputs.env }}_zap
           fail_action: true              # fail the job if alerts found
           allow_issue_writing: false     # don't open/update a GitHub Issue
           rules_file_name: .zap/rules.tsv
