@@ -1,0 +1,46 @@
+name: Zap Scan Node
+
+env:
+  BRANCH: ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'The openshift environment to scan'
+        default: 'dev'
+        type: choice
+        options:
+        - 'dev'
+        - 'qa'
+        - 'uat'
+        - 'efx'
+        - 'prod'
+  workflow_call:
+    inputs:
+      env:
+        description: 'The openshift environment to scan'
+        default: 'dev'
+        type: string
+
+jobs:
+  zap:
+    name: Run Zap Scan
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    environment: ${{ inputs.env }}
+    steps:
+      - name: Check out repository with branch [${{ env.BRANCH }}]
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+          persist-credentials: false
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.13.0
+        with:
+          target: "https://ccof-d365api-${{ env.APP_ENVIRONMENT }}-${{ env.OPENSHIFT_NAMESPACE }}.apps.silver.devops.gov.bc.ca/swagger/v1/swagger.json"
+          artifact_name: ccof_d365_api_zap
+          fail_action: true              # fail the job if alerts found
+          allow_issue_writing: false     # don't open/update a GitHub Issue
+          rules_file_name: .zap/rules.tsv
