@@ -42,7 +42,7 @@ jobs:
             dev | qa)
               OPENSHIFT_ENV='dev'
               ;;
-            uat | efx)
+            test | efx)
               OPENSHIFT_ENV='test'
               ;;
             prod)
