@@ -1,4 +1,4 @@
-name: Zap Scan Node
+name: Zap Scan
 
 env:
   BRANCH: ${{ github.ref_name }}
