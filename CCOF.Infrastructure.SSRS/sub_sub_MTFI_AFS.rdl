@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
         <ConnectString>https://mychildcareservicesdev.crm3.dynamics.com/</ConnectString>
+        <Prompt>Specify a user name and password for data source DynamicsCRM:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>5376d888-1bf8-41da-b3d2-96f23af6745b</rd:DataSourceID>
@@ -475,7 +476,7 @@
                                   <Style />
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!ccof_aug.Value</Value>
+                                  <Value>=Fields!ccof_oct.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -824,7 +825,6 @@
             <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCFRIAFS</DataSetName>
             <Top>0.01958in</Top>
-            <Left>0in</Left>
             <Height>1.03958in</Height>
             <Width>6.70833in</Width>
             <Style>
