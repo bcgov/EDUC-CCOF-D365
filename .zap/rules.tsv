@@ -9,4 +9,5 @@
 10035	IGNORE	Strict-Transport-Security Header Not Set
 10049	IGNORE	Non-Storable Content
 10049	IGNORE	Storable and Cacheable Content
+10038	IGNORE	Content Security Policy (CSP) Header Not Set
 90004	IGNORE	Cross-Origin-Resource-Policy Header Missing or Invalid
