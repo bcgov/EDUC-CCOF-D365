@@ -245,31 +245,24 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
     public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
     {
         _processParams = processParams;
-        List<string> batchfeedback = [];
-        List<string> headerfeedback = [];
-        List<string> listfeedback = [];
-        List<string> linefeedback = [];
-        List<FeedbackHeader> headers = [];
-        var createIntregrationLogTasks = new List<Task>();
+        List<string> batchfeedback = []; List<string> headerfeedback = []; List<string> listfeedback = []; List<string> linefeedback = []; List<FeedbackHeader> headers = [];
         var startTime = _timeProvider.GetTimestamp();
-        
+
         var localData = await GetDataAsync();
         var downloadfile = Convert.FromBase64String(localData.Data.ToString());
 
-        listfeedback = System.Text.Encoding.UTF8.GetString(downloadfile).Replace("APBG", "APBG#APBG").Split("APBG#").ToList();
-        listfeedback.RemoveAll(item => string.IsNullOrWhiteSpace(item));
+        listfeedback = System.Text.Encoding.UTF8.GetString(downloadfile).Replace("APBG", "APBG#APBG").Split("APBG#").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         batchfeedback = listfeedback.Select(g => g.Replace("APBH", "APBH#APBH")).SelectMany(group => group.Split("APBH#")).ToList();
         headerfeedback = listfeedback.Select(g => g.Replace("APIH", "APIH#APIH")).SelectMany(group => group.Split("APIH#")).ToList();
 
         foreach (string data in headerfeedback)
         {
             List<FeedbackLine> lines = [];
-            linefeedback = data.Split('\n').Where(g => g.StartsWith("APIL")).Select(g => g).ToList();
+            linefeedback = data.Split('\n').Where(g => g.StartsWith("APIL")).ToList();
             foreach (string list1 in linefeedback)
             {
                 FeedbackLine line = new CustomFileProvider<FeedbackLine>().Parse(new List<string> { list1.TrimStart() });
                 lines.Add(line);
-
             }
             FeedbackHeader header = new CustomFileProvider<FeedbackHeader>().Parse(new List<string> { data });
             header.feedbackLine = lines;
@@ -280,82 +273,75 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
         var serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(localInvoiceData.Data.ToString());
         var localPayData = await GetPayLinesAsync();
         var serializedPayData = JsonSerializer.Deserialize<List<D365PaymentLine>>(localPayData.Data.ToString());
-        
 
-        List<HttpRequestMessage> updateInvoiceRequests = [];
-        List<HttpRequestMessage> updatePaymentLineRequests = [];
+        List<HttpRequestMessage> updateInvoiceRequests = []; List<HttpRequestMessage> updatePaymentLineRequests = [];
 
-
-        serializedInvoiceData?.ForEach(async invoice =>
+        foreach (var invoice in serializedInvoiceData)
         {
             var line = headers.SelectMany(p => p.feedbackLine).FirstOrDefault(pl => pl.ILInvoice == invoice.ccof_invoice_number && pl.ILDescription.Contains(invoice?.ccof_payment_type.ToString()));
-            var header = headers.Where(p => p.IHInvoice == invoice.ccof_invoice_number).FirstOrDefault();
+            var header = headers.FirstOrDefault(p => p.IHInvoice == invoice.ccof_invoice_number);
             var localDateOnlyPST = DateTime.UtcNow.ToLocalPST().Date;
 
-            DateTime revisedInvoiceDate = localDateOnlyPST;
-            DateTime revisedInvoiceReceivedDate = localDateOnlyPST;
-            DateTime revisedEffectiveDate = localDateOnlyPST;
+            if (line == null || header == null) continue;
 
-            if (line != null && header != null)
+            string casResponse = (line?.ILCode != "0000") ? $"Error:{line?.ILCode} {line?.ILError}" : string.Empty;
+            casResponse += (header?.IHCode != "0000") ? $"{header?.IHCode} {header?.IHError}" : string.Empty;
+
+            var invoiceToUpdate = new JsonObject {
+            { CcofInvoice.Fields.CcOf_Cas_Response, casResponse },
+            { CcofInvoice.Fields.StateCode, (int)CcOf_Invoice_StateCode.Active },
+            { CcofInvoice.Fields.StatusCode, (int)((line?.ILCode=="0000" && header?.IHCode=="0000") ? CcOf_Invoice_StatusCode.Paid : CcOf_Invoice_StatusCode.ProcessingError) },
+            { CcofInvoice.Fields.CcOf_Revised_Invoice_Date, header?.IHCode!="0000" ? localDateOnlyPST.ToString("yyyy-MM-dd") : null },
+            { CcofInvoice.Fields.CcOf_Revised_Invoice_Received_Date, header?.IHCode!="0000" ? localDateOnlyPST.ToString("yyyy-MM-dd") : null },
+            { CcofInvoice.Fields.CcOf_Revised_Effective_Date, header?.IHCode!="0000" ? localDateOnlyPST.ToString("yyyy-MM-dd") : null }
+        };
+
+            updateInvoiceRequests.Add(new D365UpdateRequest(new D365EntityReference(CcofInvoice.EntityLogicalCollectionName, invoice.ccof_invoiceid), invoiceToUpdate));
+
+            var relatedPaymentLines = serializedPayData?.Where(p => p._ccof_invoice_value == invoice.ccof_invoiceid).ToList();
+            if (relatedPaymentLines != null)
             {
-                string casResponse = (line?.ILCode != "0000") ? string.Concat("Error:", line?.ILCode, " ", line?.ILError) : string.Empty;
-                casResponse += (header?.IHCode != "0000") ? string.Concat(header?.IHCode, " ", header?.IHError) : string.Empty;
-               
-                //Update it with latest cas response.
-                var invoiceToUpdate = new JsonObject {
-                    {CcofInvoice.Fields.CcOf_Cas_Response, casResponse},
-                    {CcofInvoice.Fields.StateCode,(int)((line?.ILCode=="0000" &&header?.IHCode=="0000") ?CcOf_Invoice_StateCode.Active:CcOf_Invoice_StateCode.Active)},
-                    {CcofInvoice.Fields.StatusCode,(int)((line?.ILCode=="0000" && header?.IHCode=="0000")?CcOf_Invoice_StatusCode.Paid:CcOf_Invoice_StatusCode.ProcessingError)},
-                    {CcofInvoice.Fields.CcOf_Revised_Invoice_Date,( header?.IHCode!="0000")?revisedInvoiceDate.ToString("yyyy-MM-dd"): null},
-                    {CcofInvoice.Fields.CcOf_Revised_Invoice_Received_Date,( header?.IHCode!="0000")?revisedInvoiceReceivedDate.ToString("yyyy-MM-dd"):null },
-                    {CcofInvoice.Fields.CcOf_Revised_Effective_Date,(header?.IHCode!="0000")?revisedEffectiveDate.ToString("yyyy-MM-dd"):null }
-                };
-                bool isPaid = line?.ILCode == "0000" && header?.IHCode == "0000";
-                var relatedPaymentLines = serializedPayData?.Where(p => p?._ccof_invoice_value != null && p._ccof_invoice_value == invoice?.ccof_invoiceid).ToList();
-
-
-
-
-                if (relatedPaymentLines != null)
+                foreach (var paymentLine in relatedPaymentLines)
                 {
-                  relatedPaymentLines?.ForEach(async paymentLine =>
-                    {
-                        
-                        var paymentLineUpdate = new JsonObject { 
-                        { D365PaymentLine.Fields.OfM_Cas_Response, casResponse },
-                        { D365PaymentLine.Fields.StateCode, (int)((line?.ILCode == "0000" && header?.IHCode == "0000") ? OfM_Payment_StateCode.Inactive : OfM_Payment_StateCode.Active) },
-                        { D365PaymentLine.Fields.StatusCode, (int)((line?.ILCode == "0000" && header?.IHCode == "0000") ? OfM_Payment_StatusCode.Paid : OfM_Payment_StatusCode.ProcessingError) },
-                        { D365PaymentLine.Fields.OfM_Revised_Invoice_Date, header?.IHCode != "0000" ? revisedInvoiceDate.ToString("yyyy-MM-dd") : null },
-                        { D365PaymentLine.Fields.OfM_Revised_Invoice_Received_Date, header?.IHCode != "0000" ? revisedInvoiceReceivedDate.ToString("yyyy-MM-dd") : null }, 
-                        { D365PaymentLine.Fields.OfM_Revised_Effective_Date, header?.IHCode != "0000" ? revisedEffectiveDate.ToString("yyyy-MM-dd") : null } };
+                    var paymentLineUpdate = new JsonObject {
+                    { D365PaymentLine.Fields.OfM_Cas_Response, casResponse },
+                    { D365PaymentLine.Fields.StateCode, (int)((line?.ILCode == "0000" && header?.IHCode == "0000") ? OfM_Payment_StateCode.Inactive : OfM_Payment_StateCode.Active) },
+                    { D365PaymentLine.Fields.StatusCode, (int)((line?.ILCode == "0000" && header?.IHCode == "0000") ? OfM_Payment_StatusCode.Paid : OfM_Payment_StatusCode.ProcessingError) },
+                    { D365PaymentLine.Fields.OfM_Revised_Invoice_Date, header?.IHCode != "0000" ? localDateOnlyPST.ToString("yyyy-MM-dd") : null },
+                    { D365PaymentLine.Fields.OfM_Revised_Invoice_Received_Date, header?.IHCode != "0000" ? localDateOnlyPST.ToString("yyyy-MM-dd") : null },
+                    { D365PaymentLine.Fields.OfM_Revised_Effective_Date, header?.IHCode != "0000" ? localDateOnlyPST.ToString("yyyy-MM-dd") : null }
+                };
 
-                        updatePaymentLineRequests.Add(new D365UpdateRequest(new D365EntityReference(D365PaymentLine.EntityLogicalCollectionName, paymentLine.ofm_paymentid), paymentLineUpdate));
-                    });
+                    updatePaymentLineRequests.Add(new D365UpdateRequest(new D365EntityReference(D365PaymentLine.EntityLogicalCollectionName, paymentLine.ofm_paymentid), paymentLineUpdate));
                 }
-
-
-                updateInvoiceRequests.Add(new D365UpdateRequest(new D365EntityReference(CcofInvoice.EntityLogicalCollectionName, invoice.ccof_invoiceid), invoiceToUpdate));
-                
             }
-        });
-
-        var step2BatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updateInvoiceRequests, null);
-        var step3BatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePaymentLineRequests, null);
-        if (step2BatchResult.Errors.Any())
-        {
-            var errors = ProcessResult.Failure(ProcessId, step2BatchResult.Errors, step2BatchResult.TotalProcessed, step2BatchResult.TotalRecords);
-            _logger.LogError(CustomLogEvent.Process, "Failed to update Invoices with an error: {error}", JsonValue.Create(errors)!.ToString());
-
-            return errors.SimpleProcessResult;
         }
-        if (step3BatchResult.Errors.Any())
-        {
-            var errors = ProcessResult.Failure(ProcessId, step2BatchResult.Errors, step2BatchResult.TotalProcessed, step2BatchResult.TotalRecords);
-            _logger.LogError(CustomLogEvent.Process, "Failed to update Payments with an error: {error}", JsonValue.Create(errors)!.ToString());
 
-            return errors.SimpleProcessResult;
+        const int batchSize = 500;
+        var allErrors = new List<string>(); int totalProcessed = 0;
+
+        for (int i = 0; i < updateInvoiceRequests.Count; i += batchSize)
+        {
+            var batch = updateInvoiceRequests.Skip(i).Take(batchSize).ToList();
+            var result = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, batch, null);
+            totalProcessed += result.TotalProcessed;
+            if (result.Errors.Any()) allErrors.AddRange(result.Errors);
         }
-        //  await Task.WhenAll(createIntregrationLogTasks);
+
+        if (allErrors.Any()) return ProcessResult.Failure(ProcessId, allErrors, totalProcessed, updateInvoiceRequests.Count).SimpleProcessResult;
+
+        allErrors = new List<string>(); totalProcessed = 0;
+
+        for (int i = 0; i < updatePaymentLineRequests.Count; i += batchSize)
+        {
+            var batch = updatePaymentLineRequests.Skip(i).Take(batchSize).ToList();
+            var result = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, batch, null);
+            totalProcessed += result.TotalProcessed;
+            if (result.Errors.Any()) allErrors.AddRange(result.Errors);
+        }
+
+        if (allErrors.Any()) return ProcessResult.Failure(ProcessId, allErrors, totalProcessed, updatePaymentLineRequests.Count).SimpleProcessResult;
+
         return ProcessResult.Completed(ProcessId).SimpleProcessResult;
     }
 }
