@@ -597,52 +597,131 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         return ProcessResult.Completed(ProcessId).SimpleProcessResult;
     }
 
-    private async Task<JsonObject> MarkPaymentLinesAsProcessed(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, List<CcofInvoice> payments)
+    private async Task<JsonObject> MarkPaymentLinesAsProcessed(
+    ID365AppUserService appUserService,
+    ID365WebApiService d365WebApiService,
+    List<CcofInvoice> payments)
     {
-        var updatePayRequests = new List<HttpRequestMessage>() { };
-        payments.ForEach(pay =>
+        const int batchSize = 500; // safe for Dataverse
+        var allErrors = new List<string>();
+        int totalProcessed = 0;
+
+        for (int i = 0; i < payments.Count; i += batchSize)
         {
-            var payToUpdate = new JsonObject {
-                  { "statuscode", Convert.ToInt32(CcOf_Invoice_StatusCode.ProcessingPayment) },
+            var updatePayRequests = new List<HttpRequestMessage>() { };
 
-                  {"ccof_batch_number",pay.ccof_batch_number }
-             };
+            payments.Skip(i).Take(batchSize).ToList().ForEach(pay =>
+            {
+                var payToUpdate = new JsonObject {
+                { "statuscode", Convert.ToInt32(CcOf_Invoice_StatusCode.ProcessingPayment) },
+                { "ccof_batch_number", pay.ccof_batch_number }
+            };
 
-            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(CcOf_Invoice.EntityLogicalCollectionName, pay.ccof_invoiceid), payToUpdate));
-        });
+                updatePayRequests.Add(
+                    new D365UpdateRequest(
+                        new D365EntityReference(
+                            CcOf_Invoice.EntityLogicalCollectionName,
+                            pay.ccof_invoiceid),
+                        payToUpdate));
+            });
 
-        var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePayRequests, null);
-        if (paymentBatchResult.Errors.Any())
+            var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(
+                appUserService.AZSystemAppUser,
+                updatePayRequests,
+                null);
+
+            totalProcessed += paymentBatchResult.TotalProcessed;
+
+            if (paymentBatchResult.Errors.Any())
+            {
+                allErrors.AddRange(paymentBatchResult.Errors);
+            }
+        }
+
+        if (allErrors.Any())
         {
-            var errors = ProcessResult.Failure(ProcessId, paymentBatchResult.Errors, paymentBatchResult.TotalProcessed, paymentBatchResult.TotalRecords);
-            _logger.LogError(CustomLogEvent.Process, "Failed to update invoice status with an error: {error}", JsonValue.Create(errors)!.ToString());
+            var errors = ProcessResult.Failure(
+                ProcessId,
+                allErrors,
+                totalProcessed,
+                payments.Count);
+
+            _logger.LogError(
+                CustomLogEvent.Process,
+                "Failed to update invoice status with an error: {error}",
+                JsonValue.Create(errors)!.ToString());
 
             return errors.SimpleProcessResult;
         }
 
-        return paymentBatchResult.SimpleBatchResult;
+        return new JsonObject
+    {
+        { "processed", totalProcessed },
+        { "total", payments.Count }
+    };
     }
-    private async Task<JsonObject> MarkCCOFPaymentLinesAsProcessed(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, List<D365PaymentLine> payments)
+  
+    private async Task<JsonObject> MarkCCOFPaymentLinesAsProcessed(
+    ID365AppUserService appUserService,
+    ID365WebApiService d365WebApiService,
+    List<D365PaymentLine> payments)
     {
-        var updatePayRequests = new List<HttpRequestMessage>() { };
-        payments.ForEach(pay =>
-        {
-            var payToUpdate = new JsonObject {
-                  { "statuscode", Convert.ToInt32(OfM_Payment_StatusCode.ProcessingPayment) }
-             };
-            updatePayRequests.Add(new D365UpdateRequest(new D365EntityReference(D365PaymentLine.EntityLogicalCollectionName, pay.ofm_paymentid), payToUpdate));
-        });
+        const int batchSize = 500;
+        var allErrors = new List<string>();
+        int totalProcessed = 0;
 
-        var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(appUserService.AZSystemAppUser, updatePayRequests, null);
-        if (paymentBatchResult.Errors.Any())
+        for (int i = 0; i < payments.Count; i += batchSize)
         {
-            var errors = ProcessResult.Failure(ProcessId, paymentBatchResult.Errors, paymentBatchResult.TotalProcessed, paymentBatchResult.TotalRecords);
-            _logger.LogError(CustomLogEvent.Process, "Failed to update invoice status with an error: {error}", JsonValue.Create(errors)!.ToString());
+            var updatePayRequests = new List<HttpRequestMessage>() { };
+
+            payments.Skip(i).Take(batchSize).ToList().ForEach(pay =>
+            {
+                var payToUpdate = new JsonObject {
+                { "statuscode", Convert.ToInt32(OfM_Payment_StatusCode.ProcessingPayment) }
+            };
+
+                updatePayRequests.Add(
+                    new D365UpdateRequest(
+                        new D365EntityReference(
+                            D365PaymentLine.EntityLogicalCollectionName,
+                            pay.ofm_paymentid),
+                        payToUpdate));
+            });
+
+            var paymentBatchResult = await d365WebApiService.SendBatchMessageAsync(
+                appUserService.AZSystemAppUser,
+                updatePayRequests,
+                null);
+
+            totalProcessed += paymentBatchResult.TotalProcessed;
+
+            if (paymentBatchResult.Errors.Any())
+            {
+                allErrors.AddRange(paymentBatchResult.Errors);
+            }
+        }
+
+        if (allErrors.Any())
+        {
+            var errors = ProcessResult.Failure(
+                ProcessId,
+                allErrors,
+                totalProcessed,
+                payments.Count);
+
+            _logger.LogError(
+                CustomLogEvent.Process,
+                "Failed to update invoice status with an error: {error}",
+                JsonValue.Create(errors)!.ToString());
 
             return errors.SimpleProcessResult;
         }
 
-        return paymentBatchResult.SimpleBatchResult;
+        return new JsonObject
+    {
+        { "processed", totalProcessed },
+        { "total", payments.Count }
+    };
     }
     private async Task<bool> SaveInboxFileOnNewPaymentFileExchangeRecord(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, string feederNumber, string result)
     {
