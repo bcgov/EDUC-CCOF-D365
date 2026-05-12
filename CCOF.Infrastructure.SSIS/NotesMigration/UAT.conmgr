@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="Dynamics CRM Connection Manager"
+  DTS:DTSID="{2515A857-75C0-4352-A83A-05DCF8F52E24}"
+  DTS:CreationName="DynamicsCRM">
+  <DTS:ObjectData>
+    <CrmConnectionManager
+      ConnectionString="AuthenticationType=OAuth;ServiceEndpoint=WebAPI;UserName=myccpav@gov.bc.ca;Domain=;ServerUrl=https://[environmentname].crm3.dynamics.com;ProxyUsername=;ProxyMode=NoProxy;ProxyServer=;ProxyServerPort=0;BypassProxyOnLocal=False;HomeRealmUri=;ApiVersion=;OAuthType=InteractiveLogin;AuthorizationServerUrl=;ServiceResource=;ServiceTimeout=900;RetryOnIntermittentErrors=True;IgnoreCertificateErrors=False;TimezoneConversionEngine=Auto;HttpCertificateThumbprint=;HttpCustomHeaders={}"
+      ConnectByProxy="False" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>
