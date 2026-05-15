@@ -33,7 +33,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
             _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
 
-        public HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 200)
+        public HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 1000)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, query);
             request.Headers.Add("Prefer", "odata.maxpagesize=" + maxPageSize.ToString());
@@ -45,7 +45,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
             return client.SendAsync(request).Result;
         }
 
-        public HttpResponseMessage SendRetrieveRequestAsync1(AZAppUser spn, string query, bool formatted = false, int maxPageSize = 200)
+        public HttpResponseMessage SendRetrieveRequestAsync1(AZAppUser spn, string query, bool formatted = false, int maxPageSize = 1000)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, query);
             request.Headers.Add("Prefer", "odata.maxpagesize=" + maxPageSize.ToString());
