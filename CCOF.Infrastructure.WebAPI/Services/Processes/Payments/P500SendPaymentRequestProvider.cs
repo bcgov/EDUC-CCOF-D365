@@ -164,6 +164,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     <condition attribute="ccof_site_number" operator="not-null"/>
                     <condition attribute="ccof_supplier_number" operator="not-null"/>
                     <condition attribute="ccof_paymentmethod" operator="not-null"/>
+                    <condition attribute="ccof_payment_type" operator="not-null"/>
                         </filter>
                        <link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_program_year" link-type="outer" alias="program_year" visible="false">
                     <attribute name="ccof_financial_year"/>
