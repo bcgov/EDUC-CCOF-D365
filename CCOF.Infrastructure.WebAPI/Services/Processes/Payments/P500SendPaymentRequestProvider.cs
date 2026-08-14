@@ -9,6 +9,7 @@ using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using CCOF.Infrastructure.WebAPI.Services.Processes;
 using HandlebarsDotNet;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Extensions;
 using System;
@@ -23,6 +24,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments;
 
@@ -35,15 +37,14 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
     private readonly TimeProvider timeProvider = timeProvider;
     private readonly ILogger _logger = loggerFactory.CreateLogger(LogCategory.Process);
     private readonly ID365DataService _dataService = dataService;
-  
-
     private int _controlCount;
     private double _controlAmount;
     private int _oracleBatchNumber;
     private string _cgiBatchNumber = string.Empty;
     private ProcessData? _data;
     private ProcessParameter? _processParams;
-    private string _currentFiscalYearId;
+    private string _currentFiscalYearId; 
+    
 
 
     public Int16 ProcessId => Setup.Process.Payments.SendPaymentRequestId;
@@ -164,6 +165,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                     <condition attribute="ccof_site_number" operator="not-null"/>
                     <condition attribute="ccof_supplier_number" operator="not-null"/>
                     <condition attribute="ccof_paymentmethod" operator="not-null"/>
+                    <condition attribute="ccof_payment_type" operator="not-null"/>
                         </filter>
                        <link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_program_year" link-type="outer" alias="program_year" visible="false">
                     <attribute name="ccof_financial_year"/>
@@ -317,6 +319,8 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         var commentline = typeof(InvoiceCommentLines);
         var header = typeof(InvoiceHeader);
         string inboxFileBytes = string.Empty;
+        _logger.LogInformation("Starting P500 at {Timestamp:yyyy-MM-dd HH:mm:ss}",DateTime.Now);
+
 
         #region Step 0.1: Get paymentlines data & current Financial Year
         try
@@ -325,10 +329,13 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             JsonArray? invoiceDataArray = JsonSerializer.Deserialize<JsonArray>(invoiceData.Data);
             JsonNode? invoice = invoiceDataArray.First();
             serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(invoiceData.Data.ToString());
+            _logger.LogInformation(CustomLogEvent.Process,"retrieved Invoices at {Timestamp:yyyy-MM-dd HH:mm:ss}",DateTime.Now);
             var grouppayment = serializedInvoiceData?.GroupBy(p => p.ccof_invoice_number).ToList();
             var fiscalyear = serializedInvoiceData?.FirstOrDefault()?.ccof_financial_year;
             var ccofPaymentLineData = await GetCCOFPaymentLineData();
             CCOFPaymentLines = JsonSerializer.Deserialize<List<D365PaymentLine>>(ccofPaymentLineData.Data.ToString());
+            
+            _logger.LogInformation(CustomLogEvent.Process,"retrieved payment lines at {Timestamp:yyyy-MM-dd HH:mm:ss}",DateTime.Now);
             #endregion
 
             #region Step 0.2: Get latest Oracle Batch Number
@@ -354,18 +361,22 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 
             }
 
+            _logger.LogInformation(CustomLogEvent.Process,"Retrieved payment file exchange at {Timestamp:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
+
+
             #endregion
 
             #region Step 0.3: Get ACK Codes
 
             //IEnumerable<Ack_Codes> ackCode = await LoadACKCodeAsync();
             var ackCode = await GetACKCodes();
-
+           
+            _logger.LogInformation(CustomLogEvent.Process, "retrieved ack codes at {Timestamp:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
             #endregion
 
             #region Step 1: Handlebars format to generate Inbox data
 
-            
+
             string source = "{{feederNumber}}{{batchType}}{{transactionType}}{{delimiter}}{{feederNumber}}{{fiscalYear}}{{cGIBatchNumber}}{{messageVersionNumber}}{{delimiter}}\n" 
                 + "{{#each InvoiceHeader}}{{this.feederNumber}}{{this.batchType}}{{this.headertransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.PONumber}}{{this.invoiceType}}{{this.invoiceDate}}{{this.payGroupLookup}}{{this.remittanceCode}}{{this.grossInvoiceAmount}}{{this.CAD}}{{this.invoiceDate}}{{this.termsName}}{{this.description}}{{this.goodsDate}}{{this.invoiceRecDate}}{{this.oracleBatchName}}{{this.SIN}}{{this.payflag}}{{this.flow}}{{this.delimiter}}\n" +
                            "{{#each InvoiceLines}}{{this.feederNumber}}{{this.batchType}}{{this.linetransactionType}}{{this.delimiter}}{{this.supplierNumber}}{{this.supplierSiteNumber}}{{this.invoiceNumber}}{{this.invoiceLineNumber}}{{this.committmentLine}}{{this.lineAmount}}{{this.lineCode}}{{this.distributionACK}}{{this.lineDescription}}{{this.effectiveDate}}{{this.quantity}}{{this.unitPrice}}{{this.optionalData}}{{this.distributionSupplierNumber}}{{this.flow}}{{this.delimiter}}\n{{/each}}" +
@@ -382,6 +393,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 var pay_method = (ECc_Payment_Method)headeritem.First().ccof_paymentmethod;
 
                 var paymentType = ((ECc_Payment_Type)headeritem.First().ccof_payment_type);
+                _logger.LogInformation("retrieved payment type and payment method");
 
                 var codingLineType = headeritem.First().CcOf_Coding_Line_TypeName;
                 var orgid = headeritem.First().ccof_organization_id;// Group = 1 Family = 2
@@ -405,7 +417,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         ack.ccof_provider_type == providerType &&
         ack.ccof_accrual == isInvoiceAccrual)
     ?.OfmAckNumber;
-
+                _logger.LogInformation("ack number matched");
 
                 double invoiceamount = 0.00;
                 List<InvoiceLines> invoiceLines = [];
@@ -580,10 +592,12 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
             if (!string.IsNullOrEmpty(inboxFileBytes))
             {
                 bool savePFEResult = await SaveInboxFileOnNewPaymentFileExchangeRecord(appUserService, d365WebApiService, _BCCASApi.feederNumber, inboxFileBytes);
+                _logger.LogInformation("Inbox file created at {Timestamp}",DateTime.Now);
 
                 if (savePFEResult)
                     await MarkPaymentLinesAsProcessed(appUserService, d365WebApiService, paylinesToUpdate);
                 await MarkCCOFPaymentLinesAsProcessed(appUserService, d365WebApiService, CCOFPaymentLines);
+                _logger.LogInformation("Invoice and Payment Status are updated");
             }
 
             #endregion
