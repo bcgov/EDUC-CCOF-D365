@@ -393,7 +393,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
                 var pay_method = (ECc_Payment_Method)headeritem.First().ccof_paymentmethod;
 
                 var paymentType = ((ECc_Payment_Type)headeritem.First().ccof_payment_type);
-                _logger.LogInformation("retrieved payment type and payment method");
+             
 
                 var codingLineType = headeritem.First().CcOf_Coding_Line_TypeName;
                 var orgid = headeritem.First().ccof_organization_id;// Group = 1 Family = 2
@@ -417,7 +417,7 @@ public class P500SendPaymentRequestProvider(IOptionsSnapshot<ExternalServices> b
         ack.ccof_provider_type == providerType &&
         ack.ccof_accrual == isInvoiceAccrual)
     ?.OfmAckNumber;
-                _logger.LogInformation("ack number matched");
+               
 
                 double invoiceamount = 0.00;
                 List<InvoiceLines> invoiceLines = [];
