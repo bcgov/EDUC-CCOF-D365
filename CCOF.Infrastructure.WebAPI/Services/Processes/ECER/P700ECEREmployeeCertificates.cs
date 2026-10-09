@@ -443,6 +443,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                 }
 
                 // records not in ECER and to be deactived
+                int numberOfDeactivatedRecord = 0;
                 for (int i = 0; i < oldECECertData.Count; i += batchSize)
                 {
                     var updateMissingECERequests = new List<HttpRequestMessage>() { };
@@ -451,6 +452,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     {
                         if ((int)record["statuscode"] != 2)
                         {
+                            numberOfDeactivatedRecord++;
                             var ECECert = new JsonObject
                             {
                                 { "statecode", 1 },
@@ -488,7 +490,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     var localtime = _timeProvider.GetLocalNow();
                     var endtime = _timeProvider.GetTimestamp();
                     var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-                    dataImportMessages = pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time : " + Math.Round(timediff, 2) + " seconds.\r\n" + "Upsert " + differenceCsvRecords.Count + " record(s) sucessfully\r\n" + "Deactivated " + oldECECertData.Count + " records not existing in API sucessfully\r\n";
+                    dataImportMessages = pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time : " + Math.Round(timediff, 2) + " seconds.\r\n" + "Upsert " + differenceCsvRecords.Count + " record(s) sucessfully\r\n" + "Deactivated " + numberOfDeactivatedRecord + " records not existing in API sucessfully\r\n";
 
                     var ECECertStatement = $"ofm_data_imports({dataImportID})";
                     var payload = new JsonObject {
