@@ -1,16 +1,17 @@
 ﻿using CCOF.Core.DataContext;
-using Newtonsoft.Json;
 using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Handlers;
 using CCOF.Infrastructure.WebAPI.Messages;
 using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services.AppUsers;
+using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using System.IO;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
-using Microsoft.Extensions.Options;
-using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
-using System.Net;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
 {
@@ -26,6 +27,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
         private readonly ECERSettings _ECERSettings = ECERSettings.Value.ECERApi;
         public Int16 ProcessId => Setup.Process.ECER.ProcessECEREmployeeCertificatesId;
         public string ProcessName => Setup.Process.ECER.ProcessECEREmployeeCertificatesName;
+        public Dictionary<(string Reg, string Level, string EffDate), CertificationDetail> ECERCertificateDict;
+        List<CertificationDetail> differenceCsvRecords = new List<CertificationDetail>(); //List of differences between CMS and ECER
 
 
         public async Task<ProcessData> GetDataAsync()
@@ -120,15 +123,94 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     <attribute name=""ofm_first_name"" />
                     <attribute name=""ofm_is_active"" />
                     <attribute name=""ofm_last_name"" />
-                    <attribute name=""ofm_middle_name"" />
+                    <attribute name=""statuscode"" />
                     <order attribute=""ofm_certificate_number"" />
                   </entity>
                 </fetch>";
                 var requestUri = $"""                                
-                                ofm_employee_certificates?$select=statuscode,ofm_certificate_level,ofm_expiry_date,ofm_certificate_number,ofm_effective_date,ofm_first_name,ofm_is_active,ofm_last_name,ofm_middle_name&$orderby=ofm_certificate_number asc
+                                ofm_employee_certificates?$select=statuscode,ofm_certificate_level,ofm_expiry_date,ofm_certificate_number,ofm_effective_date,ofm_first_name,ofm_is_active,ofm_last_name&$orderby=ofm_certificate_number asc
                                 """;
                 return requestUri;
             }
+        }
+
+        public async Task<List<JsonNode>> FetchandCompareAllRecordsFromCRMAsync(string requestUri)
+        {
+            _logger.LogDebug(CustomLogEvent.Process, "Getting records with query {requestUri}", requestUri.CleanLog());
+            //var allRecords = new List<JsonNode>();  // List to accumulate all records
+            int recordCount = 0; // Number of records queried
+            List<JsonNode> oldECECertData = new List<JsonNode>();
+            string nextPageLink = requestUri;  // Initial request URI
+            do
+            {
+                // 5000 is limit number can retrieve from crm
+                using var response = await _d365webapiservice.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, nextPageLink, false, 5000, isProcess: false);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    _logger.LogError(CustomLogEvent.Process, "Failed to query records with server error {responseBody}", responseBody.CleanLog());
+                    var returnJsonNodeList = new List<JsonNode>();
+                    returnJsonNodeList.Add(responseBody);
+                    return returnJsonNodeList;
+                    // null;
+                }
+                var jsonObject = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+                //JsonNode currentBatch = string.Empty;
+                JsonArray currentBatchArray = new JsonArray();
+                if (jsonObject?.TryGetPropertyValue("value", out var currentValue) == true)
+                {
+                    if (currentValue?.AsArray().Count == 0)
+                    {
+                        _logger.LogInformation(CustomLogEvent.Process, "No more records found with query {nextPageLink}", nextPageLink.CleanLog());
+                        break;  // Exit the loop if no more records
+                    }
+                    //currentBatch = currentValue!;
+                    currentBatchArray = currentValue!.AsArray();
+                    recordCount += currentBatchArray.Count;
+
+                    //Batch
+                    foreach (var record in currentBatchArray)
+                    {
+                        var crmCert = record["ofm_certificate_number"]!.GetValue<string>();
+                        var crmLevel = record["ofm_certificate_level"]!.GetValue<string>();
+                        var crmEffDate = record["ofm_effective_date"]!.GetValue<string>();
+
+                        var key = (Reg: crmCert, Level: crmLevel, EffDate: crmEffDate);
+                        if (ECERCertificateDict.TryGetValue(key, out var certificate))
+                        {
+                            if ((int)record["statuscode"] != certificate.statuscode
+                                || record["ofm_expiry_date"]?.ToString() != certificate.expirydate
+                                || crmEffDate != certificate.effectivedate
+                                || record["ofm_first_name"]?.ToString() != certificate.firstname
+                                || record["ofm_last_name"]?.ToString() != certificate.lastname)
+                            {
+                                differenceCsvRecords.Add(certificate);
+                            }
+                            ECERCertificateDict.Remove(key);
+                        }
+                        else
+                        {
+                            oldECECertData.Add(record);
+                        }
+                    }
+                }
+                _logger.LogDebug(CustomLogEvent.Process, "Fetched {batchSize} records. Total records so far: {totalRecords}", currentBatchArray.Count, recordCount);
+                currentBatchArray.Clear();
+
+                // Check if there's a next link in the response for pagination
+                nextPageLink = null;
+                if (jsonObject?.TryGetPropertyValue("@odata.nextLink", out var nextLinkValue) == true)
+                {
+                    nextPageLink = nextLinkValue.ToString();
+                }
+                jsonObject?.Clear();
+                jsonObject = null;
+            }
+            while (!string.IsNullOrEmpty(nextPageLink));
+
+            _logger.LogDebug(CustomLogEvent.Process, "Total records fetched: {totalRecords}", recordCount);
+            return oldECECertData;
         }
 
         public async Task<List<JsonNode>> FetchAllRecordsFromCRMAsync(string requestUri)
@@ -212,7 +294,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     // Step 2. Retrieve certification files list
                     // ===========================
                     var filesUrl = string.Concat(_ECERSettings.ECERURL, "s");
-                    HttpResponseMessage filesResponse = await client.GetAsync(filesUrl);
+                    using HttpResponseMessage filesResponse = await client.GetAsync(filesUrl);
                     filesResponse.EnsureSuccessStatusCode();
                     _logger.LogInformation(CustomLogEvent.Process, "Received file response");
 
@@ -232,17 +314,28 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     _logger.LogInformation(CustomLogEvent.Process, "Retrieving details for file id: " + firstFileId);
 
                     var downloadUrl = string.Concat(_ECERSettings.ECERURL, "/download/", firstFileId);// $"https://dev-ecer-api.apps.silver.devops.gov.bc.ca/api/certifications/file/download/{firstFileId}";
-                    HttpResponseMessage downloadResponse = await client.GetAsync(downloadUrl);
+                    using HttpResponseMessage downloadResponse = await client.GetAsync(downloadUrl);
                     downloadResponse.EnsureSuccessStatusCode();
                     _logger.LogInformation(CustomLogEvent.Process, "File download successful.");
 
                     #endregion
+                    byte[] downloadBytes = await downloadResponse.Content.ReadAsByteArrayAsync();
 
-                    string downloadContent = await downloadResponse.Content.ReadAsStringAsync();
-                    bool savePFEResult = await SaveImportFile(appUserService, d365WebApiService, downloadContent);
+                    //string downloadContent = await downloadResponse.Content.ReadAsStringAsync();
+                    bool savePFEResult = await SaveImportFile(appUserService, d365WebApiService, downloadBytes);
                     _logger.LogInformation(CustomLogEvent.Process, "File saved in CMS.");
 
-                    certificates = System.Text.Json.JsonSerializer.Deserialize<List<CertificationDetail>>(downloadContent);
+                    //await using var stream = await downloadResponse.Content.ReadAsStreamAsync();
+                    using var stream = new MemoryStream(downloadBytes); //delete this
+                    using var reader = new StreamReader(stream);
+                    using var jsonReader = new JsonTextReader(reader);
+
+                    var serializer = new Newtonsoft.Json.JsonSerializer();
+
+                    downloadBytes = null;
+
+                    //certificates = System.Text.Json.JsonSerializer.Deserialize<List<CertificationDetail>>(downloadContent);
+                    certificates = serializer.Deserialize<List<CertificationDetail>>(jsonReader) ?? new List<CertificationDetail>();
                 }
                 if (certificates.Count == 0)// no records
                 {
@@ -262,41 +355,34 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     }
                     return ProcessResult.Failure(ProcessId, new String[] { "ECER API did not return any records" }, 0, 0).SimpleProcessResult;
                 }
-
-                var filteredRecords = certificates.Where(r => !string.IsNullOrWhiteSpace(r.registrationnumber) &&
-                !string.IsNullOrWhiteSpace(r.certificatelevel) && !string.IsNullOrWhiteSpace(r.effectivedate)).ToList();
-                // get all ECE certification from CRM
-                List<JsonNode> oldECECertData = await FetchAllRecordsFromCRMAsync(EmployeeCertificateRequestUri);
-
-                var crmRecordsDict = oldECECertData
-                    .Select(n => n!.AsObject())
-                    .ToDictionary(
-                        obj => (Reg: obj["ofm_certificate_number"]!.GetValue<string>(),
-                                Level: obj["ofm_certificate_level"]!.GetValue<string>(),
-                                EffDate: obj["ofm_effective_date"]!.GetValue<string>())
-                    );
-                List<CertificationDetail> differenceCsvRecords = new List<CertificationDetail>();
-                foreach (var certificate in filteredRecords)
+                ECERCertificateDict = new Dictionary<(string Reg, string Level, string EffDate), CertificationDetail>(200000);
+                foreach (var r in certificates)
                 {
-                    var key = (Reg: certificate.registrationnumber, Level: certificate.certificatelevel.Replace(",", " "), EffDate: certificate.effectivedate);
-                    if (crmRecordsDict.TryGetValue(key, out var crmRecord))
+                    if (string.IsNullOrWhiteSpace(r.registrationnumber) ||
+                    string.IsNullOrWhiteSpace(r.certificatelevel) ||
+                    string.IsNullOrWhiteSpace(r.effectivedate))
                     {
-                        if ((int)crmRecord["statuscode"] != certificate.statuscode
-                            || crmRecord["ofm_expiry_date"]?.ToString() != certificate.expirydate
-                            || crmRecord["ofm_effective_date"]?.ToString() != certificate.effectivedate
-                            || crmRecord["ofm_first_name"]?.ToString() != certificate.firstname
-                            || crmRecord["ofm_last_name"]?.ToString() != certificate.lastname)
-                        {
-                            differenceCsvRecords.Add(certificate);
-                        }
-                        oldECECertData.Remove(crmRecord);
-                        crmRecordsDict.Remove(key);
+                        continue;
                     }
-                    else
-                    {
-                        differenceCsvRecords.Add(certificate);
-                    }
+
+                    var key = (
+                    Reg: r.registrationnumber,
+                    Level: r.certificatelevel.Replace(',', ' '),
+                    EffectiveDate: r.effectivedate
+                    );
+
+                    ECERCertificateDict.TryAdd(key, r); // keep first occurrence
                 }
+                certificates.Clear();
+                certificates = null!;
+
+                // get all ECE certification from CRM
+                List<JsonNode> oldECECertData = await FetchandCompareAllRecordsFromCRMAsync(EmployeeCertificateRequestUri);
+
+                differenceCsvRecords.AddRange(ECERCertificateDict.Values);
+                ECERCertificateDict.Clear();
+                ECERCertificateDict = null;
+
                 // Batch processing
                 int batchSize = 1000;
                 for (int i = 0; i < differenceCsvRecords.Count; i += batchSize)
@@ -356,30 +442,37 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     dataImportMessages += dataImportMessages + "Upsert records Failed \r\n";
                 }
 
-                // deal with missing record in CRM and deactive them
+                // records not in ECER and to be deactived
+                int numberOfDeactivatedRecord = 0;
                 for (int i = 0; i < oldECECertData.Count; i += batchSize)
                 {
                     var updateMissingECERequests = new List<HttpRequestMessage>() { };
                     var batch = oldECECertData.Skip(i).Take(batchSize).ToList();
                     foreach (var record in batch)
                     {
-                        var ECECert = new JsonObject
+                        if ((int)record["statuscode"] != 2)
                         {
-                            { "statecode", 1 },
-                            { "statuscode", 2 }
-                        };
-                        updateMissingECERequests.Add(new D365UpdateRequest(new D365EntityReference("ofm_employee_certificates", (Guid)record["ofm_employee_certificateid"]), ECECert));
-
+                            numberOfDeactivatedRecord++;
+                            var ECECert = new JsonObject
+                            {
+                                { "statecode", 1 },
+                                { "statuscode", 2 }
+                            };
+                            updateMissingECERequests.Add(new D365UpdateRequest(new D365EntityReference("ofm_employee_certificates", (Guid)record["ofm_employee_certificateid"]), ECECert));
+                        }
                     }
-                    var upsertMissingECECertResults = await d365WebApiService.SendBatchMessageAsync(_appUserService.AZSystemAppUser, updateMissingECERequests, null);
-                    if (upsertMissingECECertResults.Errors.Any())
+                    if (updateMissingECERequests.Count > 0)
                     {
-                        var errorInfos = ProcessResult.Failure(ProcessId, upsertMissingECECertResults.Errors, upsertMissingECECertResults.TotalProcessed, upsertMissingECECertResults.TotalRecords);
+                        var upsertMissingECECertResults = await d365WebApiService.SendBatchMessageAsync(_appUserService.AZSystemAppUser, updateMissingECERequests, null);
+                        if (upsertMissingECECertResults.Errors.Any())
+                        {
+                            var errorInfos = ProcessResult.Failure(ProcessId, upsertMissingECECertResults.Errors, upsertMissingECECertResults.TotalProcessed, upsertMissingECECertResults.TotalRecords);
 
-                        _logger.LogError(CustomLogEvent.Process, "Failed to Upsert ECE Certification: {error}", JsonValue.Create(errorInfos)!.ToString());
-                        deactiveMessages += "Batch Upsert errors: " + JsonValue.Create(errorInfos) + "\n\r";
+                            _logger.LogError(CustomLogEvent.Process, "Failed to Upsert ECE Certification: {error}", JsonValue.Create(errorInfos)!.ToString());
+                            deactiveMessages += "Batch Upsert errors: " + JsonValue.Create(errorInfos) + "\n\r";
+                        }
+                        _logger.LogDebug(CustomLogEvent.Process, "Batch Deactive CRM records not existing in CSV file index:{index}", i);
                     }
-                    _logger.LogDebug(CustomLogEvent.Process, "Batch Deactive CRM records not existing in CSV file index:{index}", i);
                 }
 
                 if (string.IsNullOrEmpty(deactiveMessages))
@@ -397,7 +490,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                     var localtime = _timeProvider.GetLocalNow();
                     var endtime = _timeProvider.GetTimestamp();
                     var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-                    dataImportMessages = pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time : " + Math.Round(timediff, 2) + " seconds.\r\n" + "Upsert " + differenceCsvRecords.Count + " record(s) sucessfully\r\n" + "Deactivated " + oldECECertData.Count + " records not existing in API sucessfully\r\n";
+                    dataImportMessages = pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Total time : " + Math.Round(timediff, 2) + " seconds.\r\n" + "Upsert " + differenceCsvRecords.Count + " record(s) sucessfully\r\n" + "Deactivated " + numberOfDeactivatedRecord + " records not existing in API sucessfully\r\n";
 
                     var ECECertStatement = $"ofm_data_imports({dataImportID})";
                     var payload = new JsonObject {
@@ -462,7 +555,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
             }
         }
 
-        private async Task<bool> SaveImportFile(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, string result)
+        private async Task<bool> SaveImportFile(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, byte[] result)
         {
             var importfileName = ("Provider Certificate" + "-" + DateTime.UtcNow.ToLocalPST().ToString("yyyyMMddHHmmss"));
             var requestBody = new JsonObject()
@@ -489,9 +582,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
                 if (importfileName.Length > 0)
                 {
                     // Update the new Data Import record with the new document
-                    HttpResponseMessage pfeUpdateResponse = await _d365webapiservice.SendDocumentRequestAsync(_appUserService.AZPortalAppUser, OfM_Data_Import.EntitySetName,
+                    using HttpResponseMessage pfeUpdateResponse = await _d365webapiservice.SendDocumentRequestAsync(_appUserService.AZPortalAppUser, OfM_Data_Import.EntitySetName,
                                                                                                         new Guid(pfeRecord[OfM_Data_Import.Fields.OfM_Data_ImportId].ToString()),
-                                                                                                        Encoding.ASCII.GetBytes(result.TrimEnd()),
+                                                                                                        result,
                                                                                                         importfileName);
 
                     if (!pfeUpdateResponse.IsSuccessStatusCode)
