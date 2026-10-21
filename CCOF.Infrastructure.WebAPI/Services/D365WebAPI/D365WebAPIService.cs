@@ -469,7 +469,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
                 "Failed to initialize file download");
             }
 
-            //using var stream = new MemoryStream();
             var fileBytes = new byte[downloadInfo.FileSizeInBytes];
 
             const int chunkSize = 4 * 1024 * 1024;
@@ -510,7 +509,6 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
                 byte[] bytes =
                     Convert.FromBase64String(block!.Data);
 
-                //await stream.WriteAsync(bytes);
                 Buffer.BlockCopy(bytes, 0, fileBytes, (int)offset, bytes.Length);
 
                 offset += bytes.Length;
