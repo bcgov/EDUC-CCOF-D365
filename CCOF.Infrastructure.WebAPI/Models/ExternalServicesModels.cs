@@ -202,3 +202,15 @@ public record FeedbackLine
     public string ILError { get; set; }
 
 }
+
+public class InitializeDownloadResponse
+{
+    public string FileContinuationToken { get; set; } = string.Empty;
+    public long FileSizeInBytes { get; set; }
+    public string FileName { get; set; } = string.Empty;
+}
+
+public class DownloadBlockResponse
+{
+    public string Data { get; set; } = string.Empty;
+}
