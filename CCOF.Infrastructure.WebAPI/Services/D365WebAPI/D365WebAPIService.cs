@@ -471,7 +471,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
 
             var fileBytes = new byte[downloadInfo.FileSizeInBytes];
 
-            const int chunkSize = 4 * 1024 * 1024;
+            const int chunkSize = 1024 * 1024;
 
             long offset = 0;
 
