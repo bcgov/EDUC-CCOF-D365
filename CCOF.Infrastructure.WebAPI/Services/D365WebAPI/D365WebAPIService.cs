@@ -3,20 +3,21 @@ using CCOF.Infrastructure.WebAPI.Messages;
 using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 using CCOF.Infrastructure.WebAPI.Services.Processes;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static CCOF.Infrastructure.WebAPI.Extensions.Setup.Process;
-using System.Net;
-using Microsoft.Extensions.Options;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
 {
@@ -426,6 +427,94 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebAPI
             HttpClient client = await _authenticationService.GetHttpClientAsync(D365ServiceType.CRUD, spn);
 
             return await client.SendAsync(request);
+        }
+
+        public async Task<byte[]> DownloadLargeFileColumnAsync(AZAppUser spn, string entityLogicalName, Guid recordId, string fileColumnName)
+        {
+            HttpClient client = await _authenticationService
+                .GetHttpClientAsync(D365ServiceType.CRUD, spn);
+
+            var initializeRequest = new
+            {
+                Target = new Dictionary<string, object>
+        {
+            { $"{entityLogicalName}id", recordId },
+            { "@odata.type", $"Microsoft.Dynamics.CRM.{entityLogicalName}" }
+        },
+                FileAttributeName = fileColumnName
+            };
+
+            var initializeResponse = await client.PostAsJsonAsync(
+                "InitializeFileBlocksDownload",
+                initializeRequest);
+
+            if (!initializeResponse.IsSuccessStatusCode)
+            {
+                string error =
+                    await initializeResponse.Content.ReadAsStringAsync();
+
+                throw new Exception(
+                    $"Status: {(int)initializeResponse.StatusCode} " +
+                    $"{initializeResponse.StatusCode}\n" +
+                    error);
+            }
+
+            var downloadInfo =
+                await initializeResponse.Content
+                    .ReadFromJsonAsync<InitializeDownloadResponse>();
+
+            if (downloadInfo == null)
+            {
+                throw new Exception(
+                "Failed to initialize file download");
+            }
+
+            using var stream = new MemoryStream();
+
+            const int chunkSize = 4 * 1024 * 1024;
+
+            long offset = 0;
+
+            while (offset < downloadInfo.FileSizeInBytes)
+            {
+                var blockRequest = new
+                {
+                    FileContinuationToken =
+                        downloadInfo.FileContinuationToken,
+                    Offset = offset,
+                    BlockLength = Math.Min(
+                        chunkSize,
+                        (int)(downloadInfo.FileSizeInBytes - offset))
+                };
+
+                var blockResponse = await client.PostAsJsonAsync(
+                    "DownloadBlock",
+                    blockRequest);
+
+                if (!blockResponse.IsSuccessStatusCode)
+                {
+                    string error =
+                        await blockResponse.Content.ReadAsStringAsync();
+
+                    throw new Exception(
+                        $"Status: {(int)blockResponse.StatusCode} " +
+                        $"{blockResponse.StatusCode}\n" +
+                        error);
+                }
+
+                var block =
+                    await blockResponse.Content
+                        .ReadFromJsonAsync<DownloadBlockResponse>();
+
+                byte[] bytes =
+                    Convert.FromBase64String(block!.Data);
+
+                await stream.WriteAsync(bytes);
+
+                offset += bytes.Length;
+            }
+
+            return stream.ToArray();
         }
 
         #endregion

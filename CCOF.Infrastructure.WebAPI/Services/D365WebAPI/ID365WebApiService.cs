@@ -25,6 +25,7 @@ public interface ID365WebApiService
     Task<HttpResponseMessage> SendDeleteRequestAsync(AZAppUser spn, string requestUrl);
     Task<HttpResponseMessage> SendSearchRequestAsync(AZAppUser spn, string requestBody);
     Task<HttpResponseMessage> SendDocumentRequestAsync(AZAppUser spn, string entityNameSet, Guid id, Byte[] data, string fileName);
+    Task<byte[]> DownloadLargeFileColumnAsync(AZAppUser spn, string entityLogicalName, Guid recordId, string columnName);
     Task<D365ServiceException> ParseError(HttpResponseMessage response);
     Task<HttpResponseMessage> GetRecordTemplateForClone(AZAppUser spn, Guid recordId, string targetEntityName, string targetEntityNameSet);
     Task<BatchResult> SendBatchMessageAsync(AZAppUser spn, List<HttpRequestMessage> requestMessages, Guid? callerObjectId);

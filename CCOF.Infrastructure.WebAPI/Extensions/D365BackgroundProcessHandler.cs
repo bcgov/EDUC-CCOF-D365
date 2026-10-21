@@ -33,7 +33,7 @@ public class D365BackgroundProcessHandler : ID365BackgroundProcessHandler
             }
             catch (Exception exp)
             {
-                _logger.LogCritical(exp.StackTrace);
+                _logger.LogCritical(exp.Message + exp.StackTrace);
                 //_logger.LogCritical(exp.Message);
             }
         });
