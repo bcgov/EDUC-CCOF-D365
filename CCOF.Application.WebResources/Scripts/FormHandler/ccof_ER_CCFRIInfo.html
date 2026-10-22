@@ -132,6 +132,21 @@
             </tbody>
         </table>
     </div>
+    <div class="mtfi-container">
+        <table class="enrolment-table mtfi-table" style="border-top: none;">
+            <thead id="closure-table-header">
+                <tr>
+                    <th scope="col">Closure</th>
+                    <td style="text-align: center;">Type</td>
+                    <td style="text-align: center;">Start Date</td>
+                    <td style="text-align: center;">End Date</td>
+                    <td style="text-align: center;">Status</td>
+                </tr>
+            </thead>
+            <tbody id="closure-table-tbody">
+            </tbody>
+        </table>
+    </div>
 
     <script>
         function onLoad() {
@@ -192,32 +207,89 @@
                             timeZone: "America/Vancouver", year: "numeric", month: "2-digit",
                             day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false});
                 }
+
+                // MTFI — moved inside the guard so a facility with no CCFRI record doesn't throw
+                const MTFIInfos = getSyncMultipleRecord("ccof_change_request_mtfis?$filter=(statecode eq 0 and _ccof_ccfri_facility_value eq " + CCFRIFacilityInfos[0]['ccof_adjudication_ccfri_facilityid'] + ")&$orderby=ccof_mtfi_sequence_number desc");
+                if (MTFIInfos && MTFIInfos.length > 0) {
+                    const tableBody = document.getElementById("mtfi-table-tbody");
+                    if (tableBody) {
+                        tableBody.innerHTML = '';
+                    }
+                    MTFIInfos.forEach(record => {
+                        const tr = document.createElement('tr');
+                        const mtfiId = record["ccof_name"];
+                        const version = record["ccof_mtfi_sequence_number"];
+                        const statusLabel = record["statuscode@OData.Community.Display.V1.FormattedValue"];
+                        let cell = document.createElement("td");
+                        cell.innerText = mtfiId;
+                        tr.appendChild(cell);
+                        cell = document.createElement("td");
+                        cell.innerText = version;
+                        tr.appendChild(cell);
+                        cell = document.createElement("td");
+                        tr.appendChild(cell);
+                        cell.innerText = statusLabel;
+                        tableBody.appendChild(tr);
+                    });
+                }
             }
 
-            const MTFIInfos = getSyncMultipleRecord("ccof_change_request_mtfis?$filter=(statecode eq 0 and _ccof_ccfri_facility_value eq " + CCFRIFacilityInfos[0]['ccof_adjudication_ccfri_facilityid'] + ")&$orderby=ccof_mtfi_sequence_number desc");
-            if (MTFIInfos && MTFIInfos.length > 0) {
-                const tableBody = document.getElementById("mtfi-table-tbody");
-                if (tableBody) {
-                    tableBody.innerHTML = '';
+            loadClosures(facilityGuid);
+        }
+
+        // Closures for this facility that overlap the ER reporting month (CCFRI-7813)
+        function loadClosures(facilityGuid) {
+            const tableBody = document.getElementById("closure-table-tbody");
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+            try {
+                const page = window.parent.Xrm.Page;
+                const monthAttr = page.getAttribute("ccof_month");
+                const monthText = monthAttr.getText ? monthAttr.getText() : monthAttr.getValue(); // e.g. "April"
+                const month = new Date(monthText + " 1, 2000").getMonth() + 1;
+                const year = parseInt(page.getAttribute("ccof_year").getValue(), 10);
+                if (!month || !year) return;
+
+                const pad = n => String(n).padStart(2, "0");
+                const firstDay = year + "-" + pad(month) + "-01";
+                const lastDay = year + "-" + pad(month) + "-" + pad(new Date(year, month, 0).getDate());
+
+                // Overlap: starts on/before month end AND ends on/after month start.
+                // No end date = treat as a single-day closure on the start date.
+                const filter = "statecode eq 0"
+                    + " and _ccof_facilityinfo_value eq " + getCleanedGuid(facilityGuid)
+                    + " and ccof_startdate le " + lastDay
+                    + " and (ccof_enddate ge " + firstDay
+                    + " or (ccof_enddate eq null and ccof_startdate ge " + firstDay + "))";
+
+                const closures = getSyncMultipleRecord("ccof_application_ccfri_closures?$filter=(" + filter + ")&$orderby=ccof_startdate asc");
+
+                if (!closures || closures.length === 0) {
+                    const tr = document.createElement("tr");
+                    const cell = document.createElement("td");
+                    cell.colSpan = 5;
+                    cell.innerText = "No closures for this reporting month";
+                    tr.appendChild(cell);
+                    tableBody.appendChild(tr);
+                    return;
                 }
-                MTFIInfos.forEach(record => {
-                    const tr = document.createElement('tr');
-                    const mtfiId = record["ccof_name"];
-                    const version = record["ccof_mtfi_sequence_number"];
-                    const statusLabel = record["statuscode@OData.Community.Display.V1.FormattedValue"];
-                    let cell = document.createElement("td");
-                    cell.innerText = mtfiId;
-                    tr.appendChild(cell);
-                    cell = document.createElement("td");
-                    cell.innerText = version;
-                    tr.appendChild(cell);
-                    cell = document.createElement("td");
-                    tr.appendChild(cell);
-                    cell.innerText = statusLabel;
+
+                const fv = (r, f) => r[f + "@OData.Community.Display.V1.FormattedValue"] ?? r[f] ?? "";
+                closures.forEach(r => {
+                    const tr = document.createElement("tr");
+                    [r["ccof_name"], fv(r, "ccof_closure_type"), fv(r, "ccof_startdate"), fv(r, "ccof_enddate"), fv(r, "ccof_closure_status")]
+                        .forEach(v => {
+                            const cell = document.createElement("td");
+                            cell.innerText = v;
+                            tr.appendChild(cell);
+                        });
                     tableBody.appendChild(tr);
                 });
+            } catch (e) {
+                console.error("Closure load failed", e);
             }
         }
+
         function getCleanedGuid(id) {
             return id.replace("{", "").replace("}", "");
         }
