@@ -8,7 +8,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.D365WebApi;
 
 public interface ID365WebApiService
 {
-    HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 200);
+    HttpResponseMessage SendRetrieveRequestAsync(string query, bool formatted = false, int maxPageSize = 1000);
     HttpResponseMessage SendCreateRequestAsync(string endPoint, string content);
     HttpResponseMessage SendCreateRequestAsyncRtn(string endPoint, string content);
     HttpResponseMessage SendCreateRequestAsync(HttpMethod httpMethod, string entitySetName, string body);
@@ -16,7 +16,7 @@ public interface ID365WebApiService
     HttpResponseMessage SendUpdateRequestAsync(string endPoint, string content);
     HttpResponseMessage SendMessageAsync(HttpMethod httpMethod, string messageUri);
     HttpResponseMessage SendRetrieveAsync(AZAppUser spn, HttpMethod httpMethod, string messageUri);
-    HttpResponseMessage SendRetrieveRequestAsync1(AZAppUser spn, string query, bool formatted = false, int maxPageSize = 200);
+    HttpResponseMessage SendRetrieveRequestAsync1(AZAppUser spn, string query, bool formatted = false, int maxPageSize = 1000);
 
     HttpResponseMessage SendSearchRequestAsync(string body);
     Task<HttpResponseMessage> SendRetrieveRequestAsync(AZAppUser spn, string requestUrl, bool formatted = false, int pageSize = 50, bool isProcess = false);
@@ -25,6 +25,7 @@ public interface ID365WebApiService
     Task<HttpResponseMessage> SendDeleteRequestAsync(AZAppUser spn, string requestUrl);
     Task<HttpResponseMessage> SendSearchRequestAsync(AZAppUser spn, string requestBody);
     Task<HttpResponseMessage> SendDocumentRequestAsync(AZAppUser spn, string entityNameSet, Guid id, Byte[] data, string fileName);
+    Task<byte[]> DownloadLargeFileColumnAsync(AZAppUser spn, string entityLogicalName, Guid recordId, string columnName);
     Task<D365ServiceException> ParseError(HttpResponseMessage response);
     Task<HttpResponseMessage> GetRecordTemplateForClone(AZAppUser spn, Guid recordId, string targetEntityName, string targetEntityNameSet);
     Task<BatchResult> SendBatchMessageAsync(AZAppUser spn, List<HttpRequestMessage> requestMessages, Guid? callerObjectId);

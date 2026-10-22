@@ -37,7 +37,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         /// <returns></returns>
         // GET: api/Operations
         [HttpGet]
-        public ActionResult<string> Get(string statement, int maxPageSize = 200)
+        public ActionResult<string> Get(string statement, int maxPageSize = 1000)
         {
             if (string.IsNullOrEmpty(statement)) return string.Empty;
 

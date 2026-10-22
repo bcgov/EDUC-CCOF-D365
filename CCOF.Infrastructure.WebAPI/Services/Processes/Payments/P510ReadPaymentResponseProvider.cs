@@ -1,16 +1,19 @@
-﻿using HandlebarsDotNet;
-using Microsoft.Extensions.Options;
+﻿using CCOF.Core.DataContext;
 using CCOF.Infrastructure.WebAPI.Extensions;
 using CCOF.Infrastructure.WebAPI.Messages;
 using CCOF.Infrastructure.WebAPI.Models;
+using CCOF.Infrastructure.WebAPI.Models;
 using CCOF.Infrastructure.WebAPI.Services.AppUsers;
 using CCOF.Infrastructure.WebAPI.Services.D365WebApi;
-using System.Net;
-using System.Text.Json.Nodes;
+using CCOF.Infrastructure.WebAPI.Services.D365WebAPI;
 using FixedWidthParserWriter;
-using CCOF.Core.DataContext;
+using HandlebarsDotNet;
+using Microsoft.Extensions.Options;
+using System;
+using System.Net;
 using System.Text.Json;
-using CCOF.Infrastructure.WebAPI.Models;
+using System.Text.Json.Nodes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments;
 
@@ -150,6 +153,7 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
         if (_data is null)
         {
             var response = await _d365webapiservice.SendRetrieveRequestAsync(_appUserService.AZSystemAppUser, RequestUri, isProcess: true);
+            //var fileBytes = await _d365webapiservice.DownloadFileColumnAsync(_appUserService, "ofm_payment_file_exchange", applicationId, "ofm_payment_file_exchange");
             if (!response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -247,9 +251,10 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
         _processParams = processParams;
         List<string> batchfeedback = []; List<string> headerfeedback = []; List<string> listfeedback = []; List<string> linefeedback = []; List<FeedbackHeader> headers = [];
         var startTime = _timeProvider.GetTimestamp();
-
-        var localData = await GetDataAsync();
-        var downloadfile = Convert.FromBase64String(localData.Data.ToString());
+        
+        _logger.LogDebug(CustomLogEvent.Process, "Starting {nameof} at {time}", nameof(P510ReadPaymentResponseProvider), startTime);
+        string guid = processParams?.PaymentFile?.paymentfileId;
+        var downloadfile = await _d365webapiservice.DownloadLargeFileColumnAsync(appUserService.AZSystemAppUser, "ofm_payment_file_exchange", Guid.Parse(guid), "ofm_feedback_document_memo");
 
         listfeedback = System.Text.Encoding.UTF8.GetString(downloadfile).Replace("APBG", "APBG#APBG").Split("APBG#").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         batchfeedback = listfeedback.Select(g => g.Replace("APBH", "APBH#APBH")).SelectMany(group => group.Split("APBH#")).ToList();
@@ -341,6 +346,9 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
         }
 
         if (allErrors.Any()) return ProcessResult.Failure(ProcessId, allErrors, totalProcessed, updatePaymentLineRequests.Count).SimpleProcessResult;
+
+        var endTime = _timeProvider.GetTimestamp();
+        _logger.LogInformation(CustomLogEvent.Process, "Finished updating Payment Status in {time} minutes", _timeProvider.GetElapsedTime(startTime, endTime).TotalMinutes);
 
         return ProcessResult.Completed(ProcessId).SimpleProcessResult;
     }
