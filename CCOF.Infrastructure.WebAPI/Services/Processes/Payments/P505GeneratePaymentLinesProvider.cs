@@ -196,7 +196,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 { ("CCOF", 1, "negative"), "CR"},
                 { ("CCOF", 4, "positive"), "PE"},
                 { ("CCOF", 4, "negative"), "PR"},
-                { ("CCFRI", 1, "positive"), "CS"},
+                { ("CCFRI", 1, "positive"), "CX"},
                 { ("CCFRI", 1, "negative"), "CY"},
                 { ("CCFRI", 4, "positive"), "PX"},
                 { ("CCFRI", 4, "negative"), "PY"},

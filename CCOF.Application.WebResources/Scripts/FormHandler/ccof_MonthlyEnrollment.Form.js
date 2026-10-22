@@ -12,6 +12,8 @@ CCOF.MonthlyEnrollment.Form = {
         // } else {
         // 	formContext.getControl("ccof_locked").setDisabled(true);
         // }
+
+
         formContext.getAttribute("ccof_locked").addOnChange(onChange_locked);
         formContext.getAttribute("ccof_ccof_base_verification").addOnChange(onChange_CCOFBaseVerification);
         formContext.getAttribute("ccof_ccfri_verification").addOnChange(onChange_CCFRIVerification);
@@ -53,8 +55,44 @@ CCOF.MonthlyEnrollment.Form = {
             formContext.getControl("ccof_rejectreasonother").setVisible(false);
             formContext.getAttribute("ccof_rejectreasonother").setRequiredLevel("none")
         }
+        formContext.getControl("header_ccof_ccof_internal_status").setDisabled(true);
+        formContext.getControl("header_ccof_ccfri_internal_status").setDisabled(true);
+     
         if (formContext.getAttribute("ccof_ccof_internal_status").getValue() === 7) formContext.getControl("ccof_ccof_base_verification").setDisabled(true);  // "Approved for payment"
-        if (formContext.getAttribute("ccof_ccfri_internal_status").getValue() === 7) formContext.getControl("ccof_ccfri_verification").setDisabled(true);      // "Approved for payment"        
+        if (formContext.getAttribute("ccof_ccfri_internal_status").getValue() === 7) formContext.getControl("ccof_ccfri_verification").setDisabled(true);      // "Approved for payment"     
+        if (formContext.getAttribute("ccof_ccfri_verification").getValue() === 101510000 && formContext.getAttribute("ccof_ccfri_internal_status").getValue() === 6)  formContext.getControl("header_ccof_ccfri_internal_status").setDisabled(false);
+        if (formContext.getAttribute("ccof_ccof_base_verification").getValue() === 101510000 && formContext.getAttribute("ccof_ccof_internal_status").getValue() === 6) formContext.getControl("header_ccof_ccof_internal_status").setDisabled(false);
+        
+
+
+        this.showChangeRequestBanner(executionContext);
+    },
+
+    showChangeRequestBanner: function (executionContext) {
+        debugger;
+        var formContext = executionContext.getFormContext();
+
+        var orgId = formContext.getAttribute("ccof_organization").getValue();
+        orgId = orgId[0].id;
+        orgId = orgId.replace("{", "").replace("}", "");
+
+        var query = "?$filter=_ccof_organization_value eq " + orgId + " and statecode eq 0" +
+            " and (statuscode eq 3 or statuscode eq 4 or statuscode eq 10 or statuscode eq 11 or statuscode eq 5 or statuscode eq 9)";
+
+        Xrm.WebApi.retrieveMultipleRecords("ccof_change_request", query).then(
+            function success(results) {
+                if (results.entities.length > 0) {
+                    var bannerField = formContext.getAttribute("ccof_flag_banner");
+                    var bannerControl = formContext.getControl("ccof_flag_banner");
+
+                    if (bannerField && bannerControl) {
+
+                        bannerField.setSubmitMode("never");
+                        bannerControl.setVisible(true);
+                    }
+                }
+            },
+        );
     },
     onSave: function (executionContext) {
         debugger;
@@ -75,6 +113,11 @@ CCOF.MonthlyEnrollment.Form = {
                 formContext.ui.clearFormNotification("date_check");
             }
         }
+        formContext.getControl("header_ccof_ccof_internal_status").setDisabled(true);
+        formContext.getControl("header_ccof_ccfri_internal_status").setDisabled(true);
+        if (formContext.getAttribute("ccof_ccfri_verification").getValue() === 101510000 && formContext.getAttribute("ccof_ccfri_internal_status").getValue() === 6) formContext.getControl("header_ccof_ccfri_internal_status").setDisabled(false);
+        if (formContext.getAttribute("ccof_ccof_base_verification").getValue() === 101510000 && formContext.getAttribute("ccof_ccof_internal_status").getValue() === 6) formContext.getControl("header_ccof_ccof_internal_status").setDisabled(false);
+        
     },
     CreateAdjustmentER: function (primaryControl) {
         debugger;
@@ -557,11 +600,51 @@ function onChange_CCOFInternalStatus(executionContext) {
     debugger;
     let formContext = executionContext.getFormContext();
     if (formContext.getAttribute("ccof_ccof_internal_status").getValue() === 7) formContext.getControl("ccof_ccof_base_verification").setDisabled(true);  // "Approved for payment"
+   
+    let verification = formContext.getAttribute("ccof_ccof_base_verification")?.getValue();
+    let status = formContext.getAttribute("ccof_ccof_internal_status")?.getValue();
+    let control = formContext.getControl("header_ccof_ccof_internal_status");
+
+    if (!control) return;
+
+    // keep read-only
+    control.setDisabled(true);
+
+    if (verification === 101510000 && status === 6) {
+        let options = control.getOptions();
+        let allowed = options.find(o => o.value === 7); // the one you want to keep
+
+        control.clearOptions();
+        if (allowed) {
+            control.addOption(allowed);
+            control.setDisabled(false);
+        }
+    }
 }
 function onChange_CCFRIInternalStatus(executionContext) {
     debugger;
     let formContext = executionContext.getFormContext();
     if (formContext.getAttribute("ccof_ccfri_internal_status").getValue() === 7) formContext.getControl("ccof_ccfri_verification").setDisabled(true);      // "Approved for payment"
+    
+    let verification = formContext.getAttribute("ccof_ccfri_verification")?.getValue();
+    let status = formContext.getAttribute("ccof_ccfri_internal_status")?.getValue();
+    let control = formContext.getControl("header_ccof_ccfri_internal_status");
+
+    if (!control) return;
+
+    // keep read-only
+    control.setDisabled(true);
+
+    if (verification === 101510000 && status === 6) {
+        let options = control.getOptions();
+        let allowed = options.find(o => o.value === 7); // the one you want to keep
+
+        control.clearOptions();
+        if (allowed) {
+            control.addOption(allowed);
+            control.setDisabled(false);
+        }
+    }
 }
 function getCleanedGuid(id) {
     return id.replace("{", "").replace("}", "");

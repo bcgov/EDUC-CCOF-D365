@@ -29,6 +29,7 @@
     &lt;attribute name="ccof_change_request_mtfiid" /&gt;
     &lt;attribute name="ccof_facility" /&gt;
     &lt;attribute name="ccof_name" /&gt;
+    &lt;attribute name="ccof_unlock_afs_enable" /&gt;
     &lt;link-entity name="ccof_change_action" from="ccof_change_actionid" to="ccof_change_action" link-type="inner" alias="changeaction"&gt;
       &lt;attribute name="ccof_changetype" /&gt;
       &lt;link-entity name="ccof_change_request" from="ccof_change_requestid" to="ccof_change_request" link-type="inner" alias="changerequest"&gt;
@@ -50,7 +51,6 @@
     &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_ccfri" link-type="inner" alias="appccfri"&gt;
       &lt;attribute name="ccof_afs_status_mtfi" /&gt;
       &lt;attribute name="ccof_unlock_afs" /&gt;
-      &lt;attribute name="ccof_unlock_afsenable" /&gt;
     &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
@@ -100,6 +100,14 @@
           <DataField>ccof_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ccof_unlock_afs_enable">
+          <DataField>ccof_unlock_afs_enable</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_unlock_afs_enableValue">
+          <DataField>ccof_unlock_afs_enableValue</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
         <Field Name="changeaction_ccof_changetype">
           <DataField>changeaction_ccof_changetype</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -132,10 +140,6 @@
           <DataField>changerequest_ccof_showdeclarationonreport</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="facility_accountnumber">
-          <DataField>facility_accountnumber</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="changerequest_ccof_showdeclarationonreportValue">
           <DataField>changerequest_ccof_showdeclarationonreportValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -156,6 +160,10 @@
           <DataField>changerequest_ccof_declaration_versionValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="facility_accountnumber">
+          <DataField>facility_accountnumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="facility_ccof_facilitylicencenumber">
           <DataField>facility_ccof_facilitylicencenumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -174,14 +182,6 @@
         </Field>
         <Field Name="appccfri_ccof_unlock_afsValue">
           <DataField>appccfri_ccof_unlock_afsValue</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="appccfri_ccof_unlock_afsenable">
-          <DataField>appccfri_ccof_unlock_afsenable</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="appccfri_ccof_unlock_afsenableValue">
-          <DataField>appccfri_ccof_unlock_afsenableValue</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
@@ -607,12 +607,12 @@
                               <TablixMember />
                               <TablixMember>
                                 <Visibility>
-                                  <Hidden>=IIF(First(Fields!appccfri_ccof_unlock_afsenableValue.Value, "MTFI")=1,false,true)</Hidden>
+                                  <Hidden>=IIF(First(Fields!ccof_unlock_afs_enableValue.Value, "MTFI")=true,false,true)</Hidden>
                                 </Visibility>
                               </TablixMember>
                               <TablixMember>
                                 <Visibility>
-                                  <Hidden>=IIF(First(Fields!appccfri_ccof_unlock_afsenableValue.Value, "MTFI")=1,false,true)</Hidden>
+                                  <Hidden>=IIF(First(Fields!ccof_unlock_afs_enableValue.Value, "MTFI")=true,false,true)</Hidden>
                                 </Visibility>
                               </TablixMember>
                               <TablixMember />

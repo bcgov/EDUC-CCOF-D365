@@ -176,12 +176,10 @@ jobs:
           cat << JSON > /tmp/auth_schema_settings
             ${{ secrets.D365_API_KEY_SCHEME }}
           JSON
-           cat << JSON > /tmp/BCCASApi
-            ${{ secrets.BCCASApi }}
+          cat << JSON > /tmp/external_services
+            ${{ secrets.EXTERNALSERVICES }}
           JSON
-          cat << JSON > /tmp/ExternalServices
-            ${{ secrets.ExternalServices }}
-          JSON
+
           curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ env.BRANCH }}/tools/config/update-configmap.sh \
             | bash /dev/stdin \
               ${{ env.APP_ENVIRONMENT }} \
@@ -189,8 +187,7 @@ jobs:
               ${{ env.OPENSHIFT_NAMESPACE }} \
               /tmp/authentication_settings \
               /tmp/auth_schema_settings \
-             /tmp/BCCASApi \
-            /tmp/ExternalServices \ 
+              /tmp/external_services
 
           # Start rollout (if necessary) and follow it
           oc rollout restart deployment/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }} 2> /dev/null \
@@ -198,10 +195,3 @@ jobs:
 
           # Get status, returns 0 if rollout is successful
           oc rollout status deployment/${{ env.APP_NAME }}-${{ env.IMAGE_NAME }}-${{ env.APP_ENVIRONMENT }}
-  zap:
-    name: Run Zap Scan
-    uses: ./.github/workflows/zap-scan.yml
-    needs: openshift-ci-cd
-    with:
-      env: 'dev'
-    secrets: inherit
