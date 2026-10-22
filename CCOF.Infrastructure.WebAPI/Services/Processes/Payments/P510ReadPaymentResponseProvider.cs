@@ -278,6 +278,10 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
             headers.Add(header);
         }
 
+        listfeedback = null;
+        headerfeedback = null;
+        linefeedback = null;
+
         var localInvoiceData = await GetInvoiceLinesAsync();
         var serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(localInvoiceData.Data.ToString());
         var localPayData = await GetPayLinesAsync();
