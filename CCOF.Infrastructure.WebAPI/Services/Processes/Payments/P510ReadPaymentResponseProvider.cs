@@ -257,6 +257,9 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
         var downloadfile = await _d365webapiservice.DownloadLargeFileColumnAsync(appUserService.AZSystemAppUser, "ofm_payment_file_exchange", Guid.Parse(guid), "ofm_feedback_document_memo");
 
         listfeedback = System.Text.Encoding.UTF8.GetString(downloadfile).Replace("APBG", "APBG#APBG").Split("APBG#").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+        downloadfile = null;
+
         batchfeedback = listfeedback.Select(g => g.Replace("APBH", "APBH#APBH")).SelectMany(group => group.Split("APBH#")).ToList();
         headerfeedback = listfeedback.Select(g => g.Replace("APIH", "APIH#APIH")).SelectMany(group => group.Split("APIH#")).ToList();
 
