@@ -859,7 +859,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                         };
                         createEnrolmentReportRequests.Add(new CreateRequest(entitySetName, EnrolmentReportToCreate));
                     }
-                    _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Creating Draft ERs index:{index}", i);
+                    _logger.LogInformation(CustomLogEvent.Process, DateTime.UtcNow.ToLocalPST().ToString("yyyy-MM-dd HH:mm:ss") + " Creating Draft ERs index:{index}", i);
                     AsyncRetryPolicy retryPolicy = Policy
                         .Handle<TaskCanceledException>(ex => ex.InnerException is TimeoutException)
                         .Or<HttpRequestException>()
@@ -887,9 +887,9 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 }
                 var endtime = _timeProvider.GetTimestamp();
                 var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Total records processed:"+(totalProcessed+totalErrorCount)+" Records processed successfully:"+totalProcessed
+                _logger.LogInformation(CustomLogEvent.Process, DateTime.UtcNow.ToLocalPST().ToString("yyyy-MM-dd HH:mm:ss") + " Total records processed:"+(totalProcessed+totalErrorCount)+" Records processed successfully:"+totalProcessed
                     +" Records processed with error:"+totalErrorCount+" Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
-                _logger.LogInformation(CustomLogEvent.Process, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone).ToString("yyyy-MM-dd HH:mm:ss") + " Draft ERs Creation Batch process is Complete");
+                _logger.LogInformation(CustomLogEvent.Process, DateTime.UtcNow.ToLocalPST().ToString("yyyy-MM-dd HH:mm:ss") + " Draft ERs Creation Batch process is Complete");
                 return ProcessResult.Completed(ProcessId).SimpleProcessResult;
             }
             catch (Exception ex)
