@@ -261,8 +261,8 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.ECER
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
         {
             var startTime = _timeProvider.GetTimestamp();
-            var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-            var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
+            //var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
+            var pstTime = DateTime.UtcNow.ToLocalPST();
             _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + "Process " + ProcessId + ": Begin to process data for ECER");
             _processParams = processParams;
             string dataImportMessages = string.Empty;
