@@ -399,7 +399,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         //  public ActionResult<string> GenerateAdjusementER([FromBody] dynamic value)
         public async Task<ActionResult<string>> GenerateAdjusementER([FromBody] AdjustmentERRequest request)
         {
-            var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
             var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
             var startTime = _timeProvider.GetTimestamp();
             ERGuid = request.ERGuid;
