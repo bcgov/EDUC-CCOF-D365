@@ -399,8 +399,8 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
         //  public ActionResult<string> GenerateAdjusementER([FromBody] dynamic value)
         public async Task<ActionResult<string>> GenerateAdjusementER([FromBody] AdjustmentERRequest request)
         {
-            var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
-            var pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
+            //var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
+            var pstTime = DateTime.UtcNow.ToLocalPST();
             var startTime = _timeProvider.GetTimestamp();
             ERGuid = request.ERGuid;
             string targetEntityLogicalName = request.targetEntityLogicalName;
@@ -782,7 +782,7 @@ namespace CCOF.Infrastructure.WebAPI.Controllers
             };
             var endtime = _timeProvider.GetTimestamp();
             var timediff = _timeProvider.GetElapsedTime(startTime, endtime).TotalSeconds;
-            pstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PSTZone);
+            pstTime = DateTime.UtcNow.ToLocalPST(); ;
             if (response.IsSuccessStatusCode)
             {
                 _logger.LogInformation(pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Successfully created adjustment ER with ID: " + returnRecord["ccof_monthlyenrollmentreportid"]?.ToString() + " Total time:" + Math.Round(timediff, 2) + " seconds.\r\n");
