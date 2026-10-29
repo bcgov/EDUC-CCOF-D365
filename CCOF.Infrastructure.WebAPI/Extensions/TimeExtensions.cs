@@ -70,7 +70,7 @@ public static class TimeExtensions
         TimeZoneInfo timeZone;
         if (isWindows)
         {
-            timeZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time");
         }
         else
         {
@@ -95,7 +95,7 @@ public static class TimeExtensions
         TimeZoneInfo timeZone;
         if (isWindows)
         {
-            timeZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time");
         }
         else
         {
@@ -119,7 +119,7 @@ public static class TimeExtensions
         TimeZoneInfo timeZone;
         if (isWindows)
         {
-            timeZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time");
         }
         else
         {
