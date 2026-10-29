@@ -249,7 +249,8 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
     public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
     {
         _processParams = processParams;
-        List<string> batchfeedback = []; List<string> headerfeedback = []; List<string> listfeedback = []; List<string> linefeedback = []; List<FeedbackHeader> headers = [];
+        //List<string> batchfeedback = []; 
+        List<string> headerfeedback = []; List<string> listfeedback = []; List<string> linefeedback = []; List<FeedbackHeader> headers = [];
         var startTime = _timeProvider.GetTimestamp();
         
         _logger.LogDebug(CustomLogEvent.Process, "Starting {nameof} at {time}", nameof(P510ReadPaymentResponseProvider), startTime);
@@ -257,7 +258,10 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
         var downloadfile = await _d365webapiservice.DownloadLargeFileColumnAsync(appUserService.AZSystemAppUser, "ofm_payment_file_exchange", Guid.Parse(guid), "ofm_feedback_document_memo");
 
         listfeedback = System.Text.Encoding.UTF8.GetString(downloadfile).Replace("APBG", "APBG#APBG").Split("APBG#").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-        batchfeedback = listfeedback.Select(g => g.Replace("APBH", "APBH#APBH")).SelectMany(group => group.Split("APBH#")).ToList();
+
+        downloadfile = null;
+
+        //batchfeedback = listfeedback.Select(g => g.Replace("APBH", "APBH#APBH")).SelectMany(group => group.Split("APBH#")).ToList();
         headerfeedback = listfeedback.Select(g => g.Replace("APIH", "APIH#APIH")).SelectMany(group => group.Split("APIH#")).ToList();
 
         foreach (string data in headerfeedback)
@@ -273,6 +277,10 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
             header.feedbackLine = lines;
             headers.Add(header);
         }
+
+        listfeedback = null;
+        headerfeedback = null;
+        linefeedback = null;
 
         var localInvoiceData = await GetInvoiceLinesAsync();
         var serializedInvoiceData = JsonSerializer.Deserialize<List<CcofInvoice>>(localInvoiceData.Data.ToString());
@@ -353,17 +361,3 @@ public class P510ReadPaymentResponseProvider(IOptionsSnapshot<ExternalServices> 
         return ProcessResult.Completed(ProcessId).SimpleProcessResult;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
