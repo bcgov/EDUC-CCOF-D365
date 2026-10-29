@@ -522,7 +522,7 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
 
         public async Task<JsonObject> RunProcessAsync(ID365AppUserService appUserService, ID365WebApiService d365WebApiService, ProcessParameter processParams)
         {
-            //var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time");
+            //var PSTZone = TimeZoneInfo.FindSystemTimeZoneById("British Columbia Standard Time");
             var pstTime = DateTime.UtcNow.ToLocalPST();
             _logger.LogInformation(CustomLogEvent.Process, pstTime.ToString("yyyy-MM-dd HH:mm:ss") + " Starting Process P" + ProcessId + " to Create Draft Monthly Enrolment Reports");
             try
