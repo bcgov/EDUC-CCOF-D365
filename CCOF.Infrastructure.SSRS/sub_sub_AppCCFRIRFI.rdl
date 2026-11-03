@@ -4612,7 +4612,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_feeincreasedduetoawageincrease.Value, "AppCCFRIRFI")</Value>
+                                  <Value>=First(Fields!ccof_pseinclusioneligibleexpenseandpolicy.Value, "AppCCFRIRFI")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <TextDecoration>None</TextDecoration>
@@ -4653,7 +4653,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>IDescribe the expense and how it meets the immediate inclusion need, confirm it is not covered by other funding sources, and submit evidence of the expense (e.g., receipts, quotes, or financial statements of staffing costs incurred) and a copy of your inclusion policy. Please tell us anything else you would like us to know about how your facility’s business case provides an inclusive and supportive environment.</Value>
+                                  <Value>Describe the expense and how it meets the immediate inclusion need, confirm it is not covered by other funding sources, and submit evidence of the expense (e.g., receipts, quotes, or financial statements of staffing costs incurred) and a copy of your inclusion policy. Please tell us anything else you would like us to know about how your facility’s business case provides an inclusive and supportive environment.</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -4667,7 +4667,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ccof_wageincreaestipulatedincollectivebargaining.Value</Value>
+                                  <Value>=First(Fields!ccof_pseinclusionbusinesscase.Value, "AppCCFRIRFI")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <TextDecoration>None</TextDecoration>
@@ -4719,7 +4719,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_feeincreasedduetoawageincrease.Value, "AppCCFRIRFI")</Value>
+                                  <Value>=First(Fields!ccof_pseinclusionparentfeescope.Value, "AppCCFRIRFI")</Value>
                                   <Style>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
@@ -4777,7 +4777,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_feeincreasedduetoawageincrease.Value, "AppCCFRIRFI")</Value>
+                                  <Value>=First(Fields!ccof_pseinclusionstaffexpenses.Value, "AppCCFRIRFI")</Value>
                                   <Style>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
@@ -4825,7 +4825,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=First(Fields!ccof_feeincreasedduetoawageincrease.Value, "AppCCFRIRFI")</Value>
+                                  <Value>=First(Fields!ccof_pseinclusionstaffingexplanation.Value, "AppCCFRIRFI")</Value>
                                   <Style>
                                     <TextDecoration>None</TextDecoration>
                                   </Style>
