@@ -4721,6 +4721,7 @@
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -5063,7 +5064,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -5387,7 +5387,7 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>APPCCFRIRFISEIndigenousCommunity</DataSetName>
+            <DataSetName>AppCCFRIRFIExpenseInfoInclusion</DataSetName>
             <Top>12.83264in</Top>
             <Left>0.05869in</Left>
             <Height>1in</Height>
