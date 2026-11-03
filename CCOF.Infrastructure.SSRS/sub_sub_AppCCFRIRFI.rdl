@@ -738,6 +738,92 @@
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="AppCCFRIRFIExpenseInfoInclusion">
+      <Query>
+        <DataSourceName>CRM</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@FacilityID">
+            <Value>=Parameters!FacilityID.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ApplicationID">
+            <Value>=Parameters!ApplicationID.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>&lt;fetch&gt;
+  &lt;entity name="ccof_rfipfiserviceexpansioninclusion"&gt;
+    &lt;attribute name="ccof_name" /&gt;
+    &lt;attribute name="ccof_expensedescription" /&gt;
+    &lt;attribute name="ccof_amount" /&gt;
+    &lt;attribute name="ccof_date" /&gt;
+    &lt;attribute name="ccof_paymentfrequency" /&gt;
+    &lt;attribute name="ccof_rfiparentfeeincrease_inclusion" /&gt;
+    &lt;attribute name="statecode" /&gt;
+    &lt;link-entity name="ccof_rfipfi" from="ccof_rfipfiid" to="ccof_rfipfi" link-type="inner" alias="rfi"&gt;
+      &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
+        &lt;filter&gt;
+          &lt;condition attribute="ccof_facility" operator="eq" value="@FacilityID" /&gt;
+        &lt;/filter&gt;
+        &lt;link-entity name="ccof_application" from="ccof_applicationid" to="ccof_application" link-type="inner" alias="app"&gt;
+          &lt;filter&gt;
+            &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
+          &lt;/filter&gt;
+        &lt;/link-entity&gt;
+      &lt;/link-entity&gt;
+    &lt;/link-entity&gt;
+  &lt;/entity&gt;
+&lt;/fetch&gt;</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ccof_name">
+          <DataField>ccof_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_expensedescription">
+          <DataField>ccof_expensedescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_amount">
+          <DataField>ccof_amount</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_amountValue">
+          <DataField>ccof_amountValue</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ccof_date">
+          <DataField>ccof_date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_dateValue">
+          <DataField>ccof_dateValue</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ccof_paymentfrequency">
+          <DataField>ccof_paymentfrequency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_rfiparentfeeincrease_inclusion">
+          <DataField>ccof_rfiparentfeeincrease_inclusion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_rfiparentfeeincrease_inclusionValue">
+          <DataField>ccof_rfiparentfeeincrease_inclusionValue</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
+        <Field Name="ccof_rfiparentfeeincrease_inclusionEntityName">
+          <DataField>ccof_rfiparentfeeincrease_inclusionEntityName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="statecode">
+          <DataField>statecode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="statecodeValue">
+          <DataField>statecodeValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -4977,6 +5063,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
