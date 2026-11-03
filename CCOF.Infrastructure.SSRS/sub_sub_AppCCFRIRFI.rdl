@@ -758,7 +758,7 @@
     &lt;attribute name="ccof_paymentfrequency" /&gt;
     &lt;attribute name="ccof_rfiparentfeeincrease_inclusion" /&gt;
     &lt;attribute name="statecode" /&gt;
-    &lt;link-entity name="ccof_rfipfi" from="ccof_rfipfiid" to="ccof_rfipfi" link-type="inner" alias="rfi"&gt;
+    &lt;link-entity name="ccof_rfipfi" from="ccof_rfipfiid" to="ccof_rfiparentfeeincrease_inclusion" link-type="inner" alias="rfi"&gt;
       &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
         &lt;filter&gt;
           &lt;condition attribute="ccof_facility" operator="eq" value="@FacilityID" /&gt;
