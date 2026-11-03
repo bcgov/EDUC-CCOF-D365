@@ -54,6 +54,11 @@
     &lt;attribute name="ccof_wageincreaestipulatedincollectivebargaining" /&gt;
     &lt;attribute name="ccof_wageincreasecommittedinwriting" /&gt;
     &lt;attribute name="ccof_whathaveyoudonetotrytorecruitstaff" /&gt;
+   &lt;attribute name="ccof_pseinclusioneligibleexpenseandpolicy" /&gt;
+    &lt;attribute name="ccof_pseinclusionbusinesscase" /&gt;
+    &lt;attribute name="ccof_pseinclusionparentfeescope" /&gt;
+    &lt;attribute name="ccof_pseinclusionstaffexpenses" /&gt;
+    &lt;attribute name="ccof_pseinclusionstaffingexplanation" /&gt;
     &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
       &lt;attribute name="ccof_applicationccfriid" /&gt;
       &lt;attribute name="ccof_name" /&gt;
@@ -63,6 +68,7 @@
       &lt;link-entity name="ccof_application" from="ccof_applicationid" to="ccof_application" link-type="inner" alias="app"&gt;
         &lt;attribute name="ccof_applicationid" /&gt;
         &lt;attribute name="ccof_name" /&gt;
+       &lt;attribute name="ccof_programyear" alias="pse_programyear" /&gt;
         &lt;filter&gt;
           &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
         &lt;/filter&gt;
@@ -232,6 +238,10 @@
           <DataField>ccof_whathaveyoudonetotrytorecruitstaff</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ccof_pseinclusioneligibleexpenseandpolicy">
+          <DataField>ccof_pseinclusioneligibleexpenseandpolicy</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="appccfri_ccof_applicationccfriid">
           <DataField>appccfri_ccof_applicationccfriid</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -240,12 +250,52 @@
           <DataField>appccfri_ccof_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ccof_pseinclusioneligibleexpenseandpolicyValue">
+          <DataField>ccof_pseinclusioneligibleexpenseandpolicyValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionbusinesscase">
+          <DataField>ccof_pseinclusionbusinesscase</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="app_ccof_applicationid">
           <DataField>app_ccof_applicationid</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="app_ccof_name">
           <DataField>app_ccof_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionparentfeescope">
+          <DataField>ccof_pseinclusionparentfeescope</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionparentfeescopeValue">
+          <DataField>ccof_pseinclusionparentfeescopeValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionstaffexpenses">
+          <DataField>ccof_pseinclusionstaffexpenses</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionstaffexpensesValue">
+          <DataField>ccof_pseinclusionstaffexpensesValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionstaffingexplanation">
+          <DataField>ccof_pseinclusionstaffingexplanation</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="pse_programyear">
+          <DataField>pse_programyear</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="pse_programyearValue">
+          <DataField>pse_programyearValue</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
+        <Field Name="pse_programyearEntityName">
+          <DataField>pse_programyearEntityName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
