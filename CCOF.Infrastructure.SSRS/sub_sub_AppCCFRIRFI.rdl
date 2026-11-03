@@ -4721,7 +4721,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -4964,6 +4963,14 @@
             <Height>2.76042in</Height>
             <Width>8.39721in</Width>
             <ZIndex>11</ZIndex>
+            <Visibility>
+              <Hidden>=Val(
+    Left(
+        First(Fields!pse_programyear.Value, "AppCCFRIRFI") &amp; "",
+        4
+    )
+) &lt; 2027</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -5393,6 +5400,14 @@
             <Height>1in</Height>
             <Width>8.42892in</Width>
             <ZIndex>12</ZIndex>
+            <Visibility>
+              <Hidden>=Val(
+    Left(
+        First(Fields!pse_programyear.Value, "AppCCFRIRFI") &amp; "",
+        4
+    )
+) &lt; 2027</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
