@@ -62,10 +62,11 @@ Account.OrgFacility.Form = {
             return;
         }
         if (accType.getValue() === 100000001) {
-
-            var parentId = formContext.getAttribute("parentaccountid").getValue();
-            parentId = parentId[0].id;
-            accountId = parentId.replace("{", "").replace("}", "");
+            this.showChangeRequestBannerFacility(executionContext);
+            return;
+            //var parentId =formContext.getAttribute("parentaccountid").getValue();
+            //parentId = parentId[0].id;
+            //accountId = parentId.replace("{", "").replace("}", "");
         } else {
             accountId = formContext.data.entity.getId();
         }
@@ -91,6 +92,134 @@ Account.OrgFacility.Form = {
             },
         );
     },
+
+
+
+    showChangeRequestBannerFacility: function (executionContext) {
+        debugger;
+        var formContext = executionContext.getFormContext();
+        var accountId = null;
+        var accType = formContext.getAttribute("ccof_accounttype");
+        accountId = formContext.data.entity.getId();
+        accountId = accountId.replace("{", "").replace("}", "");
+
+        var fetch1 = `
+      <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true" no-lock="false">
+  <entity name="ccof_change_request">
+    <attribute name="statecode" />
+    <attribute name="ccof_name" />
+    <attribute name="ccof_change_requestid" />
+    <filter type="and">
+      <condition attribute="statecode" operator="eq" value="0" />
+      <condition attribute="statuscode" operator="in">
+        <value>4</value>
+        <value>5</value>
+        <value>11</value>
+        <value>3</value>
+        <value>10</value>
+        <value>9</value>
+      </condition>
+    </filter>
+    <link-entity alias="a_a" name="account" to="ccof_organization" from="accountid" link-type="outer" visible="false">
+      <attribute name="accountnumber" />
+    </link-entity>
+    <link-entity name="ccof_change_action" alias="aa" link-type="inner" from="ccof_change_request" to="ccof_change_requestid">
+      <link-entity name="ccof_change_request_mtfi" alias="ab" link-type="inner" from="ccof_change_action" to="ccof_change_actionid">
+        <filter type="and">
+          <condition attribute="ccof_facility" operator="eq" value="${accountId}" />
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>`;
+
+        var fetch2 = `
+       <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true" no-lock="false">
+  <entity name="ccof_change_request">
+    <attribute name="statecode" />
+    <attribute name="ccof_name" />
+    <attribute name="ccof_change_requestid" />
+    <filter type="and">
+      <condition attribute="statecode" operator="eq" value="0" />
+      <condition attribute="statuscode" operator="in">
+        <value>4</value>
+        <value>5</value>
+        <value>11</value>
+        <value>3</value>
+        <value>10</value>
+        <value>9</value>
+      </condition>
+    </filter>
+    <link-entity alias="a_a" name="account" to="ccof_organization" from="accountid" link-type="outer" visible="false">
+      <attribute name="accountnumber" />
+    </link-entity>
+    <link-entity name="ccof_change_action" alias="aa" link-type="inner" from="ccof_change_request" to="ccof_change_requestid">
+      <link-entity name="ccof_change_request_new_facility" alias="ab" link-type="inner" from="ccof_change_action" to="ccof_change_actionid">
+        <filter type="and">
+          <condition attribute="ccof_facility" operator="eq" value="${accountId}" />
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>`;
+
+        var fetch3 = `
+       <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true" no-lock="false">
+  <entity name="ccof_change_request">
+    <attribute name="statecode" />
+    <attribute name="ccof_name" />
+    <attribute name="ccof_change_requestid" />
+    <filter type="and">
+      <condition attribute="statecode" operator="eq" value="0" />
+      <condition attribute="statuscode" operator="in">
+        <value>4</value>
+        <value>5</value>
+        <value>11</value>
+        <value>3</value>
+        <value>10</value>
+        <value>9</value>
+      </condition>
+    </filter>
+    <link-entity alias="a_a" name="account" to="ccof_organization" from="accountid" link-type="outer" visible="false">
+      <attribute name="accountnumber" />
+    </link-entity>
+    <link-entity name="ccof_change_action" alias="aa" link-type="inner" from="ccof_change_request" to="ccof_change_requestid">
+      <link-entity name="ccof_change_action_closure" alias="ab" link-type="inner" from="ccof_change_action" to="ccof_change_actionid">
+        <filter type="and">
+          <condition attribute="ccof_facility" operator="eq" value="${accountId}" />
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>`;
+
+        Promise.all([
+            Xrm.WebApi.retrieveMultipleRecords("ccof_change_request", "?fetchXml=" + encodeURIComponent(fetch1)),
+            Xrm.WebApi.retrieveMultipleRecords("ccof_change_request", "?fetchXml=" + encodeURIComponent(fetch2)),
+            Xrm.WebApi.retrieveMultipleRecords("ccof_change_request", "?fetchXml=" + encodeURIComponent(fetch3))
+        ]).then(function (results) {
+            var hasRecords =
+                (results[0].entities && results[0].entities.length > 0) ||
+                (results[1].entities && results[1].entities.length > 0) ||
+                (results[2].entities && results[2].entities.length > 0);
+            var bannerField = formContext.getAttribute("ccof_flag_banner");
+            var bannerControl = formContext.getControl("ccof_flag_banner");
+
+
+
+            if (hasRecords) {
+                bannerField.setSubmitMode("never");
+                bannerControl.setVisible(true);
+
+            } else {
+                bannerControl.setVisible(false);
+            }
+        }).catch(function (error) {
+            console.log("Error checking related records: " + error.message);
+        });
+
+    },
+
 
 
     getTypeOfForm: function () {
