@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
         <ConnectString>https://mychildcareservicesdev.crm3.dynamics.com/</ConnectString>
+        <Prompt>Specify a user name and password for data source CRM:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>55ddf860-2d58-4f37-abdf-f61920492ec4</rd:DataSourceID>
@@ -16,11 +17,6 @@
     <DataSet Name="AppCCFRIRFI">
       <Query>
         <DataSourceName>CRM</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@ApplicationCCFRIID">
-            <Value>=Parameters!ApplicationCCFRIID.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
         <CommandText>&lt;fetch&gt;
   &lt;entity name="ccof_rfipfi"&gt;
     &lt;attribute name="ccof_name" /&gt;
@@ -50,12 +46,22 @@
     &lt;attribute name="ccof_wageincreaestipulatedincollectivebargaining" /&gt;
     &lt;attribute name="ccof_wageincreasecommittedinwriting" /&gt;
     &lt;attribute name="ccof_whathaveyoudonetotrytorecruitstaff" /&gt;
-    &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
+ &lt;attribute name="ccof_pseinclusioneligibleexpenseandpolicy" /&gt;
+    &lt;attribute name="ccof_pseinclusionbusinesscase" /&gt;
+    &lt;attribute name="ccof_pseinclusionparentfeescope" /&gt;
+    &lt;attribute name="ccof_pseinclusionstaffexpenses" /&gt;
+    &lt;attribute name="ccof_pseinclusionstaffingexplanation" /&gt;
+   &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
       &lt;attribute name="ccof_applicationccfriid" /&gt;
       &lt;attribute name="ccof_name" /&gt;
       &lt;filter&gt;
-        &lt;condition attribute="ccof_applicationccfriid" operator="eq" value="@ApplicationCCFRIID" /&gt;
+        &lt;condition attribute="ccof_applicationccfriid" operator="eq" value="4712081d-3977-f111-ab0e-6045bdcd67fc" /&gt;
       &lt;/filter&gt;
+      &lt;link-entity name="ccof_application" from="ccof_applicationid" to="ccof_application" link-type="inner" alias="A"&gt;
+        &lt;link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_programyear" link-type="inner" alias="PY"&gt;
+          &lt;attribute name="ccof_programyearnumber" /&gt;
+        &lt;/link-entity&gt;
+      &lt;/link-entity&gt;
     &lt;/link-entity&gt;
   &lt;/entity&gt;
 &lt;/fetch&gt;</CommandText>
@@ -221,12 +227,52 @@
           <DataField>ccof_whathaveyoudonetotrytorecruitstaff</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ccof_pseinclusioneligibleexpenseandpolicy">
+          <DataField>ccof_pseinclusioneligibleexpenseandpolicy</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="appccfri_ccof_applicationccfriid">
           <DataField>appccfri_ccof_applicationccfriid</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ccof_pseinclusioneligibleexpenseandpolicyValue">
+          <DataField>ccof_pseinclusioneligibleexpenseandpolicyValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="appccfri_ccof_name">
           <DataField>appccfri_ccof_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionbusinesscase">
+          <DataField>ccof_pseinclusionbusinesscase</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PY_ccof_programyearnumber">
+          <DataField>PY_ccof_programyearnumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionparentfeescope">
+          <DataField>ccof_pseinclusionparentfeescope</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PY_ccof_programyearnumberValue">
+          <DataField>PY_ccof_programyearnumberValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionparentfeescopeValue">
+          <DataField>ccof_pseinclusionparentfeescopeValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionstaffexpenses">
+          <DataField>ccof_pseinclusionstaffexpenses</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionstaffexpensesValue">
+          <DataField>ccof_pseinclusionstaffexpensesValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ccof_pseinclusionstaffingexplanation">
+          <DataField>ccof_pseinclusionstaffingexplanation</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -629,6 +675,92 @@
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="AppCCFRIRFIExpenseInfoInclusion">
+      <Query>
+        <DataSourceName>CRM</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@FacilityID">
+            <Value>=Parameters!FacilityID.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ApplicationID">
+            <Value>=Parameters!ApplicationID.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>&lt;fetch&gt;
+  &lt;entity name="ccof_rfipfiserviceexpansioninclusion"&gt;
+    &lt;attribute name="ccof_name" /&gt;
+    &lt;attribute name="ccof_expensedescription" /&gt;
+    &lt;attribute name="ccof_amount" /&gt;
+    &lt;attribute name="ccof_date" /&gt;
+    &lt;attribute name="ccof_paymentfrequency" /&gt;
+    &lt;attribute name="ccof_rfiparentfeeincrease_inclusion" /&gt;
+    &lt;attribute name="statecode" /&gt;
+    &lt;link-entity name="ccof_rfipfi" from="ccof_rfipfiid" to="ccof_rfiparentfeeincrease_inclusion" link-type="inner" alias="rfi"&gt;
+      &lt;link-entity name="ccof_applicationccfri" from="ccof_applicationccfriid" to="ccof_applicationccfri" link-type="inner" alias="appccfri"&gt;
+        &lt;filter&gt;
+          &lt;condition attribute="ccof_facility" operator="eq" value="@FacilityID" /&gt;
+        &lt;/filter&gt;
+        &lt;link-entity name="ccof_application" from="ccof_applicationid" to="ccof_application" link-type="inner" alias="app"&gt;
+          &lt;filter&gt;
+            &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
+          &lt;/filter&gt;
+        &lt;/link-entity&gt;
+      &lt;/link-entity&gt;
+    &lt;/link-entity&gt;
+  &lt;/entity&gt;
+&lt;/fetch&gt;</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ccof_name">
+          <DataField>ccof_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_expensedescription">
+          <DataField>ccof_expensedescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_amount">
+          <DataField>ccof_amount</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_amountValue">
+          <DataField>ccof_amountValue</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ccof_date">
+          <DataField>ccof_date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_dateValue">
+          <DataField>ccof_dateValue</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ccof_paymentfrequency">
+          <DataField>ccof_paymentfrequency</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_rfiparentfeeincrease_inclusion">
+          <DataField>ccof_rfiparentfeeincrease_inclusion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ccof_rfiparentfeeincrease_inclusionValue">
+          <DataField>ccof_rfiparentfeeincrease_inclusionValue</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
+        <Field Name="ccof_rfiparentfeeincrease_inclusionEntityName">
+          <DataField>ccof_rfiparentfeeincrease_inclusionEntityName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="statecode">
+          <DataField>statecode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="statecodeValue">
+          <DataField>statecodeValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -886,7 +1018,7 @@
             </TablixRowHierarchy>
             <KeepTogether>true</KeepTogether>
             <DataSetName>AppCCFRIRFI</DataSetName>
-            <Left>0.027in</Left>
+            <Left>0.19119in</Left>
             <Height>0.65in</Height>
             <Width>8.39721in</Width>
             <Style>
@@ -1311,7 +1443,7 @@
             </TablixRowHierarchy>
             <DataSetName>AppCCFRIRFIExpenseInfo</DataSetName>
             <Top>0.71944in</Top>
-            <Left>0.03418in</Left>
+            <Left>0.19837in</Left>
             <Height>1in</Height>
             <Width>8.39722in</Width>
             <ZIndex>1</ZIndex>
@@ -1370,7 +1502,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox28</rd:DefaultName>
             <Top>1.775in</Top>
-            <Left>0.03418in</Left>
+            <Left>0.19837in</Left>
             <Height>0.4in</Height>
             <Width>8.39722in</Width>
             <ZIndex>2</ZIndex>
@@ -1771,7 +1903,7 @@
             </TablixRowHierarchy>
             <DataSetName>APPCCFRIRFIOtherFunding</DataSetName>
             <Top>2.20278in</Top>
-            <Left>0.03418in</Left>
+            <Left>0.19837in</Left>
             <Height>0.4in</Height>
             <Width>8.39722in</Width>
             <ZIndex>3</ZIndex>
@@ -2046,7 +2178,7 @@
             </TablixRowHierarchy>
             <DataSetName>AppCCFRIRFI</DataSetName>
             <Top>2.60278in</Top>
-            <Left>0.00001in</Left>
+            <Left>0.1642in</Left>
             <Height>1in</Height>
             <Width>8.39721in</Width>
             <ZIndex>4</ZIndex>
@@ -2515,7 +2647,7 @@
             </TablixRowHierarchy>
             <DataSetName>APPCCFRIRFIDSCW</DataSetName>
             <Top>3.61667in</Top>
-            <Left>0.00001in</Left>
+            <Left>0.1642in</Left>
             <Height>0.6in</Height>
             <Width>8.39722in</Width>
             <ZIndex>5</ZIndex>
@@ -2991,7 +3123,7 @@
             </TablixRowHierarchy>
             <DataSetName>AppCCFRIRFI</DataSetName>
             <Top>4.24444in</Top>
-            <Left>0.00002in</Left>
+            <Left>0.16421in</Left>
             <Height>3in</Height>
             <Width>8.39721in</Width>
             <ZIndex>6</ZIndex>
@@ -3651,7 +3783,7 @@
             </TablixRowHierarchy>
             <DataSetName>AppCCFRIRFIServiceExpansion</DataSetName>
             <Top>7.25833in</Top>
-            <Left>0.00248in</Left>
+            <Left>0.16667in</Left>
             <Height>1.2in</Height>
             <Width>8.42892in</Width>
             <ZIndex>7</ZIndex>
@@ -3709,6 +3841,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox113</rd:DefaultName>
             <Top>8.45833in</Top>
+            <Left>0.41703cm</Left>
             <Height>0.6in</Height>
             <Width>8.39722in</Width>
             <ZIndex>8</ZIndex>
@@ -4137,7 +4270,7 @@
             </TablixRowHierarchy>
             <DataSetName>APPCCFRIRFISEIndigenousCommunity</DataSetName>
             <Top>9.07222in</Top>
-            <Left>0.00248in</Left>
+            <Left>0.16667in</Left>
             <Height>1in</Height>
             <Width>8.42892in</Width>
             <ZIndex>9</ZIndex>
@@ -4409,7 +4542,8 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>AppCCFRIRFI</DataSetName>
-            <Top>10.08611in</Top>
+            <Top>16.5175in</Top>
+            <Left>0.41703cm</Left>
             <Height>1.81in</Height>
             <Width>8.39721in</Width>
             <ZIndex>10</ZIndex>
@@ -4419,11 +4553,347 @@
               </Border>
             </Style>
           </Tablix>
+          <Tablix Name="TablixDCSW3">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>2.79907in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.79907in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.79907in</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.67083in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox40">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Priority Service Expansion: Inclusion</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Does your facility have: an expense that meets an immediate inclusion need and is not covered by other funding sources; and a documented inclusion policy aligned with the principles outlined in BC’s Inclusive Child Care Strategy?</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_pseinclusioneligibleexpenseandpolicy.Value, "AppCCFRIRFI")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox39</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.79792in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox49">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Describe the expense and how it meets the immediate inclusion need, confirm it is not covered by other funding sources, and submit evidence of the expense (e.g., receipts, quotes, or financial statements of staffing costs incurred) and a copy of your inclusion policy. Please tell us anything else you would like us to know about how your facility’s business case provides an inclusive and supportive environment.</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_pseinclusionbusinesscase.Value, "AppCCFRIRFI")</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                                <LineHeight>1pt</LineHeight>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox45</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.39583in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Will your proposed Parent Fees be charged for all children occupying Enrolled Spaces and Drop-In Spaces, or only for those with support needs?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_pseinclusionparentfeescope.Value, "AppCCFRIRFI")</Value>
+                                  <Style>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.44792in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox17">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Do you have expenses related to wages, recruitment and retention of staff who support all enrolled children (e.g., those who do not provide dedicated 1-1 support)?</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value xml:space="preserve"> </Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_pseinclusionstaffexpenses.Value, "AppCCFRIRFI")</Value>
+                                  <Style>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.44792in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox21">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>If yes, explain your facility’s wages and staffing model, and describe any specific skills or qualifications your facility requires of staff and why these skills or qualifications are necessary to provide an inclusive and supportive environment</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>Gray</Color>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=First(Fields!ccof_pseinclusionstaffingexplanation.Value, "AppCCFRIRFI")</Value>
+                                  <Style>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox21</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>AppCCFRIRFI</DataSetName>
+            <Top>10.12778in</Top>
+            <Left>0.16043in</Left>
+            <Height>2.76042in</Height>
+            <Width>8.39721in</Width>
+            <ZIndex>11</ZIndex>
+            <Visibility>
+              <Hidden>=Val(
+    First(
+        Fields!PY_ccof_programyearnumberValue.Value,
+        "AppCCFRIRFI"
+    ) &amp; ""
+) &lt; 8</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
         </ReportItems>
-        <Height>11.95361in</Height>
+        <Height>18.3275in</Height>
         <Style />
       </Body>
-      <Width>8.55389in</Width>
+      <Width>8.71808in</Width>
       <Page>
         <PageWidth>11.5in</PageWidth>
         <LeftMargin>1in</LeftMargin>
@@ -4444,6 +4914,14 @@
       </DefaultValue>
       <Prompt>Applicaiton CCFRIID</Prompt>
     </ReportParameter>
+    <ReportParameter Name="FacilityID">
+      <DataType>String</DataType>
+      <Prompt>Facility ID</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ApplicationID">
+      <DataType>String</DataType>
+      <Prompt>Application ID</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -4454,6 +4932,16 @@
           <ColumnIndex>3</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>ApplicationCCFRIID</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>FacilityID</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>ApplicationID</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
