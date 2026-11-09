@@ -72,6 +72,9 @@
         &lt;filter&gt;
           &lt;condition attribute="ccof_applicationid" operator="eq" value="@ApplicationID" /&gt;
         &lt;/filter&gt;
+ &lt;link-entity name="ccof_program_year" from="ccof_program_yearid" to="ccof_programyear" link-type="inner" alias="PY"&gt;
+          &lt;attribute name="ccof_programyearnumber" /&gt;
+        &lt;/link-entity&gt;
       &lt;/link-entity&gt;
     &lt;/link-entity&gt;
   &lt;/entity&gt;
@@ -297,6 +300,14 @@
         <Field Name="pse_programyearEntityName">
           <DataField>pse_programyearEntityName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PY_ccof_programyearnumber">
+          <DataField>PY_ccof_programyearnumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PY_ccof_programyearnumberValue">
+          <DataField>PY_ccof_programyearnumberValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -4965,11 +4976,11 @@
             <ZIndex>11</ZIndex>
             <Visibility>
               <Hidden>=Val(
-    Left(
-        First(Fields!pse_programyear.Value, "AppCCFRIRFI") &amp; "",
-        4
-    )
-) &lt; 2027</Hidden>
+    First(
+        Fields!PY_ccof_programyearnumberValue.Value,
+        "AppCCFRIRFI"
+    ) &amp; ""
+) &lt; 8</Hidden>
             </Visibility>
             <Style>
               <Border>
@@ -5402,11 +5413,11 @@
             <ZIndex>12</ZIndex>
             <Visibility>
               <Hidden>=Val(
-    Left(
-        First(Fields!pse_programyear.Value, "AppCCFRIRFI") &amp; "",
-        4
-    )
-) &lt; 2027</Hidden>
+    First(
+        Fields!PY_ccof_programyearnumberValue.Value,
+        "AppCCFRIRFI"
+    ) &amp; ""
+) &lt; 8</Hidden>
             </Visibility>
             <Style>
               <Border>
