@@ -182,11 +182,13 @@ namespace CCOF.Infrastructure.WebAPI.Services.Processes.Payments
                 // fetchxml for reference
                 var fetchXml = $$"""
                         <fetch>
-                          <entity name="ofm_stat_holiday">
+                        <entity name="ofm_stat_holiday">
+                            <attribute name="ofm_date_observed" />
                             <filter>
-                              <condition attribute="statecode" operator="eq" value="0" />
+                            <condition attribute="statecode" operator="eq" value="0" />
+                            <condition attribute="ofm_holiday_type" operator="eq" value="1" />
                             </filter>
-                          </entity>
+                        </entity>
                         </fetch>
                         """;
                 var requestUri = $"ofm_stat_holidaies?fetchXml=" + WebUtility.UrlEncode(fetchXml);
