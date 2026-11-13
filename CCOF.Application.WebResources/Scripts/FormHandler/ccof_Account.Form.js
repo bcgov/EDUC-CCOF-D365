@@ -19,7 +19,8 @@ Account.OrgFacility.Form = {
                     Account.OrgFacility.Form.passFormContextToHTML(formContext, item);
                 });
                 this.disableHTMLWebResource(executionContext);
-            case 2: // update                           
+            case 2: // update  
+            case 3: //readonly
                 this.getTypeOfForm();
                 this.setFilterXml_ParentFeeGrid(executionContext);
                 this.setFilterXml_Notes_Activities(executionContext);
@@ -37,8 +38,6 @@ Account.OrgFacility.Form = {
                     }
                 }, 2000); // adjust delay as needed
                 this.showChangeRequestBanner(executionContext);
-                break;
-            case 3: //readonly
                 break;
             case 4: //disable
                 break;
@@ -519,7 +518,6 @@ Account.OrgFacility.Form = {
                                 "<attribute name='ccof_adjudication_ecewe_facilityid'/>" +
                                 "<attribute name='ccof_name'/>" +
                                 "<attribute name='statuscode'/>" +
-                                "<order attribute='ccof_name' descending='false'/>" +
                                 "<filter type='and'>" +
                                 "<condition  attribute='ccof_facility' operator='in'>" +
                                 facilityid +
@@ -533,6 +531,7 @@ Account.OrgFacility.Form = {
                                 FilteredList_ProgramYear +
                                 "</condition>" +
                                 "</filter>" +
+                                "<order attribute='ccof_programyear' descending='true' />" +
                                 "</link-entity>" +
                                 "</entity>" +
                                 "</fetch>";
@@ -546,7 +545,6 @@ Account.OrgFacility.Form = {
                                 "<attribute name='ccof_adjudication_ecewe_facilityid'/>" +
                                 "<attribute name='ccof_name'/>" +
                                 "<attribute name='statuscode'/>" +
-                                "<order attribute='ccof_name' descending='false'/>" +
                                 "<filter type='and'>" +
                                 "<condition  attribute='ccof_facility' operator='in'>" +
                                 "<value> 00000000-0000-0000-0000-000000000000 </value>" +
@@ -558,6 +556,7 @@ Account.OrgFacility.Form = {
                                 "<link-entity name='ccof_application' from='ccof_applicationid' to='ccof_areyouapublicsectoremployer' visible='false' link-type='outer' alias='CCOF'>" +
                                 "<attribute name='ccof_ccofstatus'/>" +
                                 "<attribute name='ccof_programyear'/>" +
+                                "<order attribute='ccof_programyear' descending='true' />" +
                                 "</link-entity>" +
                                 "</entity>" +
                                 "</fetch>";
