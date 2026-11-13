@@ -24,7 +24,7 @@ CCOF.ECE_MER.Ribbon = {
         Xrm.Navigation.navigateTo(pageInput, navigationOptions)
             .then(
                 function () {
-                    primarycontrol?.refresh();
+                    primarycontrol?.data.refresh();
                     console.log("Success");
                 }
             ).catch(
